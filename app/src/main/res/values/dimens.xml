@@ -1,0 +1,17 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="bottom_navigation_height">57dp</dimen>
+    <dimen name="tab_icon_height">23dp</dimen>
+    <dimen name="author_image_size_width">129dp</dimen>
+    <dimen name="author_image_size_height">98dp</dimen>
+    <dimen name="questionnaire_icon_size">33dp</dimen>
+    <dimen name="question_size">22sp</dimen>
+    <dimen name="answer_gap">19dp</dimen>
+    <dimen name="answer_corner">25dp</dimen>
+    <dimen name="spend_place_holder_corner">8dp</dimen>
+    <dimen name="tab_text_size">10sp</dimen>
+    <dimen name="button_text_size">16sp</dimen>
+    <dimen name="balance_height">56dp</dimen>
+    <dimen name="image_answer_corner">2dp</dimen>
+    <dimen name="emojy_gap">16dp</dimen>
+</resources>

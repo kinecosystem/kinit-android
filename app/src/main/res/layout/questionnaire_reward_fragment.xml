@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.earn.QuestionnaireRewardViewModel"/>
+    </data>
+    <org.kinecosystem.kinit.view.customView.TransactionLayoutView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/transaction_bg_gradient_list"
+        app:complete="@{model.onTransactionComplete}"
+        >
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/transaction_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginTop="70dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_enableMergePathsForKitKatAndAbove="true"
+            app:lottie_fileName="transaction_loader.json"
+            app:lottie_loop="true"/>
+
+        <TextView
+            android:id="@+id/transaction_title"
+            android:textStyle="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/transferring_your_kin"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transaction_anim"/>
+
+
+        <org.kinecosystem.kinit.view.customView.TransactionTextView
+            android:id="@+id/balance_amount"
+            android:textStyle="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:letterSpacing="-0.02"
+            android:textColor="#ffffff"
+            android:textSize="50sp"
+            app:balance="@{model.balance}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.39999998"
+            tools:text="100"/>
+
+        <ImageView
+            android:id="@+id/confetti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/balance_amount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/conetti_illustration"/>
+
+        <TextView
+            android:id="@+id/kin_currency"
+            android:textStyle="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.02"
+            android:text="KIN"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/balance_amount"
+            app:layout_constraintStart_toEndOf="@+id/balance_amount"
+            app:layout_constraintTop_toTopOf="@+id/balance_amount"/>
+
+        <TextView
+            android:id="@+id/balance_subtitle"
+            android:textStyle="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:text="@string/your_new_balance"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance_amount"/>
+
+        <TextView
+            android:id="@+id/close_text"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="98dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:letterSpacing="0.09"
+            android:text="@string/tap_to_finish"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <ImageView
+            android:id="@+id/transaction_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/kincoins_illustration"/>
+
+
+    </org.kinecosystem.kinit.view.customView.TransactionLayoutView>
+</layout>

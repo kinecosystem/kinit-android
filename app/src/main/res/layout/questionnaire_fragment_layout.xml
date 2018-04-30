@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <data>
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <View
+            android:id="@+id/header_with_x_layout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/status_bar_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/header_x_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/header_with_x_layout"
+            app:layout_constraintStart_toStartOf="@+id/header_with_x_layout"
+            app:layout_constraintTop_toTopOf="@+id/header_with_x_layout"
+            app:srcCompat="@drawable/close"/>
+        <org.kinecosystem.kinit.view.customView.QuestionnaireProgressBar
+            android:id="@+id/questionnaire_progress_bar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:max="10000"
+            android:minHeight="4dp"
+            android:progressDrawable="@drawable/rounded_progress_bar"
+            app:layout_constraintBottom_toBottomOf="@+id/header_with_x_layout"
+            app:layout_constraintEnd_toStartOf="@+id/questionnaire_progress_text"
+            app:layout_constraintStart_toEndOf="@+id/header_x_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:questionnaireProgress="@{model.questionnaireProgress}"
+            tools:progress="2500"
+            />
+        <TextView
+            android:id="@+id/questionnaire_progress_text"
+            android:layout_width="49dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:text="@{String.valueOf(model.questionnaireProgress) + `%`}"
+            tools:text="25%"
+            app:layout_constraintBottom_toBottomOf="@+id/header_with_x_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/questionnaire_progress_bar"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_with_x_layout">
+
+        </FrameLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

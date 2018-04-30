@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/blue_light</color>
+    <color name="colorPrimaryDark">@color/status_bar_color</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="tab_icon_color">#9F79EE</color>
+    <color name="tab_icon_color_selected">#5D478B</color>
+    <color name="bottom_navigation_background">#FFF</color>
+    <color name="tab_font_color_selected">#047cfc</color>
+    <color name="fab_font_color">#7884a5</color>
+    <color name="balance_text_color">#FFF</color>
+    <color name="question_text_color">#047cfc</color>
+    <color name="white">#FFF</color>
+    <color name="answer_stroke">#d2d7e1</color>
+    <color name="blue_light">#0e6ddc</color>
+    <color name="blue_dark">#19a3fd</color>
+    <color name="deep_blue">#033cc5</color>
+    <color name="button_blue">#047cfc</color>
+    <color name="button_blue_selected">#047cfc</color>
+    <color name="button_blue_disable">#efeef0</color>
+    <color name="button_blue_font_color">#fff</color>
+    <color name="button_blue_disable_font_color">#fff</color>
+    <color name="grey_delimiter_line_color">#d2d7e1</color>
+    <color name="answer_font_color">#7884a5</color>
+    <color name="answer_font_color_selected">@color/white</color>
+    <color name="status_bar_color">#047cfc</color>
+</resources>

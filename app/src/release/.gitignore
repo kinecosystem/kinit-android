@@ -1,0 +1,6 @@
+# production google-services.json should be 
+# placed in this directory
+#
+# Ignore everything in this directory
+# Except this file
+!.gitignore

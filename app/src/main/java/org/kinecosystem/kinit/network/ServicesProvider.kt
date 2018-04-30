@@ -1,0 +1,72 @@
+package org.kinecosystem.kinit.network
+
+import android.content.Context
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.kinecosystem.kinit.BuildConfig
+import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.repository.DataStoreProvider
+import org.kinecosystem.kinit.repository.OffersRepository
+import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.util.Scheduler
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+private const val STAGE_BASE_URL = BuildConfig.StageBaseUrl
+private const val PROD_BASE_URL = BuildConfig.ProdBaseUrl
+
+interface OperationCompletionCallback {
+    fun onSuccess()
+    fun onError(errorCode: Int)
+}
+
+interface OperationResultCallback<in T> {
+    fun onResult(result: T)
+    fun onError(errorCode: Int)
+}
+
+class ServicesProvider {
+    val onboardingService: OnboardingService
+    val taskService: TaskService
+    val walletService: Wallet
+    val offerService: OfferService
+    private val applicationContext: Context
+
+    constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
+        questionnaireRepo: QuestionnaireRepository, offerRepo: OffersRepository,
+        analytics: Analytics, scheduler: Scheduler
+    ) {
+        applicationContext = context.applicationContext
+
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val client = OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS).writeTimeout(20, TimeUnit.SECONDS)
+            .addInterceptor(interceptor).build()
+
+        val baseUrl = if (BuildConfig.DEBUG) STAGE_BASE_URL else PROD_BASE_URL
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val onboardingApi = retrofit.create<OnboardingApi>(OnboardingApi::class.java)
+        walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, questionnaireRepo, analytics,
+            onboardingApi,
+            scheduler)
+        taskService = TaskService(applicationContext,
+            retrofit.create<TasksApi>(TasksApi::class.java),
+            questionnaireRepo, userRepo.userId(), walletService)
+        onboardingService = OnboardingService(applicationContext,
+            retrofit.create<OnboardingApi>(OnboardingApi::class.java),
+            userRepo, analytics, taskService, walletService)
+        offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
+            userRepo.userId(), offerRepo, analytics, walletService, scheduler)
+    }
+
+    fun isNetworkConnected(): Boolean {
+        return NetworkUtils.isConnected(applicationContext)
+    }
+}

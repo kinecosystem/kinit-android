@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NavigationTab">
+        <attr name="text" format="reference" />
+        <attr name="src" format="reference"/>
+    </declare-styleable>
+    <declare-styleable name="TransactionView">
+        <attr name="looping" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="TransactionTextView">
+        <attr name="balance" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="QuestionnaireProgressBar">
+        <attr name="progress" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="TransactionLayoutView">
+        <attr name="complete" format="boolean"/>
+    </declare-styleable>
+</resources>

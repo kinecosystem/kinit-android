@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.earn.QuestionViewModel"/>
+        <import type="android.widget.GridLayout" />
+    </data>
+
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            >
+
+
+            <TextView
+                android:id="@+id/question"
+                android:textStyle="normal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="33dp"
+                android:layout_marginEnd="33dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="5sp"
+                android:text="@{model.question}"
+                android:textColor="@color/question_text_color"
+                android:textSize="@dimen/question_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <org.kinecosystem.kinit.view.customView.AnswersGridLayout
+                android:id="@+id/answers_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="33dp"
+                android:layout_marginEnd="33dp"
+                android:layoutMode="clipBounds"
+                app:answers="@{model.answers}"
+                app:onAnswer="@{model.onAnswer}"
+                app:isAlignedLeft="@{model.isAlignedLeft}"
+                app:questionType="@{model.questionType}"
+                app:columnCount="@{model.getColumnCount()}"
+                app:orientation="@{model.isHorizontal() ? GridLayout.HORIZONTAL : GridLayout.VERTICAL}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/question"
+                app:layout_goneMarginTop="25dp"
+                >
+
+            </org.kinecosystem.kinit.view.customView.AnswersGridLayout>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+</layout>

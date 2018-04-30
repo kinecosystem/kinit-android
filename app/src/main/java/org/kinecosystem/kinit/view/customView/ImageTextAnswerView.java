@@ -1,0 +1,64 @@
+package org.kinecosystem.kinit.view.customView;
+
+import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayout;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.model.earn.Answer;
+import org.kinecosystem.kinit.util.ImageUtils;
+import org.kinecosystem.kinit.view.customView.AnswersGridLayout.OnAnswerListener;
+
+public class ImageTextAnswerView extends CardView {
+
+    private Answer answer;
+    private OnAnswerListener listener;
+
+    public ImageTextAnswerView(Context context, Answer answer, OnAnswerListener listener){
+        super(new ContextThemeWrapper(context, R.style.Button_ImageAnswer), null, R.style.Button_ImageAnswer);
+        this.answer = answer;
+        this.listener = listener;
+        init(context);
+    }
+
+
+
+    private void init(Context context) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater.inflate(R.layout.image_text_answer_layout, this);
+
+        float radius_dp_dimen =  context.getResources().getDimension(R.dimen.image_answer_corner);
+        float radius_px_dimen  = TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP,radius_dp_dimen,
+            context.getResources().getDisplayMetrics() );
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+        setLayoutParams(params);
+        setUseCompatPadding(true);
+        setPreventCornerOverlap(true);
+        setRadius(radius_px_dimen);
+
+        setOnClickListener(v -> {
+            if (listener.onAnswered(answer)) {
+                v.findViewById(R.id.answer_text).setBackground(getResources().getDrawable(R.drawable.image_answer_bg_selected));
+                ((TextView)v.findViewById(R.id.answer_text)).setTextColor(getResources().getColor(R.color.white));
+            }
+        });
+        View view = findViewById(R.id.answer_image);
+        Context ivContext = view.getContext();
+        ImageUtils.loadImageIntoView(ivContext, answer.getImageUrl(), findViewById(
+            R.id.answer_image));
+
+
+        TextView answer_text = findViewById(R.id.answer_text);
+        if (answer.getText() != null) answer_text.setText(answer.getText());
+        else answer_text.setVisibility(GONE);
+    }
+
+
+}

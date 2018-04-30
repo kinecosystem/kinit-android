@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="1dp">
+    <ImageView
+        android:id="@+id/answer_image"
+        android:layout_width="0dp"
+        android:layout_height="87dp"
+        android:layout_gravity="top|center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/android_pattern"
+        app:layout_constraintBottom_toTopOf="@+id/answer_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/answer_text"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_gravity="bottom|center"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="6dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        tools:text="Very Very Long Demo Text"/>
+</android.support.constraint.ConstraintLayout>
