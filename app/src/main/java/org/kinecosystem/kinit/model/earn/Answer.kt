@@ -10,5 +10,5 @@ data class Answer(
     @SerializedName("image_url")
     val imageUrl: String? = null)
 
-fun Answer.isValid(): Boolean = !id.isNullOrBlank() && !text.isNullOrBlank()
+fun Answer.isValid(): Boolean = !id.isNullOrBlank() && (!text.isNullOrBlank() || !imageUrl.isNullOrBlank())
 
