@@ -101,8 +101,11 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
             object : Callback<StatusResponse> {
                 override fun onResponse(call: Call<StatusResponse>?,
                     response: Response<StatusResponse>?) {
+                    val config = response?.body()?.config
+                    userRepo.tos = config?.tos!!
+                    userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled!!
                     wallet.initKinWallet()
-                    Log.d("OnboardingService", "appLaunch onResponse: $response")
+                    Log.d("OnboardingService", "appLaunch onResponse: $response" + " config " + response?.body()?.config)
                 }
 
                 override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {

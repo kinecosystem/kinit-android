@@ -34,6 +34,16 @@
             android:theme="@style/Questionnaire"/>
 
         <activity
+            android:name=".view.tutorial.TutorialActivity"
+            android:screenOrientation="portrait"
+           />
+
+        <activity
+            android:name=".view.phoneVerify.PhoneVerifyActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
             android:name=".view.spend.PurchaseOfferActivity"
             android:screenOrientation="portrait"
             />

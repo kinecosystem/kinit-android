@@ -6,9 +6,14 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.OnboardingErrorCreatingWalletLayoutBinding
 import org.kinecosystem.kinit.databinding.SplashLayoutBinding
 import org.kinecosystem.kinit.util.SupportUtil
+import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
 
 class SplashActivity : BaseActivity(), SplashNavigator {
+    override fun moveToTutorialScreen() {
+        startActivity(TutorialActivity.getIntent(this))
+        finish()
+    }
 
     private var splashViewModel: SplashViewModel? = null
 

@@ -65,4 +65,13 @@
     <string name="contact_support">contact support</string>
     <string name="question_gray_text">Check all that apply</string>
     <string name="multi_answer_next_btn_text">Next</string>
+    <string name="term_of_service">By clicking “Start earning Kin” you are agreeing\nto our Terms of Service and Privacy Policy</string>
+    <string name="start_tutorial_text">Start earning Kin</string>
+    <string name="tutorial_welcome_subtitle">Earn Kin just for sharing your opinions.\nSpend Kin on your favorite brands.\nIt takes less than a minute a day.</string>
+    <string name="welcome_to_kinit">Welcome to Kinit</string>
+    <string name="enjoy">Enjoy</string>
+    <string name="tutorial_subtitle_enjoy">In no time, you’ll have enough Kin\nto spend towards your favorite brands\n(Amazon, Grubhub and more!)</string>
+    <string name="earn_kin">Earn Kin</string>
+    <string name="tutorial_subtitle_earn">Earning Kin is as simple as answering\na few questions a day on topics like,\nmusic, movies, fashion, apps and more.</string>
+    <string name="tos"><![CDATA[By clicking Start earning Kin you are agreeing to our <u><font color=#82ffee>Terms of Service</font></u> and <u><font color=#82ffee>Privacy Policy</font></u>]]></string>
 </resources>

@@ -6,4 +6,5 @@ interface SplashNavigator {
     fun moveToErrorScreen()
     fun moveToSplashScreen()
     fun openContactSupport()
+    fun moveToTutorialScreen()
 }

@@ -68,7 +68,7 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
         if (callback == null) {
             callback = object : Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(p0: Observable?, p1: Int) {
-                    splashNavigator?.moveToMainScreen()
+                    splashNavigator?.moveToTutorialScreen()
                 }
             }
             walletReady.addOnPropertyChangedCallback(callback)
