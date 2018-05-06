@@ -2,7 +2,7 @@ package org.kinecosystem.kinit.analytics;//
 // Events.java
 //
 // Don't edit this file.
-// Generated at 2018-04-24 14:41:19 +0000 by Kik BI-Generator.
+// Generated at 2018-05-06 09:23:45 +0000 by Kik BI-Generator.
 //
 
 import android.util.Log;
@@ -373,7 +373,7 @@ public class Events {
         }
         
         /**
-        user was successfully created in the server (user_id). Event name: `user_registered`
+        user was successfully created in the server (user ID). Event name: `user_registered`
         */
         public static class UserRegistered implements Event {
             
@@ -411,6 +411,34 @@ public class Events {
             @Override
             public String getName() {
                 return "wallet_created";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("event_type", "business"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user was successfully verified (completed phone verification). Event name: `user_verified`
+        */
+        public static class UserVerified implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "user_verified";
             }
 
             @Override
@@ -904,6 +932,80 @@ public class Events {
         }
         
         /**
+        user views question page, as part of a questionnaire. Event name: `view_Question_page`
+        */
+        public static class ViewQuestionPage implements Event {
+            
+            private String creator;
+            
+            private Float estimatedTimeToComplete;
+            
+            private Integer kinReward;
+            
+            private Integer numberOfQuestions;
+            
+            private String questionId;
+            
+            private Integer questionOrder;
+            
+            private String questionType;
+            
+            private String taskCategory;
+            
+            private String taskId;
+            
+            private String taskTitle;
+            
+
+            
+            public ViewQuestionPage( String creator, Float estimatedTimeToComplete, Integer kinReward, Integer numberOfQuestions, String questionId, Integer questionOrder, String questionType, String taskCategory, String taskId, String taskTitle) {
+                
+                this.creator = creator; 
+                this.estimatedTimeToComplete = estimatedTimeToComplete; 
+                this.kinReward = kinReward; 
+                this.numberOfQuestions = numberOfQuestions; 
+                this.questionId = questionId; 
+                this.questionOrder = questionOrder; 
+                this.questionType = questionType; 
+                this.taskCategory = taskCategory; 
+                this.taskId = taskId; 
+                this.taskTitle = taskTitle; 
+            }
+
+            @Override
+            public String getName() {
+                return "view_Question_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    properties.put("creator", creator); 
+                    properties.put("estimated_time_to_complete", estimatedTimeToComplete); 
+                    properties.put("KIN_reward", kinReward); 
+                    properties.put("number_of_questions", numberOfQuestions); 
+                    properties.put("question_id", questionId); 
+                    properties.put("question_order", questionOrder); 
+                    properties.put("question_type", questionType); 
+                    properties.put("task_category", taskCategory); 
+                    properties.put("task_id", taskId); 
+                    properties.put("task_title", taskTitle); 
+                    
+                    properties.put("item_name", "Question"); 
+                    properties.put("item_type", "page"); 
+                    properties.put("action", "view"); 
+                    properties.put("event_type", "analytics"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
         user views Reward page after completing a task. Event name: `view_Reward_page`
         */
         public static class ViewRewardPage implements Event {
@@ -954,68 +1056,6 @@ public class Events {
                     properties.put("task_type", taskType); 
                     
                     properties.put("item_name", "Reward"); 
-                    properties.put("item_type", "page"); 
-                    properties.put("action", "view"); 
-                    properties.put("event_type", "analytics"); 
-                } catch (JSONException e) {
-                Log.e("Events",
-                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-        
-        /**
-        user views earning task end page (Yay!). Event name: `view_Task_End_page`
-        */
-        public static class ViewTaskEndPage implements Event {
-            
-            private String creator;
-            
-            private Float estimatedTimeToComplete;
-            
-            private Integer kinReward;
-            
-            private String taskCategory;
-            
-            private String taskId;
-            
-            private String taskTitle;
-            
-            private String taskType;
-            
-
-            
-            public ViewTaskEndPage( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
-                
-                this.creator = creator; 
-                this.estimatedTimeToComplete = estimatedTimeToComplete; 
-                this.kinReward = kinReward; 
-                this.taskCategory = taskCategory; 
-                this.taskId = taskId; 
-                this.taskTitle = taskTitle; 
-                this.taskType = taskType; 
-            }
-
-            @Override
-            public String getName() {
-                return "view_Task_End_page";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-                    
-                    properties.put("creator", creator); 
-                    properties.put("estimated_time_to_complete", estimatedTimeToComplete); 
-                    properties.put("KIN_reward", kinReward); 
-                    properties.put("task_category", taskCategory); 
-                    properties.put("task_id", taskId); 
-                    properties.put("task_title", taskTitle); 
-                    properties.put("task_type", taskType); 
-                    
-                    properties.put("item_name", "Task_End"); 
                     properties.put("item_type", "page"); 
                     properties.put("action", "view"); 
                     properties.put("event_type", "analytics"); 
@@ -1920,9 +1960,350 @@ public class Events {
         }
         
         /**
-        user views question page, as part of a questionnaire. Event name: `view_Question_page`
+        user clicks the button on the onboarding page (tutorial pages). Event name: `click_Start_button_on_Onboarding_page`
         */
-        public static class ViewQuestionPage implements Event {
+        public static class ClickStartButtonOnOnboardingPage implements Event {
+            
+            private Integer onboardingTutorialPage;
+            
+
+            
+            public ClickStartButtonOnOnboardingPage( Integer onboardingTutorialPage) {
+                
+                this.onboardingTutorialPage = onboardingTutorialPage; 
+            }
+
+            @Override
+            public String getName() {
+                return "click_Start_button_on_Onboarding_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    properties.put("onboarding_tutorial_page", onboardingTutorialPage); 
+                    
+                    properties.put("item_name", "Start"); 
+                    properties.put("item_type", "button"); 
+                    properties.put("action", "click"); 
+                    properties.put("event_type", "analytics"); 
+                    properties.put("parent_name", "Onboarding"); 
+                    properties.put("parent_type", "page"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user views the onboarding page (tutorial pages). sent also when moving to other tutorial slide. Event name: `view_Onboarding_page`
+        */
+        public static class ViewOnboardingPage implements Event {
+            
+            private Integer onboardingTutorialPage;
+            
+
+            
+            public ViewOnboardingPage( Integer onboardingTutorialPage) {
+                
+                this.onboardingTutorialPage = onboardingTutorialPage; 
+            }
+
+            @Override
+            public String getName() {
+                return "view_Onboarding_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    properties.put("onboarding_tutorial_page", onboardingTutorialPage); 
+                    
+                    properties.put("item_name", "Onboarding"); 
+                    properties.put("item_type", "page"); 
+                    properties.put("action", "view"); 
+                    properties.put("event_type", "analytics"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user views the phone authentication page when phone number should be inserted. Event name: `view_Phone_Auth_page`
+        */
+        public static class ViewPhoneAuthPage implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "view_Phone_Auth_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("item_name", "Phone_Auth"); 
+                    properties.put("item_type", "page"); 
+                    properties.put("action", "view"); 
+                    properties.put("event_type", "analytics"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user click the button to continue to verification page. Event name: `click_Next_button_on_Phone_Auth_page`
+        */
+        public static class ClickNextButtonOnPhoneAuthPage implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "click_Next_button_on_Phone_Auth_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("item_name", "Next"); 
+                    properties.put("item_type", "button"); 
+                    properties.put("action", "click"); 
+                    properties.put("event_type", "analytics"); 
+                    properties.put("parent_name", "Phone_Auth"); 
+                    properties.put("parent_type", "page"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user views the verification page, where a verification code should be inserted. Event name: `view_Verification_page`
+        */
+        public static class ViewVerificationPage implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "view_Verification_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("item_name", "Verification"); 
+                    properties.put("item_type", "page"); 
+                    properties.put("action", "view"); 
+                    properties.put("event_type", "analytics"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user gets an error message when entering a wrong verification code. Event name: `view_Error_message_on_Verification_page`
+        */
+        public static class ViewErrorMessageOnVerificationPage implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "view_Error_message_on_Verification_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("item_name", "Error"); 
+                    properties.put("item_type", "message"); 
+                    properties.put("action", "view"); 
+                    properties.put("event_type", "analytics"); 
+                    properties.put("parent_name", "Verification"); 
+                    properties.put("parent_type", "page"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user view the completion message after successfully completed onboarding. Event name: `view_Onboarding_Completed_page`
+        */
+        public static class ViewOnboardingCompletedPage implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "view_Onboarding_Completed_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("item_name", "Onboarding_Completed"); 
+                    properties.put("item_type", "page"); 
+                    properties.put("action", "view"); 
+                    properties.put("event_type", "analytics"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user clicks the new code link to receive a new SMS with verification code. Event name: `click_New_Code_link_on_Verification_page`
+        */
+        public static class ClickNewCodeLinkOnVerificationPage implements Event {
+            
+            private Integer verificationCodeCount;
+            
+
+            
+            public ClickNewCodeLinkOnVerificationPage( Integer verificationCodeCount) {
+                
+                this.verificationCodeCount = verificationCodeCount; 
+            }
+
+            @Override
+            public String getName() {
+                return "click_New_Code_link_on_Verification_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    properties.put("verification_code_count", verificationCodeCount); 
+                    
+                    properties.put("item_name", "New_Code"); 
+                    properties.put("item_type", "link"); 
+                    properties.put("action", "click"); 
+                    properties.put("event_type", "analytics"); 
+                    properties.put("parent_name", "Verification"); 
+                    properties.put("parent_type", "page"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        existing user receives a popup message explaining the phone auth required. Event name: `view_Phone_Auth_popup`
+        */
+        public static class ViewPhoneAuthPopup implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "view_Phone_Auth_popup";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("item_name", "Phone_Auth"); 
+                    properties.put("item_type", "popup"); 
+                    properties.put("action", "view"); 
+                    properties.put("event_type", "analytics"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        existing user clicks the button on the popup message to start phone auth flow. Event name: `click_Verify_button_on_Phone_Auth_popup`
+        */
+        public static class ClickVerifyButtonOnPhoneAuthPopup implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "click_Verify_button_on_Phone_Auth_popup";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
+                    
+                    properties.put("item_name", "Verify"); 
+                    properties.put("item_type", "button"); 
+                    properties.put("action", "click"); 
+                    properties.put("event_type", "analytics"); 
+                    properties.put("parent_name", "Phone_Auth"); 
+                    properties.put("parent_type", "popup"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        user views earning task end page (Yay!). Event name: `view_Task_End_page`
+        */
+        public static class ViewTaskEndPage implements Event {
             
             private String creator;
             
@@ -1930,39 +2311,30 @@ public class Events {
             
             private Integer kinReward;
             
-            private Integer numberOfQuestions;
-            
-            private String questionId;
-            
-            private Integer questionOrder;
-            
-            private String questionType;
-            
             private String taskCategory;
             
             private String taskId;
             
             private String taskTitle;
             
+            private String taskType;
+            
 
             
-            public ViewQuestionPage( String creator, Float estimatedTimeToComplete, Integer kinReward, Integer numberOfQuestions, String questionId, Integer questionOrder, String questionType, String taskCategory, String taskId, String taskTitle) {
+            public ViewTaskEndPage( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
                 
                 this.creator = creator; 
                 this.estimatedTimeToComplete = estimatedTimeToComplete; 
                 this.kinReward = kinReward; 
-                this.numberOfQuestions = numberOfQuestions; 
-                this.questionId = questionId; 
-                this.questionOrder = questionOrder; 
-                this.questionType = questionType; 
                 this.taskCategory = taskCategory; 
                 this.taskId = taskId; 
                 this.taskTitle = taskTitle; 
+                this.taskType = taskType; 
             }
 
             @Override
             public String getName() {
-                return "view_Question_page";
+                return "view_Task_End_page";
             }
 
             @Override
@@ -1973,15 +2345,12 @@ public class Events {
                     properties.put("creator", creator); 
                     properties.put("estimated_time_to_complete", estimatedTimeToComplete); 
                     properties.put("KIN_reward", kinReward); 
-                    properties.put("number_of_questions", numberOfQuestions); 
-                    properties.put("question_id", questionId); 
-                    properties.put("question_order", questionOrder); 
-                    properties.put("question_type", questionType); 
                     properties.put("task_category", taskCategory); 
                     properties.put("task_id", taskId); 
                     properties.put("task_title", taskTitle); 
+                    properties.put("task_type", taskType); 
                     
-                    properties.put("item_name", "Question"); 
+                    properties.put("item_name", "Task_End"); 
                     properties.put("item_type", "page"); 
                     properties.put("action", "view"); 
                     properties.put("event_type", "analytics"); 
@@ -2183,6 +2552,34 @@ public class Events {
                 try {
                     
                     properties.put("failure_reason", failureReason); 
+                    
+                    properties.put("event_type", "log"); 
+                } catch (JSONException e) {
+                Log.e("Events",
+                    "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+        
+        /**
+        When formatting of the phone inserted by the user when validating fails. Event name: `phone_formatting_failed`
+        */
+        public static class PhoneFormattingFailed implements Event {
+            
+
+            
+
+            @Override
+            public String getName() {
+                return "phone_formatting_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+                    
                     
                     properties.put("event_type", "log"); 
                 } catch (JSONException e) {
