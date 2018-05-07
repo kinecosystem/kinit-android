@@ -37,7 +37,7 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
         splashNavigator?.moveToSplashScreen()
         showCreatingWallet.set(true)
         checkReadyToMove()
-        coreComponents.services().onboardingService.appLaunch()
+        coreComponents.services().onBoardingService.appLaunch()
     }
 
     fun onContactSupportClicked(view: View?) {
@@ -55,9 +55,18 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
     }
 
     private fun checkReadyToMove() {
+        val userRepo = coreComponents.userRepo()
         if (walletReady.get()) {
-            splashNavigator?.moveToMainScreen()
+            if (userRepo.isFirstTimeUser
+                && userRepo.isPhoneVerificationEnabled
+                && !userRepo.isPhoneVerified) {
+
+                splashNavigator?.moveToTutorialScreen()
+            } else {
+                splashNavigator?.moveToMainScreen()
+            }
         } else {
+            userRepo.isFirstTimeUser = true
             showCreatingWallet.set(true)
             addWalletReadyCallback()
             scheduleTimeout()

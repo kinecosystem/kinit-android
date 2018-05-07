@@ -17,4 +17,5 @@
     <dimen name="question_gray_text_size">14sp</dimen>
     <dimen name="match_constraint">0dp</dimen>
     <dimen name="questionnaire_margins">33dp</dimen>
+    <dimen name="auth_phone_next_height">56dp</dimen>
 </resources>

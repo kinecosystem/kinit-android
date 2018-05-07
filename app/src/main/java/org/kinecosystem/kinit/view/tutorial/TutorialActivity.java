@@ -10,11 +10,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Html;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.view.BaseActivity;
+import org.kinecosystem.kinit.view.MainActivity;
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity;
 
 public class TutorialActivity extends BaseActivity {
@@ -63,7 +66,7 @@ public class TutorialActivity extends BaseActivity {
     private void initTosText() {
         TextView tos = findViewById(R.id.tos_text);
         String tos_url = getCoreComponents().userRepo().getTos();
-        if (tos_url == null || tos_url.isEmpty()) {
+        if (TextUtils.isEmpty(tos_url)) {
             tos.setText("");
         } else {
             tos.setText(Html.fromHtml(getResources().getString(R.string.tos)));
@@ -83,7 +86,11 @@ public class TutorialActivity extends BaseActivity {
 
     private void onStartClicked() {
         getCoreComponents().analytics().logEvent(new Events.Analytics.ClickStartButtonOnOnboardingPage(currentPage));
-        startActivity(PhoneVerifyActivity.getIntent(TutorialActivity.this));
+        if (getCoreComponents().userRepo().isPhoneVerificationEnabled()) {
+            startActivity(PhoneVerifyActivity.getIntent(this, true));
+        } else {
+            startActivity(MainActivity.getIntent(this));
+        }
         finish();
     }
 
@@ -95,8 +102,8 @@ public class TutorialActivity extends BaseActivity {
     }
 
     private void clearPagesIndicator() {
-        for (int i = 0; i < pages.length; i++) {
-            pages[i].setSelected(false);
+        for (View page : pages) {
+            page.setSelected(false);
         }
     }
 

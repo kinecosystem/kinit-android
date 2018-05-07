@@ -7,12 +7,14 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.analytics.Events.Business.UserRegistered
 import org.kinecosystem.kinit.device.DeviceUtils
+import org.kinecosystem.kinit.network.OnboardingApi.StatusResponse
 import org.kinecosystem.kinit.repository.UserRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class OnboardingService(context: Context, private val appLaunchApi: OnboardingApi,
+    private val phoneAuthenticationApi: PhoneAuthenticationApi,
     val userRepo: UserRepository,
     val analytics: Analytics,
     val taskService: TaskService,
@@ -30,6 +32,16 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         } else {
             callAppLaunch(appVersion)
         }
+    }
+
+    fun sendPhoneAuthentication(
+        phoneNumber: String, token: String, callback: Callback<StatusResponse>) {
+
+        if (!NetworkUtils.isConnected(applicationContext)) {
+            return
+        }
+        phoneAuthenticationApi.updatePhoneAuthToken(userRepo.userId(),
+            PhoneAuthenticationApi.AuthInfo(phoneNumber, token)).enqueue(callback)
     }
 
     private fun updateToken() {
@@ -76,6 +88,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 response: Response<StatusResponse>?) {
 
                 if (response != null && response.isSuccessful) {
+                    updateConfig(response)
                     updateToken()
                     analytics.logEvent(UserRegistered())
                     userRepo.isRegistered = true
@@ -94,6 +107,12 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         })
     }
 
+    private fun updateConfig(response: Response<StatusResponse>) {
+        val config = response.body()?.config
+        userRepo.tos = config?.tos ?: ""
+        userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled ?: false
+    }
+
     private fun callAppLaunch(appVersion: String) {
         updateToken()
         val call = appLaunchApi.appLaunch(userRepo.userId(), OnboardingApi.AppVersion(appVersion))
@@ -101,11 +120,12 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
             object : Callback<StatusResponse> {
                 override fun onResponse(call: Call<StatusResponse>?,
                     response: Response<StatusResponse>?) {
-                    val config = response?.body()?.config
-                    userRepo.tos = config?.tos!!
-                    userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled!!
-                    wallet.initKinWallet()
-                    Log.d("OnboardingService", "appLaunch onResponse: $response" + " config " + response?.body()?.config)
+                    if (response != null && response.isSuccessful) {
+                        updateConfig(response)
+                        wallet.initKinWallet()
+                        Log.d("OnboardingService",
+                            "appLaunch onResponse: $response" + " config " + response?.body()?.config)
+                    }
                 }
 
                 override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {

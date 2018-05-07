@@ -1,5 +1,7 @@
 package org.kinecosystem.kinit.view;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,10 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import java.util.List;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickMenuItem;
 import org.kinecosystem.kinit.analytics.Events.Event;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.view.BottomTabNavigation.TabSelectionListener;
+import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity;
 
 public class MainActivity extends BaseActivity implements TabSelectionListener {
 
@@ -31,7 +36,7 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         setContentView(R.layout.main_activity);
         bottomTabNavigation = findViewById(R.id.navigation);
-        int selectedTabIndex = (savedInstanceState!=null) ? savedInstanceState.getInt(SELECTED_TAB_INDEX_KEY, 0): 0;
+        int selectedTabIndex = (savedInstanceState != null) ? savedInstanceState.getInt(SELECTED_TAB_INDEX_KEY, 0) : 0;
         bottomTabNavigation.setSelectedTabIndex(selectedTabIndex);
         bottomTabNavigation.setTabSelectionListener(this);
         viewPager = findViewById(R.id.view_pager);
@@ -64,6 +69,25 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
     protected void onResume() {
         super.onResume();
         onScreenVisibleToUser();
+        UserRepository userRepo = getCoreComponents().userRepo();
+        if (userRepo.isPhoneVerificationEnabled() && !userRepo.isPhoneVerified()) {
+            showPhoneVerifyPopup();
+        }
+    }
+
+    private void showPhoneVerifyPopup() {
+        Builder builder = new Builder(this, R.style.CustomAlertDialog);
+        builder.setTitle(R.string.pop_verify_phone_title)
+            .setMessage(R.string.pop_verify_phone_sub_title)
+            .setPositiveButton(R.string.pop_verify_phone_possitive, (dialog, which) -> {
+                startActivity(PhoneVerifyActivity.getIntent(MainActivity.this, false));
+                finish();
+            });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+        getCoreComponents().analytics().logEvent(new Events.Analytics.ViewPhoneAuthPopup());
     }
 
     // Cannot rely on Fragment onResume to be called when fragment is visible

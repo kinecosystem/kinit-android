@@ -13,6 +13,8 @@ private const val USER_CACHE_NAME = "kin.app.user"
 private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
+private const val FIRST_TIME_USER = "FIRST_TIME_USER"
+
 
 
 class UserRepository(dataStoreProvider: DataStoreProvider) {
@@ -43,6 +45,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isPhoneVerificationEnabled: Boolean
         set(enable) = userCache.putBoolean(PHONE_VERIFICATION_ENABLED, enable)
         get() = userCache.getBoolean(PHONE_VERIFICATION_ENABLED, false)
+
+    var isFirstTimeUser: Boolean
+        set(firstTime) = userCache.putBoolean(FIRST_TIME_USER, firstTime)
+        get() = userCache.getBoolean(FIRST_TIME_USER, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")

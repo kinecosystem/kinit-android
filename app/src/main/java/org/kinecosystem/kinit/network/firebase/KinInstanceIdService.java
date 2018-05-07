@@ -12,7 +12,7 @@ public class KinInstanceIdService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         if (refreshedToken != null) {
             CoreComponentsProvider componentsProvider = (CoreComponentsProvider) getApplicationContext();
-            componentsProvider.services().getOnboardingService().updateToken(refreshedToken);
+            componentsProvider.services().getOnBoardingService().updateToken(refreshedToken);
         }
     }
 }

@@ -74,4 +74,18 @@
     <string name="earn_kin">Earn Kin</string>
     <string name="tutorial_subtitle_earn">Earning Kin is as simple as answering\na few questions a day on topics like,\nmusic, movies, fashion, apps and more.</string>
     <string name="tos"><![CDATA[By clicking Start earning Kin you are agreeing to our <u><font color=#82ffee>Terms of Service</font></u> and <u><font color=#82ffee>Privacy Policy</font></u>]]></string>
+    <string name="your_phone_number">Your phone number</string>
+    <string name="next">Next</string>
+    <string name="verification_code_subtitle">We have sent a verification code to %1$s. Please type it below</string>
+    <string name="code_sms_counter_subtitle">The code will arrive in %1$d sec</string>
+    <string name="send_new_code"><![CDATA[Send me a new code >]]></string>
+    <string name="pop_verify_phone_title">Help us keep your Kin safe</string>
+    <string name="pop_verify_phone_sub_title">Please verify your phone number</string>
+    <string name="pop_verify_phone_possitive">Verify my account</string>
+    <string name="verification_sms">Verification SMS</string>
+    <string name="phone_number">Phone number</string>
+    <string name="your_phone_number_is_used_to_identify_your_wallet">Your phone number is used to identify your wallet.</string>
+    <string name="please_fill_your_country_code">Please fill your country code</string>
+    <string name="your_wallet_is_ready">Your wallet is ready!</string>
+    <string name="woohoo">Woohoo</string>
 </resources>
