@@ -16,13 +16,17 @@ public class AnswersGridLayout extends GridLayout {
     public static final long SHOW_ANSWERS_DELAY = 750l;
     public static final long FADE_IN_DURATION = 200l;
 
-    @BindingAdapter({"answers", "onAnswer", "questionType", "isAlignedLeft"})
-    public static void setAnswers(AnswersGridLayout view, List<Answer> answers, OnAnswerListener onAnswer, String questionType, boolean isAlignedLeft) {
-        view.setAnswers(answers, onAnswer, questionType, isAlignedLeft);
+    public interface AnswerView{
+        void answerShowAnimation(long delay);
     }
 
-    public interface OnAnswerListener {
-        boolean onAnswered(Answer answer);
+    @BindingAdapter({"answers", "onAnswer", "questionType", "isAlignedLeft"})
+    public static void setAnswers(AnswersGridLayout view, List<Answer> answers, OnAnswerSelectedListener listener, String questionType, boolean isAlignedLeft) {
+        view.setAnswers(answers, listener, questionType, isAlignedLeft);
+    }
+
+    public interface OnAnswerSelectedListener {
+        boolean onAnswerSelected(Answer answer);
     }
 
     public AnswersGridLayout(Context context) {
@@ -46,22 +50,22 @@ public class AnswersGridLayout extends GridLayout {
 
     private void fadeInAnswers(long delay) {
         postDelayed(() -> {
-            if (getChildAt(0) instanceof TextAnswerView) {
-                for (int i = 0; i < getChildCount(); i++) {
-                    TextAnswerView questionAnswersView = (TextAnswerView) getChildAt(i);
-                    questionAnswersView.fadeIn(i * FADE_IN_DURATION);
-                }
+            for (int i = 0; i < getChildCount(); i++) {
+                AnswerView questionAnswersView = (AnswerView) getChildAt(i);
+                questionAnswersView.answerShowAnimation(i * FADE_IN_DURATION);
             }
         }, delay);
     }
 
-    public void setAnswers(List<Answer> answers, OnAnswerListener listener, String questionType, boolean isAlignedLeft) {
+    public void setAnswers(List<Answer> answers, OnAnswerSelectedListener answerClickListener, String questionType, boolean isAlignedLeft) {
         for (Answer answer : answers) {
             View view;
             if (Question.QuestionType.TEXT_IMAGE.getType().equals(questionType)) {
-                view = new ImageTextAnswerView(getContext(), answer, listener);
+                view = new ImageTextAnswerView(getContext(), answer, answerClickListener);
+            } else if (Question.QuestionType.TEXT_MULTIPLE.getType().equals(questionType)) {
+                view = new MultipleAnswersView(getContext(), answer, answerClickListener);
             } else {
-                view = new TextAnswerView(getContext(), answer, listener, isAlignedLeft);
+                view = new TextAnswerView(getContext(), answer, answerClickListener, isAlignedLeft);
             }
             addView(view);
         }

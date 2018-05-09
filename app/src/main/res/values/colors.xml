@@ -24,4 +24,5 @@
     <color name="answer_font_color">#7884a5</color>
     <color name="answer_font_color_selected">@color/white</color>
     <color name="status_bar_color">#047cfc</color>
+    <color name="question_gray_text_color">#8b97b4</color>
 </resources>

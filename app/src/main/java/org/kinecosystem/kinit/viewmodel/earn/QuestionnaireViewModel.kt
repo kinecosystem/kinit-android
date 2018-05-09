@@ -28,7 +28,7 @@ open class QuestionnaireViewModel(private val coreComponents: CoreComponentsProv
         get() = !repo.isQuestionnaireComplete()
 
     private var nextQuestionIndex: Int = 0
-        get() = repo.getNumOfChosenAnswers()
+        get() = repo.getNumOfAnsweredQuestions()
 
     private var currentPage: Int =
         when {
@@ -64,7 +64,7 @@ open class QuestionnaireViewModel(private val coreComponents: CoreComponentsProv
     private fun moveToNextPage(page: Int) {
         currentPage = page
         questionnaireProgress.set(
-            ((repo.getNumOfChosenAnswers().toDouble() / task?.questions!!.size) * 100).toInt())
+            ((repo.getNumOfAnsweredQuestions().toDouble() / task?.questions!!.size) * 100).toInt())
         nextFragment.set(getFragment())
     }
 

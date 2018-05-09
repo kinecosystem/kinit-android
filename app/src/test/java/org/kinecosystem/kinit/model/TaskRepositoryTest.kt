@@ -1,7 +1,7 @@
 package org.kinecosystem.kinit.model
 
 import org.kinecosystem.kinit.mock.MockComponentsProvider
-import org.kinecosystem.kinit.model.earn.ChosenAnswer
+import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.isValid
 import org.kinecosystem.kinit.repository.QuestionnaireRepository
 import org.junit.Assert.assertEquals
@@ -55,26 +55,48 @@ class TaskRepositoryTest {
 
     @Test
     fun testSaveAnswer() {
-        val chosen = setChosenAnswer(0, 2)
+        val chosen = setChosenAnswers(0, listOf(2))
         val chosenAnswers = questionnaireRepo.getChosenAnswers()
-        assertEquals(chosen.answerId, chosenAnswers[0].answerId)
+        assertEquals(chosen.answersIds[0], chosenAnswers[0].answersIds[0])
         assertEquals(chosen.questionId, chosenAnswers[0].questionId)
     }
 
     @Test
     fun testDeleteChosenAnswersFromCache() {
-        setChosenAnswer(0, 1)
+        setChosenAnswers(0, listOf(1))
         questionnaireRepo.clearChosenAnswers()
-        assertEquals(questionnaireRepo.getNumOfChosenAnswers(), 0)
+        assertEquals(questionnaireRepo.getNumOfAnsweredQuestions(), 0)
     }
 
     @Test
     fun testTwoAnswersSaved() {
         questionnaireRepo.clearChosenAnswers()
-        setChosenAnswer(0, 2)
-        val chosen2 = setChosenAnswer(1, 1)
-        assertEquals(questionnaireRepo.getNumOfChosenAnswers(), 2)
-        assertEquals(chosen2.answerId, questionnaireRepo.getChosenAnswer(chosen2.questionId))
+        setChosenAnswers(0, listOf(2))
+        val chosen2 = setChosenAnswers(1, listOf(1))
+        val answerFromRepo = questionnaireRepo.getChosenAnswers()[1]
+        assertEquals(questionnaireRepo.getNumOfAnsweredQuestions(), 2)
+        assertEquals(chosen2.answersIds[0], answerFromRepo.answersIds[0])
+    }
+
+
+    @Test
+    fun testAnswerSavedCount() {
+        questionnaireRepo.clearChosenAnswers()
+        val chosenAnswers = setChosenAnswers(0, listOf(1,2))
+        assertEquals(1,questionnaireRepo.getNumOfAnsweredQuestions())
+        assertEquals(chosenAnswers.questionId, questionnaireRepo.getChosenAnswers()[0].questionId)
+        assertEquals(chosenAnswers.answersIds.size, questionnaireRepo.getChosenAnswers()[0].answersIds.size)
+    }
+
+    @Test
+    fun testMultiAnswersSaved() {
+        questionnaireRepo.clearChosenAnswers()
+        val chosenAnswers = setChosenAnswers(0, listOf(1,2,3))
+        val answersInRepo = questionnaireRepo.getChosenAnswers()
+        assertEquals(chosenAnswers.questionId, answersInRepo[0].questionId)
+        assertEquals(chosenAnswers.answersIds[0], answersInRepo[0].answersIds[0])
+        assertEquals(chosenAnswers.answersIds[1], answersInRepo[0].answersIds[1])
+        assertEquals(chosenAnswers.answersIds[2], answersInRepo[0].answersIds[2])
     }
 
     @Test
@@ -88,18 +110,18 @@ class TaskRepositoryTest {
         questionnaireRepo.clearChosenAnswers()
 
         for (i in questionnaireRepo.task?.questions?.indices!!) {
-            setChosenAnswer(i, 0)
+            setChosenAnswers(i, listOf(0))
         }
         assertEquals(questionnaireRepo.isQuestionnaireComplete(), true)
     }
 
-    private fun setChosenAnswer(questionIndex: Int, answerIndex: Int): ChosenAnswer {
+    private fun setChosenAnswers(questionIndex: Int, answersIndex: List<Int>): ChosenAnswers {
         val question = questionnaireRepo.task?.questions?.get(questionIndex)
-        val answer = question?.answers?.get(answerIndex)
-        if (question != null && answer != null) {
-            questionnaireRepo.setChosenAnswer(question?.id!!, answer?.id!!)
+        val answers = answersIndex.map { index -> question?.answers?.get(index)?.id!! }
+        if (question != null && answersIndex.isNotEmpty()) {
+            questionnaireRepo.setChosenAnswers(question.id!!, answers)
         }
-        return ChosenAnswer(question?.id!!, answer?.id!!)
+        return ChosenAnswers(question?.id!!, answers)
     }
 }
 

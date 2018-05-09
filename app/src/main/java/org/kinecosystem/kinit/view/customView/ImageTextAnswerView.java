@@ -8,34 +8,33 @@ import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.model.earn.Answer;
 import org.kinecosystem.kinit.util.ImageUtils;
-import org.kinecosystem.kinit.view.customView.AnswersGridLayout.OnAnswerListener;
+import org.kinecosystem.kinit.view.customView.AnswersGridLayout.OnAnswerSelectedListener;
 
-public class ImageTextAnswerView extends CardView {
+public class ImageTextAnswerView extends CardView implements AnswersGridLayout.AnswerView {
 
     private Answer answer;
-    private OnAnswerListener listener;
+    private OnAnswerSelectedListener listener;
 
-    public ImageTextAnswerView(Context context, Answer answer, OnAnswerListener listener){
+    public ImageTextAnswerView(Context context, Answer answer, OnAnswerSelectedListener listener) {
         super(new ContextThemeWrapper(context, R.style.Button_ImageAnswer), null, R.style.Button_ImageAnswer);
         this.answer = answer;
         this.listener = listener;
         init(context);
     }
 
-
-
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.image_text_answer_layout, this);
 
-        float radius_dp_dimen =  context.getResources().getDimension(R.dimen.image_answer_corner);
-        float radius_px_dimen  = TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP,radius_dp_dimen,
-            context.getResources().getDisplayMetrics() );
+        float radius_dp_dimen = context.getResources().getDimension(R.dimen.image_answer_corner);
+        float radius_px_dimen = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, radius_dp_dimen, context.getResources().getDisplayMetrics());
 
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
@@ -44,12 +43,11 @@ public class ImageTextAnswerView extends CardView {
         setPreventCornerOverlap(true);
         setRadius(radius_px_dimen);
 
-        setOnClickListener(v -> {
-            if (listener.onAnswered(answer)) {
-                v.findViewById(R.id.answer_text).setBackground(getResources().getDrawable(R.drawable.image_answer_bg_selected));
-                ((TextView)v.findViewById(R.id.answer_text)).setTextColor(getResources().getColor(R.color.white));
+        setOnClickListener(view -> {
+            if (!listener.onAnswerSelected(answer)) {
+                view.findViewById(R.id.answer_text).setBackground(getResources().getDrawable(R.drawable.image_answer_bg_selected));
+                ((TextView) view.findViewById(R.id.answer_text)).setTextColor(getResources().getColor(R.color.white));
             }
-
         });
         TextView answer_text = findViewById(R.id.answer_text);
         if (!TextUtils.isEmpty(answer.getText()))
@@ -59,11 +57,16 @@ public class ImageTextAnswerView extends CardView {
 
         View view = findViewById(R.id.answer_image);
         Context ivContext = view.getContext();
-        ImageUtils.loadImageIntoView(ivContext, answer.getImageUrl(), findViewById(
-            R.id.answer_image));
+        ImageUtils.loadImageIntoView(ivContext, answer.getImageUrl(), findViewById(R.id.answer_image));
+    }
 
-
+    private void animateClick() {
+        Animation bounce = AnimationUtils.loadAnimation(getContext(), R.anim.bounce);
+        startAnimation(bounce);
     }
 
 
+    @Override
+    public void answerShowAnimation(long delay) {
+    }
 }

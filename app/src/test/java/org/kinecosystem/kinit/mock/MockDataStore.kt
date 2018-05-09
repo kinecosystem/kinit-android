@@ -46,7 +46,7 @@ class MockDataStore : DataStore {
         else defaultValue?:""
     }
 
-    override fun getStringList(key: String, defaultValue: List<String>?): List<String>? {
+    override fun getStringList(key: String, defaultValue: List<String>): List<String> {
         val res = store.get(key)
         return if (res != null)
             res as List<String>
@@ -69,7 +69,8 @@ class MockDataStore : DataStore {
         store.clear()
     }
 
-    override fun getAll(): Map<String, String> {
-        return store as Map<String, String>
+
+    override fun getAll(): Map<String, *> {
+        return store
     }
 }

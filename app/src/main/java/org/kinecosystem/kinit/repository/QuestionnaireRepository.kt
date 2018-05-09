@@ -6,7 +6,7 @@ import android.util.Log
 import com.google.gson.Gson
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Answer
-import org.kinecosystem.kinit.model.earn.ChosenAnswer
+import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.util.ImageUtils
@@ -19,7 +19,7 @@ private const val TASK_STATE_KEY = "task_state"
 class QuestionnaireRepository(dataStoreProvider: DataStoreProvider, defaultTask: String? = null) {
     var task: Task?
         private set
-    private var chosenAnswers: ArrayList<ChosenAnswer> = ArrayList()
+    private var chosenAnswers: ArrayList<ChosenAnswers> = ArrayList()
     private val chosenAnswersCache: DataStore
     private val questionnaireCache: DataStore = dataStoreProvider.dataStore(QUESTIONNAIRE_STORAGE)
     private val questionnaireStorageName: String
@@ -50,25 +50,32 @@ class QuestionnaireRepository(dataStoreProvider: DataStoreProvider, defaultTask:
         return Gson().fromJson(cachedQuestionnaire, Task::class.java)
     }
 
-    fun setChosenAnswer(questionId: String, answerId: String) {
-        chosenAnswers.add(ChosenAnswer(questionId, answerId))
-        chosenAnswersCache.putString(questionId, answerId)
+    fun setChosenAnswers(questionId: String, answersIds: List<String>) {
+        chosenAnswers.add(ChosenAnswers(questionId, answersIds))
+        chosenAnswersCache.putStringList(questionId, answersIds)
         isQuestionnaireStarted.set(true)
     }
 
-    fun getChosenAnswer(questionId: String): String = chosenAnswersCache.getString(questionId, "")
+    fun getChosenAnswersByQuestionId(questionId: String): List<String> = chosenAnswersCache.getStringList(questionId, listOf())
 
-    fun getNumOfChosenAnswers(): Int = getChosenAnswers().size
-
-    fun isQuestionnaireComplete(): Boolean {
-        return task?.questions?.size == getNumOfChosenAnswers()
+    fun getNumOfAnsweredQuestions(): Int {
+        return getChosenAnswers().size
     }
 
-    fun getChosenAnswers(): ArrayList<ChosenAnswer> {
+    fun isQuestionnaireComplete(): Boolean {
+        return task?.questions?.size == getNumOfAnsweredQuestions()
+    }
+
+    fun getChosenAnswers(): ArrayList<ChosenAnswers> {
         if (chosenAnswers.isEmpty()) {
             val answersMap = chosenAnswersCache.getAll()
-            for (answer in answersMap) {
-                chosenAnswers.add(ChosenAnswer(answer.key, answer.value))
+            for (answers in answersMap) {
+                if(answers.value is String) {
+                    chosenAnswers.add(ChosenAnswers(answers.key, listOf(answers.value as String)))
+                }
+                else if (answers.value is HashSet<*>) {
+                    chosenAnswers.add(ChosenAnswers(answers.key, (answers.value as HashSet<String>).toList()))
+                }
             }
         }
         return chosenAnswers

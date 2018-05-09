@@ -1,7 +1,7 @@
 package org.kinecosystem.kinit.network
 
 import com.google.gson.annotations.SerializedName
-import org.kinecosystem.kinit.model.earn.ChosenAnswer
+import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import retrofit2.Call
 import retrofit2.http.Body
@@ -12,9 +12,9 @@ import retrofit2.http.POST
 interface TasksApi {
 
     data class SubmitInfo(
-        @SerializedName("id") val taskId: String,
-        @SerializedName("results") val chosenAnswerList: List<ChosenAnswer>,
-        @SerializedName("address") val publicAddress: String)
+            @SerializedName("id") val taskId: String,
+            @SerializedName("results") val chosenAnswersList: List<ChosenAnswers>,
+            @SerializedName("address") val publicAddress: String)
 
     data class TaskSubmitResponse(@SerializedName("tx_id") val transactionId: String)
 

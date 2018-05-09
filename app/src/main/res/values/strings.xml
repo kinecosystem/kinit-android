@@ -63,4 +63,6 @@
     <string name="error_please_check_your_internet_connection">Please check your internet connection &amp; restart the app.</string>
     <string name="retry">Retry</string>
     <string name="contact_support">contact support</string>
+    <string name="question_gray_text">Check all that apply</string>
+    <string name="multi_answer_next_btn_text">Next</string>
 </resources>

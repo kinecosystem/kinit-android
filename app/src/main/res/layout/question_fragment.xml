@@ -1,71 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.earn.QuestionViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.earn.QuestionViewModel" />
+
         <import type="android.widget.GridLayout" />
+
+        <import type="android.view.View" />
     </data>
 
-
-    <ScrollView
-        android:id="@+id/scroll"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:background="@color/white">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="295dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal|center"
+            android:lineSpacingExtra="5sp"
+            android:text="@{model.question}"
+            android:textColor="@color/question_text_color"
+            android:textSize="@dimen/question_size"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_gl"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/gray_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="5sp"
+            android:text="@string/question_gray_text"
+            android:textColor="@color/question_gray_text_color"
+            android:textSize="@dimen/question_gray_text_size"
+            android:textStyle="normal"
+            android:visibility="@{model.isMultipleAnswers ? View.VISIBLE: View.GONE }"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_gl"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/bottom_gl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="160dp" />
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@color/white"
-            >
-
-
-            <TextView
-                android:id="@+id/question"
-                android:textStyle="normal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_marginStart="33dp"
-                android:layout_marginEnd="33dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="5sp"
-                android:text="@{model.question}"
-                android:textColor="@color/question_text_color"
-                android:textSize="@dimen/question_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@+id/multi_answer_next_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bottom_gl">
 
             <org.kinecosystem.kinit.view.customView.AnswersGridLayout
                 android:id="@+id/answers_layout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginStart="33dp"
-                android:layout_marginEnd="33dp"
+                android:layout_marginEnd="@{model.isFullWidth() ? @dimen/match_constraint : @dimen/questionnaire_margins}"
+                android:layout_marginStart="@{model.isFullWidth() ? @dimen/match_constraint : @dimen/questionnaire_margins}"
                 android:layoutMode="clipBounds"
                 app:answers="@{model.answers}"
-                app:onAnswer="@{model.onAnswer}"
-                app:isAlignedLeft="@{model.isAlignedLeft}"
-                app:questionType="@{model.questionType}"
                 app:columnCount="@{model.getColumnCount()}"
-                app:orientation="@{model.isHorizontal() ? GridLayout.HORIZONTAL : GridLayout.VERTICAL}"
+                app:isAlignedLeft="@{model.isAlignedLeft}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/question"
+                app:layout_constraintTop_toBottomOf="@+id/gray_text"
                 app:layout_goneMarginTop="25dp"
-                >
+                app:onAnswer="@{model.onAnswer}"
+                app:orientation="@{model.isHorizontal() ? GridLayout.HORIZONTAL : GridLayout.VERTICAL}"
+                app:questionType="@{model.questionType}"
+                tools:columnCount="2"
+                tools:orientation="vertical">
+
 
             </org.kinecosystem.kinit.view.customView.AnswersGridLayout>
-        </android.support.constraint.ConstraintLayout>
-    </ScrollView>
+        </ScrollView>
 
+        <Button
+            android:id="@+id/multi_answer_next_btn"
+            android:layout_width="0dp"
+            android:layout_height="68dp"
+            android:background="@drawable/multiple_button_next_bg_drawable"
+            android:enabled="@{model.chosenAnswersCount > 0 ? true : false}"
+            android:fontFamily="@string/multi_answer_next_btn_text"
+            android:onClick="@{()->model.onNext()}"
+            android:text="@string/multi_answer_next_btn_text"
+            android:textAllCaps="false"
+            android:textColor="@{model.chosenAnswersCount > 0 ? @color/blue_dark : @color/question_gray_text_color}"
+            android:textSize="18sp"
+            android:visibility="@{model.isMultipleAnswers ? View.VISIBLE: View.GONE }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 </layout>

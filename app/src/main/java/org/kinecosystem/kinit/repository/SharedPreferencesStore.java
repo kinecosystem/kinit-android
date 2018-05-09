@@ -2,8 +2,11 @@ package org.kinecosystem.kinit.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -43,7 +46,7 @@ public class SharedPreferencesStore implements DataStore {
 
     public int getInt(String key, Integer defaultValue) {
         SharedPreferences sp = applicationContext.getSharedPreferences(storageSection, Context.MODE_PRIVATE);
-        return sp.getInt(key, defaultValue!=null? defaultValue.intValue(): 0);
+        return sp.getInt(key, defaultValue != null ? defaultValue.intValue() : 0);
     }
 
     public void putInt(String key, int value) {
@@ -55,7 +58,7 @@ public class SharedPreferencesStore implements DataStore {
 
     public long getLong(String key, Long defaultValue) {
         SharedPreferences sp = applicationContext.getSharedPreferences(storageSection, Context.MODE_PRIVATE);
-        return sp.getLong(key, defaultValue!=null? defaultValue.longValue(): 0);
+        return sp.getLong(key, defaultValue != null ? defaultValue.longValue() : 0);
     }
 
     public void putLong(String key, long value) {
@@ -93,11 +96,6 @@ public class SharedPreferencesStore implements DataStore {
         }
     }
 
-    public Map<String, String> getAll() {
-        SharedPreferences sp = applicationContext.getSharedPreferences(storageSection, Context.MODE_PRIVATE);
-        return (Map<String, String>)sp.getAll();
-    }
-
     public void clear(String key) {
         SharedPreferences sp = applicationContext.getSharedPreferences(storageSection, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -123,5 +121,11 @@ public class SharedPreferencesStore implements DataStore {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @NonNull
+    public Map<String, ?> getAll() {
+        SharedPreferences sp = applicationContext.getSharedPreferences(storageSection, Context.MODE_PRIVATE);
+        return  sp.getAll();
     }
 }

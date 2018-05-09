@@ -3,7 +3,7 @@ package org.kinecosystem.kinit.network
 import android.content.Context
 import android.util.Log
 import org.kinecosystem.kinit.model.TaskState
-import org.kinecosystem.kinit.model.earn.ChosenAnswer
+import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isValid
 import org.kinecosystem.kinit.model.user.UserInfo
@@ -22,7 +22,7 @@ class TaskService(context: Context, api: TasksApi,
     fun submitQuestionnaireAnswers(
             userInfo: UserInfo,
             task: Task?,
-            chosenAnswers: List<ChosenAnswer>) {
+            chosenAnswers: List<ChosenAnswers>) {
 
         if (!NetworkUtils.isConnected(applicationContext)) {
             questionnaireRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
