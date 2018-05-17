@@ -30,4 +30,8 @@
     <color name="auth_next_font_color_disable">#d2d7e1</color>
     <color name="auth_next_bg_color">#fff</color>
     <color name="auth_next_bg_color_clicked">#7884a5</color>
+    <color name="konetti1">#01ff1c</color>
+    <color name="konetti2">#f7da1a</color>
+    <color name="konetti3">#90fdf2</color>
+    <color name="konetti4">#1664e8</color>
 </resources>
