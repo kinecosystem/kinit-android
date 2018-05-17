@@ -21,7 +21,7 @@ class KinitApplication : Application(), CoreComponentsProvider {
         coreComponentsProvider = CoreComponentsProviderImpl(this, this)
         analytics().init(this, userRepo().isFreshInstall)
         analytics().setUserId(userRepo().userId())
-        services().onboardingService.appLaunch()
+        services().onBoardingService.appLaunch()
         services().offerService.retrieveOffers()
         userRepo().isFreshInstall = false
     }

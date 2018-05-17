@@ -22,7 +22,12 @@
     <color name="button_blue_disable_font_color">#fff</color>
     <color name="grey_delimiter_line_color">#d2d7e1</color>
     <color name="answer_font_color">#7884a5</color>
+    <color name="grey">#7884a5</color>
     <color name="answer_font_color_selected">@color/white</color>
     <color name="status_bar_color">#047cfc</color>
     <color name="question_gray_text_color">#8b97b4</color>
+    <color name="auth_next_font_color">#047cfc</color>
+    <color name="auth_next_font_color_disable">#d2d7e1</color>
+    <color name="auth_next_bg_color">#fff</color>
+    <color name="auth_next_bg_color_clicked">#7884a5</color>
 </resources>

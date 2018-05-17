@@ -15,6 +15,17 @@ interface OnboardingApi {
         @SerializedName("device_id") val deviceId: String,
         @SerializedName("app_ver") val appVersion: String)
 
+
+    data class Config(@SerializedName("auth_token_enabled") val auth_token_enabled: Boolean,
+        @SerializedName("p2p_enabled") val p2p_enabled: Boolean,
+        @SerializedName("p2p_max_kin") val p2p_max_kin: String,
+        @SerializedName("p2p_min_kin") val p2p_min_kin: String,
+        @SerializedName("phone_verification_enabled") val phone_verification_enabled: Boolean,
+        @SerializedName("tos") val tos: String)
+
+    data class StatusResponse(@SerializedName("status") val status: String,
+        @SerializedName("config") val config: Config)
+
     @POST("/user/register")
     fun register(@Body registrationInfo: RegistrationInfo): Call<StatusResponse>
 
@@ -32,4 +43,6 @@ interface OnboardingApi {
 
     @POST("/user/onboard")
     fun createAccount(@Header(USER_HEADER_KEY) userId: String, @Body accountInfo: AccountInfo): Call<StatusResponse>
+
+
 }

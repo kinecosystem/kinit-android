@@ -10,6 +10,12 @@ private const val IS_REGISTERED_KEY = "is_registered"
 private const val IS_FRESH_INSTALL = "is_fresh_install"
 private const val FCM_TOKEN_KEY = "token"
 private const val USER_CACHE_NAME = "kin.app.user"
+private const val TOS = "tos"
+private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
+private const val PHONE_VERIFIED = "PHONE_VERIFIED"
+private const val FIRST_TIME_USER = "FIRST_TIME_USER"
+
+
 
 class UserRepository(dataStoreProvider: DataStoreProvider) {
     private val userCache: DataStore = dataStoreProvider.dataStore(USER_CACHE_NAME)
@@ -24,10 +30,25 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(registered) = userCache.putBoolean(IS_REGISTERED_KEY, registered)
         get() = userCache.getBoolean(IS_REGISTERED_KEY, false)
 
+    var isPhoneVerified: Boolean
+        set(phoneVerified) = userCache.putBoolean(PHONE_VERIFIED, phoneVerified)
+        get() = userCache.getBoolean(PHONE_VERIFIED, false)
+
     var isFreshInstall: Boolean
         set(freshInstall) = userCache.putBoolean(IS_FRESH_INSTALL, freshInstall)
         get() = userCache.getBoolean(IS_FRESH_INSTALL, true)
 
+    var tos: String
+        set(tos) = userCache.putString(TOS, tos)
+        get() = userCache.getString(TOS, "")
+
+    var isPhoneVerificationEnabled: Boolean
+        set(enable) = userCache.putBoolean(PHONE_VERIFICATION_ENABLED, enable)
+        get() = userCache.getBoolean(PHONE_VERIFICATION_ENABLED, false)
+
+    var isFirstTimeUser: Boolean
+        set(firstTime) = userCache.putBoolean(FIRST_TIME_USER, firstTime)
+        get() = userCache.getBoolean(FIRST_TIME_USER, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")

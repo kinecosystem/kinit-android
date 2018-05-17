@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -32,6 +33,17 @@
             android:name=".view.earn.QuestionnaireActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Questionnaire"/>
+
+        <activity
+            android:name=".view.tutorial.TutorialActivity"
+            android:screenOrientation="portrait"
+           />
+
+        <activity
+            android:name=".view.phoneVerify.PhoneVerifyActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            />
 
         <activity
             android:name=".view.spend.PurchaseOfferActivity"
