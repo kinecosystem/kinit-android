@@ -50,20 +50,16 @@
         app:layout_constraintTop_toBottomOf="@+id/title"/>
     <EditText
         android:id="@+id/code_input"
-        android:layout_width="304dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="36dp"
-        android:ems="10"
-        android:gravity="center_horizontal"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="left"
         android:inputType="number"
-        android:letterSpacing="2"
         android:maxLength="6"
         android:textColor="#7884a5"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subtitle"/>
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="16dp"/>
 
     <TextView
         android:id="@+id/next"
@@ -99,22 +95,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="40dp"/>
-    <View
-        android:id="@+id/code_underline"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="29dp"
-        android:background="@color/tab_font_color_selected"
-        app:layout_constraintBottom_toBottomOf="@+id/code_input"
-        app:layout_constraintEnd_toEndOf="@+id/code_input"
-        app:layout_constraintStart_toStartOf="@+id/code_input"
-        app:layout_constraintTop_toTopOf="@+id/code_input"/>
     <TextView
         android:id="@+id/counter"
         android:textStyle="normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"
@@ -123,13 +109,13 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/code_input"/>
+        app:layout_constraintTop_toBottomOf="@+id/input5"/>
     <TextView
         android:id="@+id/resend"
         android:textStyle="normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"
@@ -139,24 +125,229 @@
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/code_input"/>
+        app:layout_constraintTop_toBottomOf="@+id/input5"/>
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_marginTop="8dp"
         android:theme="@style/AppTheme.DarkAccent"
         app:layout_constraintBottom_toTopOf="@+id/next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"/>
+        app:layout_constraintTop_toBottomOf="@+id/guideline3"/>
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_begin="241dp"
+        app:layout_constraintGuide_begin="222dp"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/input0"
+        android:textStyle="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:maxEms="1"
+        android:minEms="1"
+        android:text="0"
+        android:textColor="#7884a5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/input1"
+        app:layout_constraintEnd_toStartOf="@+id/input1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
+        />
+    <View
+        android:id="@+id/line0"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="#047cfc"
+
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="@+id/input0"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input0"
+        app:layout_constraintTop_toBottomOf="@+id/input0"/>
+    <TextView
+        android:id="@+id/input1"
+        android:textStyle="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:maxEms="1"
+        android:minEms="1"
+        android:clickable="false"
+
+        android:text="0"
+        android:textColor="#7884a5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/input2"
+        app:layout_constraintEnd_toStartOf="@+id/input2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/input0"
+        />
+    <View
+        android:id="@+id/line1"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="#047cfc"
+
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="@+id/input1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input1"
+        app:layout_constraintTop_toBottomOf="@+id/input1"/>
+    <TextView
+        android:id="@+id/input2"
+        android:textStyle="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:maxEms="1"
+        android:minEms="1"
+        android:clickable="false"
+
+        android:text="0"
+        android:textColor="#7884a5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/input3"
+        app:layout_constraintEnd_toStartOf="@+id/input3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/input1"
+        />
+    <View
+        android:id="@+id/line2"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="#047cfc"
+
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="@+id/input2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input2"
+        app:layout_constraintTop_toBottomOf="@+id/input2"/>
+    <TextView
+        android:id="@+id/input3"
+        android:textStyle="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:maxEms="1"
+        android:clickable="false"
+
+        android:minEms="1"
+        android:text="0"
+        android:textColor="#7884a5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/input4"
+        app:layout_constraintEnd_toStartOf="@+id/input4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/input2"
+        />
+    <View
+        android:id="@+id/line3"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="#047cfc"
+
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="@+id/input3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input3"
+        app:layout_constraintTop_toBottomOf="@+id/input3"/>
+    <TextView
+        android:id="@+id/input4"
+        android:textStyle="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:maxEms="1"
+        android:clickable="false"
+
+        android:minEms="1"
+        android:text="0"
+        android:textColor="#7884a5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/input5"
+        app:layout_constraintEnd_toStartOf="@+id/input5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/input3"
+        />
+    <View
+        android:id="@+id/line4"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="#047cfc"
+        android:clickable="false"
+
+        app:layout_constraintEnd_toEndOf="@+id/input4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input4"
+        app:layout_constraintTop_toBottomOf="@+id/input4"/>
+    <TextView
+        android:id="@+id/input5"
+        android:textStyle="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="36dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:maxEms="1"
+        android:clickable="false"
+
+        android:minEms="1"
+        android:text="0"
+        android:textColor="#7884a5"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/input4"
+        app:layout_constraintTop_toBottomOf="@+id/subtitle"/>
+    <View
+        android:id="@+id/line5"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:background="#047cfc"
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="@+id/input5"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input5"
+        app:layout_constraintTop_toBottomOf="@+id/input5"/>
+    <android.support.constraint.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="input0,input1,input2,input3,input4,input5"/>
+    <View
+        android:id="@+id/hitArea"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/line5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/input5"/>
+
 
 </android.support.constraint.ConstraintLayout>
