@@ -6,10 +6,12 @@ import static org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity.PHONE_
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.kinecosystem.kinit.R;
@@ -30,15 +33,16 @@ public class CodeVerificationFragment extends BaseFragment {
     public static final String TAG = CodeVerificationFragment.class.getSimpleName();
     private static final String KEY_RESEND_CODE = "KEY_RESEND_CODE";
     private static final String PHONE_NUMBER = "PHONE_NUMBER";
-    private static final long SEC = 1000;
-    private static final long COUNT_DOWN_DURATION = 16 * SEC;
+    private static final long COUNT_DOWN = 16 * DateUtils.SECOND_IN_MILLIS;
     private static final long CODE_LENGTH = 6;
     private static final long VIBRATE_DURATION = 500;
-
+    private TextView[] inputs = new TextView[6];
+    private View[] lines = new View[6];
     private TextView code, next, subtitle, counter, resend;
     private ProgressBar progressBar;
     private PhoneVerificationUIActions actions;
-    private CountDownTimer timer = new CountDownTimer(COUNT_DOWN_DURATION, SEC) {
+    private View hitArea;
+    private CountDownTimer timer = new CountDownTimer(COUNT_DOWN, DateUtils.SECOND_IN_MILLIS) {
         @Override
         public void onTick(long l) {
             String counterText = getResources().getString(R.string.code_sms_counter_subtitle, l / 1000);
@@ -76,9 +80,30 @@ public class CodeVerificationFragment extends BaseFragment {
             Log.e(TAG, "activity must implements PhoneVerificationActions");
             getActivity().finish();
         }
+        inputs[0] = view.findViewById(R.id.input0);
+        inputs[1] = view.findViewById(R.id.input1);
+        inputs[2] = view.findViewById(R.id.input2);
+        inputs[3] = view.findViewById(R.id.input3);
+        inputs[4] = view.findViewById(R.id.input4);
+        inputs[5] = view.findViewById(R.id.input5);
+
+        lines[0] = view.findViewById(R.id.line0);
+        lines[1] = view.findViewById(R.id.line1);
+        lines[2] = view.findViewById(R.id.line2);
+        lines[3] = view.findViewById(R.id.line3);
+        lines[4] = view.findViewById(R.id.line4);
+        lines[5] = view.findViewById(R.id.line5);
+
+        hitArea = view.findViewById(R.id.hitArea);
+        hitArea.setOnClickListener(viewHit -> showKeyboardFocusCodeInput(viewHit));
+        for (int i = 0; i < inputs.length; i++) {
+            inputs[i].setText("");
+        }
         code = view.findViewById(R.id.code_input);
         code.setFocusable(true);
         code.requestFocus();
+        code.setY(0);
+        code.setX(50000);
         counter = view.findViewById(R.id.counter);
         String counterText = getResources().getString(R.string.code_sms_counter_subtitle, 15);
         counter.setText(counterText);
@@ -106,17 +131,37 @@ public class CodeVerificationFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int c = 0;
+                for (; c < charSequence.length(); c++) {
+                    inputs[c].setText("" + charSequence.charAt(c));
+                }
+                for (; c < inputs.length; c++) {
+                    inputs[c].setText("");
+                }
                 next.setEnabled(charSequence.length() >= CODE_LENGTH);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         timer.start();
 
         return view;
+    }
+
+    private void showKeyboardFocusCodeInput(final View trigger) {
+        final Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            if (trigger != null) {
+                trigger.clearFocus();
+            }
+            code.requestFocus();
+            InputMethodManager mgr = (InputMethodManager) getActivity()
+                .getSystemService(getActivity().INPUT_METHOD_SERVICE);
+            mgr.showSoftInput(code, InputMethodManager.SHOW_IMPLICIT);
+
+        }, 50);
     }
 
     private void sendEvent() {
@@ -165,7 +210,12 @@ public class CodeVerificationFragment extends BaseFragment {
 
             }
         });
-        code.startAnimation(animShake);
+        for (int i = 0; i < inputs.length; i++) {
+            inputs[i].startAnimation(animShake);
+        }
+        for (int i = 0; i < lines.length; i++) {
+            lines[i].startAnimation(animShake);
+        }
     }
 
     void onEndWiggleAnim() {
