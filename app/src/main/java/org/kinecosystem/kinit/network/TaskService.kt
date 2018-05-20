@@ -68,7 +68,7 @@ class TaskService(context: Context, api: TasksApi,
             override fun onFailure(call: Call<TasksApi.NextTasksResponse>?, t: Throwable?) {
                 Log.d("TaskService", "onFailure called with throwable $t")
                 questionnaireRepo.replaceQuestionnaire(null, applicationContext)
-                callback?.onError(ERROR_FAILED_RESPONSE)
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
         })
     }

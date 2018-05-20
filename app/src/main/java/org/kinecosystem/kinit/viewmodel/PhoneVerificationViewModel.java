@@ -1,6 +1,7 @@
 package org.kinecosystem.kinit.viewmodel;
 
 import android.app.Activity;
+import android.util.Log;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -10,23 +11,20 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 import org.kinecosystem.kinit.CoreComponentsProvider;
-import org.kinecosystem.kinit.network.OnboardingApi.StatusResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import org.kinecosystem.kinit.network.OperationCompletionCallback;
 
 public class PhoneVerificationViewModel {
 
-    public interface phoneAuthModelActions {
-
-        void onError(String error);
-        void onWrongCode();
-        void onAuthComplete();
-    }
+    public static final int PHONE_VERIF_ERROR_WRONG_CODE = 200;
+    public static final int PHONE_VERIF_ERROR_OTHER = 201;
+    public static final int PHONE_VERIF_ERROR_INVALID_PHONE_CREDENTIALS = 202;
+    public static final int PHONE_VERIF_ERROR_SMS_QUOTA_FOR_PROJECT_EXCEEDED = 203;
+    public static final int PHONE_VERIF_ERROR_VERIFICATION_FAILED = 204;
+    public static final int PHONE_VERIF_ERROR_CANT_GET_FIREBASE_AUTH_TOKEN = 205;
 
     public static final String TAG = PhoneVerificationViewModel.class.getSimpleName();
     private CoreComponentsProvider coreComponents;
-    private phoneAuthModelActions actions;
+    private OperationCompletionCallback verificationCallback;
 
     private FirebaseAuth auth;
     private String phoneNumber;
@@ -43,11 +41,11 @@ public class PhoneVerificationViewModel {
         @Override
         public void onVerificationFailed(FirebaseException e) {
             if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                actions.onError("Invalid phone number - Invalid Credentials Exception");
+                verificationCallback.onError(PHONE_VERIF_ERROR_INVALID_PHONE_CREDENTIALS);
             } else if (e instanceof FirebaseTooManyRequestsException) {
-                actions.onError("verification failed - The SMS quota for the project has been exceeded");
+                verificationCallback.onError(PHONE_VERIF_ERROR_SMS_QUOTA_FOR_PROJECT_EXCEEDED);
             }
-            actions.onError("verification failed");
+            verificationCallback.onError(PHONE_VERIF_ERROR_VERIFICATION_FAILED);
         }
 
         @Override
@@ -62,13 +60,12 @@ public class PhoneVerificationViewModel {
 
 
     public PhoneVerificationViewModel(Activity activity, CoreComponentsProvider coreComponentsProvider,
-        phoneAuthModelActions actions) {
+        OperationCompletionCallback actions) {
         coreComponents = coreComponentsProvider;
         this.activity = activity;
         auth = FirebaseAuth.getInstance();
-        this.actions = actions;
+        this.verificationCallback = actions;
     }
-
 
     public void startPhoneNumberVerification(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -85,7 +82,7 @@ public class PhoneVerificationViewModel {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             signInWithPhoneAuthCredential(credential);
         } else {
-            actions.onWrongCode();
+            verificationCallback.onError(PHONE_VERIF_ERROR_WRONG_CODE);
         }
     }
 
@@ -98,29 +95,18 @@ public class PhoneVerificationViewModel {
                         if (tokenRequest.isComplete()) {
                             coreComponents.services().getOnBoardingService()
                                 .sendPhoneAuthentication(phoneNumber, tokenRequest.getResult().getToken(),
-                                    new Callback<StatusResponse>() {
-                                        @Override
-                                        public void onResponse(Call<StatusResponse> call,
-                                            Response<StatusResponse> response) {
-                                            if (response != null && response.isSuccessful()) {
-                                                actions.onAuthComplete();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<StatusResponse> call, Throwable t) {
-                                            actions.onError("Cant sendPhoneAuthentication" + t.getMessage());
-                                        }
-                                    });
-                        }else{
-                            actions.onError("Cant get token from user by firebase");
+                                    verificationCallback);
+                        } else {
+                            verificationCallback.onError(PHONE_VERIF_ERROR_CANT_GET_FIREBASE_AUTH_TOKEN);
                         }
                     });
                 } else {
                     if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                        actions.onWrongCode();
+                        verificationCallback.onError(PHONE_VERIF_ERROR_WRONG_CODE);
                     } else {
-                        actions.onError("Cant sign in with phone");
+                        Log.e(TAG, "Can't sign in with phone, exception " + task.getException() + ", message " + task
+                            .getException().getMessage());
+                        verificationCallback.onError(PHONE_VERIF_ERROR_OTHER);
                     }
                 }
             });

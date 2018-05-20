@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.network.OperationCompletionCallback;
 import org.kinecosystem.kinit.util.GeneralUtils;
 import org.kinecosystem.kinit.view.BaseActivity;
 import org.kinecosystem.kinit.view.MainActivity;
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity;
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel;
-import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel.phoneAuthModelActions;
 
 public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificationUIActions {
 
@@ -37,9 +37,9 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
         getSupportFragmentManager().beginTransaction()
             .add(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
             .commit();
-        model = new PhoneVerificationViewModel(this, getCoreComponents(), new phoneAuthModelActions() {
+        model = new PhoneVerificationViewModel(this, getCoreComponents(), new OperationCompletionCallback() {
             @Override
-            public void onError(String error) {
+            public void onError(int error) {
                 CodeVerificationFragment codeVerificationFragment = (CodeVerificationFragment) getSupportFragmentManager()
                     .findFragmentByTag(FRAGMENT_CODE_TAG);
                 if (codeVerificationFragment != null && codeVerificationFragment.isVisible()) {
@@ -48,16 +48,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
             }
 
             @Override
-            public void onWrongCode() {
-                CodeVerificationFragment codeVerificationFragment = (CodeVerificationFragment) getSupportFragmentManager()
-                    .findFragmentByTag(FRAGMENT_CODE_TAG);
-                if (codeVerificationFragment != null && codeVerificationFragment.isVisible()) {
-                    codeVerificationFragment.onWrongCode();
-                }
-            }
-
-            @Override
-            public void onAuthComplete() {
+            public void onSuccess() {
                 getCoreComponents().userRepo().setPhoneVerified(true);
                 getCoreComponents().userRepo().setFirstTimeUser(false);
                 GeneralUtils.closeKeyboard(PhoneVerifyActivity.this, findViewById(R.id.fragment_container));
