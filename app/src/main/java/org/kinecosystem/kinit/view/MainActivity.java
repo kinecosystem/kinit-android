@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
         super.onResume();
         onScreenVisibleToUser();
         UserRepository userRepo = getCoreComponents().userRepo();
+        userRepo.setFirstTimeUser(false);
         if (userRepo.isPhoneVerificationEnabled() && !userRepo.isPhoneVerified()) {
             showPhoneVerifyPopup();
         }
