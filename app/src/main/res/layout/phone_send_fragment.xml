@@ -11,10 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:padding="16dp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back"
-        android:visibility="invisible"
         />
     <TextView
         android:id="@+id/title"
@@ -52,25 +52,27 @@
     <EditText
         android:id="@+id/phone_input"
         android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
         android:ems="10"
         android:hint="@string/your_phone_number"
         android:inputType="phone"
+        app:layout_constraintBottom_toBottomOf="@+id/prefix"
         app:layout_constraintEnd_toStartOf="@+id/clear"
         app:layout_constraintStart_toEndOf="@+id/prefix"
-        app:layout_constraintTop_toBottomOf="@+id/subtitle"/>
+        />
     <EditText
         android:id="@+id/prefix"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
+        android:background="@android:color/transparent"
         android:ems="10"
-        android:minEms="2"
         android:inputType="phone"
         android:maxLength="4"
+        android:minEms="2"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/subtitle"/>
