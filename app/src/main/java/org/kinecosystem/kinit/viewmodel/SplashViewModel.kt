@@ -55,23 +55,29 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
     }
 
     private fun checkReadyToMove() {
-        val userRepo = coreComponents.userRepo()
         if (walletReady.get()) {
-            if (userRepo.isFirstTimeUser
-                && userRepo.isPhoneVerificationEnabled
-                && !userRepo.isPhoneVerified) {
-
-                splashNavigator?.moveToTutorialScreen()
-            } else {
-                splashNavigator?.moveToMainScreen()
-            }
+            moveToNextScreen()
         } else {
-            userRepo.isFirstTimeUser = true
+            coreComponents.userRepo().isFirstTimeUser = true
             showCreatingWallet.set(true)
             addWalletReadyCallback()
             scheduleTimeout()
         }
     }
+
+    private fun moveToNextScreen() {
+        val userRepo = coreComponents.userRepo()
+        if (userRepo.isFirstTimeUser
+            && userRepo.isPhoneVerificationEnabled
+            && !userRepo.isPhoneVerified) {
+            splashNavigator?.moveToTutorialScreen()
+        } else if (userRepo.isFirstTimeUser && !userRepo.isPhoneVerificationEnabled) {
+            splashNavigator?.moveToTutorialScreen()
+        } else {
+            splashNavigator?.moveToMainScreen()
+        }
+    }
+
 
     private fun addWalletReadyCallback() {
         if (callback == null) {
@@ -87,8 +93,8 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
     private fun scheduleTimeout() {
         coreComponents.scheduler().scheduleOnMain(
             {
-                if (coreComponents.services().walletService.ready.get()) {
-                    splashNavigator?.moveToMainScreen()
+                if (walletReady.get()) {
+                    moveToNextScreen()
                 } else {
                     coreComponents.analytics()
                         .logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
