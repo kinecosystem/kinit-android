@@ -35,13 +35,27 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     }
 
     fun sendPhoneAuthentication(
-        phoneNumber: String, token: String, callback: Callback<StatusResponse>) {
+        phoneNumber: String, token: String, callback: OperationCompletionCallback) {
 
         if (!NetworkUtils.isConnected(applicationContext)) {
+            callback.onError(ERROR_NO_INTERNET)
             return
         }
+
         phoneAuthenticationApi.updatePhoneAuthToken(userRepo.userId(),
-            PhoneAuthenticationApi.AuthInfo(phoneNumber, token)).enqueue(callback)
+            PhoneAuthenticationApi.AuthInfo(phoneNumber, token)).enqueue(
+            object : Callback<StatusResponse> {
+                override fun onResponse(call: Call<StatusResponse>,
+                    response: Response<StatusResponse>) {
+                    if (response != null && response.isSuccessful) {
+                        taskService.retrieveNextTask(callback)
+                    }
+                }
+
+                override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+                    callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                }
+            })
     }
 
     private fun updateToken() {
@@ -93,7 +107,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     analytics.logEvent(UserRegistered())
                     userRepo.isRegistered = true
                     wallet.initKinWallet()
-                    taskService.retrieveNextTask()
+                    if (!userRepo.isPhoneVerificationEnabled) {
+                        taskService.retrieveNextTask()
+                    }
                 } else {
                     Log.d("OnboardingService", "### register onResponse NOT SUCCESSFULL OR null: $response")
                     analytics.logEvent(Events.BILog.UserRegistrationFailed("response: $response"))
