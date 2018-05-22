@@ -7,6 +7,7 @@ import org.kinecosystem.kinit.CoreComponentsProvider
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.model.spend.isP2p
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.ERROR_NO_INTERNET
 import org.kinecosystem.kinit.network.ERROR_REDEEM_COUPON_FAILED
@@ -24,11 +25,13 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
     val typeImageUrl = offer.imageTypeUrl
     val headerImageUrl = offer.imageUrl
     val providerImageUrl = offer.provider?.imageUrl
+    val isP2p = offer.isP2p()
     val couponCode = ObservableField("")
     val couponPurchaseCompleted = ObservableBoolean(false)
     private var canCloseScreen = true
     var purchaseOfferActions: PurchaseOfferActions? = null
     var canBuy: ObservableBoolean = ObservableBoolean(false)
+
 
     fun onShareButtonClicked(view: View) {
         analytics.logEvent(
@@ -48,9 +51,13 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
                 R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
             return
         }
-        canCloseScreen = false
-        purchaseOfferActions?.animateBuy()
-        buy()
+        if(isP2p){
+            navigator.navigateTo(Navigator.Destination.PEER2PEER)
+        }else {
+            canCloseScreen = false
+            purchaseOfferActions?.animateBuy()
+            buy()
+        }
     }
 
     fun onCloseButtonClicked(view: View?) {
@@ -111,6 +118,9 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
             offer.domain,
             offer.id,
             offer.title, offer.type))
+        if(isP2p){
+            purchaseOfferActions?.updateBuyButtonWidth()
+        }
     }
 
     fun logViewErrorPopup(errorType: String) {

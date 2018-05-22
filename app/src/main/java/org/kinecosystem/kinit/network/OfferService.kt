@@ -55,6 +55,18 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
         })
     }
 
+    fun sendContact(phones: List<String>, callback: OperationResultCallback<String>) {
+        if (!NetworkUtils.isConnected(applicationContext)) {
+            callback.onError(ERROR_NO_INTERNET)
+        }
+        val response = offersApi.sendContact(userId, OffersApi.ContactInfo(phones)).execute()
+        if (response.isSuccessful && response.body() != null && !response.body()!!.address.isEmpty()) {
+            callback.onResult(response.body()!!.address)
+        } else {
+            callback.onError(-1)
+        }
+    }
+
     fun buyOffer(offer: Offer, callback: OperationResultCallback<String>) {
 
         if (!NetworkUtils.isConnected(applicationContext)) {

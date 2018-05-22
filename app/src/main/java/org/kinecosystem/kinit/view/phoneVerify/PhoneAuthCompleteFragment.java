@@ -44,8 +44,8 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
             public void onGlobalLayout() {
                 if (konfettiView.getWidth() > 0) {
                     konfettiView.getViewTreeObserver().removeOnGlobalLayoutListener(this::onGlobalLayout);
+                    startKonfettiAnim();
                 }
-                startKonfettiAnim();
             }
         });
 

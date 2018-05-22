@@ -5,12 +5,13 @@ import android.support.v7.app.AppCompatActivity
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
+import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
 
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        QUESTIONNAIRE, MAIN_SCREEN, SPEND
+        QUESTIONNAIRE, MAIN_SCREEN, SPEND, PEER2PEER
     }
 
     fun navigateTo(dest: Destination) {
@@ -21,6 +22,7 @@ class Navigator(private val context: Context) {
         when (dest) {
             Destination.QUESTIONNAIRE -> navigateToQuestionnaire()
             Destination.SPEND -> navigateToSpend(index)
+            Destination.PEER2PEER -> navigateToPeer2Peer()
             else -> navigateToMainScreen()
         }
     }
@@ -34,6 +36,13 @@ class Navigator(private val context: Context) {
 
     private fun navigateToQuestionnaire() {
         context.startActivity(QuestionnaireActivity.getIntent(context))
+        if (context is AppCompatActivity) {
+            context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
+        }
+    }
+
+    private fun navigateToPeer2Peer() {
+        context.startActivity(Peer2PeerActivity.getIntent(context))
         if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }

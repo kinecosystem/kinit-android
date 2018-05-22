@@ -20,6 +20,7 @@
     <string name="tap_to_finish">Tap to finish</string>
     <string name="your_new_balance">Your new balance</string>
     <string name="buy_now">Buy Now</string>
+    <string name="send_kin">Send Kin</string>
     <string name="buying">Buying</string>
     <string name="share_code_to">Share code to</string>
     <string name="dialog_no_good_left_message">Please try again later</string>

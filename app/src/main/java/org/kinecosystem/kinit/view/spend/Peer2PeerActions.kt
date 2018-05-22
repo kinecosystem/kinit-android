@@ -1,14 +1,13 @@
 package org.kinecosystem.kinit.view.spend
 
-interface PurchaseOfferActions {
+interface Peer2PeerActions {
 
-    fun animateBuy()
-
-    fun updateBuyButtonWidth()
+    fun pickContact()
+    fun requestReadContactsPermission()
+    fun onContactParseError()
 
     fun closeScreen()
 
     fun showDialog(resTitle: Int, resMessage: Int, resAction: Int, shouldFinish: Boolean, logErrorType: String? = null)
 
-    fun shareCode(code: String)
 }

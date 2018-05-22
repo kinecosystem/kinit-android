@@ -14,7 +14,10 @@ private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
 private const val FIRST_TIME_USER = "FIRST_TIME_USER"
-
+private const val P2P_MAX_KIN = "P2P_MAX_KIN"
+private const val P2P_MIN_KIN = "P2P_MIN_KIN"
+private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
+private const val P2P_ENABLED = "P2P_ENABLED"
 
 
 class UserRepository(dataStoreProvider: DataStoreProvider) {
@@ -49,6 +52,22 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isFirstTimeUser: Boolean
         set(firstTime) = userCache.putBoolean(FIRST_TIME_USER, firstTime)
         get() = userCache.getBoolean(FIRST_TIME_USER, false)
+
+    var p2pMaxKin: Int
+        set(max) = userCache.putInt(P2P_MAX_KIN, max)
+        get() = userCache.getInt(P2P_MAX_KIN, 0)
+
+    var p2pMinKin: Int
+        set(max) = userCache.putInt(P2P_MIN_KIN, max)
+        get() = userCache.getInt(P2P_MIN_KIN, 0)
+
+    var p2pMinTaksks: Int
+        set(max) = userCache.putInt(P2P_MIN_TASKS, max)
+        get() = userCache.getInt(P2P_MIN_TASKS, 0)
+
+    var isP2pEnabled: Boolean
+        set(enable) = userCache.putBoolean(P2P_ENABLED, enable)
+        get() = userCache.getBoolean(P2P_ENABLED, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")

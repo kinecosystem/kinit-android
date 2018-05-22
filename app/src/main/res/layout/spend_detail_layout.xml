@@ -136,7 +136,7 @@
             app:layout_constraintStart_toStartOf="parent"
             />
         <TextView
-            android:id="@+id/price"
+            android:id="@+id/amount"
             android:textStyle="normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,6 +144,7 @@
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="-0.02"
             android:text="@{model.price}"
+            android:visibility="@{!model.isP2p}"
             android:textColor="#047cfc"
             android:textSize="28sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -163,9 +164,9 @@
             android:text="@string/kin_currency"
             android:textColor="#047cfc"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/price"
-            app:layout_constraintStart_toEndOf="@+id/price"
-            app:layout_constraintTop_toTopOf="@+id/price"
+            app:layout_constraintBottom_toBottomOf="@+id/amount"
+            app:layout_constraintStart_toEndOf="@+id/amount"
+            app:layout_constraintTop_toTopOf="@+id/amount"
             app:layout_constraintVertical_bias="0.0"
             />
         <ImageView
@@ -195,9 +196,9 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bottom_guide"
-            app:visibilityOn="@{model.couponPurchaseCompleted}"
-            />
+            app:visibilityOn="@{model.couponPurchaseCompleted}"/>
 
         <View
             android:id="@+id/share_btn"
@@ -227,7 +228,7 @@
             android:letterSpacing="0.03"
             android:onClick="@{model::onBuyButtonClicked}"
             android:singleLine="true"
-            android:text="@string/buy_now"
+            android:text="@{model.isP2p() ? @string/send_kin : @string/buy_now}"
             android:textSize="16sp"
             android:visibility="@{!model.couponPurchaseCompleted}"
             app:layout_constraintBottom_toBottomOf="parent"

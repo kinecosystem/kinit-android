@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.databinding.SpendDetailLayoutBinding;
 import org.kinecosystem.kinit.navigation.Navigator;
@@ -53,7 +54,6 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
         binding.setModel(model);
         return binding.getRoot();
     }
-
 
     @Override
     public void onResume() {
@@ -133,5 +133,18 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
+    }
+
+    @Override
+    public void updateBuyButtonWidth() {
+        binding.codeButton.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (binding.codeButton.getWidth() > 0) {
+                    binding.codeButton.getViewTreeObserver().removeOnGlobalLayoutListener(this::onGlobalLayout);
+                    binding.buyBtn.expand(binding.codeButton.getMeasuredWidth());
+                }
+            }
+        });
     }
 }
