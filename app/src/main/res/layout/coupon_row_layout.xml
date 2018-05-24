@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.balance.CouponViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:tag="layout/coupons_row_layout">
+
+        <TextView
+            android:id="@+id/coupon_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="-0.02"
+            android:onClick="@{()->model.onClick()}"
+            android:text="@{model.coupon.title}"
+            android:textColor="#5c6786"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/left_guid"
+            app:layout_constraintTop_toTopOf="@+id/provider_image_card"
+            tools:text="5$ Amazon gift card" />
+
+        <TextView
+            android:id="@+id/expande_collapse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:onClick="@{()->model.onClick()}"
+            android:text="@{model.isExpanded ? `show less` : `show more`}"
+            android:textColor="#047cfc"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/provider_image_card"
+            app:layout_constraintStart_toStartOf="@+id/left_guid"
+            tools:text="See Details" />
+
+        <ImageView
+            android:id="@+id/share_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_margin="11dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{()->model.share()}"
+            app:layout_constraintBottom_toBottomOf="@+id/provider_image_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/provider_image_card"
+            app:srcCompat="@drawable/share_blue" />
+
+        <ImageView
+            android:id="@+id/provider_image_card"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="10dp"
+            android:onClick="@{()->model.onClick()}"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{model.coupon.provider.imageUrl}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/spend_illustration" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/left_guid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="84dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/right_guid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="48dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/mid_guid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="70dp" />
+
+        <TextView
+            android:id="@+id/coupons_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="4sp"
+            android:text="@{model.coupon.desc}"
+            android:textColor="#7884a5"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:visibility="@{model.isExpanded ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="@+id/right_guid"
+            app:layout_constraintStart_toStartOf="@+id/left_guid"
+            app:layout_constraintTop_toBottomOf="@+id/mid_guid"
+            tools:text="Visit www.amazon.com to redeem your gift card. Once applied to your Amazon account, the entire amount will be added to your gift card balance. Your gift card balance will be applied automatically to eligible orders during the checkout process. The Gift Card has no expiration date. " />
+
+        <ImageView
+            android:id="@+id/bottom_delim"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="3dp"
+            android:scaleType="fitXY"
+            android:visibility="@{model.isExpanded ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coupons_desc"
+            app:srcCompat="@drawable/coupon_line" />
+
+        <TextView
+            android:id="@+id/hash_code"
+            android:layout_width="0dp"
+            android:layout_height="17dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="11dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.08"
+            android:lineSpacingExtra="2sp"
+            android:selectAllOnFocus="true"
+            android:text="@{model.coupon.value}"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="#7884a5"
+            android:textIsSelectable="true"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:visibility="@{model.isExpanded ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/right_guid"
+            app:layout_constraintStart_toStartOf="@+id/left_guid"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_delim"
+            tools:text="23476234-3242342-234234234" />
+
+        <View
+            android:id="@+id/coupons_bottom_delim"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#d2d7e1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

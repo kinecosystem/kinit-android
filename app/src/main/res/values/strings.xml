@@ -88,4 +88,8 @@
     <string name="please_fill_your_country_code">Please fill your country code</string>
     <string name="your_wallet_is_ready">Your wallet is ready!</string>
     <string name="woohoo">Woohoo</string>
+    <string name="recent_activity_tab_text">Recent Activity</string>
+    <string name="my_vouchers_tab_text">My Vouchers</string>
+    <string name="no_transactions_text">In the future, your transactions will be recorded here!</string>
+    <string name="no_coupons_text">Your coupons will be saved here!</string>
 </resources>

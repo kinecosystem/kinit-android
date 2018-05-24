@@ -12,13 +12,14 @@ import org.kinecosystem.kinit.util.Scheduler
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.SocketTimeoutException
 
 const val ERROR_TRANSACTION_FAILED = 100
 const val ERROR_REDEEM_COUPON_FAILED = 101
 const val ERROR_NO_GOOD_LEFT = 200
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userId: String,
-    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
+                   val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
 
     val applicationContext: Context = context.applicationContext
 
@@ -31,7 +32,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
         offersApi.offers(userId).enqueue(object : Callback<OffersApi.OffersResponse> {
             override fun onResponse(call: Call<OffersApi.OffersResponse>?,
-                response: Response<OffersApi.OffersResponse>?) {
+                                    response: Response<OffersApi.OffersResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     Log.d("OffersService", "onResponse: ${response.body()}")
@@ -69,8 +70,14 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                         offer.price, offer.domain, offer.id,
                         offer.title, offer.type))
 
-                val response: Response<OffersApi.BookOfferResponse> = offersApi.bookOffer(userId,
-                    OffersApi.OfferInfo(offer.id!!)).execute()
+                val response: Response<OffersApi.BookOfferResponse>
+                try {
+                    response = offersApi.bookOffer(userId,
+                        OffersApi.OfferInfo(offer.id!!)).execute()
+                } catch (e: SocketTimeoutException) {
+                    callbackWithError(ERROR_NO_INTERNET)
+                    return
+                }
 
                 if (!response.isSuccessful || response.body() == null) {
                     callbackWithError(ERROR_NO_GOOD_LEFT)
@@ -93,7 +100,6 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                     val transactionId = wallet.payForOrder(offer.address!!, offer.price!!, bookOfferResponse?.orderId!!)
 
                     wallet.updateBalanceSync()
-
                     wallet.logSpendTransactionCompleted(offer.price, bookOfferResponse.orderId)
 
                     val response2 = offersApi.redeemOffer(userId,
@@ -112,6 +118,9 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                     if (couponCode.isBlank()) {
                         callbackWithError(ERROR_REDEEM_COUPON_FAILED)
                     }
+
+                    wallet.retrieveCoupons()
+                    wallet.retrieveTransactions()
 
                     scheduler.post {
                         callback.onResult(couponCode)

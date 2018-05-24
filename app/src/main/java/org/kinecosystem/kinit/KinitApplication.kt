@@ -23,6 +23,8 @@ class KinitApplication : Application(), CoreComponentsProvider {
         analytics().setUserId(userRepo().userId())
         services().onBoardingService.appLaunch()
         services().offerService.retrieveOffers()
+        services().walletService.retrieveTransactions()
+        services().walletService.retrieveCoupons()
         userRepo().isFreshInstall = false
     }
 

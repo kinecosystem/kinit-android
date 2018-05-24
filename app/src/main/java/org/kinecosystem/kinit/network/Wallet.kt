@@ -11,13 +11,18 @@ import kin.core.exception.OperationFailedException
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Analytics.MENU_ITEM_NAME_SPEND
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.model.KinTransaction
 import org.kinecosystem.kinit.model.Push
 import org.kinecosystem.kinit.model.TaskState
+import org.kinecosystem.kinit.model.spend.Coupon
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.QuestionnaireRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.Scheduler
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.math.BigDecimal
 
 private const val TEST_NET_URL = "https://horizon-testnet.stellar.org"
@@ -28,23 +33,27 @@ private const val ACTIVE_WALLET_KEY = "activeWallet"
 private const val WALLET_BALANCE_KEY = "WalletBalance"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
-    val userRepo: UserRepository,
-    val questionnaireRepo: QuestionnaireRepository,
-    val analytics: Analytics,
-    val onboardingApi: OnboardingApi,
-    val scheduler: Scheduler,
-    type: Type = Type.Test) {
+             val userRepo: UserRepository,
+             val questionnaireRepo: QuestionnaireRepository,
+             val analytics: Analytics,
+             val onboardingApi: OnboardingApi,
+             val walletApi: WalletApi,
+             val scheduler: Scheduler,
+             type: Type = Type.Test) {
 
     enum class Type {
         Main,
         Test
     }
 
-    val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
 
     private val walletCache: DataStore
     private var kinClient: KinClient
     private var account: KinAccount
+
+    val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
+    val transactions: ObservableField<ArrayList<KinTransaction>> = ObservableField(ArrayList())
+    val coupons: ObservableField<ArrayList<Coupon>> = ObservableField(ArrayList())
 
     init {
         val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
@@ -66,7 +75,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             ready.set(value)
         }
         get() = walletCache.getBoolean(ACTIVE_WALLET_KEY, false)
-    val ready: ObservableBoolean = ObservableBoolean(activeWallet)
 
     var balanceInt: Int
         private set(value) {
@@ -76,6 +84,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
         get() = walletCache.getInt(WALLET_BALANCE_KEY, 0)
 
+    val ready: ObservableBoolean = ObservableBoolean(activeWallet)
     val balance: ObservableField<String> = ObservableField(balanceInt.toString())
 
     fun updateBalance(callback: ResultCallback<Balance>? = null) {
@@ -95,6 +104,78 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 }
             })
         }
+    }
+
+
+    fun retrieveTransactions(callback: OperationCompletionCallback? = null) {
+        walletApi.getTransactions(userRepo.userId()).enqueue(object : Callback<WalletApi.TransactionsResponse> {
+            override fun onResponse(call: Call<WalletApi.TransactionsResponse>?,
+                                    response: Response<WalletApi.TransactionsResponse>?) {
+                if (response != null && response.isSuccessful) {
+                    Log.d("retrieveTransactions", "onResponse: ${response.body()}")
+                    val transactionList = response.body()
+                    if (transactionList?.txs != null && transactionList.txs.isNotEmpty() && transactionList.status.equals("ok")) {
+                        injectTxsBalance(transactionList.txs)
+                        transactions.set(transactionList.txs)
+                    } else {
+                        Log.d("#####", "transaction list empty or null ")
+                        transactions.set(ArrayList())
+                    }
+                    callback?.onSuccess()
+                } else {
+                    callback?.onError(ERROR_EMPTY_RESPONSE)
+                    Log.d("retrieveTransactions", "onResponse null or isSuccessful=false: $response")
+                }
+            }
+
+            override fun onFailure(call: Call<WalletApi.TransactionsResponse>?, t: Throwable?) {
+                Log.d("retrieveTransactions", "onFailure called with throwable $t")
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+            }
+        })
+    }
+
+    private fun injectTxsBalance(txs: ArrayList<KinTransaction>) {
+        val txsOrderedTimeAsc = txs.reversed()
+        for (index in txsOrderedTimeAsc.indices) {
+            when (index) {
+                0 -> txsOrderedTimeAsc[index].txBalance = txsOrderedTimeAsc[index].amount
+                txsOrderedTimeAsc.lastIndex -> txsOrderedTimeAsc[index].txBalance = this.balanceInt
+                else -> {
+                    val inverter = if (txsOrderedTimeAsc[index].clientReceived == true) 1 else -1
+                    val previousTransaction = txsOrderedTimeAsc[index - 1]
+                    txsOrderedTimeAsc[index].txBalance = previousTransaction.txBalance?.plus(inverter * (txsOrderedTimeAsc[index].amount
+                        ?: 0))
+                }
+            }
+        }
+    }
+
+
+    fun retrieveCoupons(callback: OperationCompletionCallback? = null) {
+        walletApi.getCoupons(userRepo.userId()).enqueue(object : Callback<WalletApi.CouponsResponse> {
+            override fun onResponse(call: Call<WalletApi.CouponsResponse>?, response: Response<WalletApi.CouponsResponse>?) {
+                if (response != null && response.isSuccessful) {
+                    Log.d("retrieveCoupons", "onResponse: ${response.body()}")
+                    val couponsList = response.body()
+                    if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals("ok")) {
+                        coupons.set(couponsList.coupons)
+                    } else {
+                        Log.d("#####", "coupons® list empty or null ")
+                        coupons.set(ArrayList())
+                    }
+                    callback?.onSuccess()
+                } else {
+                    Log.d("retrieveCoupons", "onResponse null or isSuccessful=false: $response")
+                    callback?.onError(ERROR_EMPTY_RESPONSE)
+                }
+            }
+
+            override fun onFailure(call: Call<WalletApi.CouponsResponse>?, t: Throwable?) {
+                Log.d("retrieveCoupons", "onFailure called with throwable $t")
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+            }
+        })
     }
 
     fun updateBalanceSync() {
@@ -195,6 +276,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 if (transactionComplete.kin != null && transactionComplete.txHash != null) {
                     onEarnTransactionCompleted.set(true)
                     setTaskState(TaskState.TRANSACTION_COMPLETED)
+                    retrieveTransactions()
                     logEarnTransactionCompleted(transactionComplete.kin, transactionComplete.txHash)
                 } else {
                     setTaskState(TaskState.TRANSACTION_ERROR)

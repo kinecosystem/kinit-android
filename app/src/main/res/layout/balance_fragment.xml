@@ -1,49 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel" />
+
+        <import type="android.support.v7.widget.LinearLayoutManager" />
+
+        <import type="android.view.View" />
     </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <View
             android:id="@+id/balance_blue"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:background="@color/status_bar_color"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/balance"
-            android:textStyle="normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="sans-serif-medium"
             android:text="@{model.balance}"
             android:textColor="#ffffff"
             android:textSize="57sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/balance_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/ksign"
             app:layout_constraintTop_toBottomOf="@+id/balance_blue"
             app:layout_constraintVertical_bias="0.501"
-            tools:text="250"/>
+            tools:text="250" />
+
         <TextView
             android:id="@+id/balance_title"
-            android:textStyle="normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:letterSpacing="0.01"
@@ -51,10 +57,12 @@
             android:text="@string/your_kin_balance"
             android:textColor="#b3ffffff"
             android:textSize="12sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/balance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="Your Kin Balance"/>
+            tools:text="Your Kin Balance" />
+
         <ImageView
             android:id="@+id/ksign"
             android:layout_width="wrap_content"
@@ -68,65 +76,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/balance"
             app:layout_constraintVertical_bias="0.456"
-            app:srcCompat="@drawable/k_kin_white"/>
-        <TextView
-            android:id="@+id/recent_transactions"
-            android:textStyle="normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:fontFamily="sans-serif"
-            android:text="@string/recent_transactions"
-            android:textColor="#7884a5"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/line_delim"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balance_blue"
-            tools:text="Recent Transaction"/>
+            app:srcCompat="@drawable/k_kin_white" />
+
         <View
             android:id="@+id/line_delim"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:background="#d2d7e1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balance_blue"/>
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/sub_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_delim"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:srcCompat="@drawable/record_illustration"/>
-        <TextView
-            android:id="@+id/sub_title"
-            android:textStyle="normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="3sp"
-            android:text="@string/record_transactions"
-            android:textColor="#a4acc2"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
+            app:layout_constraintTop_toBottomOf="@+id/balance_blue" />
+
         <View
             android:id="@+id/shadow"
             android:layout_width="0dp"
@@ -135,7 +96,129 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_delim"/>
+            app:layout_constraintTop_toBottomOf="@+id/line_delim" />
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/balance_nav_tabs"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/shadow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance_blue"
+            app:tabIndicatorColor="@color/tab_font_color_selected"
+            app:tabSelectedTextColor="@color/fab_font_color"
+            app:tabTextColor="@color/fab_font_color">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/recent_activity_tab_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/recent_activity_tab_text"
+                android:textSize="16sp" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/my_vouchers_tab_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/my_vouchers_tab_text"
+                android:textSize="16sp" />
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/tabs_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingTop="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/line_delim">
+
+            <LinearLayout
+                android:id="@+id/transactions_illustration"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/shadow">
+
+                <ImageView
+                    android:layout_width="156dp"
+                    android:layout_height="152dp"
+                    android:layout_marginBottom="9dp"
+                    android:layout_marginTop="55dp"
+                    android:src="@drawable/record_illustration" />
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/no_transactions_text"
+                    android:textColor="#a4acc2"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/coupons_illustration"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/shadow">
+
+                <ImageView
+                    android:layout_width="115dp"
+                    android:layout_height="135dp"
+                    android:layout_marginBottom="17dp"
+                    android:layout_marginTop="64dp"
+                    android:src="@drawable/coupon_illustration" />
+
+                <TextView
+                    android:layout_width="275dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/no_coupons_text"
+                    android:textColor="#a4acc2"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="Your coupons will be saved here!" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/transactions_recycle_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/coupons_recycle_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:visibility="gone" />
+
+        </android.support.v4.view.ViewPager>
 
 
     </android.support.constraint.ConstraintLayout>

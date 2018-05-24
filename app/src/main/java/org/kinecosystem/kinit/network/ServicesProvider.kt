@@ -5,10 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.repository.DataStoreProvider
-import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
-import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.repository.*
 import org.kinecosystem.kinit.util.Scheduler
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -36,8 +33,8 @@ class ServicesProvider {
     private val applicationContext: Context
 
     constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
-        questionnaireRepo: QuestionnaireRepository, offerRepo: OffersRepository,
-        analytics: Analytics, scheduler: Scheduler
+                questionnaireRepo: QuestionnaireRepository, offerRepo: OffersRepository,
+               analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
 
@@ -54,9 +51,11 @@ class ServicesProvider {
             .build()
 
         val onboardingApi = retrofit.create<OnboardingApi>(OnboardingApi::class.java)
+        val walletApi = retrofit.create<WalletApi>(WalletApi::class.java)
+
+
         walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, questionnaireRepo, analytics,
-            onboardingApi,
-            scheduler)
+            onboardingApi,walletApi, scheduler)
         taskService = TaskService(applicationContext,
             retrofit.create<TasksApi>(TasksApi::class.java),
             questionnaireRepo, userRepo.userId(), walletService)

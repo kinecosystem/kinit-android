@@ -5,15 +5,13 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.network.Wallet
 import org.kinecosystem.kinit.notification.NotificationPublisher
-import org.kinecosystem.kinit.repository.DataStore
-import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
-import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.repository.*
 import org.kinecosystem.kinit.util.Scheduler
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 
 class MockComponentsProvider : CoreComponentsProvider {
+
     var userRepository: UserRepository = Mockito.mock(UserRepository::class.java)
     var questionnaireRepository = Mockito.mock(QuestionnaireRepository::class.java)
     var offersRepository = Mockito.mock(OffersRepository::class.java)

@@ -192,8 +192,8 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginBottom="14dp"
-            android:layout_marginStart="34dp"
             android:layout_marginEnd="34dp"
+            android:layout_marginStart="34dp"
             android:background="#d7dce9"
             android:visibility="@{model.getShouldShowTask}"
             app:layout_constraintBottom_toTopOf="@+id/amount_kin_icon"
@@ -202,7 +202,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/timer_icon"
             app:layout_constraintVertical_bias="1.0"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/reward_text"

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.balance.TransactionViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/bottom_line"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp"
+            android:background="#d7dce9"
+            android:visibility="@{model.isTopLineVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/provider_icon"
+            app:layout_constraintStart_toStartOf="@+id/provider_icon"
+            app:layout_constraintTop_toBottomOf="@+id/provider_icon"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/top_line"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="2dp"
+            android:background="#d7dce9"
+            android:visibility="@{model.isBottomLineVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/provider_icon"
+            app:layout_constraintEnd_toEndOf="@+id/provider_icon"
+            app:layout_constraintStart_toStartOf="@+id/provider_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/provider_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="18dp"
+            app:imageUrl="@{model.transactionProviderIconUrl}"
+            app:layout_constraintBottom_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title"
+            app:srcCompat="@drawable/letter_dark" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="sans-serif"
+            android:text="@{model.transaction.title}"
+            android:textColor="#5c6786"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@+id/provider_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="sans-serif"
+            android:text="@{model.isMoreThanADay ? model.formatDayMonthShort : model.formatHHMM}"
+            android:textColor="#7884a5"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <TextView
+            android:id="@+id/balance_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="13dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="end"
+            android:text="@{model.amount}"
+            android:textColor="@{model.clientReceived ? @color/blue_sky : @color/fab_font_color}"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/title"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/new_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="end"
+            android:text="@{String.valueOf(safeUnbox(model.transaction.txBalance)) + ` K`}"
+            android:textColor="#7884a5"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/date_time"
+            app:layout_constraintEnd_toEndOf="@+id/balance_update" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
+

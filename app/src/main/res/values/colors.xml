@@ -13,6 +13,7 @@
     <color name="white">#FFF</color>
     <color name="answer_stroke">#d2d7e1</color>
     <color name="blue_light">#0e6ddc</color>
+    <color name="blue_sky">#48a1fc</color>
     <color name="blue_dark">#19a3fd</color>
     <color name="deep_blue">#033cc5</color>
     <color name="button_blue">#047cfc</color>

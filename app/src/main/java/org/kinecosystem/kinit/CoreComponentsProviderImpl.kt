@@ -16,7 +16,7 @@ class CoreComponentsProviderImpl(context: Context, dataStoreProvider: DataStoreP
     private val analytics = Analytics()
     private val androidScheduler = AndroidScheduler()
     private val serviceProvider = ServicesProvider(context.applicationContext, dataStoreProvider,
-        userRepository, questionnaireRepo, offersRepository, analytics, androidScheduler)
+            userRepository, questionnaireRepo, offersRepository, analytics, androidScheduler)
     private val notificationPublisher = NotificationPublisher(appContext, analytics)
 
     override fun userRepo(): UserRepository {
@@ -28,7 +28,7 @@ class CoreComponentsProviderImpl(context: Context, dataStoreProvider: DataStoreP
     }
 
     override fun offersRepo(): OffersRepository {
-        return offersRepository;
+        return offersRepository
     }
 
     override fun services(): ServicesProvider {

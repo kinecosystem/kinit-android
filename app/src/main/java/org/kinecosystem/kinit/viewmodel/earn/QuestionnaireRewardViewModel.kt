@@ -57,6 +57,7 @@ class QuestionnaireRewardViewModel(val coreComponents: CoreComponentsProvider,
                     timeoutCallback?.onTransactionTimeout()
                     // update balance anyway in case kin has been received
                     coreComponents.services().walletService.updateBalance()
+                    walletService.retrieveTransactions()
                 }
             },
             REWARD_TIMEOUT)
