@@ -6,6 +6,7 @@ import kin.core.exception.OperationFailedException
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
+import org.kinecosystem.kinit.model.spend.TYPE_P2P
 import org.kinecosystem.kinit.model.spend.isValid
 import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.util.Scheduler
@@ -17,12 +18,12 @@ import java.net.SocketTimeoutException
 const val ERROR_TRANSACTION_FAILED = 100
 const val ERROR_REDEEM_COUPON_FAILED = 101
 const val ERROR_NO_GOOD_LEFT = 200
+private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userId: String,
-                   val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
+    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
 
     val applicationContext: Context = context.applicationContext
-
 
     fun retrieveOffers() {
 
@@ -32,7 +33,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
         offersApi.offers(userId).enqueue(object : Callback<OffersApi.OffersResponse> {
             override fun onResponse(call: Call<OffersApi.OffersResponse>?,
-                                    response: Response<OffersApi.OffersResponse>?) {
+                response: Response<OffersApi.OffersResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     Log.d("OffersService", "onResponse: ${response.body()}")
@@ -55,16 +56,22 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
         })
     }
 
-    fun sendContact(phones: List<String>, callback: OperationResultCallback<String>) {
+    fun sendContact(phones: String, callback: OperationResultCallback<String>) {
         if (!NetworkUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
         }
-        val response = offersApi.sendContact(userId, OffersApi.ContactInfo(phones)).execute()
-        if (response.isSuccessful && response.body() != null && !response.body()!!.address.isEmpty()) {
-            callback.onResult(response.body()!!.address)
-        } else {
-            callback.onError(-1)
-        }
+        scheduler.executeOnBackground({
+            val response = offersApi.sendContact(userId, OffersApi.ContactInfo(phones)).execute()
+            if (response.isSuccessful && response.body() != null && !response.body()!!.address.isEmpty()) {
+                scheduler.post {
+                    callback.onResult(response.body()!!.address)
+                }
+            } else {
+                scheduler.post {
+                    callback.onError(ERROR_EMPTY_RESPONSE)
+                }
+            }
+        })
     }
 
     fun buyOffer(offer: Offer, callback: OperationResultCallback<String>) {
@@ -160,4 +167,46 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
     }
 
+    fun p2pTransfer(toAddress: String, amount: Int, callback: OperationResultCallback<String>) {
+
+        if (!NetworkUtils.isConnected(applicationContext)) {
+            callback.onError(ERROR_NO_INTERNET)
+        }
+        scheduler.executeOnBackground(object : Runnable {
+            override fun run() {
+                try {
+                    val transactionId = wallet.sendTransactionSync(toAddress, amount)
+                    wallet.updateBalanceSync()
+                    if (transactionId != null && !transactionId.id().isEmpty()) {
+                        scheduler.post {
+                            callback.onResult(transactionId.id())
+                        }
+                        analytics.logEvent(Events.Business.KINTransactionSucceeded(amount.toFloat(), transactionId.id(),
+                            TYPE_P2P))
+                        //update to the server the transactionId
+                        offersApi.sendTransactionInfo(userId,
+                            OffersApi.TransactionInfo(transactionId.id(), toAddress, amount)).execute()
+                    }
+                } catch (e: OperationFailedException) {
+                    scheduler.post({
+                        callbackWithError(ERROR_TRANSACTION_FAILED)
+                    })
+                    analytics.logEvent(
+                        Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
+                } catch (e: Exception) {
+                    scheduler.post({
+                        callbackWithError(ERROR_UPDATE_TRANSACTION_TO_SERVER)
+                    })
+                    analytics.logEvent(
+                        Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
+                }
+            }
+
+            private fun callbackWithError(e: Int) {
+                scheduler.post {
+                    callback.onError(e)
+                }
+            }
+        })
+    }
 }

@@ -31,8 +31,14 @@
     <color name="auth_next_font_color_disable">#d2d7e1</color>
     <color name="auth_next_bg_color">#fff</color>
     <color name="auth_next_bg_color_clicked">#7884a5</color>
-    <color name="konetti1">#01ff1c</color>
-    <color name="konetti2">#f7da1a</color>
-    <color name="konetti3">#90fdf2</color>
-    <color name="konetti4">#1664e8</color>
+    <color name="button_send_p2p_font_color_normal">#047cfc</color>
+    <color name="button_send_p2p_disable_font_color">#d7dce9</color>
+    <color name="button_send_p2p_bg_color_normal">#fff</color>
+    <color name="button_send_p2p_bg_color_selected">#047cfc</color>
+    <color name="konfetti1">#01ff1c</color>
+    <color name="konfetti2">#f7da1a</color>
+    <color name="konfetti3">#90fdf2</color>
+    <color name="konfetti4">#1664e8</color>
+    <color name="rounded_rec_stroke_grey">#d7dce9</color>
+
 </resources>

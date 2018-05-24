@@ -51,9 +51,9 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
                 R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
             return
         }
-        if(isP2p){
+        if (isP2p) {
             navigator.navigateTo(Navigator.Destination.PEER2PEER)
-        }else {
+        } else {
             canCloseScreen = false
             purchaseOfferActions?.animateBuy()
             buy()
@@ -110,15 +110,20 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
     }
 
     fun onResume() {
-        val offerPrice = offer.price ?: Int.MAX_VALUE;
-        canBuy.set(coreComponents.services().walletService.balanceInt >= offerPrice)
+        val offerPrice = offer.price ?: Int.MAX_VALUE
+        val taskId = coreComponents.questionnaireRepo().task?.id!!.toInt()
+        var p2pValid = true
+        if (isP2p && coreComponents.userRepo().isP2pEnabled) {
+            p2pValid = coreComponents.userRepo().p2pMinTasks <= taskId
+        }
+        canBuy.set(coreComponents.services().walletService.balanceInt >= offerPrice && p2pValid)
 
         coreComponents.analytics().logEvent(Events.Analytics.ViewOfferPage(offer.provider?.name,
             offer.price,
             offer.domain,
             offer.id,
             offer.title, offer.type))
-        if(isP2p){
+        if (isP2p) {
             purchaseOfferActions?.updateBuyButtonWidth()
         }
     }

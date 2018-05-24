@@ -93,4 +93,22 @@
     <string name="my_vouchers_tab_text">My Vouchers</string>
     <string name="no_transactions_text">In the future, your transactions will be recorded here!</string>
     <string name="no_coupons_text">Your coupons will be saved here!</string>
+    <string name="p2p_server_problem_title">Houston we have a server problem</string>
+    <string name="p2p_server_problem_body">Please try again later. If you continue to see this message reach out to support</string>
+    <string name="p2p_server_problem_action">Back to list</string>
+    <string name="p2p_friend_has_no_kinit_title">Your friend doesn’t use Kinit :(</string>
+    <string name="p2p_friend_has_no_kinit_body">Sorry, you can only send Kin to Kinit users.</string>
+    <string name="p2p_friend_has_no_kinit_action">Back to list</string>
+    <string name="p2p_amount_too_big_title">That’s very kind</string>
+    <string name="p2p_amount_too_big_body">But you can only send %1$dKIN at a time.</string>
+    <string name="p2p_amount_not_valid_action">ok</string>
+    <string name="p2p_amount_too_small_title">Not enough Kin</string>
+    <string name="p2p_amount_too_small_body">Please choose a number above %1$dKIN</string>
+    <string name="p2p_not_enough_balance_title">Looks like your balance is a bit low</string>
+    <string name="p2p_not_enough_balance_body">Make sure you have at least %1$dKIN.</string>
+
+    <string name="to">To</string>
+    <string name="change">change</string>
+    <string name="transaction_completed">Transaction completed</string>
+    <string name="transaction_complete_subtitle">You’ve successfully sent %dKIN, see transaction details under balance</string>
 </resources>

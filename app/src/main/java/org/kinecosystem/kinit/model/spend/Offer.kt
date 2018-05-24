@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import org.kinecosystem.kinit.model.Provider
 import org.kinecosystem.kinit.model.isValid
 
-public val TYPE_P2P = "p2p"
+const val TYPE_P2P = "p2p"
 
 data class Offer(@SerializedName("id") val id: String?,
     @SerializedName("type") val type: String?,

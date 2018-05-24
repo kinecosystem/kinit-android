@@ -2,39 +2,30 @@ package org.kinecosystem.kinit.view.spend;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.Manifest.permission;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.databinding.PeersSendKinLayoutBinding;
-import org.kinecosystem.kinit.navigation.Navigator;
+import org.kinecosystem.kinit.util.GeneralUtils;
 import org.kinecosystem.kinit.view.BaseFragment;
-import org.kinecosystem.kinit.viewmodel.spend.Peer2PeersViewModel;
+import org.kinecosystem.kinit.viewmodel.spend.Peer2PeerViewModel;
 
 public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActions {
 
     public static final String TAG = Peer2PeerSendFragment.class.getSimpleName();
-    private static final int READ_CONTACTS_REQUEST = 100;
     private static final int PICK_CONTACT = 200;
-    private Peer2PeersViewModel model;
+    private Peer2PeerViewModel model;
     private AlertDialog alertDialog;
     private PeersSendKinLayoutBinding binding;
-
-    public Peer2PeersViewModel getModel() {
-        return model;
-    }
+    private static int NO_STRING_PARAM = -1;
+    private ContactData contactData;
 
     public static Peer2PeerSendFragment newInstance() {
         return new Peer2PeerSendFragment();
@@ -44,31 +35,11 @@ public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.peers_send_kin_layout, container, false);
-        Navigator navigator = new Navigator(getActivity());
-        model = new Peer2PeersViewModel(getActivity(), getCoreComponents(), navigator);
+        model = new Peer2PeerViewModel(getCoreComponents());
         model.setPeer2PeerActions(this);
         binding.setModel(model);
-        binding.amount.requestFocus();
-        binding.amount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.length() >= 2) {
-                    if (editable.charAt(0) == '0') {
-                        editable.delete(0, 1);
-                    }
-                }
-                binding.send.setEnabled(editable.length() >= 1 && !editable.equals("0"));
-            }
-        });
-        model.checkReadContactPermission();
+        contactData = new ContactData(getActivity());
+        pickContact();
         return binding.getRoot();
     }
 
@@ -80,28 +51,11 @@ public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActi
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-        String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case READ_CONTACTS_REQUEST: {
-                if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    model.onPermissionGranted();
-                } else {
-                    model.onPermissionDenied();
-                    // permission denied,Disable the functionality that depends on this permission.
-                }
-            }
-
-        }
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_CONTACT && resultCode == RESULT_OK && data != null) {
-            model.onContactSelected(data);
-        }else{
+        if (requestCode == PICK_CONTACT && resultCode == RESULT_OK && data != null && contactData.parse(data)) {
+            model.updateContact(contactData);
+        } else {
             model.onErrorPickContact();
         }
     }
@@ -109,7 +63,7 @@ public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActi
     @Override
     public void onResume() {
         super.onResume();
-        //model.onResume();
+        model.onResume();
     }
 
     @Override
@@ -118,28 +72,33 @@ public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActi
     }
 
     @Override
-    public void showDialog(int titleStringRes, int messageStringRes, int actionStringRes, boolean finish,
-        String errorType) {
+    public void showDialog(int titleStringRes, int messageStringRes, int messageParam, int actionStringRes,
+        boolean showContacts) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
-
-        if (errorType != null) {
-            //model.logViewErrorPopup(errorType);
+        String message;
+        if (messageParam == NO_STRING_PARAM) {
+            message = getResources().getString(messageStringRes);
+        } else {
+            message = getResources().getString(messageStringRes, messageParam);
         }
-        builder.setTitle(titleStringRes).setMessage(messageStringRes).setPositiveButton(actionStringRes,
+        builder.setTitle(titleStringRes).setMessage(message).setPositiveButton(actionStringRes,
             (dialogInterface, i) -> {
-                if (errorType != null) {
-                    // model.logCloseErrorPopupClicked(errorType);
-                }
                 dialogInterface.dismiss();
-                if (finish) {
-                    getActivity().finish();
+                if (showContacts) {
+                    model.onPickContactClicked(null);
                 }
             });
         if (alertDialog != null) {
             alertDialog.dismiss();
+            binding.amount.requestFocus();
         }
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public void showDialog(int titleStringRes, int messageStringRes, int actionStringRes, boolean showContacts) {
+        showDialog(titleStringRes, messageStringRes, NO_STRING_PARAM, actionStringRes, showContacts);
     }
 
     @Override
@@ -161,17 +120,28 @@ public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActi
         }
     }
 
-    @RequiresApi(api = VERSION_CODES.M)
-    public void requestReadContactsPermission() {
-        if (shouldShowRequestPermissionRationale(permission.READ_CONTACTS)) {
-            // show UI part if you want here to show some rationale !!!
-        } else {
-            requestPermissions(new String[]{permission.READ_CONTACTS}, READ_CONTACTS_REQUEST);
-        }
-    }
-
     @Override
     public void onContactParseError() {
 
+    }
+
+    @Override
+    public void onReadyForTransaction() {
+        binding.amount.requestFocus();
+        GeneralUtils.openKeyboard(getActivity(), binding.amount);
+    }
+
+    @Override
+    public void onStartTransaction() {
+        GeneralUtils.closeKeyboard(getActivity(), binding.transactionCompleteBg);
+    }
+
+    @Override
+    public void onTransactionComplete() {
+        GeneralUtils.closeKeyboard(getActivity(), binding.transactionCompleteBg);
+        binding.transactionCompleteBg.animate().alpha(.8f).setDuration(250);
+        binding.transactionCompleteImage.animate().alpha(1).setDuration(250).setStartDelay(250);
+        binding.transactionCompleteTitle.animate().alpha(1).setDuration(250).setStartDelay(500);
+        binding.transactionCompleteSubtitle.animate().alpha(1).setDuration(250).setStartDelay(550);
     }
 }

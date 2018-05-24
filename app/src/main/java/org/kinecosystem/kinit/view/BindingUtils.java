@@ -56,6 +56,19 @@ public class BindingUtils {
         }
     }
 
+    @BindingAdapter("animatedFadeIn")
+    public static void setVisibility(View view, boolean visible) {
+       if(view != null){
+           if(visible) {
+               view.setAlpha(0);
+               view.setVisibility(View.VISIBLE);
+               view.animate().alpha(1).setDuration(250);
+           }else{
+               view.setVisibility(View.INVISIBLE);
+           }
+       }
+    }
+
     @BindingAdapter("visibilityOn")
     public static void setVisibilityOn(View view, boolean visible) {
         if (visible) {

@@ -1,9 +1,6 @@
 package org.kinecosystem.kinit.util;
 
 import android.content.Context;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
-import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import org.kinecosystem.kinit.R;
 

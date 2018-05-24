@@ -61,7 +61,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(max) = userCache.putInt(P2P_MIN_KIN, max)
         get() = userCache.getInt(P2P_MIN_KIN, 0)
 
-    var p2pMinTaksks: Int
+    var p2pMinTasks: Int
         set(max) = userCache.putInt(P2P_MIN_TASKS, max)
         get() = userCache.getInt(P2P_MIN_TASKS, 0)
 
