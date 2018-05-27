@@ -15,7 +15,6 @@ import org.kinecosystem.kinit.viewmodel.balance.CouponViewModel
 
 class CouponsListAdapter(val context: Context, private val coreComponents: CoreComponentsProvider)
     : RecyclerView.Adapter<CouponsListAdapter.ViewHolder>() {
-    private val couponViews = ArrayList<ViewHolder>()
     private val updateCouponsCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
             coupons = coreComponents.services().walletService.coupons.get()
@@ -55,7 +54,6 @@ class CouponsListAdapter(val context: Context, private val coreComponents: CoreC
         val isExpanded: Boolean = position == currentExpandedPosition
         if (isExpanded) previousExpandedPosition = position
         holder.bind(coupon, parent, isExpanded, position)
-        couponViews.add(holder)
     }
 
     fun expandCollapse(isExpanded: Boolean, position: Int){

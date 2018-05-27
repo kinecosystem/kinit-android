@@ -35,8 +35,6 @@ android {
         buildConfigField "String", "StageBaseUrl", globalProperties["StageBaseUrl"]
         buildConfigField "String", "ProdBaseUrl", globalProperties["ProdBaseUrl"]
         buildConfigField "String", "TestFairyApiSecret", globalProperties["TestfairyApiSecret"]
-        buildConfigField "boolean", "isPhoneVerificationEnabled",
-                globalProperties["isPhoneVerificationEnabled"]
         multiDexEnabled true
     }
     buildTypes {

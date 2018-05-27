@@ -71,6 +71,8 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
             override fun onResult(result: String) {
                 couponCode.set(result)
                 couponPurchaseCompleted.set(true)
+                coreComponents.services().walletService.retrieveTransactions()
+                coreComponents.services().walletService.retrieveCoupons()
                 analytics.logEvent(
                     Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
                         offer.title, offer.type))
