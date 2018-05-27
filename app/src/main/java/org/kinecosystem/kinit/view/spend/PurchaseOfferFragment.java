@@ -40,7 +40,7 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.spend_detail_layout, container, false);
         int index = getArguments().getInt(ARG_OFFER_INDEX, INVALID_OFFER_INDEX);
         if (index == INVALID_OFFER_INDEX) {
@@ -93,7 +93,7 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
 
     @Override
     public void showDialog(int titleStringRes, int messageStringRes, int actionStringRes, boolean finish,
-        String errorType) {
+                           String errorType) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
 
         if (errorType != null) {

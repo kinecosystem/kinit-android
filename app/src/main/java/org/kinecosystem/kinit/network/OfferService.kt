@@ -119,9 +119,6 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                         callbackWithError(ERROR_REDEEM_COUPON_FAILED)
                     }
 
-                    wallet.retrieveCoupons()
-                    wallet.retrieveTransactions()
-
                     scheduler.post {
                         callback.onResult(couponCode)
                         analytics.logEvent(

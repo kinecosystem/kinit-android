@@ -28,6 +28,8 @@ class BalanceViewModel(private val coreComponents: CoreComponentsProvider) {
     }
 
     fun onScreenVisibleToUser() {
+        hasTransactions.set(!coreComponents.services().walletService.transactions.get().isEmpty())
+        hasCoupons.set(!coreComponents.services().walletService.coupons.get().isEmpty())
         coreComponents.analytics().logEvent(Events.Analytics.ViewBalancePage())
     }
 }

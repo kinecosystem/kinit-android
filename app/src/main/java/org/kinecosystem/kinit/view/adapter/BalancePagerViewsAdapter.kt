@@ -12,20 +12,16 @@ private const val NUMBER_OF_TABS = 2
 
 class BalancePagerViewsAdapter(val context: Context, val coreComponents: CoreComponentsProvider, val binding: BalanceFragmentBinding) : PagerAdapter() {
 
-    private val transactions = coreComponents.services().walletService.transactions
-    private val coupons = coreComponents.services().walletService.coupons
-
     init {
         binding.transactionsRecycleView.adapter = TransactionsListAdapter(context, coreComponents)
         binding.couponsRecycleView.adapter = CouponsListAdapter(context, coreComponents)
-        binding.couponsRecycleView.layoutManager
     }
 
     private fun getPage(position: Int): ViewGroup {
         return when (position) {
-            0 -> if (transactions.get().size > 0) binding.transactionsRecycleView else binding.transactionsIllustration
-            1 -> if (coupons.get().size > 0) binding.couponsRecycleView else binding.couponsIllustration
-            else -> binding.transactionsRecycleView
+            0 -> binding.transactionsPageWrapper
+            1 -> binding.couponsPageWrapper
+            else -> binding.transactionsPageWrapper
         }
     }
 
