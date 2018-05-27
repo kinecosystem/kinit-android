@@ -127,7 +127,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         val config = response.body()?.config
         userRepo.tos = config?.tos ?: ""
         userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled ?: false
-    }
+     }
 
     private fun callAppLaunch(appVersion: String) {
         updateToken()
