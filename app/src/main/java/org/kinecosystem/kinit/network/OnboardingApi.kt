@@ -45,4 +45,6 @@ interface OnboardingApi {
     fun createAccount(@Header(USER_HEADER_KEY) userId: String, @Body accountInfo: AccountInfo): Call<StatusResponse>
 
 
+    @POST("/user/auth/ack")
+    fun authTokenAck(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<StatusResponse>
 }

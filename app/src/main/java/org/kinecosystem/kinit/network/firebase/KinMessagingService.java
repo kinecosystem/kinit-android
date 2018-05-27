@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.network.firebase;
 
 import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
 
+import android.text.TextUtils;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -10,6 +11,7 @@ import com.google.gson.JsonSyntaxException;
 import java.util.Map;
 import org.kinecosystem.kinit.CoreComponentsProvider;
 import org.kinecosystem.kinit.model.Push;
+import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
 
 
@@ -23,8 +25,8 @@ public class KinMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d("###", "From: " + remoteMessage.getFrom());
-        Log.d("###", "Message data payload: " + remoteMessage.getData());
+        Log.d(TAG, "###From: " + remoteMessage.getFrom());
+        Log.d(TAG, "###Message data payload: " + remoteMessage.getData());
         Gson gson = new Gson();
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
@@ -40,9 +42,19 @@ public class KinMessagingService extends FirebaseMessagingService {
                             coreComponents.services().getWalletService()
                                 .onTransactionMessageReceived(gson.fromJson(message, TransactionCompleteMessage.class))
                         );
-                    } else if (type.equals(Push.TYPE_ENGAGEMENT)) {
-                        coreComponents.notificationPublisher().notify(data.get(Push.ID_DATA_KEY),
-                            gson.fromJson(message, NotificationMessage.class));
+                    } else if (type.equals(Push.TYPE_AUTH_TOKEN)) {
+                        AuthTokenMessage authTokenMessage = gson.fromJson(message, AuthTokenMessage.class);
+                        coreComponents.services().getOnBoardingService()
+                            .sendAuthTokenAck(authTokenMessage.getAuthToken());
+
+                    } else /* if (type.equals(Push.TYPE_ENGAGEMENT) */ {
+                        String id = data.get(Push.ID_DATA_KEY);
+                        NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);
+                        if (!TextUtils.isEmpty(id) && notificationMessage != null && !TextUtils
+                            .isEmpty(notificationMessage.getBody())) {
+                            coreComponents.services().getWalletService().updateBalance(null);
+                            coreComponents.notificationPublisher().notify(id, notificationMessage);
+                        }
                     }
                 }
 
@@ -51,6 +63,7 @@ public class KinMessagingService extends FirebaseMessagingService {
             }
 
         }
+
     }
 
     private CoreComponentsProvider getCoreComponentsProvider() {
