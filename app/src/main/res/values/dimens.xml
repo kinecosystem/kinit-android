@@ -6,16 +6,22 @@
     <dimen name="author_image_size_height">98dp</dimen>
     <dimen name="questionnaire_icon_size">33dp</dimen>
     <dimen name="question_size">22sp</dimen>
+    <dimen name="question_size_small">17sp</dimen>
     <dimen name="answer_gap">19dp</dimen>
     <dimen name="answer_corner">25dp</dimen>
     <dimen name="spend_place_holder_corner">8dp</dimen>
     <dimen name="tab_text_size">10sp</dimen>
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="balance_height">56dp</dimen>
-    <dimen name="image_answer_corner">4dp</dimen>
+    <dimen name="image_answer_corner">3dp</dimen>
     <dimen name="emojy_gap">16dp</dimen>
     <dimen name="question_gray_text_size">14sp</dimen>
-    <dimen name="match_constraint">0dp</dimen>
+    <dimen name="zero_dp">0dp</dimen>
+    <dimen name="answer_with_image_bottom_guide_space">12dp</dimen>
     <dimen name="questionnaire_margins">33dp</dimen>
     <dimen name="auth_phone_next_height">56dp</dimen>
+    <dimen name="header_no_img_height">160dp</dimen>
+    <dimen name="header_img_height">180dp</dimen>
+    <dimen name="header_text_bottom_guid">267dp</dimen>
+    <dimen name="header_text_bottom_guid_space">28dp</dimen>
 </resources>

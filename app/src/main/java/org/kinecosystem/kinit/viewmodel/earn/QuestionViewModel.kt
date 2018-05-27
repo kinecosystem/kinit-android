@@ -10,7 +10,7 @@ import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.view.customView.AnswersGridLayout
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 
-open class QuestionViewModel(coreComponents: CoreComponentsProvider, private var questionIndex: Int,
+open class QuestionViewModel(val coreComponents: CoreComponentsProvider, private var questionIndex: Int,
                              private val questionnaireActions: QuestionnaireActions) {
 
     private val repo = coreComponents.questionnaireRepo()
@@ -20,25 +20,20 @@ open class QuestionViewModel(coreComponents: CoreComponentsProvider, private var
 
     private var chosenAnswersIndexes: MutableList<Int> = mutableListOf()
     private var chosenAnswers: MutableList<String> = mutableListOf()
+    val imageUrl = questionObj?.image_url
     var chosenAnswersCount: ObservableInt = ObservableInt(chosenAnswers.size)
     var questionType = questionObj?.type ?: Question.QuestionType.TEXT.type
     private var isImageTextAnswer = questionType == Question.QuestionType.TEXT_IMAGE.type
     var isMultipleAnswers = questionType == Question.QuestionType.TEXT_MULTIPLE.type
+    var isHeaderImageAvailable = questionObj?.image_url?.isNotBlank() ?: false
+    var isHeaderImageAndMultiple = isHeaderImageAvailable && isMultipleAnswers
+
     var isAlignedLeft = questionType == Question.QuestionType.TEXT_EMOJI.type
     var question: String? = questionObj?.text
     var answers: List<Answer>? = questionObj?.answers
-
-    fun getColumnCount(): Int {
-        if (isImageTextAnswer) return 2; return 1
-    }
-
-    fun isHorizontal(): Boolean {
-        return isImageTextAnswer
-    }
-
-    fun isFullWidth(): Boolean {
-        return isMultipleAnswers
-    }
+    var isFullWidth = isMultipleAnswers
+    var isHorizontal = isImageTextAnswer
+    var columnCount = if (isImageTextAnswer) 2 else 1
 
     private fun answerEvent(task: Task?): Events.Event? {
         return Events.Analytics.ClickAnswerButtonOnQuestionPage(

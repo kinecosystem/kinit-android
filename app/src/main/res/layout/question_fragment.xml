@@ -19,34 +19,45 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <ImageView
+            android:id="@+id/header_image"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:imageUrl="@{model.imageUrl}"
+            app:layout_constraintBottom_toTopOf="@+id/header_guide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/header_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:layout_constraintGuide_begin="180dp"
+            app:layout_constraintGuide_begin="@{model.headerImageAvailable ? @dimen/header_img_height : @dimen/zero_dp}" />
+
         <TextView
             android:id="@+id/question"
             android:layout_width="295dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal|center"
             android:lineSpacingExtra="5sp"
             android:text="@{model.question}"
             android:textColor="@color/question_text_color"
-            android:textSize="@dimen/question_size"
+            android:textSize="@{model.headerImageAvailable ? @dimen/question_size_small : @dimen/question_size}"
             android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/bottom_gl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/header_guide" />
 
         <TextView
             android:id="@+id/gray_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="5sp"
@@ -54,7 +65,7 @@
             android:textColor="@color/question_gray_text_color"
             android:textSize="@dimen/question_gray_text_size"
             android:textStyle="normal"
-            android:visibility="@{model.isMultipleAnswers ? View.VISIBLE: View.GONE }"
+            android:visibility="@{model.multipleAnswers ? View.VISIBLE: View.GONE }"
             app:layout_constraintBottom_toTopOf="@+id/bottom_gl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,12 +76,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="160dp" />
+            app:layout_constraintGuide_begin="@{model.headerImageAvailable ? @dimen/header_text_bottom_guid : @dimen/header_no_img_height}"
+            tools:layout_constraintGuide_begin="267dp" />
 
         <ScrollView
             android:id="@+id/scroll"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@{model.headerImageAndMultiple ? @dimen/answer_with_image_bottom_guide_space : @dimen/zero_dp}"
             android:background="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/multi_answer_next_btn"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,19 +94,19 @@
                 android:id="@+id/answers_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@{model.isFullWidth() ? @dimen/match_constraint : @dimen/questionnaire_margins}"
-                android:layout_marginStart="@{model.isFullWidth() ? @dimen/match_constraint : @dimen/questionnaire_margins}"
+                android:layout_marginEnd="@{model.fullWidth ? @dimen/zero_dp : @dimen/questionnaire_margins}"
+                android:layout_marginStart="@{model.fullWidth ? @dimen/zero_dp : @dimen/questionnaire_margins}"
                 android:layoutMode="clipBounds"
                 app:answers="@{model.answers}"
-                app:columnCount="@{model.getColumnCount()}"
-                app:isAlignedLeft="@{model.isAlignedLeft}"
+                app:columnCount="@{model.columnCount}"
+                app:isAlignedLeft="@{model.alignedLeft}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gray_text"
                 app:layout_goneMarginTop="25dp"
                 app:onAnswer="@{model.onAnswer}"
-                app:orientation="@{model.isHorizontal() ? GridLayout.HORIZONTAL : GridLayout.VERTICAL}"
+                app:orientation="@{model.horizontal ? GridLayout.HORIZONTAL : GridLayout.VERTICAL}"
                 app:questionType="@{model.questionType}"
                 tools:columnCount="2"
                 tools:orientation="vertical">
@@ -114,7 +127,7 @@
             android:textAllCaps="false"
             android:textColor="@{model.chosenAnswersCount > 0 ? @color/blue_dark : @color/question_gray_text_color}"
             android:textSize="18sp"
-            android:visibility="@{model.isMultipleAnswers ? View.VISIBLE: View.GONE }"
+            android:visibility="@{model.multipleAnswers ? View.VISIBLE: View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -42,7 +42,6 @@ public class ImageTextAnswerView extends CardView implements AnswersGridLayout.A
         setUseCompatPadding(true);
         setPreventCornerOverlap(true);
         setRadius(radius_px_dimen);
-
         setOnClickListener(view -> {
             if (!listener.onAnswerSelected(answer)) {
                 view.findViewById(R.id.answer_text).setBackground(getResources().getDrawable(R.drawable.image_answer_bg_selected));
@@ -50,10 +49,12 @@ public class ImageTextAnswerView extends CardView implements AnswersGridLayout.A
             }
         });
         TextView answer_text = findViewById(R.id.answer_text);
+        answer_text.setBackground(getResources().getDrawable(R.drawable.image_text_answer_bg));
         if (!TextUtils.isEmpty(answer.getText()))
             answer_text.setText(answer.getText());
         else
             answer_text.setVisibility(GONE);
+
 
         View view = findViewById(R.id.answer_image);
         Context ivContext = view.getContext();

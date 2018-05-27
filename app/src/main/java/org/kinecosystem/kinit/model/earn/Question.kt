@@ -7,6 +7,8 @@ data class Question(val id: String? = null,
     val text: String? = null,
     @SerializedName("type")
     val type: String? = null,
+    @SerializedName("image_url")
+    val image_url: String? = null,
     @SerializedName("results")
     val answers: List<Answer>? = null){
 
