@@ -44,10 +44,13 @@ public class KinMessagingService extends FirebaseMessagingService {
                         );
                     } else if (type.equals(Push.TYPE_AUTH_TOKEN)) {
                         AuthTokenMessage authTokenMessage = gson.fromJson(message, AuthTokenMessage.class);
-                        coreComponents.services().getOnBoardingService()
-                            .sendAuthTokenAck(authTokenMessage.getAuthToken());
-
-                    } else /* if (type.equals(Push.TYPE_ENGAGEMENT) */ {
+                        if (!TextUtils.isEmpty(authTokenMessage.getAuthToken())) {
+                            coreComponents.services().getOnBoardingService()
+                                .sendAuthTokenAck(authTokenMessage.getAuthToken());
+                        }
+                    } else {
+                        // if the json contains message with body field, then this is an engagement push
+                        // and we need to send notification to users
                         String id = data.get(Push.ID_DATA_KEY);
                         NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);
                         if (!TextUtils.isEmpty(id) && notificationMessage != null && !TextUtils
@@ -57,7 +60,6 @@ public class KinMessagingService extends FirebaseMessagingService {
                         }
                     }
                 }
-
             } catch (JsonSyntaxException e) {
                 Log.e(TAG, "error json content not valid " + data);
             }
