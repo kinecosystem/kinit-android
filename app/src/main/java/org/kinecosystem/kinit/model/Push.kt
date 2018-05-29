@@ -16,6 +16,7 @@ class Push {
     companion object {
         const val TYPE_TX_COMPLETED = "tx_completed"
         const val TYPE_ENGAGEMENT = "engage-recent"
+        const val TYPE_AUTH_TOKEN = "auth_token"
         const val ID_DATA_KEY = "push_id"
         const val TYPE_DATA_KEY = "push_type"
         const val MESSAGE_DATA_KEY = "message"
@@ -26,6 +27,15 @@ class Push {
         val body: String? = null,
         @SerializedName("title")
         val title: String? = null)
+
+
+    data class AuthTokenMessage(
+        @SerializedName("user_id")
+        val userId: String? = null,
+        @SerializedName("type")
+        val type: String? = null,
+        @SerializedName("token")
+        val authToken: String? = null)
 
 
     data class TransactionCompleteMessage(

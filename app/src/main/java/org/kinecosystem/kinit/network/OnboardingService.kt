@@ -87,6 +87,21 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
             })
     }
 
+    fun sendAuthTokenAck(token: String) {
+        val call = appLaunchApi.authTokenAck(userRepo.userId(), OnboardingApi.TokenInfo(token))
+        call.enqueue(
+            object : Callback<StatusResponse> {
+                override fun onResponse(call: Call<StatusResponse>?,
+                    response: Response<StatusResponse>?) {
+                    Log.d("OnboardingService", "### authTokenAck success : $response token:$token")
+                }
+
+                override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
+                    Log.e("OnboardingService", "### authTokenAck onFailure called with throwable $t")
+                }
+            })
+    }
+
     private fun callRegister(appVersion: String) {
         val deviceUtils = DeviceUtils(applicationContext)
         val userId: String = userRepo.userId()
