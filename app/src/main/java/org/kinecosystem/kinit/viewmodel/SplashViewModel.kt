@@ -19,15 +19,13 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
 
     val showCreatingWallet: ObservableBoolean = ObservableBoolean(false)
     var callback: Observable.OnPropertyChangedCallback? = null
+    var googlePlayServicesAvailable: Boolean = true
     private val walletReady = coreComponents.services().walletService.ready
 
-    init {
+    fun onResume() {
         coreComponents.scheduler().scheduleOnMain({
             checkReadyToMove()
         }, SPLASH_DURATION)
-    }
-
-    fun onResume() {
         coreComponents.analytics().logEvent(Events.Analytics.ViewSplashscreenPage())
     }
 
@@ -55,13 +53,15 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
     }
 
     private fun checkReadyToMove() {
-        if (walletReady.get()) {
-            moveToNextScreen()
-        } else {
-            coreComponents.userRepo().isFirstTimeUser = true
-            showCreatingWallet.set(true)
-            addWalletReadyCallback()
-            scheduleTimeout()
+        if (googlePlayServicesAvailable) {
+            if (walletReady.get()) {
+                moveToNextScreen()
+            } else {
+                coreComponents.userRepo().isFirstTimeUser = true
+                showCreatingWallet.set(true)
+                addWalletReadyCallback()
+                scheduleTimeout()
+            }
         }
     }
 
