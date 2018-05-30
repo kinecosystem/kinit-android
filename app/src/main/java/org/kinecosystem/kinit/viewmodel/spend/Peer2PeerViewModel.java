@@ -47,7 +47,7 @@ public class Peer2PeerViewModel {
     };
     public ObservableInt maxTransferLength = new ObservableInt(1);
     public ObservableInt amount = new ObservableInt(0);
-    private static final long COMPLETE_TRANSACTION_SCREEN_TIMEOUT = 4000;
+    private static final long COMPLETE_TRANSACTION_SCREEN_TIMEOUT = 3000;
     private int minKinTransfer, maxKinTransfer;
     public OnClickListener amountClickListener = view -> {
         //keep the cursor at the end of the edittext view
