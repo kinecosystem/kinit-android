@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName
 import org.kinecosystem.kinit.model.Provider
 import org.kinecosystem.kinit.model.isValid
 
+const val TYPE_P2P = "p2p"
+
 data class Offer(@SerializedName("id") val id: String?,
     @SerializedName("type") val type: String?,
     @SerializedName("domain") val domain: String,
@@ -22,4 +24,8 @@ fun Offer.isValid(): Boolean {
         return false
     }
     return provider.isValid()
+}
+
+fun Offer.isP2p(): Boolean {
+    return type.equals(TYPE_P2P)
 }

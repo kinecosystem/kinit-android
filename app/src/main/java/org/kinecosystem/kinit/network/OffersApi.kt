@@ -23,9 +23,34 @@ interface OffersApi {
         "reason") val reason: String, @SerializedName(
         "order_id") val orderId: String)
 
+
+    data class ContactResponse(
+        @SerializedName("status") val status: String,
+        @SerializedName("reason") val reason: String,
+        @SerializedName("address") val address: String)
+
+
+    data class TransactionInfo(
+        @SerializedName("tx_hash") val txHash: String,
+        @SerializedName("destination_address") val address: String,
+        @SerializedName("amount") val amount: Int)
+
+
+    data class StatusResponse(@SerializedName("status") val status: String)
+
+    data class ContactInfo(
+        @SerializedName("phone_number") val phoneNumber: String)
+
     @POST("/offer/book")
     fun bookOffer(@Header(USER_HEADER_KEY) userId: String, @Body offerInfo: OfferInfo): Call<BookOfferResponse>
 
+
+    @POST("/user/contact")
+    fun sendContact(@Header(USER_HEADER_KEY) userId: String, @Body contactInfo: ContactInfo): Call<ContactResponse>
+
+    @POST("/user/transaction/p2p")
+    fun sendTransactionInfo(@Header(
+        USER_HEADER_KEY) userId: String, @Body transactionInfo: TransactionInfo): Call<StatusResponse>
 
     // redeem coupon after paying
     data class PaymentReceipt(@SerializedName("tx_hash") val txHash: String)

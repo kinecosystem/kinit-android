@@ -142,7 +142,11 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         val config = response.body()?.config
         userRepo.tos = config?.tos ?: ""
         userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled ?: false
-     }
+        userRepo.isP2pEnabled = config?.p2p_enabled ?: false
+        userRepo.p2pMaxKin = config?.p2p_max_kin ?: 0
+        userRepo.p2pMinKin = config?.p2p_min_kin ?: 0
+        userRepo.p2pMinTasks = config?.p2p_min_tasks ?: 0
+    }
 
     private fun callAppLaunch(appVersion: String) {
         updateToken()

@@ -12,4 +12,11 @@ public class GeneralUtils {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    public static void openKeyboard(Context context, View view) {
+        if (view != null && context != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, 0);
+        }
+    }
 }

@@ -44,8 +44,8 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
             public void onGlobalLayout() {
                 if (konfettiView.getWidth() > 0) {
                     konfettiView.getViewTreeObserver().removeOnGlobalLayoutListener(this::onGlobalLayout);
+                    startKonfettiAnim();
                 }
-                startKonfettiAnim();
             }
         });
 
@@ -54,8 +54,8 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
 
     private void startKonfettiAnim() {
         konfettiView.build()
-            .addColors(getResources().getColor(R.color.konetti1), getResources().getColor(R.color.konetti2),
-                getResources().getColor(R.color.konetti3), getResources().getColor(R.color.konetti4))
+            .addColors(getResources().getColor(R.color.konfetti1), getResources().getColor(R.color.konfetti2),
+                getResources().getColor(R.color.konfetti3), getResources().getColor(R.color.konfetti4))
             .setDirection(0.0, 359.0)
             .setSpeed(0f, 8f)
             .setFadeOutEnabled(true)
