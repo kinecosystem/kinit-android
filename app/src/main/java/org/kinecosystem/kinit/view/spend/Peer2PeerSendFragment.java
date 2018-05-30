@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.view.spend;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Context;
@@ -53,10 +54,12 @@ public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_CONTACT && resultCode == RESULT_OK && data != null && contactData.parse(data)) {
-            model.updateContact(contactData);
-        } else {
-            model.onErrorPickContact();
+        if (resultCode != RESULT_CANCELED) {
+            if (requestCode == PICK_CONTACT && resultCode == RESULT_OK && data != null && contactData.parse(data)) {
+                model.updateContact(contactData);
+            } else {
+                model.onErrorPickContact();
+            }
         }
     }
 

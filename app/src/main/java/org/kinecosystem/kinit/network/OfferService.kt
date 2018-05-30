@@ -177,6 +177,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                 try {
                     val transactionId = wallet.sendTransactionSync(toAddress, amount)
                     wallet.updateBalanceSync()
+                    wallet.retrieveTransactions()
                     if (transactionId != null && !transactionId.id().isEmpty()) {
                         scheduler.post {
                             callback.onResult(transactionId.id())
