@@ -96,7 +96,7 @@
     <string name="p2p_server_problem_title">Houston we have a server problem</string>
     <string name="p2p_server_problem_body">Please try again later. If you continue to see this message reach out to support</string>
     <string name="p2p_server_problem_action">Back to list</string>
-    <string name="p2p_friend_has_no_kinit_title">Your friend doesn’t use Kinit :(</string>
+    <string name="p2p_friend_has_no_kinit_title">Your friend doesn’t use Kinit</string>
     <string name="p2p_friend_has_no_kinit_body">Sorry, you can only send Kin to Kinit users.</string>
     <string name="p2p_friend_has_no_kinit_action">Back to list</string>
     <string name="p2p_amount_too_big_title">That’s very kind</string>
