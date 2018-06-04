@@ -81,6 +81,7 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
         builder.setTitle(R.string.pop_verify_phone_title)
             .setMessage(R.string.pop_verify_phone_sub_title)
             .setPositiveButton(R.string.pop_verify_phone_possitive, (dialog, which) -> {
+                getCoreComponents().analytics().logEvent(new Events.Analytics.ClickVerifyButtonOnPhoneAuthPopup());
                 startActivity(PhoneVerifyActivity.getIntent(MainActivity.this, false));
                 finish();
             });

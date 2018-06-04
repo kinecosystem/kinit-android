@@ -187,40 +187,23 @@ public class CodeVerificationFragment extends BaseFragment {
     }
 
     public void onError() {
-        code.setText("");
+        getCoreComponents().analytics()
+            .logEvent(new Events.Analytics.ViewErrorMessageOnVerificationPage());
         progressBar.setVisibility(View.GONE);
-        next.setEnabled(true);
+        vibrate();
+        animateWiggle();
+        code.setText("");
+        next.setEnabled(false);
     }
 
     private void animateWiggle() {
         final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.wiggle);
-        animShake.setAnimationListener(new AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                onEndWiggleAnim();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
         for (int i = 0; i < inputs.length; i++) {
             inputs[i].startAnimation(animShake);
         }
         for (int i = 0; i < lines.length; i++) {
             lines[i].startAnimation(animShake);
         }
-    }
-
-    void onEndWiggleAnim() {
-        code.setText("");
-        next.setEnabled(true);
     }
 
     private void vibrate() {
@@ -230,13 +213,5 @@ public class CodeVerificationFragment extends BaseFragment {
         } else {
             v.vibrate(VIBRATE_DURATION);
         }
-    }
-
-    public void onWrongCode() {
-        getCoreComponents().analytics()
-            .logEvent(new Events.Analytics.ViewErrorMessageOnVerificationPage());
-        progressBar.setVisibility(View.GONE);
-        vibrate();
-        animateWiggle();
     }
 }

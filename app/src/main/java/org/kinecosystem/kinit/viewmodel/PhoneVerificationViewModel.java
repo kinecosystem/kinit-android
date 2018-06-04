@@ -42,10 +42,13 @@ public class PhoneVerificationViewModel {
         public void onVerificationFailed(FirebaseException e) {
             if (e instanceof FirebaseAuthInvalidCredentialsException) {
                 verificationCallback.onError(PHONE_VERIF_ERROR_INVALID_PHONE_CREDENTIALS);
+                Log.e(TAG, "invalid code FirebaseAuthInvalidCredentialsException");
             } else if (e instanceof FirebaseTooManyRequestsException) {
                 verificationCallback.onError(PHONE_VERIF_ERROR_SMS_QUOTA_FOR_PROJECT_EXCEEDED);
+                Log.e(TAG, "reached sms quota limit FirebaseTooManyRequestsException");
             }
             verificationCallback.onError(PHONE_VERIF_ERROR_VERIFICATION_FAILED);
+            Log.e(TAG, "Exception occurred while verifying code " + e.getMessage());
         }
 
         @Override
