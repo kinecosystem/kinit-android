@@ -19,6 +19,7 @@ const val ERROR_TRANSACTION_FAILED = 100
 const val ERROR_REDEEM_COUPON_FAILED = 101
 const val ERROR_NO_GOOD_LEFT = 200
 private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
+private const val P2P_ORDER_ID = "1-kit-p2p"
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userId: String,
     val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
@@ -177,7 +178,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
         scheduler.executeOnBackground(object : Runnable {
             override fun run() {
                 try {
-                    val transactionId = wallet.sendTransactionSync(toAddress, amount)
+                    val transactionId = wallet.payForOrder(toAddress, amount, P2P_ORDER_ID)
                     wallet.updateBalanceSync()
                     wallet.retrieveTransactions()
                     if (transactionId != null && !transactionId.id().isEmpty()) {

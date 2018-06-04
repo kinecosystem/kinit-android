@@ -198,10 +198,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         return account.sendTransactionSync(toAddress, BigDecimal(amount), orderId)
     }
 
-    fun sendTransactionSync(toAddress: String, amount: Int): TransactionId {
-        return account.sendTransactionSync(toAddress, BigDecimal(amount))
-    }
-
     fun initKinWallet() {
         Log.d("OnboardingService", "#### try create Wallet")
         scheduler.executeOnBackground({
