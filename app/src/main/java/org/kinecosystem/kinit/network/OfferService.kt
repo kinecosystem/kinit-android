@@ -25,7 +25,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
     val applicationContext: Context = context.applicationContext
 
-    fun retrieveOffers() {
+    fun retrieveOffers(callback: OperationCompletionCallback? = null) {
 
         if (!NetworkUtils.isConnected(applicationContext)) {
             return
@@ -40,18 +40,20 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                     val offerResponse = response.body()
                     if (offerResponse?.offerList != null && offerResponse.offerList.isNotEmpty()) {
                         repository.replaceOfferList(offerResponse.offerList)
-
                     } else {
                         Log.d("OffersService", "offer list empty or null ")
                         repository.replaceOfferList(ArrayList())
                     }
+                    callback?.onSuccess()
                 } else {
                     Log.d("OffersService", "response null or isSuccessful=false: $response")
+                    callback?.onError(ERROR_EMPTY_RESPONSE)
                 }
             }
 
             override fun onFailure(call: Call<OffersApi.OffersResponse>?, t: Throwable?) {
                 Log.d("TaskService", "onFailure called with throwable $t")
+                callback?.onError(ERROR_NO_INTERNET)
             }
         })
     }

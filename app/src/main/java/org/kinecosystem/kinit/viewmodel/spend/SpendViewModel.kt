@@ -6,8 +6,9 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.network.OperationCompletionCallback
 
-class SpendViewModel(private val coreComponents: CoreComponentsProvider, private val navigator: Navigator) {
+class SpendViewModel(val coreComponents: CoreComponentsProvider, private val navigator: Navigator) {
     val questionnaireRepo = coreComponents.questionnaireRepo()
 
     var balance = coreComponents.services().walletService.balance
@@ -27,7 +28,13 @@ class SpendViewModel(private val coreComponents: CoreComponentsProvider, private
             showNoOffer.set(!hasOffers.get())
             balance.set(coreComponents.services().walletService.balance.get().toString())
             if (!hasOffers.get()) {
-                coreComponents.services().offerService.retrieveOffers()
+                coreComponents.services().offerService.retrieveOffers(object : OperationCompletionCallback {
+                    override fun onError(errorCode: Int) {
+                    }
+                    override fun onSuccess() {
+                        hasOffers.set(!coreComponents.offersRepo().offerList.isEmpty())
+                    }
+                })
             }
         } else {
             hasNetwork.set(false)
