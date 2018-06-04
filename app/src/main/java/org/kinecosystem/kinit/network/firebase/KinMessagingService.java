@@ -1,18 +1,21 @@
 package org.kinecosystem.kinit.network.firebase;
 
-import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
-
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import java.util.Map;
+
 import org.kinecosystem.kinit.CoreComponentsProvider;
 import org.kinecosystem.kinit.model.Push;
 import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
+
+import java.util.Map;
+
+import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
 
 
 public class KinMessagingService extends FirebaseMessagingService {
@@ -56,6 +59,7 @@ public class KinMessagingService extends FirebaseMessagingService {
                         if (!TextUtils.isEmpty(id) && notificationMessage != null && !TextUtils
                             .isEmpty(notificationMessage.getBody())) {
                             coreComponents.services().getWalletService().updateBalance(null);
+                            coreComponents.services().getWalletService().retrieveTransactions(null);
                             coreComponents.notificationPublisher().notify(id, notificationMessage);
                         }
                     }
