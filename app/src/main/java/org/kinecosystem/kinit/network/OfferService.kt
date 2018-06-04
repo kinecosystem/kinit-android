@@ -155,7 +155,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                     analytics.logEvent(
                         Events.Business.KINTransactionFailed(
                             "Spend failed. Exception $e with message ${e.message}",
-                            offer.price?.toFloat(), "spend"))
+                            offer.price?.toFloat(), Analytics.TRANSACTION_TYPE_SPEND))
                 } catch (e: Exception) {
                     callbackWithError(ERROR_TRANSACTION_FAILED)
                 }
@@ -180,16 +180,15 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                 try {
                     val transactionId = wallet.payForOrder(toAddress, amount, P2P_ORDER_ID)
                     wallet.updateBalanceSync()
-                    wallet.retrieveTransactions()
                     if (transactionId != null && !transactionId.id().isEmpty()) {
                         scheduler.post {
                             callback.onResult(transactionId.id())
                         }
-                        analytics.logEvent(Events.Business.KINTransactionSucceeded(amount.toFloat(), transactionId.id(),
-                            TYPE_P2P))
+                        wallet.logP2pTransactionCompleted(amount, transactionId.id())
                         //update to the server the transactionId
                         offersApi.sendTransactionInfo(userId,
                             OffersApi.TransactionInfo(transactionId.id(), toAddress, amount)).execute()
+                        wallet.retrieveTransactions()
                     }
                 } catch (e: OperationFailedException) {
                     scheduler.post({
