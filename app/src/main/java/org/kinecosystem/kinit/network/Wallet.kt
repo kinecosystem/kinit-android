@@ -9,7 +9,7 @@ import kin.core.exception.AccountNotActivatedException
 import kin.core.exception.AccountNotFoundException
 import kin.core.exception.OperationFailedException
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.analytics.Analytics.MENU_ITEM_NAME_SPEND
+import org.kinecosystem.kinit.analytics.Analytics.*
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.KinTransaction
 import org.kinecosystem.kinit.model.Push
@@ -246,13 +246,19 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.setUserProperty(Events.UserProperties.BALANCE, balance)
     }
 
+    fun logP2pTransactionCompleted(price: Int, orderId: String) {
+        analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
+        analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
+            orderId, TRANSACTION_TYPE_P2P))
+    }
+
     fun logSpendTransactionCompleted(price: Int, orderId: String) {
         analytics.incrementUserProperty(Events.UserProperties.SPEND_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_SPENT,
             price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-            orderId, MENU_ITEM_NAME_SPEND))
+            orderId, TRANSACTION_TYPE_SPEND))
     }
 
     fun logEarnTransactionCompleted(price: Int, orderId: String) {
@@ -261,7 +267,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-            orderId, Analytics.MENU_ITEM_NAME_EARN))
+            orderId, TRANSACTION_TYPE_EARN))
     }
 
     fun onTransactionMessageReceived(transactionComplete: Push.TransactionCompleteMessage) {
