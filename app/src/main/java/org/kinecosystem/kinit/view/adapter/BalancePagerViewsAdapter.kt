@@ -19,7 +19,6 @@ class BalancePagerViewsAdapter(val context: Context, val coreComponents: CoreCom
 
     private fun getPage(position: Int): ViewGroup {
         return when (position) {
-            0 -> binding.transactionsPageWrapper
             1 -> binding.couponsPageWrapper
             else -> binding.transactionsPageWrapper
         }
@@ -45,7 +44,6 @@ class BalancePagerViewsAdapter(val context: Context, val coreComponents: CoreCom
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when (position) {
-            0 -> context.resources.getString(R.string.recent_activity_tab_text)
             1 -> context.resources.getString(R.string.my_vouchers_tab_text)
             else -> context.resources.getString(R.string.recent_activity_tab_text)
         }

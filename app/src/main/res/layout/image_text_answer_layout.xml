@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="126dp"
-    android:padding="1dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/answer_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="top|center"
-        android:scaleType="fitCenter"
-        android:src="@drawable/android_pattern"
-        app:layout_constraintBottom_toTopOf="@+id/answer_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/answer_text"
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.view.adapter.AnswerViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:layout_gravity="bottom|center"
-        android:gravity="center"
-        android:paddingBottom="9dp"
-        android:paddingEnd="6dp"
-        android:paddingStart="8dp"
-        android:paddingTop="9dp"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        tools:text="Very Very Long Demo Text"
-        tools:visibility="gone"/>
-</android.support.constraint.ConstraintLayout>
+        android:layout_height="126dp"
+        android:layout_margin="5dp"
+        android:background="@{model.isSelected ? @drawable/image_answer_bg_selected : @drawable/image_answer_bg}"
+        android:padding="1dp">
+
+        <ImageView
+            android:id="@+id/answer_image"
+            imageUrl="@{model.imageUrl}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="top|center"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/answer_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/android_pattern" />
+
+        <TextView
+            android:id="@+id/answer_text"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_gravity="bottom|center"
+            android:background="@{model.isSelected ? @drawable/image_text_answer_bg_selected : @drawable/image_text_answer_bg}"
+            android:gravity="center"
+            android:paddingBottom="9dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="8dp"
+            android:paddingTop="9dp"
+            android:text="@{model.text}"
+            android:textColor="@{model.isSelected ? @color/white : @color/answer_font_color}"
+            android:textSize="16sp"
+            android:visibility="@{model.isTextPresent ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            tools:text="Very Very Long Demo Text" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

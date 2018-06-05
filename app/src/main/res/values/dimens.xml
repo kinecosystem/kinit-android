@@ -13,7 +13,8 @@
     <dimen name="tab_text_size">10sp</dimen>
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="balance_height">56dp</dimen>
-    <dimen name="image_answer_corner">3dp</dimen>
+    <dimen name="image_answer_corner">8dp</dimen>
+    <dimen name="image_answer_sides_spacing">5dp</dimen>
     <dimen name="emojy_gap">16dp</dimen>
     <dimen name="question_gray_text_size">14sp</dimen>
     <dimen name="zero_dp">0dp</dimen>

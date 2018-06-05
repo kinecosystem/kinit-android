@@ -48,12 +48,4 @@ public class ImageUtils {
         Log.d("ImageUtils", "Density= " + densityDpi + ". Loading images from " + imageResolutionPath);
         return imageResolutionPath;
     }
-
-    // test
-//    public static void main(String args[]) {
-//        String output = urlWithResolution("https://s3.amazonaws.com/kinapp-static/brand_img/dunkin.png",
-//            DisplayMetrics.DENSITY_LOW);
-//        System.out.println("the output url for low density is " + output);
-//
-//    }
 }

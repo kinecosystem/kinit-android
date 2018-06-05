@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.Gravity" />
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.view.adapter.AnswerViewModel" />
+    </data>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/answer_text"
+        style="@style/Button.Answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@{model.text}"
+        android:layout_marginBottom="@dimen/answer_gap"
+        android:background="@{model.isSelected ? @drawable/answer_bg_selected : @drawable/answer_bg}"
+        android:textColor="@{model.isSelected ? @color/white : @color/answer_font_color}"
+        tools:background="@drawable/answer_bg"
+        tools:textColor="@color/answer_font_color"
+        android:gravity="@{model.isTextAlignedLeft ? Gravity.START|Gravity.CENTER_VERTICAL : Gravity.CENTER}"
+        tools:text="Demo text answer button" />
+</layout>

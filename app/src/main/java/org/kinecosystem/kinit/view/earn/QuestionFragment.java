@@ -3,6 +3,9 @@ package org.kinecosystem.kinit.view.earn;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.databinding.QuestionFragmentBinding;
 import org.kinecosystem.kinit.view.BaseFragment;
+import org.kinecosystem.kinit.view.adapter.AnswersListAdapter;
 import org.kinecosystem.kinit.viewmodel.earn.QuestionViewModel;
 
 
@@ -45,6 +49,10 @@ public class QuestionFragment extends BaseFragment {
         }
         QuestionnaireActions questionnaireActions = (QuestionnaireActions) getActivity();
         questionModel = new QuestionViewModel(getCoreComponents(), questionIndex, questionnaireActions);
+        binding.answersRecycleView.setAdapter(new AnswersListAdapter(questionModel));
+        binding.answersRecycleView.setLayoutManager(new GridLayoutManager(getContext(), questionModel.getColumnCount(), RecyclerView.VERTICAL, false));
+        ((SimpleItemAnimator)binding.answersRecycleView.getItemAnimator()).setSupportsChangeAnimations(false);
+        binding.answersRecycleView.setHasFixedSize(true);
         binding.setModel(questionModel);
         return binding.getRoot();
     }

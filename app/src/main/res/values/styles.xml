@@ -46,28 +46,8 @@
         <item name="android:background">@drawable/button_blue_hollow_line</item>
     </style>
 
-
     <style name="Button.Answer">
-        <item name="android:layout_width">match_parent</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@drawable/answer_font_color</item>
-        <item name="android:background">@drawable/answer_bg_drawable</item>
-    </style>
-
-    <style name="Button.MultipleAnswer">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:layout_marginBottom">1dp</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/multiple_button_answer_bg_drawable</item>
-    </style>
-
-    <style name="Button.ImageAnswer">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">124dp</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:background">@drawable/image_answer_bg_drawable</item>
     </style>
 
     <style name="Questionnaire" parent="Theme.AppCompat.Light.NoActionBar">
