@@ -142,42 +142,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/line_delim">
 
+
             <LinearLayout
                 android:id="@+id/transactions_page_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/shadow">
 
-                <LinearLayout
-                    android:id="@+id/transactions_illustration"
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="156dp"
+                    android:layout_height="152dp"
+                    android:layout_marginBottom="9dp"
+                    android:src="@drawable/record_illustration"
+                    android:visibility="@{!model.hasTransactions ? View.VISIBLE : View.GONE}" />
+
+                <TextView
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="@{!model.hasTransactions ? View.VISIBLE : View.GONE}">
-
-                    <ImageView
-                        android:layout_width="156dp"
-                        android:layout_height="152dp"
-                        android:layout_marginBottom="9dp"
-                        android:src="@drawable/record_illustration" />
-
-                    <TextView
-                        android:layout_width="250dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center"
-                        android:lineSpacingExtra="3sp"
-                        android:text="@string/no_transactions_text"
-                        android:textColor="#a4acc2"
-                        android:textSize="14sp"
-                        android:textStyle="normal" />
-                </LinearLayout>
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/no_transactions_text"
+                    android:textColor="#a4acc2"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="@{!model.hasTransactions ? View.VISIBLE : View.GONE}" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/transactions_recycle_view"
@@ -188,48 +183,36 @@
                     tools:visibility="gone" />
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/coupons_page_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/shadow">
 
-                <LinearLayout
-                    android:id="@+id/coupons_illustration"
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="115dp"
+                    android:layout_height="135dp"
+                    android:layout_marginBottom="17dp"
+                    android:src="@drawable/coupon_illustration"
+                    android:visibility="@{!model.hasCoupons ? View.VISIBLE : View.GONE}" />
+
+                <TextView
+                    android:layout_width="275dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/no_coupons_text"
+                    android:textColor="#a4acc2"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
                     android:visibility="@{!model.hasCoupons ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/shadow">
-
-                    <ImageView
-                        android:layout_width="115dp"
-                        android:layout_height="135dp"
-                        android:layout_marginBottom="17dp"
-                        android:src="@drawable/coupon_illustration" />
-
-                    <TextView
-                        android:layout_width="275dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center"
-                        android:lineSpacingExtra="3sp"
-                        android:text="@string/no_coupons_text"
-                        android:textColor="#a4acc2"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        tools:text="Your coupons will be saved here!" />
-                </LinearLayout>
-
+                    tools:text="Your coupons will be saved here!" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/coupons_recycle_view"
@@ -239,7 +222,6 @@
                     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     tools:visibility="gone" />
             </LinearLayout>
-
 
         </android.support.v4.view.ViewPager>
     </android.support.constraint.ConstraintLayout>
