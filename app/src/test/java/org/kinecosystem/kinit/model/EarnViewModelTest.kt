@@ -3,14 +3,14 @@ package org.kinecosystem.kinit.model
 import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
 import android.text.format.DateUtils.HOUR_IN_MILLIS
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
 import org.kinecosystem.kinit.mock.MockComponentsProvider
 import org.kinecosystem.kinit.mock.MockScheduler
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.QuestionnaireRepository
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 
@@ -48,7 +48,7 @@ class EarnViewModelTest {
         mockComponents.questionnaireRepository = QuestionnaireRepository(mockComponents, task)
         `when`(mockComponents.wallet.balance).thenReturn(ObservableField("1"))
         earnViewModelToTest = EarnViewModel(mockComponents, mockNavigator)
-        earnViewModelToTest.onResume()
+        earnViewModelToTest.onScreenVisibleToUser()
     }
 
     @Test

@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import org.kinecosystem.kinit.CoreComponentsProvider
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.databinding.BalanceFragmentBinding
+import org.kinecosystem.kinit.databinding.BalanceTabBinding
 
 private const val NUMBER_OF_TABS = 2
 
-class BalancePagerViewsAdapter(val context: Context, val coreComponents: CoreComponentsProvider, val binding: BalanceFragmentBinding) : PagerAdapter() {
+class BalancePagerViewsAdapter(val context: Context, val coreComponents: CoreComponentsProvider, val binding: BalanceTabBinding) : PagerAdapter() {
 
     init {
         binding.transactionsRecycleView.adapter = TransactionsListAdapter(context, coreComponents)

@@ -7,21 +7,27 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationCompletionCallback
+import org.kinecosystem.kinit.view.TabViewModel
 
-class SpendViewModel(val coreComponents: CoreComponentsProvider, private val navigator: Navigator) {
+class SpendViewModel(private val coreComponents: CoreComponentsProvider, private val navigator: Navigator) :
+    TabViewModel {
+
     val questionnaireRepo = coreComponents.questionnaireRepo()
-
     var balance = coreComponents.services().walletService.balance
     var hasOffers = ObservableBoolean(false)
     var showNoOffer = ObservableBoolean(false)
     var hasNetwork = ObservableBoolean(coreComponents.services().isNetworkConnected())
     val analytics = coreComponents.analytics()
 
+    init {
+        refresh()
+    }
+
     fun getOffers(): List<Offer> {
         return coreComponents.offersRepo().offerList
     }
 
-    fun onResume() {
+    private fun refresh() {
         if (coreComponents.services().isNetworkConnected()) {
             hasNetwork.set(true)
             hasOffers.set(!coreComponents.offersRepo().offerList.isEmpty())
@@ -31,6 +37,7 @@ class SpendViewModel(val coreComponents: CoreComponentsProvider, private val nav
                 coreComponents.services().offerService.retrieveOffers(object : OperationCompletionCallback {
                     override fun onError(errorCode: Int) {
                     }
+
                     override fun onSuccess() {
                         hasOffers.set(!coreComponents.offersRepo().offerList.isEmpty())
                     }
@@ -43,7 +50,8 @@ class SpendViewModel(val coreComponents: CoreComponentsProvider, private val nav
         }
     }
 
-    fun onScreenVisibleToUser() {
+    override fun onScreenVisibleToUser() {
+        refresh()
         val event: Events.Event =
             if (!hasNetwork.get()) {
                 Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)

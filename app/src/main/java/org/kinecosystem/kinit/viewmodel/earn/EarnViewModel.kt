@@ -12,13 +12,16 @@ import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationCompletionCallback
 import org.kinecosystem.kinit.util.TimeUtils
+import org.kinecosystem.kinit.view.TabViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
-class EarnViewModel(private val coreComponents: CoreComponentsProvider, private val navigator: Navigator) {
-    val questionnaireRepo = coreComponents.questionnaireRepo()
+class EarnViewModel(private val coreComponents: CoreComponentsProvider, private val navigator: Navigator) :
+    TabViewModel {
+
+    private val questionnaireRepo = coreComponents.questionnaireRepo()
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
     var shouldShowNoTask = ObservableBoolean(false)
@@ -34,6 +37,10 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
     var minToComplete = ObservableField<String>()
     private var scheduler = coreComponents.scheduler()
     private var scheduledRunnable: Runnable? = null
+
+    init {
+        refresh()
+    }
 
     fun startQuestionnaire() {
         val task = questionnaireRepo.task
@@ -138,17 +145,13 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
         return SimpleDateFormat(AVAILABILITY_DATE_FORMAT).format(Date(dateInMillis))
     }
 
-    fun onResume() {
+    override fun onScreenVisibleToUser() {
         refresh()
-    }
-
-    fun onScreenVisibleToUser() {
         if (shouldShowTask.get()) {
             onEarnScreenVisible()
         } else if (shouldShowNoTask.get()) {
             onNoTasksAvailableVisible()
-        }
-        else {
+        } else {
             onLockedScreenVisible()
         }
     }
@@ -173,7 +176,7 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
         coreComponents.analytics().logEvent(event)
     }
 
-    private fun onNoTasksAvailableVisible(){
+    private fun onNoTasksAvailableVisible() {
         coreComponents.analytics().logEvent(Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN))
     }
 

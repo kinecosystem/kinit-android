@@ -1,11 +1,11 @@
 package org.kinecosystem.kinit.viewmodel.balance
 
 import android.databinding.ObservableBoolean
-import android.support.design.widget.TabLayout
 import org.kinecosystem.kinit.CoreComponentsProvider
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.view.TabViewModel
 
-class BalanceViewModel(private val coreComponents: CoreComponentsProvider) {
+class BalanceViewModel(private val coreComponents: CoreComponentsProvider) : TabViewModel {
     val balance = coreComponents.services().walletService.balance
     val hasTransactions = ObservableBoolean(false)
     val hasCoupons = ObservableBoolean(false)
@@ -27,7 +27,7 @@ class BalanceViewModel(private val coreComponents: CoreComponentsProvider) {
         }
     }
 
-    fun onScreenVisibleToUser() {
+    override fun onScreenVisibleToUser() {
         hasTransactions.set(!coreComponents.services().walletService.transactions.get().isEmpty())
         hasCoupons.set(!coreComponents.services().walletService.coupons.get().isEmpty())
         coreComponents.analytics().logEvent(Events.Analytics.ViewBalancePage())

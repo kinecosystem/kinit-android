@@ -5,9 +5,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import java.util.List;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush;
@@ -28,7 +26,9 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
     }
 
     private ViewPager viewPager;
+    private TabsAdapter tabsAdapter;
     private BottomTabNavigation bottomTabNavigation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +39,9 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
         int selectedTabIndex = (savedInstanceState != null) ? savedInstanceState.getInt(SELECTED_TAB_INDEX_KEY, 0) : 0;
         bottomTabNavigation.setSelectedTabIndex(selectedTabIndex);
         bottomTabNavigation.setTabSelectionListener(this);
+        tabsAdapter = new TabsAdapter(getCoreComponents());
         viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(tabsAdapter);
         handleIntentExtras(getIntent().getExtras());
     }
 
@@ -62,13 +63,13 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
         viewPager.setCurrentItem(index, false);
         Event event = new ClickMenuItem(tabTitle);
         getCoreComponents().analytics().logEvent(event);
-        onScreenVisibleToUser();
+        tabsAdapter.onTabVisibleToUser(index);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        onScreenVisibleToUser();
+        tabsAdapter.onTabVisibleToUser(viewPager.getCurrentItem());
         UserRepository userRepo = getCoreComponents().userRepo();
         userRepo.setFirstTimeUser(false);
         if (userRepo.isPhoneVerificationEnabled() && !userRepo.isPhoneVerified()) {
@@ -90,27 +91,6 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
         getCoreComponents().analytics().logEvent(new Events.Analytics.ViewPhoneAuthPopup());
-    }
-
-    // Cannot rely on Fragment onResume to be called when fragment is visible
-    // because of the way that ViewPager/FragmentPagerAdapter work
-    // I tried overriding 'setUserVisibleHint' in the Fragments as suggested
-    // here: https://stackoverflow.com/questions/10024739/how-to-determine-when-fragment-becomes-visible-in-viewpager
-    // but that did not work as expected either.
-    // Activity onResume always works well - so relying on that
-    // only problem with this solution is that when the activity resumes for the first time
-    // the first fragment is displayed (and it's onResume method called) but here
-    // the list of fragments is still empty!! Solved this with a hack in EarnFragment.java
-    // Will soon change tabs implementation to use plain Views instead of fragments so
-    // no hacks will be needed !!
-    private void onScreenVisibleToUser() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (Fragment f : fragments) {
-            TabFragment fragment = (TabFragment) f;
-            if (fragment != null && fragment.getTabIndex() == viewPager.getCurrentItem()) {
-                fragment.onScreenVisibleToUser();
-            }
-        }
     }
 
 }
