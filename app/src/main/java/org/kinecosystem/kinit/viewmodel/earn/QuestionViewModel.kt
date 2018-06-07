@@ -46,7 +46,7 @@ open class QuestionViewModel(val coreComponents: CoreComponentsProvider, private
             questionObj?.type,
             task?.tagsString(),
             task?.id,
-            task?.type)
+            task?.title)
     }
 
     fun onNext() {
@@ -113,7 +113,7 @@ open class QuestionViewModel(val coreComponents: CoreComponentsProvider, private
             questionObj?.type,
             task?.tagsString(),
             task?.id,
-            task?.type)
+            task?.title)
         analytics.logEvent(event)
     }
 }
