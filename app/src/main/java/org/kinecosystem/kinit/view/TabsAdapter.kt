@@ -1,17 +1,16 @@
 package org.kinecosystem.kinit.view
 
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableField
 import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.kinecosystem.kinit.CoreComponentsProvider
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.databinding.BalanceTabBinding
-import org.kinecosystem.kinit.databinding.EarnTabBinding
-import org.kinecosystem.kinit.databinding.InfoTabBinding
-import org.kinecosystem.kinit.databinding.SpendTabBinding
+import org.kinecosystem.kinit.databinding.*
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
@@ -20,7 +19,7 @@ import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
 
-private const val NUMBER_OF_TABS = 4
+private const val NUMBER_OF_TABS = 5
 
 class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAdapter() {
 
@@ -29,10 +28,11 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
 
     override fun instantiateItem(parent: ViewGroup, position: Int): View {
         val tabView = when (position) {
-            0 -> getEarnTab(parent, position)
-            1 -> getSpendTab(parent, position)
-            2 -> getBalanceTab(parent, position)
-            3 -> getInfoTab(parent, position)
+            0 -> getPreEarnTab(parent, position)
+            1 -> getEarnTab(parent, position)
+            2 -> getSpendTab(parent, position)
+            3 -> getBalanceTab(parent, position)
+            4 -> getInfoTab(parent, position)
             else -> getInfoTab(parent, position)
         }
         parent.addView(tabView)
@@ -57,12 +57,28 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when (position) {
-            0 -> "earn"
-            1 -> "spend"
-            2 -> "balance"
-            3 -> "more"
+            0 -> "pre-earn"
+            1 -> "earn"
+            2 -> "spend"
+            3 -> "balance"
+            4 -> "more"
             else -> "more"
         }
+    }
+
+    private fun getPreEarnTab(parent: ViewGroup, position: Int): View {
+        val binding = DataBindingUtil.inflate<PreEarnTabBinding>(LayoutInflater.from(parent.context),
+            R.layout.pre_earn_tab, parent, false)
+        binding.model = PreEarnViewModel(coreComponents)
+        models[position] = binding.model
+        parent.postDelayed({
+            if (parent is ViewPager) {
+                // move to Eran Tab & destroy this one
+                parent.setCurrentItem(1, true)
+                destroyItem(parent, position, this)
+            }
+        }, 2000)
+        return binding.root
     }
 
     private fun getEarnTab(parent: ViewGroup, position: Int): View {
@@ -107,5 +123,14 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
         } else {
             models[position]?.onScreenVisibleToUser()
         }
+    }
+}
+
+
+class PreEarnViewModel(coreComponents: CoreComponentsProvider) :
+    TabViewModel {
+    var balance: ObservableField<String> = coreComponents.services().walletService.balance
+    override fun onScreenVisibleToUser() {
+
     }
 }
