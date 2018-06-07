@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.kinecosystem.kinit.org.kinecosystem.kinit.view.MainActivity"
     android:background="@color/white"
-    >
+    tools:context="org.kinecosystem.kinit.view.MainActivity">
 
     <org.kinecosystem.kinit.view.customView.LockableViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/bottom_navigation_height"
-        />
+        android:layout_marginBottom="@dimen/bottom_navigation_height" />
 
 
     <org.kinecosystem.kinit.view.BottomTabNavigation
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_navigation_height"
-        android:layout_gravity="bottom"
-        />
+        android:layout_gravity="bottom" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:background="@color/grey_delimiter_line_color"
-        android:layout_marginBottom="@dimen/bottom_navigation_height"/>
+        android:layout_marginBottom="@dimen/bottom_navigation_height"
+        android:background="@color/grey_delimiter_line_color" />
 
 </FrameLayout>
