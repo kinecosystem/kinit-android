@@ -3,7 +3,6 @@ package org.kinecosystem.kinit.viewmodel.earn
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
-import org.kinecosystem.kinit.CoreComponentsProvider
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.earn.Task
@@ -11,6 +10,11 @@ import org.kinecosystem.kinit.model.earn.startDateInMillis
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationCompletionCallback
+import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.network.TaskService
+import org.kinecosystem.kinit.network.Wallet
+import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.TimeUtils
 import org.kinecosystem.kinit.view.TabViewModel
 import java.text.SimpleDateFormat
@@ -18,32 +22,35 @@ import java.util.*
 
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
-class EarnViewModel(private val coreComponents: CoreComponentsProvider, private val navigator: Navigator) :
+class EarnViewModel(val questionnaireRepository: QuestionnaireRepository, val wallet: Wallet,
+    val taskService: TaskService,
+    val scheduler: Scheduler, val analytics: Analytics, private val navigator: Navigator) :
     TabViewModel {
 
-    private val questionnaireRepo = coreComponents.questionnaireRepo()
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
     var shouldShowNoTask = ObservableBoolean(false)
-    var isQuestionnaireStarted = questionnaireRepo.isQuestionnaireStarted
+    var isQuestionnaireStarted: ObservableBoolean
     var nextAvailableDate: ObservableField<String> = ObservableField("")
     var isAvailableTomorrow: ObservableBoolean = ObservableBoolean(false)
-    var balance: ObservableField<String> = coreComponents.services().walletService.balance
+    var balance: ObservableField<String>
     var authorName = ObservableField<String>()
     var authorImageUrl = ObservableField<String?>()
     var title = ObservableField<String?>()
     var description = ObservableField<String?>()
     var kinReward = ObservableField<String>()
     var minToComplete = ObservableField<String>()
-    private var scheduler = coreComponents.scheduler()
+
     private var scheduledRunnable: Runnable? = null
 
     init {
+        balance = wallet.balance
+        isQuestionnaireStarted = questionnaireRepository.isQuestionnaireStarted
         refresh()
     }
 
     fun startQuestionnaire() {
-        val task = questionnaireRepo.task
+        val task = questionnaireRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
             task?.provider?.name,
             task?.minToComplete,
@@ -52,7 +59,7 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
             task?.id,
             task?.title,
             task?.type)
-        coreComponents.analytics().logEvent(bEvent)
+        analytics.logEvent(bEvent)
 
         val aEvent = Events.Analytics.ClickStartButtonOnTaskPage(
             isQuestionnaireStarted.get(),
@@ -63,12 +70,12 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
             task?.id,
             task?.title,
             task?.type)
-        coreComponents.analytics().logEvent(aEvent)
+        analytics.logEvent(aEvent)
         navigator.navigateTo(Navigator.Destination.QUESTIONNAIRE)
     }
 
     private fun refresh() {
-        val task = coreComponents.questionnaireRepo().task
+        val task = questionnaireRepository.task
         authorName.set(task?.provider?.name)
         authorImageUrl.set(task?.provider?.imageUrl)
         title.set(task?.title)
@@ -77,12 +84,12 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
         minToComplete.set(convertMinToCompleteToString(task?.minToComplete))
         handleAvailability()
         if (task == null) {
-            coreComponents.services().taskService.retrieveNextTask(object : OperationCompletionCallback {
+            taskService.retrieveNextTask(object : OperationCompletionCallback {
                 override fun onError(errorCode: Int) {
                 }
 
                 override fun onSuccess() {
-                    if (coreComponents.questionnaireRepo().task != null) {
+                    if (questionnaireRepository.task != null) {
                         refresh()
                     }
                 }
@@ -95,7 +102,7 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
             scheduler.cancel(scheduledRunnable)
         }
 
-        if (questionnaireRepo.task == null) {
+        if (questionnaireRepository.task == null) {
             shouldShowNoTask.set(true)
             shouldShowTask.set(false)
             shouldShowTaskNotAvailableYet.set(false)
@@ -110,7 +117,7 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
                 nextAvailableDate.set(nextAvailableDate())
                 isAvailableTomorrow.set(isAvailableTomorrow())
                 if (isAvailableTomorrow.get()) {
-                    val diff = questionnaireRepo.task?.startDateInMillis()!! - scheduler.currentTimeMillis()
+                    val diff = questionnaireRepository.task?.startDateInMillis()!! - scheduler.currentTimeMillis()
                     scheduledRunnable = Runnable {
                         shouldShowTask.set(true)
                         shouldShowTaskNotAvailableYet.set(false)
@@ -125,12 +132,12 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
     }
 
     private fun isQuestionnaireAvailable(): Boolean {
-        val taskDate: Long = questionnaireRepo.task?.startDateInMillis() ?: scheduler.currentTimeMillis()
+        val taskDate: Long = questionnaireRepository.task?.startDateInMillis() ?: scheduler.currentTimeMillis()
         return scheduler.currentTimeMillis() >= taskDate
     }
 
     private fun isAvailableTomorrow(): Boolean {
-        return timeToUnlockInDays(questionnaireRepo.task) == 1
+        return timeToUnlockInDays(questionnaireRepository.task) == 1
     }
 
     private fun timeToUnlockInDays(task: Task?): Int {
@@ -141,7 +148,7 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
     }
 
     fun nextAvailableDate(): String {
-        val dateInMillis = questionnaireRepo.task?.startDateInMillis() ?: 0
+        val dateInMillis = questionnaireRepository.task?.startDateInMillis() ?: 0
         return SimpleDateFormat(AVAILABILITY_DATE_FORMAT).format(Date(dateInMillis))
     }
 
@@ -157,7 +164,7 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
     }
 
     private fun onEarnScreenVisible() {
-        val task = coreComponents.questionnaireRepo().task
+        val task = questionnaireRepository.task
         val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,
@@ -165,19 +172,19 @@ class EarnViewModel(private val coreComponents: CoreComponentsProvider, private 
             task?.id,
             task?.title,
             task?.type)
-        coreComponents.analytics().logEvent(event)
+        analytics.logEvent(event)
     }
 
     private fun onLockedScreenVisible() {
-        val questionnaire = questionnaireRepo.task
+        val questionnaire = questionnaireRepository.task
         val timeToUnlockInDays = timeToUnlockInDays(questionnaire)
 
         val event = Events.Analytics.ViewLockedTaskPage(timeToUnlockInDays)
-        coreComponents.analytics().logEvent(event)
+        analytics.logEvent(event)
     }
 
     private fun onNoTasksAvailableVisible() {
-        coreComponents.analytics().logEvent(Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN))
+        analytics.logEvent(Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN))
     }
 
     private fun convertMinToCompleteToString(minToComplete: Float?): String =

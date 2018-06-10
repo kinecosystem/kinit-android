@@ -4,18 +4,24 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.OnboardingErrorCreatingWalletLayoutBinding
 import org.kinecosystem.kinit.databinding.SplashLayoutBinding
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
+import javax.inject.Inject
 
 
 class SplashActivity : BaseActivity(), SplashNavigator {
     private companion object {
         private const val PLAY_SERVICES_UPDATE_REQUEST = 100
     }
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun moveToTutorialScreen() {
         startActivity(TutorialActivity.getIntent(this))
@@ -25,8 +31,9 @@ class SplashActivity : BaseActivity(), SplashNavigator {
     private var splashViewModel: SplashViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
-        splashViewModel = SplashViewModel(coreComponents, this)
+        splashViewModel = SplashViewModel(this)
         moveToSplashScreen()
     }
 
@@ -42,7 +49,7 @@ class SplashActivity : BaseActivity(), SplashNavigator {
     }
 
     override fun openContactSupport() {
-        SupportUtil.openEmailSupport(this, coreComponents.userRepo())
+        SupportUtil.openEmailSupport(this, userRepository)
     }
 
     override fun moveToMainScreen() {
@@ -59,7 +66,7 @@ class SplashActivity : BaseActivity(), SplashNavigator {
     private fun checkGoogleServices() {
         val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext)
         splashViewModel?.googlePlayServicesAvailable = status == ConnectionResult.SUCCESS
-        if ( status != ConnectionResult.SUCCESS ) {
+        if (status != ConnectionResult.SUCCESS) {
             GoogleApiAvailability.getInstance().getErrorDialog(this, status, PLAY_SERVICES_UPDATE_REQUEST).show()
         }
     }

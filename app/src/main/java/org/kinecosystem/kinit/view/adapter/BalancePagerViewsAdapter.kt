@@ -4,17 +4,16 @@ import android.content.Context
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
-import org.kinecosystem.kinit.CoreComponentsProvider
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.BalanceTabBinding
 
 private const val NUMBER_OF_TABS = 2
 
-class BalancePagerViewsAdapter(val context: Context, val coreComponents: CoreComponentsProvider, val binding: BalanceTabBinding) : PagerAdapter() {
+class BalancePagerViewsAdapter(val context: Context, val binding: BalanceTabBinding) : PagerAdapter() {
 
     init {
-        binding.transactionsRecycleView.adapter = TransactionsListAdapter(context, coreComponents)
-        binding.couponsRecycleView.adapter = CouponsListAdapter(context, coreComponents)
+        binding.transactionsRecycleView.adapter = TransactionsListAdapter(context)
+        binding.couponsRecycleView.adapter = CouponsListAdapter(context)
     }
 
     private fun getPage(position: Int): ViewGroup {

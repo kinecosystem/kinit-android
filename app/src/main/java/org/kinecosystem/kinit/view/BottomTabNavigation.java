@@ -11,18 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-
-import org.kinecosystem.kinit.CoreComponentsProvider;
-import org.kinecosystem.kinit.R;
-
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
+import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.network.Wallet;
 
 public class BottomTabNavigation extends FrameLayout implements OnClickListener {
 
     private PageSelectionListener pageSelectionListener;
     private int currentTabSelectedIndex;
     private List<NavigationTab> tabs = new ArrayList<>();
+    @Inject
+    Wallet wallet;
 
     public BottomTabNavigation(@NonNull Context context) {
         super(context);
@@ -30,7 +32,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
     }
 
     public BottomTabNavigation(@NonNull Context context,
-                               @Nullable AttributeSet attrs) {
+        @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -42,7 +44,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
 
     @RequiresApi(api = VERSION_CODES.LOLLIPOP)
     public BottomTabNavigation(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr,
-                               int defStyleRes) {
+        int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -77,11 +79,11 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
     }
 
     private void init() {
+        KinitApplication.getCoreComponent().inject(this);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.bottom_navigation_layout, this, true);
         initTabs(view);
-        getCoreComponents().services().getWalletService()
-            .getBalance().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+        wallet.getBalance().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
                 ((NavigationTab) view.findViewById(R.id.tab_balance)).setNotificationIndicator(true);
@@ -99,11 +101,8 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         }
     }
 
-    public CoreComponentsProvider getCoreComponents() {
-        return (CoreComponentsProvider) getContext().getApplicationContext();
-    }
-
     public interface PageSelectionListener {
+
         void onPageSelected(int index, String tabTitle);
     }
 }

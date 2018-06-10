@@ -11,11 +11,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.view.BaseActivity;
 import org.kinecosystem.kinit.view.MainActivity;
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity;
@@ -27,12 +30,20 @@ public class TutorialActivity extends BaseActivity {
         return new Intent(context, TutorialActivity.class);
     }
 
+
+    @Inject
+    Analytics analytics;
+    @Inject
+    UserRepository userRepository;
+
     final static int NUM_ITEMS = 3;
     private View[] pages = new View[NUM_ITEMS];
     private int currentPage = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        KinitApplication.coreComponent.inject(this);
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         setContentView(R.layout.tutorial_activity);
@@ -65,7 +76,7 @@ public class TutorialActivity extends BaseActivity {
 
     private void initTosText() {
         TextView tos = findViewById(R.id.tos_text);
-        String tos_url = getCoreComponents().userRepo().getTos();
+        String tos_url = userRepository.getTos();
         if (TextUtils.isEmpty(tos_url)) {
             tos.setText("");
         } else {
@@ -81,12 +92,12 @@ public class TutorialActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getCoreComponents().analytics().logEvent(new Events.Analytics.ViewOnboardingPage(currentPage));
+        analytics.logEvent(new Events.Analytics.ViewOnboardingPage(currentPage));
     }
 
     private void onStartClicked() {
-        getCoreComponents().analytics().logEvent(new Events.Analytics.ClickStartButtonOnOnboardingPage(currentPage));
-        if (getCoreComponents().userRepo().isPhoneVerificationEnabled()) {
+        analytics.logEvent(new Events.Analytics.ClickStartButtonOnOnboardingPage(currentPage));
+        if (userRepository.isPhoneVerificationEnabled()) {
             startActivity(PhoneVerifyActivity.getIntent(this, true));
         } else {
             startActivity(MainActivity.getIntent(this));

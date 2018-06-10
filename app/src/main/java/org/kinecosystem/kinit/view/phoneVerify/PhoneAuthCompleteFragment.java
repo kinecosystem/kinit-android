@@ -2,15 +2,19 @@ package org.kinecosystem.kinit.view.phoneVerify;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import javax.inject.Inject;
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.view.BaseFragment;
 
@@ -19,12 +23,20 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
 
     public static final String TAG = PhoneAuthCompleteFragment.class.getSimpleName();
     public static final long TIMEOUT = 5000;
+    @Inject
+    Analytics analytics;
     private PhoneVerificationUIActions actions;
     private KonfettiView konfettiView;
 
     public static PhoneAuthCompleteFragment newInstance() {
         PhoneAuthCompleteFragment fragment = new PhoneAuthCompleteFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        KinitApplication.coreComponent.inject(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -69,6 +81,6 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getCoreComponents().analytics().logEvent(new Events.Analytics.ViewOnboardingCompletedPage());
+        analytics.logEvent(new Events.Analytics.ViewOnboardingCompletedPage());
     }
 }

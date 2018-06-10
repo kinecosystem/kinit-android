@@ -1,24 +1,37 @@
 package org.kinecosystem.kinit.viewmodel.earn
 
-import org.kinecosystem.kinit.CoreComponentsProvider
+import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.tagsString
-class QuestionnaireCompleteViewModel(coreComponents: CoreComponentsProvider) {
+import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.UserRepository
+import javax.inject.Inject
 
-    private val questionnaireRepo = coreComponents.questionnaireRepo()
-    private val userRepo = coreComponents.userRepo()
-    private val services = coreComponents.services()
-    private val analytics = coreComponents.analytics()
+class QuestionnaireCompleteViewModel() {
+
+
+    @Inject
+    lateinit var analytics: Analytics
+    @Inject
+    lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var servicesProvider: ServicesProvider
+    @Inject
+    lateinit var questionnaireRepository: QuestionnaireRepository
+
     var submitComplete: Boolean = false
-        get() = (questionnaireRepo.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD || questionnaireRepo.taskState == TaskState.TRANSACTION_COMPLETED)
+        get() = (questionnaireRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD || questionnaireRepository.taskState == TaskState.TRANSACTION_COMPLETED)
 
     init {
+        KinitApplication.coreComponent.inject(this)
         submitAnswers()
     }
 
     private fun submitAnswers() {
-        val task = questionnaireRepo.task
+        val task = questionnaireRepository.task
         val event = Events.Business.EarningTaskCompleted(task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,
@@ -28,15 +41,15 @@ class QuestionnaireCompleteViewModel(coreComponents: CoreComponentsProvider) {
             task?.type)
         analytics.logEvent(event)
 
-        services.taskService.submitQuestionnaireAnswers(
-            userRepo.userInfo,
+        servicesProvider.taskService.submitQuestionnaireAnswers(
+            userRepository.userInfo,
             task,
-            questionnaireRepo.getChosenAnswers())
+            questionnaireRepository.getChosenAnswers())
 
     }
 
     fun onResume() {
-        val task = questionnaireRepo.task
+        val task = questionnaireRepository.task
         val event = Events.Analytics.ViewTaskEndPage(
             task?.provider?.name,
             task?.minToComplete,

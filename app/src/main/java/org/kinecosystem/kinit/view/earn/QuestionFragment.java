@@ -48,10 +48,11 @@ public class QuestionFragment extends BaseFragment {
             onInvalidData();
         }
         QuestionnaireActions questionnaireActions = (QuestionnaireActions) getActivity();
-        questionModel = new QuestionViewModel(getCoreComponents(), questionIndex, questionnaireActions);
+        questionModel = new QuestionViewModel(questionIndex, questionnaireActions);
         binding.answersRecycleView.setAdapter(new AnswersListAdapter(questionModel));
-        binding.answersRecycleView.setLayoutManager(new GridLayoutManager(getContext(), questionModel.getColumnCount(), RecyclerView.VERTICAL, false));
-        ((SimpleItemAnimator)binding.answersRecycleView.getItemAnimator()).setSupportsChangeAnimations(false);
+        binding.answersRecycleView.setLayoutManager(
+            new GridLayoutManager(getContext(), questionModel.getColumnCount(), RecyclerView.VERTICAL, false));
+        ((SimpleItemAnimator) binding.answersRecycleView.getItemAnimator()).setSupportsChangeAnimations(false);
         binding.answersRecycleView.setHasFixedSize(true);
         binding.setModel(questionModel);
         return binding.getRoot();

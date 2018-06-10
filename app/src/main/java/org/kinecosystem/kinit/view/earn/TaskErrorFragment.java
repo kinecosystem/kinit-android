@@ -2,14 +2,18 @@ package org.kinecosystem.kinit.view.earn;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickCloseButtonOnErrorPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPage;
 import org.kinecosystem.kinit.analytics.Events.Event;
+import org.kinecosystem.kinit.repository.QuestionnaireRepository;
 import org.kinecosystem.kinit.view.BaseActivity;
 import org.kinecosystem.kinit.view.BaseFragment;
 
@@ -21,6 +25,10 @@ public class TaskErrorFragment extends BaseFragment {
     public static final int ERROR_TRANSACTION = 20;
 
     public static final String TAG = TaskErrorFragment.class.getSimpleName();
+    @Inject
+    Analytics analytics;
+    @Inject
+    QuestionnaireRepository questionnaireRepository;
 
     public static TaskErrorFragment newInstance(int error) {
         TaskErrorFragment fragment = new TaskErrorFragment();
@@ -28,6 +36,12 @@ public class TaskErrorFragment extends BaseFragment {
         args.putInt(ARG_ERROR_TYPE, error);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        KinitApplication.coreComponent.inject(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -40,7 +54,7 @@ public class TaskErrorFragment extends BaseFragment {
             {
                 reportClickOnCloseEvent(errorType);
                 BaseActivity activity = (BaseActivity) getActivity();
-                activity.getCoreComponents().questionnaireRepo().resetTaskState();
+                questionnaireRepository.resetTaskState();
                 activity.finish();
             }
         );
@@ -66,7 +80,7 @@ public class TaskErrorFragment extends BaseFragment {
         } else { // ERROR_SUBMIT
             event = new ViewErrorPage(Analytics.VIEW_ERROR_TYPE_TASK_SUBMISSION);
         }
-        getCoreComponents().analytics().logEvent(event);
+        analytics.logEvent(event);
     }
 
     private void reportClickOnCloseEvent(int errorType) {
@@ -76,6 +90,6 @@ public class TaskErrorFragment extends BaseFragment {
         } else { // ERROR_SUBMIT
             event = new ClickCloseButtonOnErrorPage(Analytics.VIEW_ERROR_TYPE_TASK_SUBMISSION);
         }
-        getCoreComponents().analytics().logEvent(event);
+        analytics.logEvent(event);
     }
 }

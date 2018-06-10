@@ -2,21 +2,26 @@ package org.kinecosystem.kinit.view.earn
 
 import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.MenuItem
 import android.view.View
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.databinding.QuestionnaireFragmentLayoutBinding
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.navigation.Navigator.Destination
+import org.kinecosystem.kinit.repository.QuestionnaireRepository
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel
-import android.databinding.DataBindingUtil
-import org.kinecosystem.kinit.databinding.QuestionnaireFragmentLayoutBinding
+import javax.inject.Inject
 
 class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
 
+    @Inject
+    lateinit var questionnaireRepository: QuestionnaireRepository
     private lateinit var questionnaireModel: QuestionnaireViewModel
     private lateinit var nextFragmentCallback: Observable.OnPropertyChangedCallback
 
@@ -47,15 +52,17 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
-        val binding : QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this, R.layout.questionnaire_fragment_layout)
-        questionnaireModel = QuestionnaireViewModel(coreComponents, savedInstanceState != null)
+        val binding: QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this,
+            R.layout.questionnaire_fragment_layout)
+        questionnaireModel = QuestionnaireViewModel(savedInstanceState != null)
         binding.model = questionnaireModel
 
         findViewById<View>(R.id.header_x_btn).setOnClickListener { view ->
             val navigator = Navigator(this@QuestionnaireActivity)
             navigator.navigateTo(Destination.MAIN_SCREEN)
-            coreComponents.questionnaireRepo().resetTaskState()
+            questionnaireRepository.resetTaskState()
             overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out)
             finish()
         }

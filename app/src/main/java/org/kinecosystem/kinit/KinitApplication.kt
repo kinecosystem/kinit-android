@@ -2,61 +2,58 @@ package org.kinecosystem.kinit
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
+import dagger.*
 import io.fabric.sdk.android.Fabric
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.network.ServicesProvider
-import org.kinecosystem.kinit.notification.NotificationPublisher
-import org.kinecosystem.kinit.repository.*
-import org.kinecosystem.kinit.util.AndroidScheduler
-import org.kinecosystem.kinit.util.Scheduler
+import org.kinecosystem.kinit.network.Wallet
+import org.kinecosystem.kinit.repository.DataStore
+import org.kinecosystem.kinit.repository.DataStoreProvider
+import org.kinecosystem.kinit.repository.SharedPreferencesStore
+import org.kinecosystem.kinit.repository.UserRepository
+import javax.inject.Inject
 
 
-class KinitApplication : Application(), CoreComponentsProvider {
+class KinitApplication : Application(), DataStoreProvider {
 
-    private lateinit var coreComponentsProvider: CoreComponentsProvider
+    companion object {
+        @JvmStatic
+        lateinit var coreComponent: CoreComponent
+    }
+
+    @Inject
+    lateinit var analytics: Analytics
+    @Inject
+    lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var servicesProvider: ServicesProvider
+    @Inject
+    lateinit var wallet: Wallet
 
     override fun onCreate() {
         super.onCreate()
         Fabric.with(applicationContext, Crashlytics())
-        coreComponentsProvider = CoreComponentsProviderImpl(this, this)
-        analytics().init(this, userRepo().isFreshInstall)
-        analytics().setUserId(userRepo().userId())
-        services().onBoardingService.appLaunch()
-        services().offerService.retrieveOffers()
-        services().walletService.retrieveTransactions()
-        services().walletService.retrieveCoupons()
-        userRepo().isFreshInstall = false
-    }
+        coreComponent = DaggerCoreComponent.builder().contextModule(ContextModule(applicationContext))
+            .dataStoreProviderModule(DataStoreProviderModule(this))
+            .userRepositoryModule(UserRepositoryModule())
+            .questionnaireRepositoryModule(QuestionnaireRepositoryModule())
+            .offersRepositoryModule(OffersRepositoryModule())
+            .analyticsModule(AnalyticsModule())
+            .notificationModule(NotificationModule())
+            .servicesProviderModule(ServicesProviderModule())
+            .build()
 
-    override fun userRepo(): UserRepository {
-        return coreComponentsProvider.userRepo()
-    }
-
-    override fun questionnaireRepo(): QuestionnaireRepository {
-        return coreComponentsProvider.questionnaireRepo()
-    }
-
-    override fun offersRepo(): OffersRepository {
-        return coreComponentsProvider.offersRepo()
-    }
-
-    override fun services(): ServicesProvider {
-        return coreComponentsProvider.services()
-    }
-
-    override fun analytics(): Analytics {
-        return coreComponentsProvider.analytics()
+        coreComponent.inject(this)
+        analytics.init(this, userRepository.isFreshInstall)
+        analytics.setUserId(userRepository.userId())
+        servicesProvider.onBoardingService.appLaunch()
+        servicesProvider.offerService.retrieveOffers()
+        wallet.retrieveTransactions()
+        wallet.retrieveCoupons()
+        userRepository.isFreshInstall = false
     }
 
     override fun dataStore(storage: String): DataStore {
         return SharedPreferencesStore(this, storage)
-    }
-
-    override fun scheduler(): Scheduler {
-        return AndroidScheduler()
-    }
-
-    override fun notificationPublisher(): NotificationPublisher {
-        return coreComponentsProvider.notificationPublisher()
     }
 }

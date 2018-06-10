@@ -47,7 +47,8 @@ class EarnViewModelTest {
         var task = SAMPLE_QUESTIONNAIRE.replace("__START_DATE__", timeInSecs.toString())
         mockComponents.questionnaireRepository = QuestionnaireRepository(mockComponents, task)
         `when`(mockComponents.wallet.balance).thenReturn(ObservableField("1"))
-        earnViewModelToTest = EarnViewModel(mockComponents, mockNavigator)
+        earnViewModelToTest = EarnViewModel(mockComponents.questionnaireRepository, mockComponents.servicesProvider,
+            mockComponents.scheduler, mockComponents.analytics, mockNavigator)
         earnViewModelToTest.onScreenVisibleToUser()
     }
 
@@ -98,7 +99,7 @@ class EarnViewModelTest {
         val timeIn1day = currentTime + DAY_IN_MILLIS
         var timeIn2days = timeIn1day + DAY_IN_MILLIS
         setupTaskWithTime(timeIn2days)
-        System.out.println("Task available in "+earnViewModelToTest.nextAvailableDate.get())
+        System.out.println("Task available in " + earnViewModelToTest.nextAvailableDate.get())
         assertFalse(earnViewModelToTest.isAvailableTomorrow.get())
         mockScheduler.setCurrentTime(timeIn1day)
         assertFalse(earnViewModelToTest.shouldShowTask.get())

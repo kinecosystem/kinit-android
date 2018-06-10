@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickMenuItem;
@@ -21,6 +23,11 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
     public static final String REPORT_PUSH_ID_KEY = "report_push_id_key";
     public static final String REPORT_PUSH_TEXT_KEY = "report_push_text_key";
     private static final String SELECTED_TAB_INDEX_KEY = "selected_tab_index_key";
+
+    @Inject
+    Analytics analytics;
+    @Inject
+    UserRepository userRepository;
     private ViewPager viewPager;
     private TabsAdapter tabsAdapter;
     private BottomTabNavigation bottomTabNavigation;
@@ -31,6 +38,7 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        KinitApplication.coreComponent.inject(this);
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         setContentView(R.layout.main_activity);
@@ -38,7 +46,7 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
         int selectedTabIndex = (savedInstanceState != null) ? savedInstanceState.getInt(SELECTED_TAB_INDEX_KEY, 0) : 0;
         bottomTabNavigation.setSelectedTabIndex(selectedTabIndex);
         bottomTabNavigation.setPageSelectionListener(this);
-        tabsAdapter = new TabsAdapter(getCoreComponents());
+        tabsAdapter = new TabsAdapter();
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(tabsAdapter);
         if (!tabsAdapter.shouldShowAnimation()) {
@@ -55,7 +63,7 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
 
     private void handleIntentExtras(Bundle intentExtras) {
         if (intentExtras != null && intentExtras.containsKey(REPORT_PUSH_ID_KEY)) {
-            getCoreComponents().analytics().logEvent(new ClickEngagementPush(intentExtras.getString(REPORT_PUSH_ID_KEY),
+            analytics.logEvent(new ClickEngagementPush(intentExtras.getString(REPORT_PUSH_ID_KEY),
                 intentExtras.getString(REPORT_PUSH_TEXT_KEY)));
         }
     }
@@ -64,7 +72,7 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
     public void onPageSelected(int index, String tabTitle) {
         viewPager.setCurrentItem(index, false);
         Event event = new ClickMenuItem(tabTitle);
-        getCoreComponents().analytics().logEvent(event);
+        analytics.logEvent(event);
         tabsAdapter.onTabVisibleToUser(index);
     }
 
@@ -72,9 +80,9 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
     protected void onResume() {
         super.onResume();
         tabsAdapter.onTabVisibleToUser(viewPager.getCurrentItem());
-        UserRepository userRepo = getCoreComponents().userRepo();
-        userRepo.setFirstTimeUser(false);
-        if (userRepo.isPhoneVerificationEnabled() && !userRepo.isPhoneVerified()) {
+
+        userRepository.setFirstTimeUser(false);
+        if (userRepository.isPhoneVerificationEnabled() && !userRepository.isPhoneVerified()) {
             showPhoneVerifyPopup();
         }
     }
@@ -84,7 +92,7 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
         builder.setTitle(R.string.pop_verify_phone_title)
             .setMessage(R.string.pop_verify_phone_sub_title)
             .setPositiveButton(R.string.pop_verify_phone_possitive, (dialog, which) -> {
-                getCoreComponents().analytics().logEvent(new Events.Analytics.ClickVerifyButtonOnPhoneAuthPopup());
+                analytics.logEvent(new Events.Analytics.ClickVerifyButtonOnPhoneAuthPopup());
                 startActivity(PhoneVerifyActivity.getIntent(MainActivity.this, false));
                 finish();
             });
@@ -92,7 +100,7 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
         alertDialog.setCancelable(false);
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
-        getCoreComponents().analytics().logEvent(new Events.Analytics.ViewPhoneAuthPopup());
+        analytics.logEvent(new Events.Analytics.ViewPhoneAuthPopup());
     }
 
 }

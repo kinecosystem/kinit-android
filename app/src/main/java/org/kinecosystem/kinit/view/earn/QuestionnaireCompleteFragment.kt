@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import androidx.core.view.doOnPreDraw
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.QuestionnaireCompleteFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
@@ -22,7 +23,7 @@ class QuestionnaireCompleteFragment : BaseFragment() {
         binding = DataBindingUtil
             .inflate(inflater, R.layout.questionnaire_complete_fragment,
                 container, false)
-        model = QuestionnaireCompleteViewModel(coreComponents)
+        model = QuestionnaireCompleteViewModel()
         binding.model = model
         binding.hands.doOnPreDraw {
             animateIn()

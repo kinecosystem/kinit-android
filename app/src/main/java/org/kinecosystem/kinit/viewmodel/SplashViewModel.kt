@@ -3,44 +3,62 @@ package org.kinecosystem.kinit.viewmodel
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.view.View
-import org.kinecosystem.kinit.CoreComponentsProvider
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.SplashNavigator
+import javax.inject.Inject
 
 
-class SplashViewModel(private val coreComponents: CoreComponentsProvider,
-    var splashNavigator: SplashNavigator?) {
+class SplashViewModel(var splashNavigator: SplashNavigator?) {
 
     private companion object {
         const val SPLASH_DURATION: Long = 2000L
         const val CREATE_WALLET_TIMEOUT = 20000L
     }
 
+    @Inject
+    lateinit var scheduler: Scheduler
+    @Inject
+    lateinit var analytics: Analytics
+    @Inject
+    lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var servicesProvider: ServicesProvider
+    @Inject
+    lateinit var questionnaireRepository: QuestionnaireRepository
+
     val showCreatingWallet: ObservableBoolean = ObservableBoolean(false)
     var callback: Observable.OnPropertyChangedCallback? = null
     var googlePlayServicesAvailable: Boolean = true
-    private val walletReady = coreComponents.services().walletService.ready
+    private var walletReady: ObservableBoolean
+
+    init {
+        KinitApplication.coreComponent.inject(this)
+        walletReady = servicesProvider.walletService.ready
+    }
 
     fun onResume() {
-        coreComponents.scheduler().scheduleOnMain({
+        scheduler.scheduleOnMain({
             checkReadyToMove()
         }, SPLASH_DURATION)
-        coreComponents.analytics().logEvent(Events.Analytics.ViewSplashscreenPage())
+        analytics.logEvent(Events.Analytics.ViewSplashscreenPage())
     }
 
     fun onRetryClicked(view: View?) {
-        coreComponents.analytics()
-            .logEvent(Events.Analytics.ClickRetryButtonOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
+        analytics.logEvent(Events.Analytics.ClickRetryButtonOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
         splashNavigator?.moveToSplashScreen()
         showCreatingWallet.set(true)
         checkReadyToMove()
-        coreComponents.services().onBoardingService.appLaunch()
+        servicesProvider.onBoardingService.appLaunch()
     }
 
     fun onContactSupportClicked(view: View?) {
-        coreComponents.analytics()
-            .logEvent(Events.Analytics.ClickContactLinkOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
+        analytics.logEvent(Events.Analytics.ClickContactLinkOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
         splashNavigator?.openContactSupport()
     }
 
@@ -57,7 +75,7 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
             if (walletReady.get()) {
                 moveToNextScreen()
             } else {
-                coreComponents.userRepo().isFirstTimeUser = true
+                userRepository.isFirstTimeUser = true
                 showCreatingWallet.set(true)
                 addWalletReadyCallback()
                 scheduleTimeout()
@@ -66,12 +84,11 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
     }
 
     private fun moveToNextScreen() {
-        val userRepo = coreComponents.userRepo()
-        if (userRepo.isFirstTimeUser
-            && userRepo.isPhoneVerificationEnabled
-            && !userRepo.isPhoneVerified) {
+        if (userRepository.isFirstTimeUser
+            && userRepository.isPhoneVerificationEnabled
+            && !userRepository.isPhoneVerified) {
             splashNavigator?.moveToTutorialScreen()
-        } else if (userRepo.isFirstTimeUser && !userRepo.isPhoneVerificationEnabled) {
+        } else if (userRepository.isFirstTimeUser && !userRepository.isPhoneVerificationEnabled) {
             splashNavigator?.moveToTutorialScreen()
         } else {
             splashNavigator?.moveToMainScreen()
@@ -91,13 +108,12 @@ class SplashViewModel(private val coreComponents: CoreComponentsProvider,
     }
 
     private fun scheduleTimeout() {
-        coreComponents.scheduler().scheduleOnMain(
+        scheduler.scheduleOnMain(
             {
                 if (walletReady.get()) {
                     moveToNextScreen()
                 } else {
-                    coreComponents.analytics()
-                        .logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
+                    analytics.logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
                     splashNavigator?.moveToErrorScreen()
                 }
             },

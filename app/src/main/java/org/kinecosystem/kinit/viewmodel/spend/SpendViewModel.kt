@@ -1,45 +1,58 @@
 package org.kinecosystem.kinit.viewmodel.spend
 
 import android.databinding.ObservableBoolean
-import org.kinecosystem.kinit.CoreComponentsProvider
+import android.databinding.ObservableField
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationCompletionCallback
+import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.view.TabViewModel
+import javax.inject.Inject
 
-class SpendViewModel(private val coreComponents: CoreComponentsProvider, private val navigator: Navigator) :
+class SpendViewModel(private val navigator: Navigator) :
     TabViewModel {
 
-    val questionnaireRepo = coreComponents.questionnaireRepo()
-    var balance = coreComponents.services().walletService.balance
+    @Inject
+    lateinit var offersRepository: OffersRepository
+    @Inject
+    lateinit var analytics: Analytics
+    @Inject
+    lateinit var servicesProvider: ServicesProvider
+
+    var balance: ObservableField<String>
     var hasOffers = ObservableBoolean(false)
     var showNoOffer = ObservableBoolean(false)
-    var hasNetwork = ObservableBoolean(coreComponents.services().isNetworkConnected())
-    val analytics = coreComponents.analytics()
+    var hasNetwork = ObservableBoolean(false)
+
 
     init {
+        KinitApplication.coreComponent.inject(this)
+        balance = servicesProvider.walletService.balance
+        hasNetwork = ObservableBoolean(servicesProvider.isNetworkConnected())
         refresh()
     }
 
     fun getOffers(): List<Offer> {
-        return coreComponents.offersRepo().offerList
+        return offersRepository.offerList
     }
 
     private fun refresh() {
-        if (coreComponents.services().isNetworkConnected()) {
+        if (servicesProvider.isNetworkConnected()) {
             hasNetwork.set(true)
-            hasOffers.set(!coreComponents.offersRepo().offerList.isEmpty())
+            hasOffers.set(!offersRepository.offerList.isEmpty())
             showNoOffer.set(!hasOffers.get())
-            balance.set(coreComponents.services().walletService.balance.get().toString())
+            balance.set(servicesProvider.walletService.balance.get().toString())
             if (!hasOffers.get()) {
-                coreComponents.services().offerService.retrieveOffers(object : OperationCompletionCallback {
+                servicesProvider.offerService.retrieveOffers(object : OperationCompletionCallback {
                     override fun onError(errorCode: Int) {
                     }
 
                     override fun onSuccess() {
-                        hasOffers.set(!coreComponents.offersRepo().offerList.isEmpty())
+                        hasOffers.set(!offersRepository.offerList.isEmpty())
                     }
                 })
             }
@@ -58,7 +71,7 @@ class SpendViewModel(private val coreComponents: CoreComponentsProvider, private
             } else if (showNoOffer.get()) {
                 Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN)
             } else {
-                Events.Analytics.ViewSpendPage(coreComponents.offersRepo().numOfOffers())
+                Events.Analytics.ViewSpendPage(offersRepository.numOfOffers())
             }
         analytics.logEvent(event)
     }
@@ -68,7 +81,7 @@ class SpendViewModel(private val coreComponents: CoreComponentsProvider, private
         val offer = getOffers()[position]
         analytics.logEvent(Events.Analytics.ClickOfferItemOnSpendPage(offer.provider?.name,
             offer.price,
-            coreComponents.offersRepo().numOfOffers(),
+            offersRepository.numOfOffers(),
             offer.domain,
             offer.id,
             offer.title,

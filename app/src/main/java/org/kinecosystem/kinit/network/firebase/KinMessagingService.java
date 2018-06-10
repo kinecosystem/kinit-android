@@ -1,39 +1,49 @@
 package org.kinecosystem.kinit.network.firebase;
 
+import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
+
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-
-import org.kinecosystem.kinit.CoreComponentsProvider;
+import java.util.Map;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.model.Push;
 import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
-
-import java.util.Map;
-
-import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
+import org.kinecosystem.kinit.network.ServicesProvider;
+import org.kinecosystem.kinit.notification.NotificationPublisher;
+import org.kinecosystem.kinit.util.AndroidScheduler;
+import org.kinecosystem.kinit.util.Scheduler;
 
 
 public class KinMessagingService extends FirebaseMessagingService {
 
     public static String TAG = KinMessagingService.class.getSimpleName();
 
+    @Inject
+    NotificationPublisher notificationPublisher;
+    @Inject
+    ServicesProvider servicesProvider;
+    @Inject
+    Scheduler scheduler;
+
     public KinMessagingService() {
+
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        KinitApplication.coreComponent.inject(this);
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "###From: " + remoteMessage.getFrom());
         Log.d(TAG, "###Message data payload: " + remoteMessage.getData());
         Gson gson = new Gson();
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            CoreComponentsProvider coreComponents = getCoreComponentsProvider();
             Map<String, String> data = remoteMessage.getData();
             try {
                 if (data.containsKey(Push.TYPE_DATA_KEY) && data.containsKey(Push.MESSAGE_DATA_KEY)) {
@@ -41,14 +51,14 @@ public class KinMessagingService extends FirebaseMessagingService {
                     String message = data.get(Push.MESSAGE_DATA_KEY);
 
                     if (type.equals(Push.TYPE_TX_COMPLETED)) {
-                        coreComponents.scheduler().post(() ->
-                            coreComponents.services().getWalletService()
+                        scheduler.post(() ->
+                            servicesProvider.getWalletService()
                                 .onTransactionMessageReceived(gson.fromJson(message, TransactionCompleteMessage.class))
                         );
                     } else if (type.equals(Push.TYPE_AUTH_TOKEN)) {
                         AuthTokenMessage authTokenMessage = gson.fromJson(message, AuthTokenMessage.class);
                         if (!TextUtils.isEmpty(authTokenMessage.getAuthToken())) {
-                            coreComponents.services().getOnBoardingService()
+                            servicesProvider.getOnBoardingService()
                                 .sendAuthTokenAck(authTokenMessage.getAuthToken());
                         }
                     } else {
@@ -58,9 +68,9 @@ public class KinMessagingService extends FirebaseMessagingService {
                         NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);
                         if (!TextUtils.isEmpty(id) && notificationMessage != null && !TextUtils
                             .isEmpty(notificationMessage.getBody())) {
-                            coreComponents.services().getWalletService().updateBalance(null);
-                            coreComponents.services().getWalletService().retrieveTransactions(null);
-                            coreComponents.notificationPublisher().notify(id, notificationMessage);
+                            servicesProvider.getWalletService().updateBalance(null);
+                            servicesProvider.getWalletService().retrieveTransactions(null);
+                            notificationPublisher.notify(id, notificationMessage);
                         }
                     }
                 }
@@ -71,9 +81,4 @@ public class KinMessagingService extends FirebaseMessagingService {
         }
 
     }
-
-    private CoreComponentsProvider getCoreComponentsProvider() {
-        return (CoreComponentsProvider) getApplication();
-    }
-
 }

@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.databinding.PeersSendKinLayoutBinding;
 import org.kinecosystem.kinit.util.GeneralUtils;
@@ -36,7 +37,7 @@ public class Peer2PeerSendFragment extends BaseFragment implements Peer2PeerActi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.peers_send_kin_layout, container, false);
-        model = new Peer2PeerViewModel(getCoreComponents());
+        model = new Peer2PeerViewModel();
         model.setPeer2PeerActions(this);
         binding.setModel(model);
         contactData = new ContactData(getActivity());

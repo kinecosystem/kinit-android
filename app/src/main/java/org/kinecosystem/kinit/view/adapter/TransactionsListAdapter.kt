@@ -7,42 +7,55 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import org.kinecosystem.kinit.CoreComponentsProvider
+import dagger.CoreComponent
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TransactionRowLayoutBinding
 import org.kinecosystem.kinit.model.KinTransaction
+import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.viewmodel.balance.TransactionViewModel
+import javax.inject.Inject
 
-class TransactionsListAdapter(val context: Context, val coreComponents: CoreComponentsProvider)
+class TransactionsListAdapter(val context: Context)
     : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>() {
 
-    private var transactions = coreComponents.services().walletService.transactions.get()
-    private val updateTransactionsCallback = object : Observable.OnPropertyChangedCallback(){
+    @Inject
+    lateinit var servicesProvider: ServicesProvider
+
+    var transactions: ArrayList<KinTransaction>
+    private val updateTransactionsCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            transactions = coreComponents.services().walletService.transactions.get()
+            transactions = servicesProvider.walletService.transactions.get()
             notifyDataSetChanged()
         }
     }
+
     companion object {
         const val TOP_TRANSACTION = 0
         const val BOTTOM_TRANSACTION = 1
         const val OTHER_TRANSACTION = -1
     }
 
+    init {
+        KinitApplication.coreComponent.inject(this)
+        transactions = servicesProvider.walletService.transactions.get()
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         Log.d("####", "TransactionsListAdapter onAttachedToRecyclerView")
-        coreComponents.services().walletService.transactions.addOnPropertyChangedCallback(updateTransactionsCallback)
+        servicesProvider.walletService.transactions.addOnPropertyChangedCallback(updateTransactionsCallback)
         super.onAttachedToRecyclerView(recyclerView)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        coreComponents.services().walletService.transactions.removeOnPropertyChangedCallback(updateTransactionsCallback)
+        servicesProvider.walletService.transactions.removeOnPropertyChangedCallback(updateTransactionsCallback)
         super.onDetachedFromRecyclerView(recyclerView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsListAdapter.ViewHolder {
         val inflater = LayoutInflater.from(context)
-        val binding: TransactionRowLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.transaction_row_layout, parent, false)
+        val binding: TransactionRowLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.transaction_row_layout,
+            parent, false)
 
         return when (viewType) {
             TOP_TRANSACTION -> TopTransactionViewHolder(binding)
