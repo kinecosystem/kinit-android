@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 
 public class LockableViewPager extends ViewPager {
 
+    public static final int SWIPE_DURATION = 500;
     private boolean swipeable;
 
     public LockableViewPager(Context context) {
@@ -59,13 +60,14 @@ public class LockableViewPager extends ViewPager {
     }
 
     public class SlowScroll extends Scroller {
+
         SlowScroll(Context context) {
             super(context, new AccelerateDecelerateInterpolator());
         }
 
         @Override
         public void startScroll(int startX, int startY, int dx, int dy, int duration) {
-            super.startScroll(startX, startY, dx, dy, 500);
+            super.startScroll(startX, startY, dx, dy, SWIPE_DURATION);
         }
     }
 }

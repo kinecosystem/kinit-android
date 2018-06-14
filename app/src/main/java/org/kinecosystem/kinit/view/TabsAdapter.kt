@@ -1,9 +1,7 @@
 package org.kinecosystem.kinit.view
 
 import android.databinding.DataBindingUtil
-import android.databinding.ObservableField
 import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -14,25 +12,35 @@ import org.kinecosystem.kinit.databinding.*
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
+import org.kinecosystem.kinit.view.customView.LockableViewPager
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
 
 private const val NUMBER_OF_TABS = 5
+private const val PRE_EARN_SHOW_DURATION: Long = 2000L
 
 class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAdapter() {
-
     private var models = arrayOfNulls<TabViewModel?>(NUMBER_OF_TABS)
     private var positionToBeViewed: Int? = null
+    private var preAnimationWasShown = false
+
+    companion object {
+        const val PRE_EARN_TAB_INDEX = 0
+        const val EARN_TAB_INDEX = 1
+        const val SPEND_TAB = 2
+        const val BALANCE_TAB = 3
+        const val INFO_TAB = 4
+    }
 
     override fun instantiateItem(parent: ViewGroup, position: Int): View {
         val tabView = when (position) {
-            0 -> getPreEarnTab(parent, position)
-            1 -> getEarnTab(parent, position)
-            2 -> getSpendTab(parent, position)
-            3 -> getBalanceTab(parent, position)
-            4 -> getInfoTab(parent, position)
+            PRE_EARN_TAB_INDEX -> getPreEarnTab(parent, position)
+            EARN_TAB_INDEX -> getEarnTab(parent, position)
+            SPEND_TAB -> getSpendTab(parent, position)
+            BALANCE_TAB -> getBalanceTab(parent, position)
+            INFO_TAB -> getInfoTab(parent, position)
             else -> getInfoTab(parent, position)
         }
         parent.addView(tabView)
@@ -41,6 +49,11 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
             positionToBeViewed = null
         }
         return tabView
+    }
+
+    fun shouldShowAnimation(): Boolean {
+        return if (preAnimationWasShown) false
+        else coreComponents.questionnaireRepo().isQuestionnaireAvaliable()
     }
 
     override fun getCount(): Int {
@@ -56,14 +69,7 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return when (position) {
-            0 -> "pre-earn"
-            1 -> "earn"
-            2 -> "spend"
-            3 -> "balance"
-            4 -> "more"
-            else -> "more"
-        }
+        return ""
     }
 
     private fun getPreEarnTab(parent: ViewGroup, position: Int): View {
@@ -71,14 +77,20 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
             R.layout.pre_earn_tab, parent, false)
         binding.model = PreEarnViewModel(coreComponents)
         models[position] = binding.model
-        parent.postDelayed({
-            if (parent is ViewPager) {
-                // move to Eran Tab & destroy this one
-                parent.setCurrentItem(1, true)
-                destroyItem(parent, position, this)
-            }
-        }, 2000)
+        moveToEarnTab(parent, position, binding)
         return binding.root
+    }
+
+    private fun moveToEarnTab(parent: ViewGroup, position: Int, binding: PreEarnTabBinding) {
+        if (!preAnimationWasShown && coreComponents.questionnaireRepo().isQuestionnaireAvaliable()) {
+            parent.postDelayed({
+                if (parent is LockableViewPager) {
+                    // move to Eran Tab
+                    parent.setCurrentItem(EARN_TAB_INDEX, true)
+                    preAnimationWasShown = true
+                }
+            }, PRE_EARN_SHOW_DURATION)
+        }
     }
 
     private fun getEarnTab(parent: ViewGroup, position: Int): View {
@@ -129,7 +141,6 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
 
 class PreEarnViewModel(coreComponents: CoreComponentsProvider) :
     TabViewModel {
-    var balance: ObservableField<String> = coreComponents.services().walletService.balance
     override fun onScreenVisibleToUser() {
 
     }

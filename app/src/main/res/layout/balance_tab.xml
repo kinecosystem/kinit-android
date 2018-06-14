@@ -118,7 +118,6 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="@string/recent_activity_tab_text"
                 android:textSize="16sp" />
 
             <android.support.design.widget.TabItem
@@ -128,7 +127,6 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="@string/my_vouchers_tab_text"
                 android:textSize="16sp" />
         </android.support.design.widget.TabLayout>
 

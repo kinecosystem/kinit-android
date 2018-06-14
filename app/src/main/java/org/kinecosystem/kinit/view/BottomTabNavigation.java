@@ -19,7 +19,7 @@ import java.util.List;
 public class BottomTabNavigation extends FrameLayout implements OnClickListener {
 
 
-    private TabSelectionListener tabSelectionListener;
+    private PageSelectionListener pageSelectionListener;
     private int currentTabSelectedIndex;
     private List<NavigationTab> tabs = new ArrayList<>();
 
@@ -46,8 +46,8 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         init();
     }
 
-    public void setTabSelectionListener(TabSelectionListener tabSelectionListener) {
-        this.tabSelectionListener = tabSelectionListener;
+    public void setPageSelectionListener(PageSelectionListener pageSelectionListener) {
+        this.pageSelectionListener = pageSelectionListener;
     }
 
     public int getSelectedTabIndex() {
@@ -67,9 +67,9 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         final String tabSelectedTitle = navTab.title();
         if (currentTabSelectedIndex != tabSelectedIndex) {
             setSelectedTabIndex(tabSelectedIndex);
-            if (tabSelectionListener != null) {
+            if (pageSelectionListener != null) {
                 // Tabs starts at index 1
-                tabSelectionListener.onTabSelected(currentTabSelectedIndex + 1, tabSelectedTitle);
+                pageSelectionListener.onPageSelected(currentTabSelectedIndex + 1, tabSelectedTitle);
             }
         }
     }
@@ -90,8 +90,8 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         }
     }
 
-    public interface TabSelectionListener {
+    public interface PageSelectionListener {
 
-        void onTabSelected(int index, String tabTitle);
+        void onPageSelected(int index, String tabTitle);
     }
 }
