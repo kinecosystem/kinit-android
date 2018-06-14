@@ -10,17 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
+
+import org.kinecosystem.kinit.R;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.kinecosystem.kinit.R;
 
 public class BottomTabNavigation extends FrameLayout implements OnClickListener {
 
-
-    public interface TabSelectionListener {
-
-        void onTabSelected(int index, String tabTitle);
-    }
 
     private TabSelectionListener tabSelectionListener;
     private int currentTabSelectedIndex;
@@ -32,7 +29,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
     }
 
     public BottomTabNavigation(@NonNull Context context,
-        @Nullable AttributeSet attrs) {
+                               @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -44,7 +41,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
 
     @RequiresApi(api = VERSION_CODES.LOLLIPOP)
     public BottomTabNavigation(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr,
-        int defStyleRes) {
+                               int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -53,14 +50,14 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         this.tabSelectionListener = tabSelectionListener;
     }
 
+    public int getSelectedTabIndex() {
+        return currentTabSelectedIndex;
+    }
+
     public void setSelectedTabIndex(int index) {
         tabs.get(currentTabSelectedIndex).setSelected(false);
         currentTabSelectedIndex = index;
         tabs.get(currentTabSelectedIndex).setSelected(true);
-    }
-
-    public int getSelectedTabIndex() {
-        return currentTabSelectedIndex;
     }
 
     @Override
@@ -71,7 +68,8 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         if (currentTabSelectedIndex != tabSelectedIndex) {
             setSelectedTabIndex(tabSelectedIndex);
             if (tabSelectionListener != null) {
-                tabSelectionListener.onTabSelected(currentTabSelectedIndex, tabSelectedTitle);
+                // Tabs starts at index 1
+                tabSelectionListener.onTabSelected(currentTabSelectedIndex + 1, tabSelectedTitle);
             }
         }
     }
@@ -90,5 +88,10 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         for (final NavigationTab tab : tabs) {
             tab.setOnClickListener(this);
         }
+    }
+
+    public interface TabSelectionListener {
+
+        void onTabSelected(int index, String tabTitle);
     }
 }

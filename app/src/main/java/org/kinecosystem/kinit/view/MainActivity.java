@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush;
@@ -20,15 +21,13 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
     public static final String REPORT_PUSH_ID_KEY = "report_push_id_key";
     public static final String REPORT_PUSH_TEXT_KEY = "report_push_text_key";
     private static final String SELECTED_TAB_INDEX_KEY = "selected_tab_index_key";
-
-    public static Intent getIntent(Context context) {
-        return new Intent(context, MainActivity.class);
-    }
-
     private ViewPager viewPager;
     private TabsAdapter tabsAdapter;
     private BottomTabNavigation bottomTabNavigation;
 
+    public static Intent getIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
