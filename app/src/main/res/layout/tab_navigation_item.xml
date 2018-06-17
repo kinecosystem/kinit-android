@@ -4,24 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/tab_icon_height"
-        android:layout_marginBottom="4dp"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
         android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
+        android:adjustViewBounds="false"
+        android:baselineAlignBottom="false"
+        android:keepScreenOn="false"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:src="@drawable/earn"
-        />
+        tools:src="@drawable/earn" />
+
+    <View
+        android:id="@+id/notification"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:background="@drawable/tab_notification"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/icon"
+        app:layout_constraintTop_toTopOf="@+id/icon"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/title"
@@ -36,6 +47,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/icon"
-        tools:text="@string/title_earn"/>
+        tools:text="@string/title_earn" />
 
 </android.support.constraint.ConstraintLayout>

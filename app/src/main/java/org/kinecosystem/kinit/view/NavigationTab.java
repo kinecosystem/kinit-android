@@ -10,17 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import org.kinecosystem.kinit.R;
 
 public class NavigationTab extends ConstraintLayout {
 
     private TextView title;
     private ImageView icon;
+    private View notification;
     private int iconColor = getContext().getResources().getColor(R.color.tab_icon_color);
     private int iconSelectedColor = getContext().getResources().getColor(R.color.tab_icon_color_selected);
 
     public NavigationTab(@NonNull Context context,
-        @Nullable AttributeSet attrs) {
+                         @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
@@ -40,6 +42,8 @@ public class NavigationTab extends ConstraintLayout {
         try {
             titleResId = a.getResourceId(R.styleable.NavigationTab_text, 0);
             imageResId = a.getResourceId(R.styleable.NavigationTab_src, 0);
+
+
         } finally {
             a.recycle();
         }
@@ -47,15 +51,21 @@ public class NavigationTab extends ConstraintLayout {
         View view = inflater.inflate(R.layout.tab_navigation_item, this, true);
         title = view.findViewById(R.id.title);
         icon = view.findViewById(R.id.icon);
+        notification = view.findViewById(R.id.notification);
         title.setText(titleResId);
         icon.setImageResource(imageResId);
     }
+
 
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
         title.setSelected(selected);
         icon.setSelected(selected);
+    }
+
+    public void setNotificationIndicator(boolean toggle) {
+        notification.setVisibility(toggle ? View.VISIBLE : View.GONE);
     }
 
     public String title() {
