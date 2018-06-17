@@ -75,7 +75,7 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
             if (parent is ViewPager) {
                 // move to Eran Tab & destroy this one
                 parent.setCurrentItem(1, true)
-                destroyItem(parent, position, this)
+                destroyItem(parent, position, binding.root)
             }
         }, 2000)
         return binding.root
