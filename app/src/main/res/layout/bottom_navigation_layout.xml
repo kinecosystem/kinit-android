@@ -12,8 +12,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         app:src="@drawable/earn_drawable"
-        app:text="@string/title_earn"
-        />
+        app:text="@string/title_earn" />
 
     <org.kinecosystem.kinit.view.NavigationTab
         android:id="@+id/tab_spend"
@@ -21,8 +20,9 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         app:src="@drawable/spend_drawable"
-        app:text="@string/title_spend"
-        />
+        app:text="@string/title_spend">
+
+    </org.kinecosystem.kinit.view.NavigationTab>
 
 
     <org.kinecosystem.kinit.view.NavigationTab
@@ -31,8 +31,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         app:src="@drawable/balance_drawable"
-        app:text="@string/title_balance"
-        />
+        app:text="@string/title_balance" />
 
 
     <org.kinecosystem.kinit.view.NavigationTab
@@ -41,7 +40,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         app:src="@drawable/more_drawable"
-        app:text="@string/title_more"
-        />
+        app:text="@string/title_more" />
 
 </LinearLayout>

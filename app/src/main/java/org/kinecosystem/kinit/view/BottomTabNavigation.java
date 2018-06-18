@@ -1,6 +1,7 @@
 package org.kinecosystem.kinit.view;
 
 import android.content.Context;
+import android.databinding.Observable;
 import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,13 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 
+import org.kinecosystem.kinit.CoreComponentsProvider;
 import org.kinecosystem.kinit.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BottomTabNavigation extends FrameLayout implements OnClickListener {
-
 
     private PageSelectionListener pageSelectionListener;
     private int currentTabSelectedIndex;
@@ -67,6 +68,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         final String tabSelectedTitle = navTab.title();
         if (currentTabSelectedIndex != tabSelectedIndex) {
             setSelectedTabIndex(tabSelectedIndex);
+            navTab.setNotificationIndicator(false);
             if (pageSelectionListener != null) {
                 // Tabs starts at index 1
                 pageSelectionListener.onPageSelected(currentTabSelectedIndex + 1, tabSelectedTitle);
@@ -78,6 +80,13 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.bottom_navigation_layout, this, true);
         initTabs(view);
+        getCoreComponents().services().getWalletService()
+            .getBalance().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                ((NavigationTab) view.findViewById(R.id.tab_balance)).setNotificationIndicator(true);
+            }
+        });
     }
 
     private void initTabs(View view) {
@@ -90,8 +99,11 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         }
     }
 
-    public interface PageSelectionListener {
+    public CoreComponentsProvider getCoreComponents() {
+        return (CoreComponentsProvider) getContext().getApplicationContext();
+    }
 
+    public interface PageSelectionListener {
         void onPageSelected(int index, String tabTitle);
     }
 }
