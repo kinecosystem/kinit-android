@@ -9,6 +9,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
@@ -17,14 +18,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.repository.DataStore;
+import org.kinecosystem.kinit.repository.DataStoreProvider;
 import org.kinecosystem.kinit.view.BaseFragment;
 
 
@@ -36,6 +40,10 @@ public class CodeVerificationFragment extends BaseFragment {
     private static final long COUNT_DOWN = 16 * DateUtils.SECOND_IN_MILLIS;
     private static final long CODE_LENGTH = 6;
     private static final long VIBRATE_DURATION = 500;
+    @Inject
+    Analytics analytics;
+    @Inject
+    DataStoreProvider dataStoreProvider;
     private TextView[] inputs = new TextView[6];
     private View[] lines = new View[6];
     private TextView code, next, subtitle, counter, resend;
@@ -56,11 +64,6 @@ public class CodeVerificationFragment extends BaseFragment {
         }
     };
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getCoreComponents().analytics().logEvent(new Events.Analytics.ViewVerificationPage());
-    }
 
     public static CodeVerificationFragment newInstance(String phone) {
         CodeVerificationFragment fragment = new CodeVerificationFragment();
@@ -68,6 +71,12 @@ public class CodeVerificationFragment extends BaseFragment {
         args.putString(PHONE_NUMBER, phone);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        KinitApplication.coreComponent.inject(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -150,6 +159,12 @@ public class CodeVerificationFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        analytics.logEvent(new Events.Analytics.ViewVerificationPage());
+    }
+
     private void showKeyboardFocusCodeInput(final View trigger) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
@@ -165,11 +180,10 @@ public class CodeVerificationFragment extends BaseFragment {
     }
 
     private void sendEvent() {
-        DataStore dataStore = getCoreComponents().dataStore(PHONE_AUTH_DATA_STORE);
+        DataStore dataStore = dataStoreProvider.dataStore(PHONE_AUTH_DATA_STORE);
         int resendCodeCount = dataStore.getInt(KEY_RESEND_CODE, 0);
         resendCodeCount++;
-        getCoreComponents().analytics()
-            .logEvent(new Events.Analytics.ClickNewCodeLinkOnVerificationPage(resendCodeCount));
+        analytics.logEvent(new Events.Analytics.ClickNewCodeLinkOnVerificationPage(resendCodeCount));
         dataStore.putInt(KEY_RESEND_CODE, resendCodeCount);
     }
 
@@ -187,8 +201,7 @@ public class CodeVerificationFragment extends BaseFragment {
     }
 
     public void onError() {
-        getCoreComponents().analytics()
-            .logEvent(new Events.Analytics.ViewErrorMessageOnVerificationPage());
+        analytics.logEvent(new Events.Analytics.ViewErrorMessageOnVerificationPage());
         progressBar.setVisibility(View.GONE);
         vibrate();
         animateWiggle();

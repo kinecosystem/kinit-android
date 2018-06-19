@@ -3,34 +3,61 @@ package org.kinecosystem.kinit.viewmodel.spend
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.view.View
-import org.kinecosystem.kinit.CoreComponentsProvider
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.model.spend.isP2p
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.ERROR_NO_INTERNET
 import org.kinecosystem.kinit.network.ERROR_REDEEM_COUPON_FAILED
 import org.kinecosystem.kinit.network.OperationResultCallback
+import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.repository.OffersRepository
+import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActions
+import javax.inject.Inject
 
-class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider, private val navigator: Navigator,
-    offerIndex: Int) {
+class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) {
 
-    private val offer = coreComponents.offersRepo().offer(offerIndex)
-    private val analytics = coreComponents.analytics()
-    val title = offer.title
-    val info = offer.description
-    val price = offer.price.toString()
-    val typeImageUrl = offer.imageTypeUrl
-    val headerImageUrl = offer.imageUrl
-    val providerImageUrl = offer.provider?.imageUrl
-    val isP2p = offer.isP2p()
+    var offer: Offer
+    @Inject
+    lateinit var analytics: Analytics
+    @Inject
+    lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var servicesProvider: ServicesProvider
+    @Inject
+    lateinit var offersRepository: OffersRepository
+    @Inject
+    lateinit var questionnaireRepository: QuestionnaireRepository
+
+    var title: String?
+    var info: String?
+    var price: String?
+    val typeImageUrl: String?
+    val headerImageUrl: String?
+    val providerImageUrl: String?
+    val isP2p: Boolean
     val couponCode = ObservableField("")
     val couponPurchaseCompleted = ObservableBoolean(false)
     private var canCloseScreen = true
     var purchaseOfferActions: PurchaseOfferActions? = null
     var canBuy: ObservableBoolean = ObservableBoolean(false)
+
+    init {
+        KinitApplication.coreComponent.inject(this)
+        offer = offersRepository.offer(offerIndex)
+        title = offer.title
+        info = offer.description
+        price = offer.price.toString()
+        typeImageUrl = offer.imageTypeUrl
+        headerImageUrl = offer.imageUrl
+        providerImageUrl = offer.provider?.imageUrl
+        isP2p = offer.isP2p()
+    }
 
 
     fun onShareButtonClicked(view: View) {
@@ -45,7 +72,7 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
         analytics.logEvent(
             Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
                 offer.title, offer.type))
-        if (!coreComponents.services().isNetworkConnected()) {
+        if (!servicesProvider.isNetworkConnected()) {
             purchaseOfferActions?.showDialog(
                 R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
                 R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
@@ -74,12 +101,12 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
     private fun buy() {
         couponCode.set("")
         couponPurchaseCompleted.set(false)
-        coreComponents.services().offerService.buyOffer(offer, object : OperationResultCallback<String> {
+        servicesProvider.offerService.buyOffer(offer, object : OperationResultCallback<String> {
             override fun onResult(result: String) {
                 couponCode.set(result)
                 couponPurchaseCompleted.set(true)
-                coreComponents.services().walletService.retrieveTransactions()
-                coreComponents.services().walletService.retrieveCoupons()
+                servicesProvider.walletService.retrieveTransactions()
+                servicesProvider.walletService.retrieveCoupons()
                 analytics.logEvent(
                     Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
                         offer.title, offer.type))
@@ -111,14 +138,15 @@ class PurchaseOfferViewModel(private val coreComponents: CoreComponentsProvider,
 
     fun onResume() {
         val offerPrice = offer.price ?: Int.MAX_VALUE
-        val taskId = coreComponents.questionnaireRepo().task?.id!!.toInt()
         var p2pValid = true
-        if (isP2p && coreComponents.userRepo().isP2pEnabled) {
-            p2pValid = coreComponents.userRepo().p2pMinTasks <= taskId
+        if (isP2p && userRepository.isP2pEnabled) {
+            if (questionnaireRepository.task != null) {
+                p2pValid = userRepository.p2pMinTasks <= questionnaireRepository.task?.id!!.toInt()
+            }
         }
-        canBuy.set(coreComponents.services().walletService.balanceInt >= offerPrice && p2pValid)
+        canBuy.set(servicesProvider.walletService.balanceInt >= offerPrice && p2pValid)
 
-        coreComponents.analytics().logEvent(Events.Analytics.ViewOfferPage(offer.provider?.name,
+        analytics.logEvent(Events.Analytics.ViewOfferPage(offer.provider?.name,
             offer.price,
             offer.domain,
             offer.id,

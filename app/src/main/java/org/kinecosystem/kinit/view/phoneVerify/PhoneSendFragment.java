@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.view.phoneVerify;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -10,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.util.PhoneUtils;
 import org.kinecosystem.kinit.view.BaseFragment;
@@ -19,6 +23,8 @@ import org.kinecosystem.kinit.view.BaseFragment;
 public class PhoneSendFragment extends BaseFragment {
 
     public static final String TAG = PhoneSendFragment.class.getSimpleName();
+    @Inject
+    Analytics analytics;
     private static final int MIN_PHONE_LENGTH = 5;
     private static final String HAS_BACK = "HAS_BACK";
     private EditText prefix, phone;
@@ -33,6 +39,12 @@ public class PhoneSendFragment extends BaseFragment {
         args.putBoolean(HAS_BACK, hasBack);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        KinitApplication.coreComponent.inject(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -122,7 +134,7 @@ public class PhoneSendFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getCoreComponents().analytics().logEvent(new Events.Analytics.ViewPhoneAuthPage());
+        analytics.logEvent(new Events.Analytics.ViewPhoneAuthPage());
     }
 
     public void onSendPhone() {
@@ -132,6 +144,6 @@ public class PhoneSendFragment extends BaseFragment {
         }
         String fullPhone = prefixStr + phone.getText();
         actions.onSendPhone(fullPhone);
-        getCoreComponents().analytics().logEvent(new Events.Analytics.ClickNextButtonOnPhoneAuthPage());
+        analytics.logEvent(new Events.Analytics.ClickNextButtonOnPhoneAuthPage());
     }
 }

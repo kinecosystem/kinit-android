@@ -1,25 +1,40 @@
 package org.kinecosystem.kinit.viewmodel.balance
 
 import android.databinding.ObservableBoolean
-import org.kinecosystem.kinit.CoreComponentsProvider
+import android.databinding.ObservableField
+import dagger.CoreComponent
+import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.view.TabViewModel
+import javax.inject.Inject
 
-class BalanceViewModel(private val coreComponents: CoreComponentsProvider) : TabViewModel {
-    val balance = coreComponents.services().walletService.balance
+class BalanceViewModel: TabViewModel {
+
+    var balance: ObservableField<String>
     val hasTransactions = ObservableBoolean(false)
     val hasCoupons = ObservableBoolean(false)
-    val showNoTransaction = ObservableBoolean(false)
-    val hasNetwork = ObservableBoolean(coreComponents.services().isNetworkConnected())
-    val analytics = coreComponents.analytics()
+    private val showNoTransaction = ObservableBoolean(false)
+    var hasNetwork: ObservableBoolean
+    @Inject
+    lateinit var servicesProvider: ServicesProvider
+    @Inject
+    lateinit var analytics: Analytics
+
+    init {
+        KinitApplication.coreComponent.inject(this)
+        balance = servicesProvider.offerService.wallet.balance
+        hasNetwork = ObservableBoolean(servicesProvider.isNetworkConnected())
+    }
 
     fun onResume() {
-        if (coreComponents.services().isNetworkConnected()) {
+        if (servicesProvider.isNetworkConnected()) {
             hasNetwork.set(true)
-            hasTransactions.set(!coreComponents.services().walletService.transactions.get().isEmpty())
-            hasCoupons.set(!coreComponents.services().walletService.coupons.get().isEmpty())
+            hasTransactions.set(!servicesProvider.walletService.transactions.get().isEmpty())
+            hasCoupons.set(!servicesProvider.walletService.coupons.get().isEmpty())
             showNoTransaction.set(!hasTransactions.get())
-            balance.set(coreComponents.services().walletService.balance.get().toString())
+            balance.set(servicesProvider.walletService.balance.get().toString())
         } else {
             hasNetwork.set(false)
             hasTransactions.set(false)
@@ -28,8 +43,8 @@ class BalanceViewModel(private val coreComponents: CoreComponentsProvider) : Tab
     }
 
     override fun onScreenVisibleToUser() {
-        hasTransactions.set(!coreComponents.services().walletService.transactions.get().isEmpty())
-        hasCoupons.set(!coreComponents.services().walletService.coupons.get().isEmpty())
-        coreComponents.analytics().logEvent(Events.Analytics.ViewBalancePage())
+        hasTransactions.set(!servicesProvider.walletService.transactions.get().isEmpty())
+        hasCoupons.set(!servicesProvider.walletService.coupons.get().isEmpty())
+        analytics.logEvent(Events.Analytics.ViewBalancePage())
     }
 }

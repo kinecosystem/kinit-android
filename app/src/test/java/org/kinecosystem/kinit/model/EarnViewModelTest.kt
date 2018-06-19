@@ -47,7 +47,9 @@ class EarnViewModelTest {
         var task = SAMPLE_QUESTIONNAIRE.replace("__START_DATE__", timeInSecs.toString())
         mockComponents.questionnaireRepository = QuestionnaireRepository(mockComponents, task)
         `when`(mockComponents.wallet.balance).thenReturn(ObservableField("1"))
-        earnViewModelToTest = EarnViewModel(mockComponents, mockNavigator)
+        earnViewModelToTest = EarnViewModel(mockComponents.questionnaireRepository, mockComponents.wallet, mockComponents.taskService,
+             mockComponents.scheduler, mockComponents.analytics,
+            mockNavigator)
         earnViewModelToTest.onScreenVisibleToUser()
     }
 
@@ -69,7 +71,7 @@ class EarnViewModelTest {
     fun questionnaireBecomesAvailableInAnHour() {
         var timeIn1hour = System.currentTimeMillis() + HOUR_IN_MILLIS
         setupTaskWithTime(timeIn1hour)
-        (mockComponents.scheduler() as MockScheduler).setCurrentTime(timeIn1hour)
+        (mockComponents.scheduler as MockScheduler).setCurrentTime(timeIn1hour)
         assertTrue(earnViewModelToTest.shouldShowTask.get())
     }
 
@@ -77,7 +79,7 @@ class EarnViewModelTest {
     fun questionnaireBecomesAvailableInADay() {
         var timeInAday = System.currentTimeMillis() + DAY_IN_MILLIS
         setupTaskWithTime(timeInAday)
-        (mockComponents.scheduler() as MockScheduler).setCurrentTime(timeInAday)
+        (mockComponents.scheduler as MockScheduler).setCurrentTime(timeInAday)
         assertTrue(earnViewModelToTest.shouldShowTask.get())
     }
 
@@ -86,7 +88,7 @@ class EarnViewModelTest {
         var timeInAday = System.currentTimeMillis() + DAY_IN_MILLIS
         var timeIn2days = timeInAday + DAY_IN_MILLIS
         setupTaskWithTime(timeIn2days)
-        (mockComponents.scheduler() as MockScheduler).setCurrentTime(timeInAday)
+        (mockComponents.scheduler as MockScheduler).setCurrentTime(timeInAday)
         assertFalse(earnViewModelToTest.shouldShowTask.get())
     }
 
@@ -98,7 +100,7 @@ class EarnViewModelTest {
         val timeIn1day = currentTime + DAY_IN_MILLIS
         var timeIn2days = timeIn1day + DAY_IN_MILLIS
         setupTaskWithTime(timeIn2days)
-        System.out.println("Task available in "+earnViewModelToTest.nextAvailableDate.get())
+        System.out.println("Task available in " + earnViewModelToTest.nextAvailableDate.get())
         assertFalse(earnViewModelToTest.isAvailableTomorrow.get())
         mockScheduler.setCurrentTime(timeIn1day)
         assertFalse(earnViewModelToTest.shouldShowTask.get())

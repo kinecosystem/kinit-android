@@ -6,10 +6,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.kinecosystem.kinit.CoreComponentsProvider
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.databinding.*
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.network.TaskService
+import org.kinecosystem.kinit.network.Wallet
+import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
 import org.kinecosystem.kinit.view.customView.LockableViewPager
@@ -17,11 +22,14 @@ import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
+import javax.inject.Inject
 
 private const val NUMBER_OF_TABS = 5
 private const val PRE_EARN_SHOW_DURATION: Long = 2000L
 
-class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAdapter() {
+class TabsAdapter :
+    PagerAdapter() {
+
     private var models = arrayOfNulls<TabViewModel?>(NUMBER_OF_TABS)
     private var positionToBeViewed: Int? = null
     private var preAnimationWasShown = false
@@ -32,6 +40,21 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
         const val SPEND_TAB = 2
         const val BALANCE_TAB = 3
         const val INFO_TAB = 4
+    }
+
+    @Inject
+    lateinit var analytics: Analytics
+    @Inject
+    lateinit var questionnaireRepository: QuestionnaireRepository
+    @Inject
+    lateinit var scheduler: Scheduler
+    @Inject
+    lateinit var wallet: Wallet
+    @Inject
+    lateinit var taskService: TaskService
+
+    init {
+        KinitApplication.coreComponent.inject(this)
     }
 
     override fun instantiateItem(parent: ViewGroup, position: Int): View {
@@ -53,7 +76,7 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
 
     fun shouldShowAnimation(): Boolean {
         return if (preAnimationWasShown) false
-        else coreComponents.questionnaireRepo().isQuestionnaireAvaliable()
+        else questionnaireRepository.isQuestionnaireAvaliable()
     }
 
     override fun getCount(): Int {
@@ -75,14 +98,14 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
     private fun getPreEarnTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<PreEarnTabBinding>(LayoutInflater.from(parent.context),
             R.layout.pre_earn_tab, parent, false)
-        binding.model = PreEarnViewModel(coreComponents)
+        binding.model = PreEarnViewModel()
         models[position] = binding.model
         moveToEarnTab(parent, position, binding)
         return binding.root
     }
 
     private fun moveToEarnTab(parent: ViewGroup, position: Int, binding: PreEarnTabBinding) {
-        if (!preAnimationWasShown && coreComponents.questionnaireRepo().isQuestionnaireAvaliable()) {
+        if (!preAnimationWasShown && questionnaireRepository.isQuestionnaireAvaliable()) {
             parent.postDelayed({
                 if (parent is LockableViewPager) {
                     // move to Eran Tab
@@ -96,7 +119,8 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
     private fun getEarnTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<EarnTabBinding>(LayoutInflater.from(parent.context),
             R.layout.earn_tab, parent, false)
-        binding.model = EarnViewModel(coreComponents, Navigator(parent.context))
+        binding.model = EarnViewModel(questionnaireRepository, wallet, taskService, scheduler, analytics,
+            Navigator(parent.context))
         models[position] = binding.model
         return binding.root
     }
@@ -104,7 +128,7 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
     private fun getSpendTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<SpendTabBinding>(LayoutInflater.from(parent.context),
             R.layout.spend_tab, parent, false)
-        binding.model = SpendViewModel(coreComponents, Navigator(parent.context))
+        binding.model = SpendViewModel(Navigator(parent.context))
         binding.offersList.layoutManager = LinearLayoutManager(parent.context)
         binding.offersList.adapter = OfferListAdapter(parent.context, binding.model)
         models[position] = binding.model
@@ -114,8 +138,8 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
     private fun getBalanceTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<BalanceTabBinding>(LayoutInflater.from(parent.context),
             R.layout.balance_tab, parent, false)
-        binding.model = BalanceViewModel(coreComponents)
-        binding.tabsContent.adapter = BalancePagerViewsAdapter(parent.context, coreComponents, binding)
+        binding.model = BalanceViewModel()
+        binding.tabsContent.adapter = BalancePagerViewsAdapter(parent.context, binding)
         binding.balanceNavTabs.setupWithViewPager(binding.tabsContent)
         models[position] = binding.model
         return binding.root
@@ -124,7 +148,7 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
     private fun getInfoTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<InfoTabBinding>(LayoutInflater.from(parent.context),
             R.layout.info_tab, parent, false)
-        binding.model = InfoViewModel(coreComponents)
+        binding.model = InfoViewModel()
         models[position] = binding.model
         return binding.root
     }
@@ -139,8 +163,8 @@ class TabsAdapter(private val coreComponents: CoreComponentsProvider) : PagerAda
 }
 
 
-class PreEarnViewModel(coreComponents: CoreComponentsProvider) :
-    TabViewModel {
+class PreEarnViewModel : TabViewModel {
+
     override fun onScreenVisibleToUser() {
 
     }

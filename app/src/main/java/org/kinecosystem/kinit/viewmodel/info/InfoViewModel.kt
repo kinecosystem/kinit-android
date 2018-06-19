@@ -1,14 +1,27 @@
 package org.kinecosystem.kinit.viewmodel.info
 
 import android.view.View
+import dagger.CoreComponent
 import org.kinecosystem.kinit.BuildConfig
-import org.kinecosystem.kinit.CoreComponentsProvider
+import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.TabViewModel
+import javax.inject.Inject
 
-class InfoViewModel(private val coreComponents: CoreComponentsProvider) : TabViewModel {
+class InfoViewModel() : TabViewModel {
 
+    @Inject
+    lateinit var userRepository: UserRepository
+
+    @Inject
+    lateinit var analytics: Analytics
+
+    init {
+        KinitApplication.coreComponent.inject(this)
+    }
     var version: String = if (BuildConfig.DEBUG) {
         "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE}"
     } else {
@@ -16,12 +29,12 @@ class InfoViewModel(private val coreComponents: CoreComponentsProvider) : TabVie
     }
 
     fun onContactSupportClicked(view: View) {
-        coreComponents.analytics().logEvent(Events.Analytics.ClickSupportButton())
-        coreComponents.analytics().logEvent(Events.Business.SupportRequestSent())
-        SupportUtil.openEmailSupport(view.context, coreComponents.userRepo())
+        analytics.logEvent(Events.Analytics.ClickSupportButton())
+        analytics.logEvent(Events.Business.SupportRequestSent())
+        SupportUtil.openEmailSupport(view.context, userRepository)
     }
 
     override fun onScreenVisibleToUser() {
-        coreComponents.analytics().logEvent(Events.Analytics.ViewProfilePage())
+        analytics.logEvent(Events.Analytics.ViewProfilePage())
     }
 }

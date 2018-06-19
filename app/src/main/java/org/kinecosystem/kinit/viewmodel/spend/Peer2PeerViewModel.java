@@ -5,26 +5,39 @@ import static org.kinecosystem.kinit.network.OfferServiceKt.ERROR_TRANSACTION_FA
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Handler;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import org.kinecosystem.kinit.CoreComponentsProvider;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickSendButtonOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPopupOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.DialogErrorType;
 import org.kinecosystem.kinit.network.OperationResultCallback;
+import org.kinecosystem.kinit.network.ServicesProvider;
+import org.kinecosystem.kinit.repository.UserRepository;
+import org.kinecosystem.kinit.util.AndroidScheduler;
+import org.kinecosystem.kinit.util.Scheduler;
 import org.kinecosystem.kinit.view.spend.ContactData;
 import org.kinecosystem.kinit.view.spend.Peer2PeerActions;
 
 public class Peer2PeerViewModel {
 
-    private CoreComponentsProvider coreComponents;
+    @Inject
+    UserRepository userRepository;
+    @Inject
+    Analytics analytics;
+    @Inject
+    ServicesProvider servicesProvider;
+    @Inject
+    Scheduler scheduler;
+
     private String address;
     private Peer2PeerActions actions;
     public ObservableField<String> name = new ObservableField<>("");
@@ -79,16 +92,16 @@ public class Peer2PeerViewModel {
         }
     };
 
-    public void onResume() {
-        coreComponents.analytics().logEvent(new ViewSendKinPage());
+    public Peer2PeerViewModel() {
+        KinitApplication.coreComponent.inject(this);
+        //max chars of the edit text is base on max transfer amount
+        maxKinTransfer = userRepository.getP2pMaxKin();
+        minKinTransfer = userRepository.getP2pMinKin();
+        maxTransferLength.set(String.valueOf(maxKinTransfer).length());
     }
 
-    public Peer2PeerViewModel(CoreComponentsProvider coreComponentsProvider) {
-        this.coreComponents = coreComponentsProvider;
-        //max chars of the edit text is base on max transfer amount
-        maxKinTransfer = coreComponents.userRepo().getP2pMaxKin();
-        minKinTransfer = coreComponents.userRepo().getP2pMinKin();
-        maxTransferLength.set(String.valueOf(maxKinTransfer).length());
+    public void onResume() {
+        analytics.logEvent(new ViewSendKinPage());
     }
 
     public void setPeer2PeerActions(Peer2PeerActions actions) {
@@ -112,7 +125,7 @@ public class Peer2PeerViewModel {
 
     private void sendPhone(String phoneNumber) {
         final String formattedNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
-        coreComponents.services().getOfferService()
+        servicesProvider.getOfferService()
             .sendContact(formattedNumber, new OperationResultCallback<String>() {
                 @Override
                 public void onResult(String addressResponse) {
@@ -159,13 +172,13 @@ public class Peer2PeerViewModel {
     }
 
     public void onSend(View view) {
-        coreComponents.analytics().logEvent(new ClickSendButtonOnSendKinPage((float) amount.get()));
+        analytics.logEvent(new ClickSendButtonOnSendKinPage((float) amount.get()));
         if (isValidAmount()) {
             sendingTransaction.set(true);
             if (actions != null) {
                 actions.onStartTransaction();
             }
-            coreComponents.services().getOfferService()
+            servicesProvider.getOfferService()
                 .p2pTransfer(address, amount.get(), new OperationResultCallback<String>() {
                     @Override
                     public void onResult(String transactionId) {
@@ -173,7 +186,7 @@ public class Peer2PeerViewModel {
                         transactionComplete.set(true);
                         if (actions != null) {
                             actions.onTransactionComplete();
-                            coreComponents.scheduler().scheduleOnMain(() -> {
+                            scheduler.scheduleOnMain(() -> {
                                 if (actions != null) {
                                     actions.closeScreen();
                                 }
@@ -197,7 +210,7 @@ public class Peer2PeerViewModel {
     }
 
     private void logEventPopUp(String type) {
-        coreComponents.analytics().logEvent(new ViewErrorPopupOnSendKinPage(type));
+        analytics.logEvent(new ViewErrorPopupOnSendKinPage(type));
     }
 
     private boolean isValidAmount() {
@@ -211,7 +224,7 @@ public class Peer2PeerViewModel {
             actions.showDialog(R.string.p2p_amount_too_big_title, R.string.p2p_amount_too_big_body, maxKinTransfer,
                 R.string.p2p_amount_not_valid_action, false);
             return false;
-        } else if (amount.get() > coreComponents.services().getWalletService().getBalanceInt()) {
+        } else if (amount.get() > servicesProvider.getWalletService().getBalanceInt()) {
             logEventPopUp(DialogErrorType.NOT_ENOUGH_BALANCE);
             actions
                 .showDialog(R.string.p2p_not_enough_balance_title, R.string.p2p_not_enough_balance_body, minKinTransfer,

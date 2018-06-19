@@ -3,8 +3,11 @@ package org.kinecosystem.kinit.view.phoneVerify;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.network.OperationCompletionCallback;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.util.GeneralUtils;
 import org.kinecosystem.kinit.view.BaseActivity;
 import org.kinecosystem.kinit.view.MainActivity;
@@ -24,20 +27,22 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
         return intent;
     }
 
+    @Inject
+    UserRepository userRepository;
     private PhoneVerificationViewModel model;
     private boolean hasPreviousScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        KinitApplication.coreComponent.inject(this);
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
         setContentView(R.layout.phone_veriy_activity);
         hasPreviousScreen = getIntent().getBooleanExtra(HAS_PREVIOUS, false);
         getSupportFragmentManager().beginTransaction()
             .add(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
             .commit();
-        model = new PhoneVerificationViewModel(this, getCoreComponents(), new OperationCompletionCallback() {
+        model = new PhoneVerificationViewModel(this, new OperationCompletionCallback() {
             @Override
             public void onError(int error) {
                 CodeVerificationFragment codeVerificationFragment = (CodeVerificationFragment) getSupportFragmentManager()
@@ -49,8 +54,8 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
 
             @Override
             public void onSuccess() {
-                getCoreComponents().userRepo().setPhoneVerified(true);
-                getCoreComponents().userRepo().setFirstTimeUser(false);
+                userRepository.setPhoneVerified(true);
+                userRepository.setFirstTimeUser(false);
                 GeneralUtils.closeKeyboard(PhoneVerifyActivity.this, findViewById(R.id.fragment_container));
                 getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, PhoneAuthCompleteFragment.newInstance())

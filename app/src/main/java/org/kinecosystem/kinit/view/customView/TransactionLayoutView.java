@@ -15,9 +15,12 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import com.airbnb.lottie.LottieAnimationView;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.navigation.Navigator;
 import org.kinecosystem.kinit.navigation.Navigator.Destination;
+import org.kinecosystem.kinit.repository.QuestionnaireRepository;
 import org.kinecosystem.kinit.view.BaseActivity;
 
 
@@ -29,6 +32,9 @@ public class TransactionLayoutView extends ConstraintLayout {
             layoutView.updateComplete();
         }
     }
+
+    @Inject
+    QuestionnaireRepository questionnaireRepository;
 
     private void updateComplete() {
         View transactionImage = findViewById(R.id.transaction_image);
@@ -60,7 +66,7 @@ public class TransactionLayoutView extends ConstraintLayout {
                         BaseActivity activity = ((BaseActivity) getContext());
                         Navigator navigator = new Navigator(activity);
                         navigator.navigateTo(Destination.MAIN_SCREEN);
-                        activity.getCoreComponents().questionnaireRepo().resetTaskState();
+                        questionnaireRepository.resetTaskState();
                         activity.overridePendingTransition(
                             R.anim.fade_in, R.anim.fade_out);
                         activity.finish();
@@ -118,16 +124,15 @@ public class TransactionLayoutView extends ConstraintLayout {
         init(context);
     }
 
-    private boolean complete;
-
     public TransactionLayoutView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context);
         TypedArray a = context.getTheme().obtainStyledAttributes(
             attrs,
             R.styleable.TransactionLayoutView,
             0, 0);
         try {
-            complete = a.getBoolean(R.styleable.TransactionLayoutView_complete, false);
+            a.getBoolean(R.styleable.TransactionLayoutView_complete, false);
         } finally {
             a.recycle();
         }
@@ -135,6 +140,7 @@ public class TransactionLayoutView extends ConstraintLayout {
     }
 
     private void init(Context context) {
+        KinitApplication.getCoreComponent().inject(this);
     }
 
 

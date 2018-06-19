@@ -10,8 +10,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
-import org.kinecosystem.kinit.CoreComponentsProvider;
+import javax.inject.Inject;
+import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.network.OperationCompletionCallback;
+import org.kinecosystem.kinit.network.ServicesProvider;
 
 public class PhoneVerificationViewModel {
 
@@ -23,7 +25,8 @@ public class PhoneVerificationViewModel {
     public static final int PHONE_VERIF_ERROR_CANT_GET_FIREBASE_AUTH_TOKEN = 205;
 
     public static final String TAG = PhoneVerificationViewModel.class.getSimpleName();
-    private CoreComponentsProvider coreComponents;
+    @Inject
+    ServicesProvider servicesProvider;
     private OperationCompletionCallback verificationCallback;
 
     private FirebaseAuth auth;
@@ -62,9 +65,9 @@ public class PhoneVerificationViewModel {
     };
 
 
-    public PhoneVerificationViewModel(Activity activity, CoreComponentsProvider coreComponentsProvider,
+    public PhoneVerificationViewModel(Activity activity,
         OperationCompletionCallback actions) {
-        coreComponents = coreComponentsProvider;
+        KinitApplication.coreComponent.inject(this);
         this.activity = activity;
         auth = FirebaseAuth.getInstance();
         this.verificationCallback = actions;
@@ -96,7 +99,7 @@ public class PhoneVerificationViewModel {
                     FirebaseUser user = task.getResult().getUser();
                     user.getIdToken(true).addOnCompleteListener(tokenRequest -> {
                         if (tokenRequest.isComplete()) {
-                            coreComponents.services().getOnBoardingService()
+                            servicesProvider.getOnBoardingService()
                                 .sendPhoneAuthentication(phoneNumber, tokenRequest.getResult().getToken(),
                                     verificationCallback);
                         } else {
