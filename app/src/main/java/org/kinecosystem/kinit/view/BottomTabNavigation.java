@@ -23,6 +23,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
     private PageSelectionListener pageSelectionListener;
     private int currentTabSelectedIndex;
     private List<NavigationTab> tabs = new ArrayList<>();
+
     @Inject
     Wallet wallet;
 

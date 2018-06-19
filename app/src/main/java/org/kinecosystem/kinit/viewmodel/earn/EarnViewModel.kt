@@ -10,7 +10,6 @@ import org.kinecosystem.kinit.model.earn.startDateInMillis
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationCompletionCallback
-import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
 import org.kinecosystem.kinit.repository.QuestionnaireRepository
@@ -23,7 +22,7 @@ import java.util.*
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
 class EarnViewModel(val questionnaireRepository: QuestionnaireRepository, val wallet: Wallet,
-    val taskService: TaskService,
+   val taskService: TaskService,
     val scheduler: Scheduler, val analytics: Analytics, private val navigator: Navigator) :
     TabViewModel {
 
