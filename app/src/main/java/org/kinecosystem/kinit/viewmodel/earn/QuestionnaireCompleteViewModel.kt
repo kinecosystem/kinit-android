@@ -10,7 +10,7 @@ import org.kinecosystem.kinit.repository.QuestionnaireRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import javax.inject.Inject
 
-class QuestionnaireCompleteViewModel() {
+class QuestionnaireCompleteViewModel {
 
 
     @Inject

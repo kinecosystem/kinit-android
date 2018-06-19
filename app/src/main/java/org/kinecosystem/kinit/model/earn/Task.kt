@@ -7,6 +7,8 @@ import org.kinecosystem.kinit.model.isValid
 data class Task(
     @SerializedName("id")
     val id: String? = null,
+    @SerializedName("memo")
+    val memo: String? = null,
     @SerializedName("title")
     val title: String? = null,
     @SerializedName("desc")
@@ -27,7 +29,7 @@ data class Task(
     val questions: List<Question>? = null)
 
 fun Task.isValid(): Boolean {
-    if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() ||
+    if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() ||
         kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null) {
         return false
     }
@@ -36,6 +38,11 @@ fun Task.isValid(): Boolean {
     }
     return provider.isValid()
 }
+
+fun Task.isQuestionnaire():Boolean = type.equals("questionnaire")
+
+fun Task.isTaskWebView():Boolean = type.equals("truex")
+
 
 fun Task.tagsString(): String? {
     return tags?.joinToString(", ")

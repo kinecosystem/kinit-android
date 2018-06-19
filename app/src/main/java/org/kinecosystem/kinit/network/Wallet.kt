@@ -33,19 +33,18 @@ private const val ACTIVE_WALLET_KEY = "activeWallet"
 private const val WALLET_BALANCE_KEY = "WalletBalance"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
-             val userRepo: UserRepository,
-             val questionnaireRepo: QuestionnaireRepository,
-             val analytics: Analytics,
-             val onboardingApi: OnboardingApi,
-             val walletApi: WalletApi,
-             val scheduler: Scheduler,
-             type: Type = Type.Test) {
+    val userRepo: UserRepository,
+    val questionnaireRepo: QuestionnaireRepository,
+    val analytics: Analytics,
+    val onboardingApi: OnboardingApi,
+    val walletApi: WalletApi,
+    val scheduler: Scheduler,
+    type: Type = Type.Test) {
 
     enum class Type {
         Main,
         Test
     }
-
 
     private val walletCache: DataStore
     private var kinClient: KinClient
@@ -112,11 +111,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun retrieveTransactions(callback: OperationCompletionCallback? = null) {
         walletApi.getTransactions(userRepo.userId()).enqueue(object : Callback<WalletApi.TransactionsResponse> {
             override fun onResponse(call: Call<WalletApi.TransactionsResponse>?,
-                                    response: Response<WalletApi.TransactionsResponse>?) {
+                response: Response<WalletApi.TransactionsResponse>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d("retrieveTransactions", "onResponse: ${response.body()}")
                     val transactionList = response.body()
-                    if (transactionList?.txs != null && transactionList.txs.isNotEmpty() && transactionList.status.equals("ok")) {
+                    if (transactionList?.txs != null && transactionList.txs.isNotEmpty() && transactionList.status.equals(
+                            "ok")) {
                         injectTxsBalance(transactionList.txs)
                         transactions.set(transactionList.txs)
                     } else {
@@ -146,8 +146,9 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 else -> {
                     val inverter = if (txsOrderedTimeAsc[index].clientReceived == true) 1 else -1
                     val previousTransaction = txsOrderedTimeAsc[index - 1]
-                    txsOrderedTimeAsc[index].txBalance = previousTransaction.txBalance?.plus(inverter * (txsOrderedTimeAsc[index].amount
-                        ?: 0))
+                    txsOrderedTimeAsc[index].txBalance = previousTransaction.txBalance?.plus(
+                        inverter * (txsOrderedTimeAsc[index].amount
+                            ?: 0))
                 }
             }
         }
@@ -156,11 +157,13 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     fun retrieveCoupons(callback: OperationCompletionCallback? = null) {
         walletApi.getCoupons(userRepo.userId()).enqueue(object : Callback<WalletApi.CouponsResponse> {
-            override fun onResponse(call: Call<WalletApi.CouponsResponse>?, response: Response<WalletApi.CouponsResponse>?) {
+            override fun onResponse(call: Call<WalletApi.CouponsResponse>?,
+                response: Response<WalletApi.CouponsResponse>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d("retrieveCoupons", "onResponse: ${response.body()}")
                     val couponsList = response.body()
-                    if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals("ok")) {
+                    if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals(
+                            "ok")) {
                         coupons.set(couponsList.coupons)
                     } else {
                         Log.d("#####", "coupons® list empty or null ")
@@ -270,6 +273,17 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
             orderId, TRANSACTION_TYPE_EARN))
+    }
+
+    fun listenToPayment(memo: String) {
+        val paymentWatcher = account.createPaymentWatcher()
+        paymentWatcher.start { payment ->
+            if (payment.memo() == memo) {
+                onEarnTransactionCompleted.set(true)
+                setTaskState(TaskState.TRANSACTION_COMPLETED)
+                paymentWatcher.stop()
+            }
+        }
     }
 
     fun onTransactionMessageReceived(transactionComplete: Push.TransactionCompleteMessage) {

@@ -70,7 +70,7 @@ class EarnViewModel(val questionnaireRepository: QuestionnaireRepository, val wa
             task?.title,
             task?.type)
         analytics.logEvent(aEvent)
-        navigator.navigateTo(Navigator.Destination.QUESTIONNAIRE)
+        navigator.navigateTo(Navigator.Destination.TASK)
     }
 
     private fun refresh() {
