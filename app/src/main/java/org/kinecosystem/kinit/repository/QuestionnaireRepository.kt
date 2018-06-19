@@ -5,10 +5,7 @@ import android.databinding.ObservableBoolean
 import android.util.Log
 import com.google.gson.Gson
 import org.kinecosystem.kinit.model.TaskState
-import org.kinecosystem.kinit.model.earn.Answer
-import org.kinecosystem.kinit.model.earn.ChosenAnswers
-import org.kinecosystem.kinit.model.earn.Question
-import org.kinecosystem.kinit.model.earn.Task
+import org.kinecosystem.kinit.model.earn.*
 import org.kinecosystem.kinit.util.ImageUtils
 
 private const val QUESTIONNAIRE_ANSWERS_STORAGE = "kin.app.task.chosen.answers"
@@ -70,15 +67,20 @@ class QuestionnaireRepository(dataStoreProvider: DataStoreProvider, defaultTask:
         if (chosenAnswers.isEmpty()) {
             val answersMap = chosenAnswersCache.getAll()
             for (answers in answersMap) {
-                if(answers.value is String) {
+                if (answers.value is String) {
                     chosenAnswers.add(ChosenAnswers(answers.key, listOf(answers.value as String)))
-                }
-                else if (answers.value is HashSet<*>) {
+                } else if (answers.value is HashSet<*>) {
                     chosenAnswers.add(ChosenAnswers(answers.key, (answers.value as HashSet<String>).toList()))
                 }
             }
         }
         return chosenAnswers
+    }
+
+    fun isQuestionnaireAvaliable(): Boolean {
+        if (task == null) return false
+        val taskDate: Long = task?.startDateInMillis() ?: System.currentTimeMillis()
+        return System.currentTimeMillis() >= taskDate
     }
 
     fun clearChosenAnswers() {
@@ -91,10 +93,9 @@ class QuestionnaireRepository(dataStoreProvider: DataStoreProvider, defaultTask:
         this.task = task
         if (task != null) {
             questionnaireCache.putString(QUESTIONNAIRE_KEY, Gson().toJson(task))
-            for (question : Question in task.questions.orEmpty())
-            {
+            for (question: Question in task.questions.orEmpty()) {
                 if (Question.QuestionType.TEXT_IMAGE.type == question.type) {
-                    for (answer : Answer in question.answers.orEmpty())
+                    for (answer: Answer in question.answers.orEmpty())
                         ImageUtils.fetchImages(applicationContext, answer.imageUrl)
                 }
             }

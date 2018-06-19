@@ -13,10 +13,10 @@ import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickMenuItem;
 import org.kinecosystem.kinit.analytics.Events.Event;
 import org.kinecosystem.kinit.repository.UserRepository;
-import org.kinecosystem.kinit.view.BottomTabNavigation.TabSelectionListener;
+import org.kinecosystem.kinit.view.BottomTabNavigation.PageSelectionListener;
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity;
 
-public class MainActivity extends BaseActivity implements TabSelectionListener {
+public class MainActivity extends BaseActivity implements PageSelectionListener {
 
     public static final String REPORT_PUSH_ID_KEY = "report_push_id_key";
     public static final String REPORT_PUSH_TEXT_KEY = "report_push_text_key";
@@ -37,10 +37,13 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
         bottomTabNavigation = findViewById(R.id.navigation);
         int selectedTabIndex = (savedInstanceState != null) ? savedInstanceState.getInt(SELECTED_TAB_INDEX_KEY, 0) : 0;
         bottomTabNavigation.setSelectedTabIndex(selectedTabIndex);
-        bottomTabNavigation.setTabSelectionListener(this);
+        bottomTabNavigation.setPageSelectionListener(this);
         tabsAdapter = new TabsAdapter(getCoreComponents());
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(tabsAdapter);
+        if (!tabsAdapter.shouldShowAnimation()) {
+            viewPager.setCurrentItem(TabsAdapter.EARN_TAB_INDEX, false);
+        }
         handleIntentExtras(getIntent().getExtras());
     }
 
@@ -58,7 +61,7 @@ public class MainActivity extends BaseActivity implements TabSelectionListener {
     }
 
     @Override
-    public void onTabSelected(int index, String tabTitle) {
+    public void onPageSelected(int index, String tabTitle) {
         viewPager.setCurrentItem(index, false);
         Event event = new ClickMenuItem(tabTitle);
         getCoreComponents().analytics().logEvent(event);
