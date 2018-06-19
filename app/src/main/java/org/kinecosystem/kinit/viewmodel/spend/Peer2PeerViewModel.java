@@ -18,11 +18,9 @@ import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickSendButtonOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPopupOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewSendKinPage;
-import org.kinecosystem.kinit.analytics.Events.DialogErrorType;
 import org.kinecosystem.kinit.network.OperationResultCallback;
 import org.kinecosystem.kinit.network.ServicesProvider;
 import org.kinecosystem.kinit.repository.UserRepository;
-import org.kinecosystem.kinit.util.AndroidScheduler;
 import org.kinecosystem.kinit.util.Scheduler;
 import org.kinecosystem.kinit.view.spend.ContactData;
 import org.kinecosystem.kinit.view.spend.Peer2PeerActions;
@@ -120,7 +118,7 @@ public class Peer2PeerViewModel {
             actions.showDialog(R.string.p2p_friend_has_no_kinit_title, R.string.p2p_friend_has_no_kinit_body,
                 R.string.p2p_friend_has_no_kinit_action, true);
         }
-        logEventPopUp(DialogErrorType.FRIEND_HAS_NO_ADDRESS);
+        logEventPopUp(Analytics.P2P_FRIEND_HAS_NO_ADDRESS);
     }
 
     private void sendPhone(String phoneNumber) {
@@ -156,7 +154,7 @@ public class Peer2PeerViewModel {
             actions.showDialog(R.string.p2p_friend_has_no_kinit_title, R.string.p2p_friend_has_no_kinit_body,
                 R.string.p2p_friend_has_no_kinit_action, true);
         }
-        logEventPopUp(DialogErrorType.FRIEND_HAS_NO_ADDRESS);
+        logEventPopUp(Analytics.P2P_FRIEND_HAS_NO_ADDRESS);
     }
 
     public void onCloseButtonClicked(View view) {
@@ -215,17 +213,17 @@ public class Peer2PeerViewModel {
 
     private boolean isValidAmount() {
         if (amount.get() < minKinTransfer) {
-            logEventPopUp(DialogErrorType.EXCEED_MIN_MAX);
+            logEventPopUp(Analytics.P2P_EXCEED_MIN_MAX);
             actions.showDialog(R.string.p2p_amount_too_small_title, R.string.p2p_amount_too_small_body, minKinTransfer,
                 R.string.p2p_amount_not_valid_action, false);
             return false;
         } else if (amount.get() > maxKinTransfer) {
-            logEventPopUp(DialogErrorType.EXCEED_MIN_MAX);
+            logEventPopUp(Analytics.P2P_EXCEED_MIN_MAX);
             actions.showDialog(R.string.p2p_amount_too_big_title, R.string.p2p_amount_too_big_body, maxKinTransfer,
                 R.string.p2p_amount_not_valid_action, false);
             return false;
         } else if (amount.get() > servicesProvider.getWalletService().getBalanceInt()) {
-            logEventPopUp(DialogErrorType.NOT_ENOUGH_BALANCE);
+            logEventPopUp(Analytics.P2P_NOT_ENOUGH_BALANCE);
             actions
                 .showDialog(R.string.p2p_not_enough_balance_title, R.string.p2p_not_enough_balance_body, minKinTransfer,
                     R.string.p2p_amount_not_valid_action, false);

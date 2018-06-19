@@ -11,12 +11,14 @@ import com.google.gson.JsonSyntaxException;
 import java.util.Map;
 import javax.inject.Inject;
 import org.kinecosystem.kinit.KinitApplication;
+import org.kinecosystem.kinit.analytics.Analytics;
+import org.kinecosystem.kinit.analytics.Events.BILog.AuthTokenAckFailed;
+import org.kinecosystem.kinit.analytics.Events.BILog.AuthTokenReceived;
 import org.kinecosystem.kinit.model.Push;
 import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
 import org.kinecosystem.kinit.network.ServicesProvider;
 import org.kinecosystem.kinit.notification.NotificationPublisher;
-import org.kinecosystem.kinit.util.AndroidScheduler;
 import org.kinecosystem.kinit.util.Scheduler;
 
 
@@ -30,6 +32,8 @@ public class KinMessagingService extends FirebaseMessagingService {
     ServicesProvider servicesProvider;
     @Inject
     Scheduler scheduler;
+    @Inject
+    Analytics analytics;
 
     public KinMessagingService() {
 
@@ -45,21 +49,27 @@ public class KinMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> data = remoteMessage.getData();
-            try {
-                if (data.containsKey(Push.TYPE_DATA_KEY) && data.containsKey(Push.MESSAGE_DATA_KEY)) {
-                    String type = data.get(Push.TYPE_DATA_KEY);
-                    String message = data.get(Push.MESSAGE_DATA_KEY);
+
+            if (data.containsKey(Push.TYPE_DATA_KEY) && data.containsKey(Push.MESSAGE_DATA_KEY)) {
+                String type = data.get(Push.TYPE_DATA_KEY);
+                String message = data.get(Push.MESSAGE_DATA_KEY);
+
+                try {
 
                     if (type.equals(Push.TYPE_TX_COMPLETED)) {
                         scheduler.post(() ->
                             servicesProvider.getWalletService()
-                                .onTransactionMessageReceived(gson.fromJson(message, TransactionCompleteMessage.class))
+                                .onTransactionMessageReceived(
+                                    gson.fromJson(message, TransactionCompleteMessage.class))
                         );
                     } else if (type.equals(Push.TYPE_AUTH_TOKEN)) {
+                        analytics.logEvent(new AuthTokenReceived());
                         AuthTokenMessage authTokenMessage = gson.fromJson(message, AuthTokenMessage.class);
                         if (!TextUtils.isEmpty(authTokenMessage.getAuthToken())) {
                             servicesProvider.getOnBoardingService()
                                 .sendAuthTokenAck(authTokenMessage.getAuthToken());
+                        } else {
+                            analytics.logEvent(new AuthTokenAckFailed("empty auth token" + authTokenMessage));
                         }
                     } else {
                         // if the json contains message with body field, then this is an engagement push
@@ -73,12 +83,16 @@ public class KinMessagingService extends FirebaseMessagingService {
                             notificationPublisher.notify(id, notificationMessage);
                         }
                     }
+
+                } catch (JsonSyntaxException e) {
+                    Log.e(TAG, "error json content not valid " + data);
+                    if (type != null && type.equals(Push.TYPE_AUTH_TOKEN)) {
+                        analytics.logEvent(new AuthTokenAckFailed(
+                            "JsonException for message=" + message + ", e = " + e.getMessage()));
+
+                    }
                 }
-            } catch (JsonSyntaxException e) {
-                Log.e(TAG, "error json content not valid " + data);
             }
-
         }
-
     }
 }
