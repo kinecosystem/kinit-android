@@ -138,10 +138,11 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
 
     fun onResume() {
         val offerPrice = offer.price ?: Int.MAX_VALUE
+        val taskId = questionnaireRepository.task?.id?.toInt() ?: 0
         var p2pValid = true
         if (isP2p && userRepository.isP2pEnabled) {
             if (questionnaireRepository.task != null) {
-                p2pValid = userRepository.p2pMinTasks <= questionnaireRepository.task?.id!!.toInt()
+                p2pValid = userRepository.p2pMinTasks <= taskId
             }
         }
         canBuy.set(servicesProvider.walletService.balanceInt >= offerPrice && p2pValid)
