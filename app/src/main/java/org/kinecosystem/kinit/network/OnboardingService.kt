@@ -94,10 +94,15 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 override fun onResponse(call: Call<StatusResponse>?,
                     response: Response<StatusResponse>?) {
                     Log.d("OnboardingService", "### authTokenAck success : $response token:$token")
+                    if (response == null || !response.isSuccessful) {
+                        analytics.logEvent(
+                            Events.BILog.AuthTokenAckFailed("ack success but response $response"))
+                    }
                 }
 
                 override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
                     Log.e("OnboardingService", "### authTokenAck onFailure called with throwable $t")
+                    analytics.logEvent(Events.BILog.AuthTokenAckFailed("Received onFailure with t=$t"))
                 }
             })
     }
