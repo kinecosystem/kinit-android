@@ -71,6 +71,7 @@
 -keep class org.kinecosystem.kinit.model.** { *; }
 -keep interface org.kinecosystem.kinit.network.** { *; }
 -keep class org.kinecosystem.kinit.analytics.** { *; }
+-keep class android.support.v4.view.ViewPager{ *; }
 
 # To support Enum type of class members
 -keepclassmembers enum * { *; }
