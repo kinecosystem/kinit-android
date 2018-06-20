@@ -78,9 +78,11 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     var balanceInt: Int
         private set(value) {
-            walletCache.putInt(WALLET_BALANCE_KEY, value)
-            balance.set(value.toString())
-            logBalanceUpdated(value.toDouble())
+            if (value != balanceInt) {
+                walletCache.putInt(WALLET_BALANCE_KEY, value)
+                balance.set(value.toString())
+                logBalanceUpdated(value.toDouble())
+            }
         }
         get() = walletCache.getInt(WALLET_BALANCE_KEY, 0)
 
