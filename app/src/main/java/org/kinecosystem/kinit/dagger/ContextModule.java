@@ -1,6 +1,8 @@
-package dagger;
+package org.kinecosystem.kinit.dagger;
 
 import android.content.Context;
+import dagger.Module;
+import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module

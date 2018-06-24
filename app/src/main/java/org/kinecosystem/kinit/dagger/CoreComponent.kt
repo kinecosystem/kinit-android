@@ -1,11 +1,9 @@
-package dagger
+package org.kinecosystem.kinit.dagger
 
+import dagger.Component
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.network.firebase.KinInstanceIdService
 import org.kinecosystem.kinit.network.firebase.KinMessagingService
-import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
 import org.kinecosystem.kinit.view.BottomTabNavigation
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.SplashActivity
@@ -19,7 +17,6 @@ import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneAuthCompleteFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
-import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
 import org.kinecosystem.kinit.viewmodel.SplashViewModel

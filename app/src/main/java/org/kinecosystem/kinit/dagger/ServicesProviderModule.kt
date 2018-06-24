@@ -1,6 +1,8 @@
-package dagger
+package org.kinecosystem.kinit.dagger
 
 import android.content.Context
+import dagger.Module
+import dagger.Provides
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.network.*
 import org.kinecosystem.kinit.repository.DataStoreProvider
