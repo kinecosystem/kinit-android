@@ -2,9 +2,9 @@ package org.kinecosystem.kinit
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
-import dagger.*
 import io.fabric.sdk.android.Fabric
 import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.dagger.*
 import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.network.Wallet
 import org.kinecosystem.kinit.repository.DataStore
@@ -33,7 +33,8 @@ class KinitApplication : Application(), DataStoreProvider {
     override fun onCreate() {
         super.onCreate()
         Fabric.with(applicationContext, Crashlytics())
-        coreComponent = DaggerCoreComponent.builder().contextModule(ContextModule(applicationContext))
+        coreComponent = DaggerCoreComponent.builder().contextModule(
+            ContextModule(applicationContext))
             .dataStoreProviderModule(DataStoreProviderModule(this))
             .userRepositoryModule(UserRepositoryModule())
             .questionnaireRepositoryModule(QuestionnaireRepositoryModule())

@@ -2,7 +2,7 @@ package org.kinecosystem.kinit.viewmodel.balance
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import dagger.CoreComponent
+import org.kinecosystem.kinit.dagger.CoreComponent
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events

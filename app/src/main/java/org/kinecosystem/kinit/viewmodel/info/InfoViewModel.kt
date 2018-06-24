@@ -1,7 +1,7 @@
 package org.kinecosystem.kinit.viewmodel.info
 
 import android.view.View
-import dagger.CoreComponent
+import org.kinecosystem.kinit.dagger.CoreComponent
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
