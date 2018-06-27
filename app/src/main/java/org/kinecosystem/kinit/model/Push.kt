@@ -17,6 +17,7 @@ class Push {
         const val TYPE_TX_COMPLETED = "tx_completed"
         const val TYPE_ENGAGEMENT = "engage-recent"
         const val TYPE_AUTH_TOKEN = "auth_token"
+        const val TYPE_REGISTER = "register"
         const val ID_DATA_KEY = "push_id"
         const val TYPE_DATA_KEY = "push_type"
         const val MESSAGE_DATA_KEY = "message"
