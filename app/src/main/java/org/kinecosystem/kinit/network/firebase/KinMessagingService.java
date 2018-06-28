@@ -71,7 +71,10 @@ public class KinMessagingService extends FirebaseMessagingService {
                         } else {
                             analytics.logEvent(new AuthTokenAckFailed("empty auth token" + authTokenMessage));
                         }
-                    } else {
+                    } else if (type.equals(Push.TYPE_REGISTER)) {
+                        servicesProvider.getOnBoardingService().registerOnDemand();
+                    }
+                    else {
                         // if the json contains message with body field, then this is an engagement push
                         // and we need to send notification to users
                         String id = data.get(Push.ID_DATA_KEY);

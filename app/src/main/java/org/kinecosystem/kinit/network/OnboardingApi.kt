@@ -13,7 +13,10 @@ interface OnboardingApi {
         @SerializedName("device_model") val deviceModel: String,
         @SerializedName("time_zone") val timeZone: String,
         @SerializedName("device_id") val deviceId: String,
-        @SerializedName("app_ver") val appVersion: String)
+        @SerializedName("app_ver") val appVersion: String,
+        @SerializedName("screen_w") val screenWidth: Int,
+        @SerializedName("screen_h") val screenHeight: Int,
+        @SerializedName("density") val density:Int)
 
 
     data class Config(@SerializedName("auth_token_enabled") val auth_token_enabled: Boolean,

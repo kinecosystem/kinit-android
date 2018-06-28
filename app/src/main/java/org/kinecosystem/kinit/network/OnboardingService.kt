@@ -34,6 +34,10 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         }
     }
 
+    fun registerOnDemand() {
+        callRegister(BuildConfig.VERSION_NAME)
+    }
+
     fun sendPhoneAuthentication(
         phoneNumber: String, token: String, callback: OperationCompletionCallback) {
 
@@ -112,11 +116,15 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         val userId: String = userRepo.userId()
         val timeZoneWithoutGMT = deviceUtils.timeZone().drop(3)
         deviceUtils.timeZoneDebugging(analytics)
+        val displayMetrics = applicationContext.resources.displayMetrics
         val call = appLaunchApi.register(OnboardingApi.RegistrationInfo(userId,
             deviceModel = deviceUtils.deviceName(),
             timeZone = timeZoneWithoutGMT,
             deviceId = deviceUtils.deviceId(),
-            appVersion = appVersion))
+            appVersion = appVersion,
+            screenWidth = displayMetrics.widthPixels,
+            screenHeight = displayMetrics.heightPixels,
+            density = displayMetrics.densityDpi))
         call.enqueue(object : Callback<StatusResponse> {
             override fun onResponse(call: Call<StatusResponse>?,
                                     response: Response<StatusResponse>?) {
