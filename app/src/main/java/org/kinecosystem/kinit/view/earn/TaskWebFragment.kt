@@ -41,6 +41,8 @@ class TrueXWebFragment : BaseFragment() {
                 trueXmodel.loadData()
             }
         }
+        //DEBUG
+        //WebView.setWebContentsDebuggingEnabled(true)
         binding.webview.settings.javaScriptEnabled = true
         binding.webview.addJavascriptInterface(trueXmodel, trueXmodel.interfaceName)
         binding.webview.loadUrl(trueXmodel.url)

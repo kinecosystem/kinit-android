@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.view;
+package org.kinecosystem.kinit.util;
 
 import android.databinding.BindingAdapter;
 import android.support.constraint.ConstraintSet;

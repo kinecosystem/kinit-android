@@ -25,6 +25,8 @@ abstract class WebModel(val activity: FragmentActivity, val navigator: Navigator
     lateinit var questionnaireRepository: QuestionnaireRepository
     @Inject
     lateinit var wallet: Wallet
+    @Inject
+    lateinit var taskService: TaskService
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -36,15 +38,13 @@ abstract class WebModel(val activity: FragmentActivity, val navigator: Navigator
     }
 
     fun onComplete() {
+        taskService.retrieveNextTask()
         navigator.navigateTo(Navigator.Destination.COMPLETE_WEB_TASK)
         activity.finish()
     }
 }
 
 class TrueXModel(activity: FragmentActivity, navigator: Navigator) : WebModel(activity, navigator) {
-
-    @Inject
-    lateinit var taskService: TaskService
     @Inject
     lateinit var userRepository: UserRepository
     val TRUEX_HASH: String = if (BuildConfig.DEBUG) BuildConfig.truexHashStage else BuildConfig.truexHashProd

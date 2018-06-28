@@ -10,6 +10,7 @@ abstract class BaseSingleFragmentActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
+        init()
         setContentView(R.layout.single_fragment_layout)
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container, getFragment()).commit()
@@ -22,4 +23,5 @@ abstract class BaseSingleFragmentActivity : BaseActivity() {
 
     abstract fun getFragment(): Fragment
     abstract fun inject()
+    abstract fun init()
 }

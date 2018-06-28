@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
@@ -28,6 +29,7 @@ public class TransactionLayoutView extends ConstraintLayout {
 
     @BindingAdapter({"complete"})
     public static void updateComplete(TransactionLayoutView layoutView, boolean transactionComplete) {
+        Log.d("### ","####TransactionLayoutView " + transactionComplete);
         if (transactionComplete) {
             layoutView.updateComplete();
         }
@@ -36,10 +38,26 @@ public class TransactionLayoutView extends ConstraintLayout {
     @Inject
     QuestionnaireRepository questionnaireRepository;
 
+    public TransactionLayoutView(@NonNull Context context) {
+        super(context);
+        init();
+    }
+
+    public TransactionLayoutView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    private void init() {
+        KinitApplication.getCoreComponent().inject(this);
+    }
+
+
     private void updateComplete() {
         View transactionImage = findViewById(R.id.transaction_image);
         LottieAnimationView transactionAnim = findViewById(R.id.transaction_anim);
         View transactionTitle = findViewById(R.id.transaction_title);
+        transactionImage.clearAnimation();
 
         AnimationDrawable animationDrawable = (AnimationDrawable) getBackground();
         animationDrawable.setEnterFadeDuration(3000);
@@ -49,6 +67,7 @@ public class TransactionLayoutView extends ConstraintLayout {
         transactionAnim.animate().alpha(0).setDuration(250L);
         transactionTitle.animate().alpha(0f).setDuration(250L);
         transactionImage.animate().setStartDelay(200L).translationYBy(transactionImage.getHeight()).setDuration(300L);
+        Log.d("### ","####transactionImage.animate().setStartDelay(200L).translationYBy(transactionImage.getHeight() ");
 
         View confetti = findViewById(R.id.confetti);
         View close = findViewById(R.id.close_text);
@@ -95,30 +114,5 @@ public class TransactionLayoutView extends ConstraintLayout {
         })
             .setInterpolator(new OvershootInterpolator(2f));
     }
-
-    public TransactionLayoutView(@NonNull Context context) {
-        super(context);
-        init(context);
-    }
-
-    public TransactionLayoutView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
-        TypedArray a = context.getTheme().obtainStyledAttributes(
-            attrs,
-            R.styleable.TransactionLayoutView,
-            0, 0);
-        try {
-            a.getBoolean(R.styleable.TransactionLayoutView_complete, false);
-        } finally {
-            a.recycle();
-        }
-        init(context);
-    }
-
-    private void init(Context context) {
-        KinitApplication.getCoreComponent().inject(this);
-    }
-
 
 }

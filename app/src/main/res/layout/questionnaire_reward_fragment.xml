@@ -59,6 +59,7 @@
             android:textColor="#ffffff"
             android:textSize="50sp"
             app:balance="@{model.balance}"
+            app:complete="@{model.onTransactionComplete}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

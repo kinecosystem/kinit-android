@@ -15,18 +15,21 @@ import org.kinecosystem.kinit.R;
 
 public class TransactionTextView extends android.support.v7.widget.AppCompatTextView {
 
-    @BindingAdapter({"balance"})
-    public static void updateBalance(TransactionTextView view, String balance) {
-        view.updateBalance(balance);
+    @BindingAdapter({"balance", "complete"})
+    public static void updateBalance(TransactionTextView view, String balance, boolean complete) {
+        view.updateBalance(balance, complete);
     }
 
     public static final long ANIM_DURATION = 2500;
 
-    private void updateBalance(String balance) {
-        if (getText() == null || getText().length() == 0) {
-            setText(balance.toString());
-        } else {
+    private void updateBalance(String balance, boolean complete) {
+        if (complete) {
+            if (getText() == null || getText().length() == 0) {
+                setText(balance.toString());
+            }
             animateBalance(balance);
+        } else {
+            setText(balance.toString());
         }
     }
 
