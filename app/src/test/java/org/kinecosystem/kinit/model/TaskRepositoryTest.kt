@@ -16,6 +16,7 @@ private const val DEFAULT_QUESTIONNAIRE = """
     "title":"What is crypto?",
     "desc":"A few words about the questionnaire, what you can find inside",
     "type":"questionnaire",
+    "memo":"memo",
     "price":150,
     "start_date":1519499896671,
     "min_to_complete":6,
@@ -47,7 +48,6 @@ class TaskRepositoryTest {
     fun testInitialQuestionnaireIsValid() {
 
         val questionnaire = questionnaireRepo.task
-
         assertNotNull(questionnaire)
         assertEquals(questionnaire?.isValid(), true)
         System.out.println("initial task $questionnaire")

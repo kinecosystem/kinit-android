@@ -20,6 +20,7 @@ private const val SAMPLE_QUESTIONNAIRE = """
     "title":"A questionnaire title",
     "desc":"A few words about the questionnaire, what you can find inside",
     "type":"questionnaire",
+    "memo":"memo",
     "price":100,
     "start_date":__START_DATE__,
     "min_to_complete":6,

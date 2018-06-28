@@ -3,20 +3,19 @@ package org.kinecosystem.kinit.view.customView;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+
 import com.airbnb.lottie.LottieAnimationView;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.navigation.Navigator;
@@ -24,12 +23,13 @@ import org.kinecosystem.kinit.navigation.Navigator.Destination;
 import org.kinecosystem.kinit.repository.QuestionnaireRepository;
 import org.kinecosystem.kinit.view.BaseActivity;
 
+import javax.inject.Inject;
+
 
 public class TransactionLayoutView extends ConstraintLayout {
 
     @BindingAdapter({"complete"})
     public static void updateComplete(TransactionLayoutView layoutView, boolean transactionComplete) {
-        Log.d("### ","####TransactionLayoutView " + transactionComplete);
         if (transactionComplete) {
             layoutView.updateComplete();
         }
@@ -67,7 +67,6 @@ public class TransactionLayoutView extends ConstraintLayout {
         transactionAnim.animate().alpha(0).setDuration(250L);
         transactionTitle.animate().alpha(0f).setDuration(250L);
         transactionImage.animate().setStartDelay(200L).translationYBy(transactionImage.getHeight()).setDuration(300L);
-        Log.d("### ","####transactionImage.animate().setStartDelay(200L).translationYBy(transactionImage.getHeight() ");
 
         View confetti = findViewById(R.id.confetti);
         View close = findViewById(R.id.close_text);
@@ -77,7 +76,7 @@ public class TransactionLayoutView extends ConstraintLayout {
         confetti.setScaleY(0);
         confetti.setVisibility(VISIBLE);
         close.animate().alpha(1).setDuration(500L).setStartDelay(1850L + TransactionTextView.ANIM_DURATION)
-            .setInterpolator(new AccelerateDecelerateInterpolator());
+                .setInterpolator(new AccelerateDecelerateInterpolator());
         close.setOnClickListener(view -> {
             if (getContext() != null) {
                 BaseActivity activity = ((BaseActivity) getContext());
@@ -85,12 +84,12 @@ public class TransactionLayoutView extends ConstraintLayout {
                 navigator.navigateTo(Destination.MAIN_SCREEN);
                 questionnaireRepository.resetTaskState();
                 activity.overridePendingTransition(
-                    R.anim.fade_in, R.anim.fade_out);
+                        R.anim.fade_in, R.anim.fade_out);
                 activity.finish();
             }
         });
         confetti.animate().setDuration(750L).setStartDelay(100 + TransactionTextView.ANIM_DURATION).scaleY(1.2f)
-            .scaleX(1.2f).setListener(new AnimatorListener() {
+                .scaleX(1.2f).setListener(new AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
 
@@ -99,7 +98,7 @@ public class TransactionLayoutView extends ConstraintLayout {
             @Override
             public void onAnimationEnd(Animator animator) {
                 confetti.animate().setStartDelay(200).setDuration(600L).scaleY(0f)
-                    .scaleX(0f).setInterpolator(new AccelerateInterpolator()).setListener(null);
+                        .scaleX(0f).setInterpolator(new AccelerateInterpolator()).setListener(null);
             }
 
             @Override
@@ -112,7 +111,7 @@ public class TransactionLayoutView extends ConstraintLayout {
 
             }
         })
-            .setInterpolator(new OvershootInterpolator(2f));
+                .setInterpolator(new OvershootInterpolator(2f));
     }
 
 }

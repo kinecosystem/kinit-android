@@ -64,8 +64,8 @@ interface CoreComponent {
     fun inject(navigator: Navigator)
     fun inject(trueXWebFragment: TrueXWebFragment)
     fun inject(taskWebViewActivity: TaskWebViewActivity)
-    fun inject(webModel: WebModel)
-    fun inject(trueXModel: TrueXModel)
+    fun inject(webModel: WebViewModel)
+    fun inject(trueXModel: TruexWebViewModel)
 
 
 }

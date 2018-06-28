@@ -2,7 +2,6 @@ package org.kinecosystem.kinit.viewmodel.earn
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.webkit.JavascriptInterface
 import com.google.gson.JsonElement
@@ -13,13 +12,12 @@ import org.kinecosystem.kinit.network.OperationResultCallback
 import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
 import org.kinecosystem.kinit.repository.QuestionnaireRepository
-import org.kinecosystem.kinit.repository.UserRepository
 import javax.inject.Inject
 
-abstract class WebModel(val activity: FragmentActivity, val navigator: Navigator) {
-
+abstract class WebViewModel(val navigator: Navigator) {
     abstract var interfaceName: String
     abstract var url: String
+    lateinit var webFragmentActions: WebFragmentActions
 
     @Inject
     lateinit var questionnaireRepository: QuestionnaireRepository
@@ -40,17 +38,24 @@ abstract class WebModel(val activity: FragmentActivity, val navigator: Navigator
     fun onComplete() {
         taskService.retrieveNextTask()
         navigator.navigateTo(Navigator.Destination.COMPLETE_WEB_TASK)
-        activity.finish()
+        if (webFragmentActions != null) {
+            webFragmentActions.finish()
+        }
     }
+
 }
 
-class TrueXModel(activity: FragmentActivity, navigator: Navigator) : WebModel(activity, navigator) {
-    @Inject
-    lateinit var userRepository: UserRepository
+interface WebFragmentActions {
+    fun showErrorDialog()
+    fun finish()
+}
+
+class TruexWebViewModel(navigator: Navigator) : WebViewModel(navigator) {
     val TRUEX_HASH: String = if (BuildConfig.DEBUG) BuildConfig.truexHashStage else BuildConfig.truexHashProd
 
     override var url = "file:///android_asset/truex.html"
     override var interfaceName: String = "Kinit"
+    val USER_NET_ID_ELEMENT = "network_user_id"
     val loading: ObservableBoolean = ObservableBoolean(true)
     val javascript: ObservableField<String> = ObservableField("")
 
@@ -78,13 +83,17 @@ class TrueXModel(activity: FragmentActivity, navigator: Navigator) : WebModel(ac
     fun loadData() {
         taskService.getTrueXTask(object : OperationResultCallback<JsonElement?> {
             override fun onResult(json: JsonElement?) {
+                val networkUserId = json?.asJsonObject?.get(USER_NET_ID_ELEMENT)
                 javascript.set(
-                    "updateTruexActivityData('${userRepository.userInfo.userId}', '${json.toString()}', '$TRUEX_HASH');")
+                        "updateTruexActivityData('$networkUserId', '${json.toString()}', '$TRUEX_HASH');")
                 loading.set(false)
                 //loading javascript done by binding
             }
 
             override fun onError(errorCode: Int) {
+                if (webFragmentActions != null) {
+                    webFragmentActions.showErrorDialog()
+                }
                 Log.d("####", "#### task web model  getTrueXTask    error")
             }
 

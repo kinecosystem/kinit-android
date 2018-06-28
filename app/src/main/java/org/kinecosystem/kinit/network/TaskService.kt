@@ -52,8 +52,11 @@ class TaskService(context: Context, api: TasksApi,
             }
 
             override fun onResponse(call: Call<TasksApi.TrueXResponse>?, response: Response<TasksApi.TrueXResponse>?) {
-                if (response != null && response.isSuccessful) {
+                if (response != null && response.isSuccessful && response.body()?.status.equals("ok")) {
                     callback.onResult(response?.body()?.activity)
+                }else{
+                    callback.onError(1)
+                    Log.e("###", "### getTrueX return not successful response")
                 }
             }
         })

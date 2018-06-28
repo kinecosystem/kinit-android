@@ -65,8 +65,8 @@ class QuestionnaireRewardFragment : BaseFragment(), TransactionTimeout {
     }
 
     override fun onTransactionTimeout() {
-        if (activity != null && activity is QuestionnaireActions) {
-            (activity as QuestionnaireActions).transactionError()
+        if (activity != null && activity is TransactionActions) {
+            (activity as TransactionActions).transactionError()
         }
     }
 

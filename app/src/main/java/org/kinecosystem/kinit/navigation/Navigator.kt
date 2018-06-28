@@ -8,7 +8,7 @@ import org.kinecosystem.kinit.model.earn.isQuestionnaire
 import org.kinecosystem.kinit.model.earn.isTaskWebView
 import org.kinecosystem.kinit.repository.QuestionnaireRepository
 import org.kinecosystem.kinit.view.MainActivity
-import org.kinecosystem.kinit.view.earn.CompleteWebTaskActivity
+import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.TaskWebViewActivity
 import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
@@ -50,7 +50,7 @@ class Navigator(private val context: Context) {
     }
 
     private fun navigateToCompleteWebTask() {
-        context.startActivity(CompleteWebTaskActivity.getIntent(context))
+        context.startActivity(WebTaskCompleteActivity.getIntent(context))
         if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
