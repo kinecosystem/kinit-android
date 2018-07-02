@@ -35,6 +35,12 @@
             android:theme="@style/Questionnaire"/>
 
         <activity
+            android:name=".view.earn.WebTaskCompleteActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Questionnaire"/>
+
+
+        <activity
             android:name=".view.tutorial.TutorialActivity"
             android:screenOrientation="portrait"
            />
@@ -50,11 +56,15 @@
             android:screenOrientation="portrait"
             />
 
+
+
         <activity
             android:name=".view.spend.Peer2PeerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             />
+        <activity android:name=".view.earn.WebTaskActivity"
+            android:screenOrientation="landscape"/>
 
         <service android:name=".network.firebase.KinInstanceIdService">
             <intent-filter>

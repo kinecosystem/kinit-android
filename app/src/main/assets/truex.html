@@ -1,0 +1,58 @@
+<html>
+<head>
+</head>
+<body style="background-color:white; margin:0">
+<script type='text/javascript' src='https://static.truex.com/js/client.js'></script>
+<script type='text/javascript'>
+
+    function updateStatus(status) {
+        Kinit.updateStatus(status);
+    }
+
+    function onActivityFinish() {
+        Kinit.onFinish();
+    }
+
+    function onActivityCredit() {
+        Kinit.onCredit();
+    }
+
+   function updateTruexActivityData(userId, activityString, hash){
+        var options = {
+                    'network_user_id': userId,
+                    'partner_config_hash': hash
+                };
+        var activity = JSON.parse(activityString);
+        updateStatus(userId)
+        updateStatus(activityString)
+        truex.client(options, function(client) {
+
+
+                    client.prepareActivity(activity);
+
+                    activity.onStart(function(activity) {
+                            updateStatus('Activity started');
+                    });
+
+                    activity.onFinish(function(activity) {
+                        updateStatus('Activity finished');
+                        onActivityFinish();
+                    });
+
+                    activity.onCredit(function(engagement) {
+                        onActivityCredit();
+                        updateStatus('Activity Credited');
+                    });
+
+                    activity.onClose(function(activity) {
+                        updateStatus('Activity Closed')
+                    });
+
+                    client.loadActivityIntoContainer(activity, document.body, {'width': window.screen.availWidth, 'height': window.screen.availHeight});
+            });
+   }
+
+
+</script>
+</body>
+</html>

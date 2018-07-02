@@ -1,10 +1,11 @@
-package org.kinecosystem.kinit.view;
+package org.kinecosystem.kinit.util;
 
 import android.databinding.BindingAdapter;
 import android.support.constraint.ConstraintSet;
 import android.support.constraint.Guideline;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import org.kinecosystem.kinit.util.ImageUtils;
 
@@ -75,6 +76,13 @@ public class BindingUtils {
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @BindingAdapter({"bind:run", "bind:script"})
+    public static void callJavaScript(WebView webView, boolean run, String script) {
+        if (run) {
+            webView.evaluateJavascript(script, null);
         }
     }
 }

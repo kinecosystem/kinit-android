@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.databinding.*
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
@@ -45,7 +45,7 @@ class TabsAdapter :
     @Inject
     lateinit var analytics: Analytics
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
     @Inject
     lateinit var scheduler: Scheduler
     @Inject

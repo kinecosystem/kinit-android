@@ -8,25 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.doOnPreDraw
-import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.QuestionnaireRewardFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireRewardViewModel
+import org.kinecosystem.kinit.viewmodel.earn.TaskRewardViewModel
 
 interface TransactionTimeout {
     fun onTransactionTimeout()
 }
 
-class QuestionnaireRewardFragment : BaseFragment(), TransactionTimeout {
-    var model: QuestionnaireRewardViewModel? = null
+class TaskRewardFragment : BaseFragment(), TransactionTimeout {
+    var model: TaskRewardViewModel? = null
     lateinit var binding: QuestionnaireRewardFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.questionnaire_reward_fragment, container,
             false)
-        model = QuestionnaireRewardViewModel( this)
+        model = TaskRewardViewModel( this)
         binding.model = model
         binding.transactionImage.doOnPreDraw {
             animateIn()
@@ -59,14 +58,14 @@ class QuestionnaireRewardFragment : BaseFragment(), TransactionTimeout {
     }
 
     companion object {
-        fun newInstance(): QuestionnaireRewardFragment {
-            return QuestionnaireRewardFragment()
+        fun newInstance(): TaskRewardFragment {
+            return TaskRewardFragment()
         }
     }
 
     override fun onTransactionTimeout() {
-        if (activity != null && activity is QuestionnaireActions) {
-            (activity as QuestionnaireActions).transactionError()
+        if (activity != null && activity is TransactionActions) {
+            (activity as TransactionActions).transactionError()
         }
     }
 

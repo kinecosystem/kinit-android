@@ -1,8 +1,12 @@
 package org.kinecosystem.kinit.view.earn
 
-interface QuestionnaireActions {
+interface QuestionnaireActions : TransactionActions {
     fun nextQuestion()
     fun submissionComplete()
-    fun transactionError()
+
     fun submissionError()
+}
+
+interface TransactionActions{
+    fun transactionError()
 }

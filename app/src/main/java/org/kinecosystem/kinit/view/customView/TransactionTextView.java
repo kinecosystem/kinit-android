@@ -1,8 +1,5 @@
 package org.kinecosystem.kinit.view.customView;
 
-import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -18,44 +15,34 @@ import org.kinecosystem.kinit.R;
 
 public class TransactionTextView extends android.support.v7.widget.AppCompatTextView {
 
-    @BindingAdapter({"balance"})
-    public static void updateBalance(TransactionTextView view, String balance) {
-        view.updateBalance(balance);
+    @BindingAdapter({"balance", "complete"})
+    public static void updateBalance(TransactionTextView view, String balance, boolean complete) {
+        view.updateBalance(balance, complete);
     }
 
-    private final long duration = 2500;
-    private AnimatorListener listener;
+    public static final long ANIM_DURATION = 2500;
 
-    private void updateBalance(String balance) {
-        if (getText() == null || getText().length() == 0) {
-            setText(balance.toString());
-        } else {
+    private void updateBalance(String balance, boolean complete) {
+        if (complete) {
+            if (getText() == null || getText().length() == 0) {
+                setText(balance.toString());
+            }
             animateBalance(balance);
+        } else {
+            setText(balance.toString());
         }
     }
 
-    public void setAnimationListener(AnimatorListener listener) {
-        this.listener = listener;
-    }
-
-
     public void animateBalance(String newBalance) {
-        ValueAnimator anim = ValueAnimator.ofInt(Integer.valueOf(getText().toString()), Integer.valueOf(newBalance));
-        anim.setDuration(duration);
+        ValueAnimator anim = ValueAnimator
+            .ofInt(Integer.valueOf(getText().toString()), Integer.valueOf(newBalance));
+        anim.setDuration(ANIM_DURATION);
         anim.setInterpolator(new DecelerateInterpolator(1.5f));
         anim.addUpdateListener(animation -> setText(animation.getAnimatedValue().toString()));
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (listener != null) {
-                    listener.onAnimationEnd(null);
-                }
-            }
-        });
         anim.start();
         ValueAnimator animator = ObjectAnimator.ofFloat(this, "textSize", 50, 54);
         animator.setInterpolator(new OvershootInterpolator(3f));
-        animator.setDuration(duration);
+        animator.setDuration(ANIM_DURATION);
 
         animator.start();
     }

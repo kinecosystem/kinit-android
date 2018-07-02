@@ -3,7 +3,7 @@ package org.kinecosystem.kinit.model
 import org.kinecosystem.kinit.mock.MockComponentsProvider
 import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.isValid
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -16,6 +16,7 @@ private const val DEFAULT_QUESTIONNAIRE = """
     "title":"What is crypto?",
     "desc":"A few words about the questionnaire, what you can find inside",
     "type":"questionnaire",
+    "memo":"memo",
     "price":150,
     "start_date":1519499896671,
     "min_to_complete":6,
@@ -35,7 +36,7 @@ private const val DEFAULT_QUESTIONNAIRE = """
 class TaskRepositoryTest {
 
     private val componentsProvider = MockComponentsProvider()
-    private var questionnaireRepo = QuestionnaireRepository(componentsProvider, DEFAULT_QUESTIONNAIRE)
+    private var questionnaireRepo = TasksRepository(componentsProvider, DEFAULT_QUESTIONNAIRE)
 
     @Before
     fun setup() {
@@ -47,7 +48,6 @@ class TaskRepositoryTest {
     fun testInitialQuestionnaireIsValid() {
 
         val questionnaire = questionnaireRepo.task
-
         assertNotNull(questionnaire)
         assertEquals(questionnaire?.isValid(), true)
         System.out.println("initial task $questionnaire")

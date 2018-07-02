@@ -34,6 +34,8 @@ android {
         }
         buildConfigField "String", "StageBaseUrl", globalProperties["StageBaseUrl"]
         buildConfigField "String", "ProdBaseUrl", globalProperties["ProdBaseUrl"]
+        buildConfigField "String", "truexHashStage", globalProperties["truexHashStage"]
+        buildConfigField "String", "truexHashProd", globalProperties["truexHashProd"]
         buildConfigField "String", "TestFairyApiSecret", globalProperties["TestfairyApiSecret"]
         multiDexEnabled true
     }

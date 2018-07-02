@@ -15,7 +15,7 @@ import org.kinecosystem.kinit.network.ERROR_REDEEM_COUPON_FAILED
 import org.kinecosystem.kinit.network.OperationResultCallback
 import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActions
 import javax.inject.Inject
@@ -32,7 +32,7 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
     @Inject
     lateinit var offersRepository: OffersRepository
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
 
     var title: String?
     var info: String?

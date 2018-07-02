@@ -14,11 +14,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class OnboardingService(context: Context, private val appLaunchApi: OnboardingApi,
-                        private val phoneAuthenticationApi: PhoneAuthenticationApi,
-                        val userRepo: UserRepository,
-                        val analytics: Analytics,
-                        val taskService: TaskService,
-                        val wallet: Wallet) {
+    private val phoneAuthenticationApi: PhoneAuthenticationApi,
+    val userRepo: UserRepository,
+    val analytics: Analytics,
+    val taskService: TaskService,
+    val wallet: Wallet) {
 
     private val applicationContext: Context = context.applicationContext
 
@@ -50,7 +50,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
             PhoneAuthenticationApi.AuthInfo(phoneNumber, token)).enqueue(
             object : Callback<StatusResponse> {
                 override fun onResponse(call: Call<StatusResponse>,
-                                        response: Response<StatusResponse>) {
+                    response: Response<StatusResponse>) {
                     if (response != null && response.isSuccessful) {
                         taskService.retrieveNextTask(callback)
                     }
@@ -76,7 +76,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         call.enqueue(
             object : Callback<StatusResponse> {
                 override fun onResponse(call: Call<StatusResponse>?,
-                                        response: Response<StatusResponse>?) {
+                    response: Response<StatusResponse>?) {
                     Log.d("OnboardingService", "### updateToken success : $response token:$token")
                     // successfully sent the token update to server - so it is not longer needed
                     if (response != null && response.isSuccessful) {
@@ -96,7 +96,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         call.enqueue(
             object : Callback<StatusResponse> {
                 override fun onResponse(call: Call<StatusResponse>?,
-                                        response: Response<StatusResponse>?) {
+                    response: Response<StatusResponse>?) {
                     Log.d("OnboardingService", "### authTokenAck success : $response token:$token")
                     if (response == null || !response.isSuccessful) {
                         analytics.logEvent(
@@ -127,7 +127,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
             density = displayMetrics.densityDpi))
         call.enqueue(object : Callback<StatusResponse> {
             override fun onResponse(call: Call<StatusResponse>?,
-                                    response: Response<StatusResponse>?) {
+                response: Response<StatusResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     updateConfig(response)
@@ -167,7 +167,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         call.enqueue(
             object : Callback<StatusResponse> {
                 override fun onResponse(call: Call<StatusResponse>?,
-                                        response: Response<StatusResponse>?) {
+                    response: Response<StatusResponse>?) {
                     if (response != null && response.isSuccessful) {
                         updateConfig(response)
                         wallet.initKinWallet()

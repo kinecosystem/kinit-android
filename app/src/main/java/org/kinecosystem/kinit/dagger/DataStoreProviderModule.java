@@ -4,7 +4,6 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
-import org.kinecosystem.kinit.repository.QuestionnaireRepository;
 
 @Module
 public class DataStoreProviderModule {

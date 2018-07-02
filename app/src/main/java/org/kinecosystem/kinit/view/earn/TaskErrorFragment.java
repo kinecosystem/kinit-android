@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickCloseButtonOnErrorPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPage;
 import org.kinecosystem.kinit.analytics.Events.Event;
-import org.kinecosystem.kinit.repository.QuestionnaireRepository;
+import org.kinecosystem.kinit.repository.TasksRepository;
 import org.kinecosystem.kinit.view.BaseActivity;
 import org.kinecosystem.kinit.view.BaseFragment;
 
@@ -28,7 +28,7 @@ public class TaskErrorFragment extends BaseFragment {
     @Inject
     Analytics analytics;
     @Inject
-    QuestionnaireRepository questionnaireRepository;
+    TasksRepository questionnaireRepository;
 
     public static TaskErrorFragment newInstance(int error) {
         TaskErrorFragment fragment = new TaskErrorFragment();

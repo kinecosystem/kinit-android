@@ -13,7 +13,7 @@ private const val QUESTIONNAIRE_STORAGE = "kin.app.task"
 private const val QUESTIONNAIRE_KEY = "task"
 private const val TASK_STATE_KEY = "task_state"
 
-class QuestionnaireRepository(dataStoreProvider: DataStoreProvider, defaultTask: String? = null) {
+class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String? = null) {
     var task: Task?
         private set
     private var chosenAnswers: ArrayList<ChosenAnswers> = ArrayList()
@@ -23,7 +23,7 @@ class QuestionnaireRepository(dataStoreProvider: DataStoreProvider, defaultTask:
     var isQuestionnaireStarted: ObservableBoolean
     var taskState: Int
         set(state) {
-            Log.d("QuestionnaireRepository", "setting task state to $state")
+            Log.d("TasksRepository", "setting task state to $state")
             questionnaireCache.putInt(TASK_STATE_KEY, state)
         }
         get() {

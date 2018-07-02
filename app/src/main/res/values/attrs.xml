@@ -13,7 +13,4 @@
     <declare-styleable name="QuestionnaireProgressBar">
         <attr name="progress" format="integer" />
     </declare-styleable>
-    <declare-styleable name="TransactionLayoutView">
-        <attr name="complete" format="boolean" />
-    </declare-styleable>
 </resources>
