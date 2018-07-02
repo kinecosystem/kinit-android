@@ -8,14 +8,14 @@ import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isValid
 import org.kinecosystem.kinit.model.user.UserInfo
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class TaskService(context: Context, api: TasksApi,
-    val questionnaireRepo: QuestionnaireRepository,
-    private val userId: String, private val walletService: Wallet) {
+                  val questionnaireRepo: TasksRepository,
+                  private val userId: String, private val walletService: Wallet) {
 
     private val questionnaireApi: TasksApi = api
     private val applicationContext: Context = context.applicationContext

@@ -18,7 +18,7 @@ import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.spend.Coupon
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.viewmodel.earn.REWARD_TIMEOUT
@@ -36,7 +36,7 @@ private const val WALLET_BALANCE_KEY = "WalletBalance"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
              val userRepo: UserRepository,
-             val questionnaireRepo: QuestionnaireRepository,
+             val questionnaireRepo: TasksRepository,
              val analytics: Analytics,
              val onboardingApi: OnboardingApi,
              val walletApi: WalletApi,

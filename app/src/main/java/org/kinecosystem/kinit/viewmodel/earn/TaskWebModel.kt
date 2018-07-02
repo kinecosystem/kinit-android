@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationResultCallback
 import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import javax.inject.Inject
 
 abstract class WebViewModel(val navigator: Navigator) {
@@ -20,7 +20,7 @@ abstract class WebViewModel(val navigator: Navigator) {
     lateinit var webFragmentActions: WebFragmentActions
 
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
     @Inject
     lateinit var wallet: Wallet
     @Inject
@@ -50,7 +50,7 @@ interface WebFragmentActions {
     fun finish()
 }
 
-class TruexWebViewModel(navigator: Navigator) : WebViewModel(navigator) {
+class WebTaskTruexViewModel(navigator: Navigator) : WebViewModel(navigator) {
     val TRUEX_HASH: String = if (BuildConfig.DEBUG) BuildConfig.truexHashStage else BuildConfig.truexHashProd
 
     override var url = "file:///android_asset/truex.html"

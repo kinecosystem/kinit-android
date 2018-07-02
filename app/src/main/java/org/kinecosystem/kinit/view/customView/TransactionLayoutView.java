@@ -20,7 +20,7 @@ import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.navigation.Navigator;
 import org.kinecosystem.kinit.navigation.Navigator.Destination;
-import org.kinecosystem.kinit.repository.QuestionnaireRepository;
+import org.kinecosystem.kinit.repository.TasksRepository;
 import org.kinecosystem.kinit.view.BaseActivity;
 
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class TransactionLayoutView extends ConstraintLayout {
     }
 
     @Inject
-    QuestionnaireRepository questionnaireRepository;
+    TasksRepository questionnaireRepository;
 
     public TransactionLayoutView(@NonNull Context context) {
         super(context);

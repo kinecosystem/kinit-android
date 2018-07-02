@@ -12,7 +12,7 @@ import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationCompletionCallback
 import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.TimeUtils
 import org.kinecosystem.kinit.view.TabViewModel
@@ -21,9 +21,9 @@ import java.util.*
 
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
-class EarnViewModel(val questionnaireRepository: QuestionnaireRepository, val wallet: Wallet,
-   val taskService: TaskService,
-    val scheduler: Scheduler, val analytics: Analytics, private val navigator: Navigator) :
+class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wallet,
+                    val taskService: TaskService,
+                    val scheduler: Scheduler, val analytics: Analytics, private val navigator: Navigator) :
     TabViewModel {
 
     var shouldShowTask = ObservableBoolean()

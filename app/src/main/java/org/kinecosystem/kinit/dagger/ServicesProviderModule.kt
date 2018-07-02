@@ -7,7 +7,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.network.*
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Singleton
@@ -20,9 +20,9 @@ class ServicesProviderModule {
     @Provides
     @Singleton
     fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider,
-        userRepository: UserRepository, questionnaireRepo: QuestionnaireRepository,
-        offersRepository: OffersRepository, analytics: Analytics,
-        scheduler: Scheduler): ServicesProvider {
+                         userRepository: UserRepository, questionnaireRepo: TasksRepository,
+                         offersRepository: OffersRepository, analytics: Analytics,
+                         scheduler: Scheduler): ServicesProvider {
         serivce = ServicesProvider(context, dataStoreProvider,
             userRepository, questionnaireRepo, offersRepository, analytics, scheduler)
         return serivce

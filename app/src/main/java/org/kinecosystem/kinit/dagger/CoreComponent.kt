@@ -42,7 +42,7 @@ interface CoreComponent {
     fun inject(splashViewModel: SplashViewModel)
     fun inject(questionnaireViewModel: QuestionnaireViewModel)
     fun inject(questionnaireCompleteViewModel: QuestionnaireCompleteViewModel)
-    fun inject(questionnaireRewardViewModel: QuestionnaireRewardViewModel)
+    fun inject(questionnaireRewardViewModel: TaskRewardViewModel)
     fun inject(questionViewModel: QuestionViewModel)
     fun inject(peer2PeerViewModel: Peer2PeerViewModel)
     fun inject(phoneVerificationViewModel: PhoneVerificationViewModel)
@@ -62,10 +62,10 @@ interface CoreComponent {
     fun inject(transactionLayoutView: TransactionLayoutView)
     fun inject(bottomTabNavigation: BottomTabNavigation)
     fun inject(navigator: Navigator)
-    fun inject(trueXWebFragment: TrueXWebFragment)
-    fun inject(taskWebViewActivity: TaskWebViewActivity)
+    fun inject(trueXWebFragment: WebTaskTruexFragment)
+    fun inject(taskWebViewActivity: WebTaskActivity)
     fun inject(webModel: WebViewModel)
-    fun inject(trueXModel: TruexWebViewModel)
+    fun inject(trueXModel: WebTaskTruexViewModel)
 
 
 }

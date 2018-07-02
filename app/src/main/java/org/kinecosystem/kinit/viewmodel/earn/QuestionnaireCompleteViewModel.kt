@@ -6,7 +6,7 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.network.ServicesProvider
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ class QuestionnaireCompleteViewModel {
     @Inject
     lateinit var servicesProvider: ServicesProvider
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
 
     var submitComplete: Boolean = false
         get() = (questionnaireRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD || questionnaireRepository.taskState == TaskState.TRANSACTION_COMPLETED)

@@ -6,11 +6,11 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.model.earn.isQuestionnaire
 import org.kinecosystem.kinit.model.earn.isTaskWebView
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
-import org.kinecosystem.kinit.view.earn.TaskWebViewActivity
+import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class Navigator(private val context: Context) {
     }
 
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -61,7 +61,7 @@ class Navigator(private val context: Context) {
             if (questionnaireRepository.task!!.isQuestionnaire()) {
                 context.startActivity(QuestionnaireActivity.getIntent(context))
             } else if (questionnaireRepository.task!!.isTaskWebView()) {
-                context.startActivity(TaskWebViewActivity.getIntent(context))
+                context.startActivity(WebTaskActivity.getIntent(context))
             }
         }
         if (context is AppCompatActivity) {

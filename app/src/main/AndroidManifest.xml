@@ -63,7 +63,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             />
-        <activity android:name=".view.earn.TaskWebViewActivity"
+        <activity android:name=".view.earn.WebTaskActivity"
             android:screenOrientation="landscape"/>
 
         <service android:name=".network.firebase.KinInstanceIdService">

@@ -10,21 +10,21 @@ import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.network.Wallet
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.earn.TransactionTimeout
 import javax.inject.Inject
 
 const val REWARD_TIMEOUT: Long = 20000
 
-class QuestionnaireRewardViewModel(private var timeoutCallback: TransactionTimeout? = null) {
+class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = null) {
 
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
     lateinit var servicesProvider: ServicesProvider
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
     @Inject
     lateinit var analytics: Analytics
     var task: Task?

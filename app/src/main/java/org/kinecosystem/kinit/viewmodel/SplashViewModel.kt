@@ -7,7 +7,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.network.ServicesProvider
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.SplashNavigator
@@ -30,7 +30,7 @@ class SplashViewModel(var splashNavigator: SplashNavigator?) {
     @Inject
     lateinit var servicesProvider: ServicesProvider
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
 
     val showCreatingWallet: ObservableBoolean = ObservableBoolean(false)
     var callback: Observable.OnPropertyChangedCallback? = null

@@ -9,7 +9,7 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.earn.*
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
     QuestionnaireActions {
 
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -81,7 +81,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
         return when (currentPage) {
             NEXT_QUESTION_PAGE -> QuestionFragment.newInstance(nextQuestionIndex())
             QUESTIONNAIRE_COMPLETE_PAGE -> QuestionnaireCompleteFragment.newInstance()
-            REWARD_PAGE -> QuestionnaireRewardFragment.newInstance()
+            REWARD_PAGE -> TaskRewardFragment.newInstance()
             TRANSACTION_ERROR_PAGE -> TaskErrorFragment.newInstance(
                 TaskErrorFragment.ERROR_TRANSACTION)
             else -> TaskErrorFragment.newInstance(TaskErrorFragment.ERROR_SUBMIT)

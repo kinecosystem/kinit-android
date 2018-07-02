@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.QuestionnaireFragmentLayoutBinding
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.navigation.Navigator.Destination
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel
 import javax.inject.Inject
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
 
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
     private lateinit var questionnaireModel: QuestionnaireViewModel
     private lateinit var nextFragmentCallback: Observable.OnPropertyChangedCallback
 

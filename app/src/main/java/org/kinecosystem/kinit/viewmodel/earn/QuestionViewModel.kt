@@ -8,8 +8,7 @@ import org.kinecosystem.kinit.model.earn.Answer
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
-import org.kinecosystem.kinit.util.AndroidScheduler
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.AnswersListAdapter
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
@@ -22,7 +21,7 @@ open class QuestionViewModel(private var questionIndex: Int,
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var questionnaireRepository: QuestionnaireRepository
+    lateinit var questionnaireRepository: TasksRepository
     @Inject
     lateinit var analytics: Analytics
 

@@ -33,8 +33,8 @@ class ServicesProvider {
     private val applicationContext: Context
 
     constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
-                questionnaireRepo: QuestionnaireRepository, offerRepo: OffersRepository,
-               analytics: Analytics, scheduler: Scheduler
+                questionnaireRepo: TasksRepository, offerRepo: OffersRepository,
+                analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
 

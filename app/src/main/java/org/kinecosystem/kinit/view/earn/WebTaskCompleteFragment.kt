@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.questionnaire_complete_fragment.*
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.view.BaseFragment
 
-class TaskWebCompleteFragment : BaseFragment() {
+class WebTaskCompleteFragment : BaseFragment() {
 
     interface TaskCompleteListener {
         fun onAnimationComplete()
@@ -59,8 +59,8 @@ class TaskWebCompleteFragment : BaseFragment() {
 
     companion object {
 
-        fun newInstance(): TaskWebCompleteFragment {
-            return TaskWebCompleteFragment()
+        fun newInstance(): WebTaskCompleteFragment {
+            return WebTaskCompleteFragment()
         }
     }
 }

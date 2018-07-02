@@ -6,7 +6,7 @@
     <data>
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.earn.TruexWebViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.earn.WebTaskTruexViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

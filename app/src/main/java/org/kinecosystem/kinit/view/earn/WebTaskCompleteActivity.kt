@@ -5,15 +5,15 @@ import android.content.Intent
 import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.earn.TaskErrorFragment.ERROR_TRANSACTION
 
-class WebTaskCompleteActivity : SingleFragmentActivity(), TaskWebCompleteFragment.TaskCompleteListener, TransactionActions {
+class WebTaskCompleteActivity : SingleFragmentActivity(), WebTaskCompleteFragment.TaskCompleteListener, TransactionActions {
     override fun transactionError() {
         replaceFragment(TaskErrorFragment.newInstance(ERROR_TRANSACTION))
     }
 
-    val taskWebCompleteFragment: TaskWebCompleteFragment = TaskWebCompleteFragment.newInstance()
+    val taskWebCompleteFragment: WebTaskCompleteFragment = WebTaskCompleteFragment.newInstance()
 
     override fun onAnimationComplete() {
-        replaceFragment(QuestionnaireRewardFragment.newInstance())
+        replaceFragment(TaskRewardFragment.newInstance())
     }
 
 

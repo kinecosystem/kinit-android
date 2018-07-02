@@ -2,7 +2,7 @@ language: android
 jdk: oraclejdk8
 sudo: false
 before_install:
-- openssl aes-256-cbc -K $encrypted_0c41cfa0c99f_key -iv $encrypted_0c41cfa0c99f_iv
+- openssl aes-256-cbc -K $encrypted_ddf95e72faa9_key -iv $encrypted_ddf95e72faa9_iv
   -in secrets.tar.gz.enc -out secrets.tar.gz -d
 - tar -xvf secrets.tar.gz
 - mv "app/google-services-release.json" "app/src/release/google-services.json"

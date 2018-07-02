@@ -9,7 +9,7 @@ import org.junit.Test
 import org.kinecosystem.kinit.mock.MockComponentsProvider
 import org.kinecosystem.kinit.mock.MockScheduler
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.repository.QuestionnaireRepository
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
@@ -46,7 +46,7 @@ class EarnViewModelTest {
     private fun setupTaskWithTime(timeInMillis: Long) {
         val timeInSecs = timeInMillis / 1000
         var task = SAMPLE_QUESTIONNAIRE.replace("__START_DATE__", timeInSecs.toString())
-        mockComponents.questionnaireRepository = QuestionnaireRepository(mockComponents, task)
+        mockComponents.questionnaireRepository = TasksRepository(mockComponents, task)
         `when`(mockComponents.wallet.balance).thenReturn(ObservableField("1"))
         earnViewModelToTest = EarnViewModel(mockComponents.questionnaireRepository, mockComponents.wallet, mockComponents.taskService,
              mockComponents.scheduler, mockComponents.analytics,

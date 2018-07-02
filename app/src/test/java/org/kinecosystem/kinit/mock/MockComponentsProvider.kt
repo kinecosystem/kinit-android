@@ -11,7 +11,7 @@ import org.mockito.Mockito
 class MockComponentsProvider : DataStoreProvider {
 
     var userRepository: UserRepository = Mockito.mock(UserRepository::class.java)
-    var questionnaireRepository = Mockito.mock(QuestionnaireRepository::class.java)
+    var questionnaireRepository = Mockito.mock(TasksRepository::class.java)
     var offersRepository = Mockito.mock(OffersRepository::class.java)
     var servicesProvider: ServicesProvider = Mockito.mock(ServicesProvider::class.java)
     var analytics: org.kinecosystem.kinit.analytics.Analytics = Mockito.mock(Analytics::class.java)
