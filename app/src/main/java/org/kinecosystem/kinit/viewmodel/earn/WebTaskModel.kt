@@ -50,7 +50,7 @@ interface WebFragmentActions {
     fun finish()
 }
 
-class WebTaskTruexViewModel(navigator: Navigator) : WebViewModel(navigator) {
+class WebTaskTruexViewModel(val agent:String, navigator: Navigator) : WebViewModel(navigator) {
     val TRUEX_HASH: String = if (BuildConfig.DEBUG) BuildConfig.truexHashStage else BuildConfig.truexHashProd
 
     override var url = "file:///android_asset/truex.html"
@@ -81,7 +81,7 @@ class WebTaskTruexViewModel(navigator: Navigator) : WebViewModel(navigator) {
     }
 
     fun loadData() {
-        taskService.getTrueXTask(object : OperationResultCallback<JsonElement?> {
+        taskService.getTrueXTask(agent, object : OperationResultCallback<JsonElement?> {
             override fun onResult(json: JsonElement?) {
                 val networkUserId = json?.asJsonObject?.get(USER_NET_ID_ELEMENT)
                 javascript.set(

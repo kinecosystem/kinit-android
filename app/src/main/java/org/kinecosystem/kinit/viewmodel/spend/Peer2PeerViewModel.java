@@ -196,7 +196,7 @@ public class Peer2PeerViewModel {
                     public void onError(int errorCode) {
                         if (actions != null) {
                             if (errorCode == ERROR_TRANSACTION_FAILED) {
-                                actions.showDialog(R.string.p2p_server_problem_title, R.string.p2p_server_problem_body,
+                                actions.showDialog(R.string.p2p_server_problem_title, R.string.general_problem_body,
                                     R.string.dialog_back_to_list, true);
                                 sendingTransaction.set(false);
                                 transactionComplete.set(false);

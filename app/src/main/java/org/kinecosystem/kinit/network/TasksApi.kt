@@ -5,10 +5,7 @@ import com.google.gson.annotations.SerializedName
 import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface TasksApi {
 
@@ -35,6 +32,6 @@ interface TasksApi {
 
 
     @GET("/truex/activity")
-    fun truexActivity(@Header(USER_HEADER_KEY) userId: String): Call<TrueXResponse>
+    fun truexActivity(@Header(USER_HEADER_KEY) userId: String, @Query("user-agent") agent:String): Call<TrueXResponse>
 }
 
