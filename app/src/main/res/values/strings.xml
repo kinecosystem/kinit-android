@@ -94,7 +94,8 @@
     <string name="no_transactions_text">In the future, your transactions will be recorded here!</string>
     <string name="no_coupons_text">Your coupons will be saved here!</string>
     <string name="p2p_server_problem_title">Houston we have a server problem</string>
-    <string name="p2p_server_problem_body">Please try again later. If you continue to see this message reach out to support</string>
+    <string name="general_problem_title">Houston we have a problem</string>
+    <string name="general_problem_body">Please try again later. If you continue to see this message reach out to support</string>
     <string name="p2p_server_problem_action">Back to list</string>
     <string name="p2p_friend_has_no_kinit_title">Your friend doesn’t use Kinit</string>
     <string name="p2p_friend_has_no_kinit_body">Sorry, you can only send Kin to Kinit users.</string>

@@ -3,7 +3,6 @@ package org.kinecosystem.kinit.network
 import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.os.Handler
 import android.util.Log
 import kin.core.*
 import kin.core.exception.AccountNotActivatedException
@@ -279,14 +278,13 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     fun listenToPayment(memo: String) {
         val paymentWatcher = account.createPaymentWatcher()
-        val handler = Handler()
         paymentWatcher.start { payment ->
             if (payment.memo() == memo) {
                 updateBalanceForPayment(payment)
                 paymentWatcher.stop()
             }
         }
-        handler.postDelayed({
+        scheduler.scheduleOnMain({
             if (!onEarnTransactionCompleted.get()) {
                 updateBalanceForPayment()
                 paymentWatcher.stop()
