@@ -22,6 +22,7 @@ class InfoViewModel() : TabViewModel {
     init {
         KinitApplication.coreComponent.inject(this)
     }
+
     var version: String = if (BuildConfig.DEBUG) {
         "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE}"
     } else {

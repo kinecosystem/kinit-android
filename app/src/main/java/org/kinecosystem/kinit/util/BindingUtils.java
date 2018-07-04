@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.util.ImageUtils;
 
 
 public class BindingUtils {
-    
+
     @BindingAdapter("imageUrl")
     public static void loadImage(ImageView imageView, String url) {
         if (url != null && !url.isEmpty()) {
@@ -20,33 +20,33 @@ public class BindingUtils {
     }
 
     @BindingAdapter("android:layout_marginStart")
-    public static void setLayoutMarginStart(View view, float layoutMarginStart){
+    public static void setLayoutMarginStart(View view, float layoutMarginStart) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         layoutParams.setMarginStart((int) layoutMarginStart);
         view.setLayoutParams(layoutParams);
     }
 
     @BindingAdapter("layout_constraintGuide_begin")
-    public static void setLayoutConstraintGuideBegin(View view, float layoutGuideBegin){
-        ((Guideline)view).setGuidelineBegin((int)layoutGuideBegin);
+    public static void setLayoutConstraintGuideBegin(View view, float layoutGuideBegin) {
+        ((Guideline) view).setGuidelineBegin((int) layoutGuideBegin);
     }
 
     @BindingAdapter("layout_constraintGuide_end")
-    public static void setLayoutConstraintGuideEnd(View view, float layoutGuideBegin){
-        ((Guideline)view).setGuidelineBegin((int)layoutGuideBegin);
+    public static void setLayoutConstraintGuideEnd(View view, float layoutGuideBegin) {
+        ((Guideline) view).setGuidelineBegin((int) layoutGuideBegin);
     }
 
     @BindingAdapter("android:layout_marginEnd")
-    public static void setLayoutMarginEnd(View view, float layoutMarginEnd){
+    public static void setLayoutMarginEnd(View view, float layoutMarginEnd) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         layoutParams.setMarginEnd((int) layoutMarginEnd);
         view.setLayoutParams(layoutParams);
     }
 
     @BindingAdapter("android:layout_marginTop")
-    public static void setLayoutMarginTop(View view, float layoutMarginTop){
+    public static void setLayoutMarginTop(View view, float layoutMarginTop) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        layoutParams.topMargin = (int)layoutMarginTop;
+        layoutParams.topMargin = (int) layoutMarginTop;
         view.setLayoutParams(layoutParams);
     }
 
@@ -59,15 +59,15 @@ public class BindingUtils {
 
     @BindingAdapter("animatedFadeIn")
     public static void setVisibility(View view, boolean visible) {
-       if(view != null){
-           if(visible) {
-               view.setAlpha(0);
-               view.setVisibility(View.VISIBLE);
-               view.animate().alpha(1).setDuration(250);
-           }else{
-               view.setVisibility(View.INVISIBLE);
-           }
-       }
+        if (view != null) {
+            if (visible) {
+                view.setAlpha(0);
+                view.setVisibility(View.VISIBLE);
+                view.animate().alpha(1).setDuration(250);
+            } else {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @BindingAdapter("visibilityOn")

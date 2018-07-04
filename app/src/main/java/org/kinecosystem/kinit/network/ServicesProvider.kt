@@ -33,8 +33,8 @@ class ServicesProvider {
     private val applicationContext: Context
 
     constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
-                questionnaireRepo: TasksRepository, offerRepo: OffersRepository,
-                analytics: Analytics, scheduler: Scheduler
+        tasksRepo: TasksRepository, offerRepo: OffersRepository,
+        analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
 
@@ -54,13 +54,14 @@ class ServicesProvider {
         val walletApi = retrofit.create<WalletApi>(WalletApi::class.java)
 
 
-        walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, questionnaireRepo, analytics,
-            onboardingApi,walletApi, scheduler)
+        walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, tasksRepo, analytics,
+            onboardingApi, walletApi, scheduler)
         taskService = TaskService(applicationContext,
             retrofit.create<TasksApi>(TasksApi::class.java),
-            questionnaireRepo, userRepo.userId(), walletService)
+            tasksRepo, userRepo.userId(), walletService)
         onBoardingService = OnboardingService(applicationContext,
-            retrofit.create<OnboardingApi>(OnboardingApi::class.java), retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
+            retrofit.create<OnboardingApi>(OnboardingApi::class.java),
+            retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
             userRepo, analytics, taskService, walletService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
             userRepo.userId(), offerRepo, analytics, walletService, scheduler)

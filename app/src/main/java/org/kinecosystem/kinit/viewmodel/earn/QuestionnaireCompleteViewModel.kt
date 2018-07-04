@@ -12,7 +12,6 @@ import javax.inject.Inject
 
 class QuestionnaireCompleteViewModel {
 
-
     @Inject
     lateinit var analytics: Analytics
     @Inject
@@ -20,10 +19,10 @@ class QuestionnaireCompleteViewModel {
     @Inject
     lateinit var servicesProvider: ServicesProvider
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var taskRepository: TasksRepository
 
     var submitComplete: Boolean = false
-        get() = (questionnaireRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD || questionnaireRepository.taskState == TaskState.TRANSACTION_COMPLETED)
+        get() = (taskRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD || taskRepository.taskState == TaskState.TRANSACTION_COMPLETED)
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -31,7 +30,7 @@ class QuestionnaireCompleteViewModel {
     }
 
     private fun submitAnswers() {
-        val task = questionnaireRepository.task
+        val task = taskRepository.task
         val event = Events.Business.EarningTaskCompleted(task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,
@@ -44,12 +43,12 @@ class QuestionnaireCompleteViewModel {
         servicesProvider.taskService.submitQuestionnaireAnswers(
             userRepository.userInfo,
             task,
-            questionnaireRepository.getChosenAnswers())
+            taskRepository.getChosenAnswers())
 
     }
 
     fun onResume() {
-        val task = questionnaireRepository.task
+        val task = taskRepository.task
         val event = Events.Analytics.ViewTaskEndPage(
             task?.provider?.name,
             task?.minToComplete,

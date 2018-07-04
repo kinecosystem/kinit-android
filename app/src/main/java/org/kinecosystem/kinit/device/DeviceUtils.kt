@@ -31,7 +31,7 @@ class DeviceUtils(context: Context) {
 
     fun deviceId(): String {
         if (ContextCompat.checkSelfPermission(applicationContext,
-                Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             val telephonyManager: TelephonyManager = applicationContext.getSystemService(
                 Context.TELEPHONY_SERVICE) as TelephonyManager
             return telephonyManager.deviceId

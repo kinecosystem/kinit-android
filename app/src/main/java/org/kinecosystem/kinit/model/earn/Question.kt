@@ -10,7 +10,7 @@ data class Question(val id: String? = null,
     @SerializedName("image_url")
     val image_url: String? = null,
     @SerializedName("results")
-    val answers: List<Answer>? = null){
+    val answers: List<Answer>? = null) {
 
     enum class QuestionType(val type: String) {
         TEXT("text"),

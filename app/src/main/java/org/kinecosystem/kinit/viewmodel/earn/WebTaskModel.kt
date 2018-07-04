@@ -20,7 +20,7 @@ abstract class WebViewModel(val navigator: Navigator) {
     lateinit var webFragmentActions: WebFragmentActions
 
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var tasksRepository: TasksRepository
     @Inject
     lateinit var wallet: Wallet
     @Inject
@@ -32,7 +32,7 @@ abstract class WebViewModel(val navigator: Navigator) {
     }
 
     fun startListenToPayment() {
-        wallet.listenToPayment(questionnaireRepository.task?.memo!!)
+        wallet.listenToPayment(tasksRepository.task?.memo!!)
     }
 
     fun onComplete() {
@@ -50,7 +50,7 @@ interface WebFragmentActions {
     fun finish()
 }
 
-class WebTaskTruexViewModel(val agent:String, navigator: Navigator) : WebViewModel(navigator) {
+class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewModel(navigator) {
     val TRUEX_HASH: String = if (BuildConfig.DEBUG) BuildConfig.truexHashStage else BuildConfig.truexHashProd
 
     override var url = "file:///android_asset/truex.html"
@@ -81,22 +81,23 @@ class WebTaskTruexViewModel(val agent:String, navigator: Navigator) : WebViewMod
     }
 
     fun loadData() {
-        taskService.getTrueXTask(agent, object : OperationResultCallback<JsonElement?> {
+        taskService.retrieveTruexActivity(agent, object : OperationResultCallback<JsonElement?> {
             override fun onResult(json: JsonElement?) {
                 val networkUserId = json?.asJsonObject?.get(USER_NET_ID_ELEMENT)
-                javascript.set(
+                if (networkUserId != null) {
+                    javascript.set(
                         "updateTruexActivityData('$networkUserId', '${json.toString()}', '$TRUEX_HASH');")
-                loading.set(false)
-                //loading javascript done by binding
+                    loading.set(false)
+                    //loading javascript done by binding
+                }
             }
 
             override fun onError(errorCode: Int) {
                 if (webFragmentActions != null) {
                     webFragmentActions.showErrorDialog()
                 }
-                Log.d("####", "#### task web model  getTrueXTask    error")
+                Log.d("####", "#### task web model retrieveTruexActivity error")
             }
-
         })
     }
 }

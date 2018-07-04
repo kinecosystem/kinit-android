@@ -78,8 +78,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/balance"
-            tools:visibility="visible"
-            tools:src="@mipmap/ic_launcher_app"/>
+            tools:src="@mipmap/ic_launcher_app"
+            tools:visibility="visible"/>
         <TextView
             android:id="@+id/author_name"
             android:layout_width="0dp"
@@ -142,18 +142,18 @@
             tools:text="some description"
             tools:visibility="visible"/>
         <TextView
-            android:id="@+id/start_questionnaire_btn"
+            android:id="@+id/start_task_btn"
             style="@style/Button.Blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="34dp"
             android:layout_marginTop="34dp"
+            android:layout_marginBottom="34dp"
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.03"
-            android:onClick="@{()->model.startQuestionnaire()}"
-            android:text="@{model.isQuestionnaireStarted() ? @string/resume : @string/start_earn_kin}"
+            android:onClick="@{()->model.startTask()}"
+            android:text="@{model.isTaskStarted() ? @string/resume : @string/start_earn_kin}"
             android:textSize="16sp"
             android:visibility="@{model.getShouldShowTask}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -166,7 +166,7 @@
         <ImageView
             android:id="@+id/amount_kin_icon"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/questionnaire_icon_size"
+            android:layout_height="@dimen/task_icon_size"
             android:scaleType="centerInside"
             android:visibility="@{model.getShouldShowTask}"
             app:layout_constraintBottom_toTopOf="@+id/bottom_delimiter"
@@ -178,7 +178,7 @@
         <ImageView
             android:id="@+id/timer_icon"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/questionnaire_icon_size"
+            android:layout_height="@dimen/task_icon_size"
             android:scaleType="centerInside"
             android:visibility="@{model.getShouldShowTask}"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -192,8 +192,8 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginBottom="14dp"
-            android:layout_marginEnd="34dp"
             android:layout_marginStart="34dp"
+            android:layout_marginEnd="34dp"
             android:background="#d7dce9"
             android:visibility="@{model.getShouldShowTask}"
             app:layout_constraintBottom_toTopOf="@+id/amount_kin_icon"
@@ -202,7 +202,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/timer_icon"
             app:layout_constraintVertical_bias="1.0"
-            tools:visibility="visible" />
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/reward_text"
@@ -247,11 +247,11 @@
             android:layout_marginEnd="34dp"
             android:background="#d7dce9"
             android:visibility="@{model.getShouldShowTask}"
+            app:layout_constraintBottom_toTopOf="@id/bottom_horizontal_guide_line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/complete_duration_text"
-            app:layout_constraintBottom_toTopOf="@id/bottom_horizontal_guide_line"
             tools:visibility="visible"/>
 
         <View
@@ -269,7 +269,7 @@
             tools:visibility="visible"/>
 
         <TextView
-            android:id="@+id/next_questionnaire_availability_title"
+            android:id="@+id/next_task_availability_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="58dp"
@@ -279,7 +279,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="5sp"
-            android:text="@{model.isAvailableTomorrow() ? @string/next_questionnaire_available_tomorrow : @string/next_questionnaire_available_on(model.nextAvailableDate())}"
+            android:text="@{model.isAvailableTomorrow() ? @string/next_task_available_tomorrow : @string/next_task_available_on(model.nextAvailableDate())}"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#1693f3"
             android:textSize="22sp"
@@ -302,7 +302,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/next_questionnaire_availability_title"
+            app:layout_constraintTop_toBottomOf="@+id/next_task_availability_title"
             tools:visibility="gone"/>
 
         <TextView
@@ -316,7 +316,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="@string/next_questionnaire_subtitle"
+            android:text="@string/next_task_subtitle"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
             android:textColor="#d7dce9"
             android:textSize="14sp"

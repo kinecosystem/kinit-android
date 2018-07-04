@@ -7,11 +7,11 @@ import org.kinecosystem.kinit.repository.DataStoreProvider;
 import org.kinecosystem.kinit.repository.TasksRepository;
 
 @Module(includes = DataStoreProviderModule.class)
-public class QuestionnaireRepositoryModule {
+public class TasksRepositoryModule {
 
     @Provides
     @Singleton
-    public TasksRepository questionnaireRepository(DataStoreProvider dataStoreProvider) {
+    public TasksRepository tasksRepository(DataStoreProvider dataStoreProvider) {
         return new TasksRepository(dataStoreProvider, null);
     }
 }

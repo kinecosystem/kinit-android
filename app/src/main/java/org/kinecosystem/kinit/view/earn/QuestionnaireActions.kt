@@ -7,6 +7,6 @@ interface QuestionnaireActions : TransactionActions {
     fun submissionError()
 }
 
-interface TransactionActions{
+interface TransactionActions {
     fun transactionError()
 }

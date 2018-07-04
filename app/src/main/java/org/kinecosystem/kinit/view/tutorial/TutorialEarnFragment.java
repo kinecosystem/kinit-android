@@ -9,8 +9,9 @@ import org.kinecosystem.kinit.R;
 
 
 public class TutorialEarnFragment extends Fragment {
+
     public static TutorialEarnFragment newInstance() {
-       return new TutorialEarnFragment();
+        return new TutorialEarnFragment();
     }
 
 

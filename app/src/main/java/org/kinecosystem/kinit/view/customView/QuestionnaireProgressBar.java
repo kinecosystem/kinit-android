@@ -22,21 +22,20 @@ public class QuestionnaireProgressBar extends ProgressBar {
     }
 
 
-    private void updateProgress(int progress){
-        if (!update)
-        {
+    private void updateProgress(int progress) {
+        if (!update) {
             update = true;
             setProgress(progress * multiplier);
-        }
-        else
+        } else {
             animateProgress(progress * multiplier);
+        }
     }
 
     private void animateProgress(int newProgress) {
         ValueAnimator anim = ValueAnimator.ofInt(getProgress(), newProgress);
         anim.setDuration(DURATION);
         anim.setInterpolator(new DecelerateInterpolator(1.5f));
-        anim.addUpdateListener(animation -> setProgress((int)animation.getAnimatedValue()));
+        anim.addUpdateListener(animation -> setProgress((int) animation.getAnimatedValue()));
         anim.start();
     }
 

@@ -57,12 +57,12 @@ class AnswerViewModel(questionType: String) {
     val isTextAlignedLeft = questionType == Question.QuestionType.TEXT_EMOJI.type
     val isMultipleAnswers = questionType == Question.QuestionType.TEXT_MULTIPLE.type
 
-    var text : String? = null
+    var text: String? = null
         set(value) {
             field = value
             isTextPresent = !value.isNullOrBlank()
         }
-    var imageUrl : String? = null
+    var imageUrl: String? = null
     var isSelected: Boolean = false
     var isTextPresent: Boolean = false
         private set

@@ -45,7 +45,7 @@ class TabsAdapter :
     @Inject
     lateinit var analytics: Analytics
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var tasksRepository: TasksRepository
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
@@ -76,7 +76,7 @@ class TabsAdapter :
 
     fun shouldShowAnimation(): Boolean {
         return if (preAnimationWasShown) false
-        else questionnaireRepository.isQuestionnaireAvaliable()
+        else tasksRepository.isTaskAvailable()
     }
 
     override fun getCount(): Int {
@@ -105,7 +105,7 @@ class TabsAdapter :
     }
 
     private fun moveToEarnTab(parent: ViewGroup, position: Int, binding: PreEarnTabBinding) {
-        if (!preAnimationWasShown && questionnaireRepository.isQuestionnaireAvaliable()) {
+        if (!preAnimationWasShown && tasksRepository.isTaskAvailable()) {
             parent.postDelayed({
                 if (parent is LockableViewPager) {
                     // move to Eran Tab
@@ -119,7 +119,7 @@ class TabsAdapter :
     private fun getEarnTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<EarnTabBinding>(LayoutInflater.from(parent.context),
             R.layout.earn_tab, parent, false)
-        binding.model = EarnViewModel(questionnaireRepository, wallet, taskService, scheduler, analytics,
+        binding.model = EarnViewModel(tasksRepository, wallet, taskService, scheduler, analytics,
             Navigator(parent.context))
         models[position] = binding.model
         return binding.root

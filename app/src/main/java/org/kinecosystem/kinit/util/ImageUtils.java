@@ -16,7 +16,7 @@ public class ImageUtils {
     }
 
     public static void fetchImages(Context context, String serverUrl) {
-        String urlWithResolution = urlWithResolution(serverUrl,context);
+        String urlWithResolution = urlWithResolution(serverUrl, context);
         Picasso.with(context).load(urlWithResolution).fetch();
     }
 

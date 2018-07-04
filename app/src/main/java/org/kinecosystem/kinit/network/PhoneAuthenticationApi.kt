@@ -12,5 +12,6 @@ interface PhoneAuthenticationApi {
         "token") val token: String)
 
     @POST("/user/firebase/update-id-token")
-    fun updatePhoneAuthToken(@Header(USER_HEADER_KEY) userId: String, @Body authInfo: AuthInfo): Call<OnboardingApi.StatusResponse>
+    fun updatePhoneAuthToken(@Header(
+        USER_HEADER_KEY) userId: String, @Body authInfo: AuthInfo): Call<OnboardingApi.StatusResponse>
 }

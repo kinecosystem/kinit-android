@@ -9,8 +9,8 @@ import org.kinecosystem.kinit.model.earn.*
 import org.kinecosystem.kinit.util.ImageUtils
 
 private const val QUESTIONNAIRE_ANSWERS_STORAGE = "kin.app.task.chosen.answers"
-private const val QUESTIONNAIRE_STORAGE = "kin.app.task"
-private const val QUESTIONNAIRE_KEY = "task"
+private const val TASK_STORAGE = "kin.app.task"
+private const val TASK_KEY = "task"
 private const val TASK_STATE_KEY = "task_state"
 
 class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String? = null) {
@@ -18,24 +18,24 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         private set
     private var chosenAnswers: ArrayList<ChosenAnswers> = ArrayList()
     private val chosenAnswersCache: DataStore
-    private val questionnaireCache: DataStore = dataStoreProvider.dataStore(QUESTIONNAIRE_STORAGE)
-    private val questionnaireStorageName: String
-    var isQuestionnaireStarted: ObservableBoolean
+    private val taskCache: DataStore = dataStoreProvider.dataStore(TASK_STORAGE)
+    private val taskStorageName: String
+    var isTaskStarted: ObservableBoolean
     var taskState: Int
         set(state) {
             Log.d("TasksRepository", "setting task state to $state")
-            questionnaireCache.putInt(TASK_STATE_KEY, state)
+            taskCache.putInt(TASK_STATE_KEY, state)
         }
         get() {
-            return this.questionnaireCache.getInt(TASK_STATE_KEY, TaskState.INITIAL)
+            return this.taskCache.getInt(TASK_STATE_KEY, TaskState.INITIAL)
         }
 
 
     init {
         task = getCachedTask(defaultTask)
-        questionnaireStorageName = QUESTIONNAIRE_ANSWERS_STORAGE + task?.id
-        chosenAnswersCache = dataStoreProvider.dataStore(questionnaireStorageName)
-        isQuestionnaireStarted = ObservableBoolean(getChosenAnswers().size > 0)
+        taskStorageName = QUESTIONNAIRE_ANSWERS_STORAGE + task?.id
+        chosenAnswersCache = dataStoreProvider.dataStore(taskStorageName)
+        isTaskStarted = ObservableBoolean(getChosenAnswers().size > 0)
     }
 
     fun resetTaskState() {
@@ -43,23 +43,24 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     }
 
     private fun getCachedTask(defaultTask: String?): Task? {
-        val cachedQuestionnaire = questionnaireCache.getString(QUESTIONNAIRE_KEY, defaultTask)
-        return Gson().fromJson(cachedQuestionnaire, Task::class.java)
+        val cachedTask = taskCache.getString(TASK_KEY, defaultTask)
+        return Gson().fromJson(cachedTask, Task::class.java)
     }
 
     fun setChosenAnswers(questionId: String, answersIds: List<String>) {
         chosenAnswers.add(ChosenAnswers(questionId, answersIds))
         chosenAnswersCache.putStringList(questionId, answersIds)
-        isQuestionnaireStarted.set(true)
+        isTaskStarted.set(true)
     }
 
-    fun getChosenAnswersByQuestionId(questionId: String): List<String> = chosenAnswersCache.getStringList(questionId, listOf())
+    fun getChosenAnswersByQuestionId(questionId: String): List<String> = chosenAnswersCache.getStringList(questionId,
+        listOf())
 
     fun getNumOfAnsweredQuestions(): Int {
         return getChosenAnswers().size
     }
 
-    fun isQuestionnaireComplete(): Boolean {
+    fun isTaskComplete(): Boolean {
         return task?.questions?.size == getNumOfAnsweredQuestions()
     }
 
@@ -77,7 +78,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         return chosenAnswers
     }
 
-    fun isQuestionnaireAvaliable(): Boolean {
+    fun isTaskAvailable(): Boolean {
         if (task == null) return false
         val taskDate: Long = task?.startDateInMillis() ?: System.currentTimeMillis()
         return System.currentTimeMillis() >= taskDate
@@ -86,13 +87,13 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     fun clearChosenAnswers() {
         chosenAnswers.clear()
         chosenAnswersCache.clearAll()
-        isQuestionnaireStarted.set(false)
+        isTaskStarted.set(false)
     }
 
-    fun replaceQuestionnaire(task: Task?, applicationContext: Context) {
+    fun replaceTask(task: Task?, applicationContext: Context) {
         this.task = task
         if (task != null) {
-            questionnaireCache.putString(QUESTIONNAIRE_KEY, Gson().toJson(task))
+            taskCache.putString(TASK_KEY, Gson().toJson(task))
             for (question: Question in task.questions.orEmpty()) {
                 if (Question.QuestionType.TEXT_IMAGE.type == question.type) {
                     for (answer: Answer in question.answers.orEmpty())
@@ -100,7 +101,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
                 }
             }
         } else {
-            questionnaireCache.clear(QUESTIONNAIRE_KEY)
+            taskCache.clear(TASK_KEY)
         }
         clearChosenAnswers()
     }

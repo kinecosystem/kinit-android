@@ -9,32 +9,32 @@ const val TASK_TYPE_TRUEX: String = "truex"
 
 
 data class Task(
-        @SerializedName("id")
-        val id: String? = null,
-        @SerializedName("memo")
-        val memo: String? = null,
-        @SerializedName("title")
-        val title: String? = null,
-        @SerializedName("desc")
-        val description: String? = null,
-        @SerializedName("price")
-        val kinReward: Int? = null,
-        @SerializedName("start_date")
-        val startDateInSeconds: Long? = 0,
-        @SerializedName("min_to_complete")
-        val minToComplete: Float? = null,
-        @SerializedName("tags")
-        val tags: List<String>? = null,
-        @SerializedName("provider")
-        val provider: Provider? = null,
-        @SerializedName("type")
-        val type: String? = null,
-        @SerializedName("items")
-        val questions: List<Question>? = null)
+    @SerializedName("id")
+    val id: String? = null,
+    @SerializedName("memo")
+    val memo: String? = null,
+    @SerializedName("title")
+    val title: String? = null,
+    @SerializedName("desc")
+    val description: String? = null,
+    @SerializedName("price")
+    val kinReward: Int? = null,
+    @SerializedName("start_date")
+    val startDateInSeconds: Long? = 0,
+    @SerializedName("min_to_complete")
+    val minToComplete: Float? = null,
+    @SerializedName("tags")
+    val tags: List<String>? = null,
+    @SerializedName("provider")
+    val provider: Provider? = null,
+    @SerializedName("type")
+    val type: String? = null,
+    @SerializedName("items")
+    val questions: List<Question>? = null)
 
 fun Task.isValid(): Boolean {
     if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() ||
-            kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null) {
+        kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null) {
         return false
     }
     if (!questions.orEmpty().all { question -> question.isValid() }) {

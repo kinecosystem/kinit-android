@@ -10,12 +10,12 @@
     <string name="kin_reward">+%s KIN</string>
     <string name="reward_comming_your_way">are coming your way...</string>
     <string name="added_to_your_account">added to your account</string>
-    <string name="next_questionnaire_available_on">Next earning experience will be available on %s</string>
-    <string name="next_questionnaire_available_tomorrow">Next earning experience will be available tomorrow</string>
-    <string name="next_questionnaire_subtitle">We have planted the seed and your next task is currently growing</string>
+    <string name="next_task_available_on">Next earning experience will be available on %s</string>
+    <string name="next_task_available_tomorrow">Next earning experience will be available tomorrow</string>
+    <string name="next_task_subtitle">We have planted the seed and your next task is currently growing</string>
     <string name="creating_wallet">Creating wallet...</string>
-    <string name="complete_questionnaire_subtitle">You have completed today\'s earning experience.</string>
-    <string name="complete_questionnaire_title">Awesome!</string>
+    <string name="complete_task_subtitle">You have completed today\'s earning experience.</string>
+    <string name="complete_task_title">Awesome!</string>
     <string name="transferring_your_kin">Your Kin is on its way</string>
     <string name="tap_to_finish">Tap to finish</string>
     <string name="your_new_balance">Your new balance</string>

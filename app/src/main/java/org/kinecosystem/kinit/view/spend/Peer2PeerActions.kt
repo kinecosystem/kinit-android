@@ -10,7 +10,7 @@ interface Peer2PeerActions {
     fun onTransactionComplete()
 
     fun showDialog(resTitle: Int, resMessage: Int, resAction: Int, shouldShowContacts: Boolean)
-    fun showDialog(resTitle: Int, resMessage: Int, messageParam:Int, resAction: Int, showContacts: Boolean)
+    fun showDialog(resTitle: Int, resMessage: Int, messageParam: Int, resAction: Int, showContacts: Boolean)
 
 
 }

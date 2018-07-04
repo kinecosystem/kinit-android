@@ -37,7 +37,7 @@ class KinitApplication : Application(), DataStoreProvider {
             ContextModule(applicationContext))
             .dataStoreProviderModule(DataStoreProviderModule(this))
             .userRepositoryModule(UserRepositoryModule())
-            .questionnaireRepositoryModule(QuestionnaireRepositoryModule())
+            .tasksRepositoryModule(TasksRepositoryModule())
             .offersRepositoryModule(OffersRepositoryModule())
             .analyticsModule(AnalyticsModule())
             .notificationModule(NotificationModule())
