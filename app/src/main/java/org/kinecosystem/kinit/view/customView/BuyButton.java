@@ -81,7 +81,7 @@ public class BuyButton extends android.support.v7.widget.AppCompatTextView {
         anim.start();
     }
 
-    public void expand(int width){
+    public void expand(int width) {
         ViewGroup.LayoutParams layoutParams = getLayoutParams();
         layoutParams.width = width;
         setLayoutParams(layoutParams);

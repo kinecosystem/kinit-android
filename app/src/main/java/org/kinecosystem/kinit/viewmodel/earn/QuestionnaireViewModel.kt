@@ -39,7 +39,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
         currentPage =
             when {
                 restoreState -> getPageFromState()
-                !questionnaireRepository.isQuestionnaireComplete() -> NEXT_QUESTION_PAGE
+                !questionnaireRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
                 else -> QUESTIONNAIRE_COMPLETE_PAGE
             }
         moveToNextPage(currentPage)
@@ -47,7 +47,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
 
     override fun nextQuestion() {
         moveToNextPage(
-            if (!questionnaireRepository.isQuestionnaireComplete()) {
+            if (!questionnaireRepository.isTaskComplete()) {
                 NEXT_QUESTION_PAGE
             } else QUESTIONNAIRE_COMPLETE_PAGE
         )
@@ -90,7 +90,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
 
     fun onBackPressed() {
         val event: Events.Event
-        if (questionnaireRepository.isQuestionnaireComplete()) {
+        if (questionnaireRepository.isTaskComplete()) {
             event = Events.Analytics.ClickCloseButtonOnRewardPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
@@ -124,7 +124,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
             questionnaireRepository.taskState == TaskState.SUBMIT_ERROR_RETRY -> QUESTIONNAIRE_COMPLETE_PAGE
             questionnaireRepository.taskState == TaskState.SUBMIT_ERROR_NO_RETRY -> SUBMIT_ERROR_PAGE
             else -> {
-                if (!questionnaireRepository.isQuestionnaireComplete())
+                if (!questionnaireRepository.isTaskComplete())
                     NEXT_QUESTION_PAGE
                 else QUESTIONNAIRE_COMPLETE_PAGE
             }

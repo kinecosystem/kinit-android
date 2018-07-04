@@ -10,7 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import java.io.UnsupportedEncodingException
 
-private const val DEFAULT_QUESTIONNAIRE = """
+private const val DEFAULT_TASK = """
 {
     "id":"0",
     "title":"What is crypto?",
@@ -36,27 +36,27 @@ private const val DEFAULT_QUESTIONNAIRE = """
 class TaskRepositoryTest {
 
     private val componentsProvider = MockComponentsProvider()
-    private var questionnaireRepo = TasksRepository(componentsProvider, DEFAULT_QUESTIONNAIRE)
+    private var tasksRepo = TasksRepository(componentsProvider, DEFAULT_TASK)
 
     @Before
     fun setup() {
-        componentsProvider.questionnaireRepository = questionnaireRepo
+        componentsProvider.tasksRepository = tasksRepo
     }
 
     @Test
     @Throws(UnsupportedEncodingException::class)
-    fun testInitialQuestionnaireIsValid() {
+    fun testInitialTaskIsValid() {
 
-        val questionnaire = questionnaireRepo.task
-        assertNotNull(questionnaire)
-        assertEquals(questionnaire?.isValid(), true)
-        System.out.println("initial task $questionnaire")
+        val task = tasksRepo.task
+        assertNotNull(task)
+        assertEquals(task?.isValid(), true)
+        System.out.println("initial task $task")
     }
 
     @Test
     fun testSaveAnswer() {
         val chosen = setChosenAnswers(0, listOf(2))
-        val chosenAnswers = questionnaireRepo.getChosenAnswers()
+        val chosenAnswers = tasksRepo.getChosenAnswers()
         assertEquals(chosen.answersIds[0], chosenAnswers[0].answersIds[0])
         assertEquals(chosen.questionId, chosenAnswers[0].questionId)
     }
@@ -64,35 +64,35 @@ class TaskRepositoryTest {
     @Test
     fun testDeleteChosenAnswersFromCache() {
         setChosenAnswers(0, listOf(1))
-        questionnaireRepo.clearChosenAnswers()
-        assertEquals(questionnaireRepo.getNumOfAnsweredQuestions(), 0)
+        tasksRepo.clearChosenAnswers()
+        assertEquals(tasksRepo.getNumOfAnsweredQuestions(), 0)
     }
 
     @Test
     fun testTwoAnswersSaved() {
-        questionnaireRepo.clearChosenAnswers()
+        tasksRepo.clearChosenAnswers()
         setChosenAnswers(0, listOf(2))
         val chosen2 = setChosenAnswers(1, listOf(1))
-        val answerFromRepo = questionnaireRepo.getChosenAnswers()[1]
-        assertEquals(questionnaireRepo.getNumOfAnsweredQuestions(), 2)
+        val answerFromRepo = tasksRepo.getChosenAnswers()[1]
+        assertEquals(tasksRepo.getNumOfAnsweredQuestions(), 2)
         assertEquals(chosen2.answersIds[0], answerFromRepo.answersIds[0])
     }
 
 
     @Test
     fun testAnswerSavedCount() {
-        questionnaireRepo.clearChosenAnswers()
+        tasksRepo.clearChosenAnswers()
         val chosenAnswers = setChosenAnswers(0, listOf(1,2))
-        assertEquals(1,questionnaireRepo.getNumOfAnsweredQuestions())
-        assertEquals(chosenAnswers.questionId, questionnaireRepo.getChosenAnswers()[0].questionId)
-        assertEquals(chosenAnswers.answersIds.size, questionnaireRepo.getChosenAnswers()[0].answersIds.size)
+        assertEquals(1, tasksRepo.getNumOfAnsweredQuestions())
+        assertEquals(chosenAnswers.questionId, tasksRepo.getChosenAnswers()[0].questionId)
+        assertEquals(chosenAnswers.answersIds.size, tasksRepo.getChosenAnswers()[0].answersIds.size)
     }
 
     @Test
     fun testMultiAnswersSaved() {
-        questionnaireRepo.clearChosenAnswers()
+        tasksRepo.clearChosenAnswers()
         val chosenAnswers = setChosenAnswers(0, listOf(1,2,3))
-        val answersInRepo = questionnaireRepo.getChosenAnswers()
+        val answersInRepo = tasksRepo.getChosenAnswers()
         assertEquals(chosenAnswers.questionId, answersInRepo[0].questionId)
         assertEquals(chosenAnswers.answersIds[0], answersInRepo[0].answersIds[0])
         assertEquals(chosenAnswers.answersIds[1], answersInRepo[0].answersIds[1])
@@ -100,26 +100,26 @@ class TaskRepositoryTest {
     }
 
     @Test
-    fun testIsQuestionnaireCompleteFalseAtTheBeginning() {
-        questionnaireRepo.clearChosenAnswers()
-        assertEquals(questionnaireRepo.isQuestionnaireComplete(), false)
+    fun testIsTaskCompleteFalseAtTheBeginning() {
+        tasksRepo.clearChosenAnswers()
+        assertEquals(tasksRepo.isTaskComplete(), false)
     }
 
     @Test
-    fun testIsQuestionnaireCompleteTrueAtTheEnd() {
-        questionnaireRepo.clearChosenAnswers()
+    fun testIsTaskCompleteTrueAtTheEnd() {
+        tasksRepo.clearChosenAnswers()
 
-        for (i in questionnaireRepo.task?.questions?.indices!!) {
+        for (i in tasksRepo.task?.questions?.indices!!) {
             setChosenAnswers(i, listOf(0))
         }
-        assertEquals(questionnaireRepo.isQuestionnaireComplete(), true)
+        assertEquals(tasksRepo.isTaskComplete(), true)
     }
 
     private fun setChosenAnswers(questionIndex: Int, answersIndex: List<Int>): ChosenAnswers {
-        val question = questionnaireRepo.task?.questions?.get(questionIndex)
+        val question = tasksRepo.task?.questions?.get(questionIndex)
         val answers = answersIndex.map { index -> question?.answers?.get(index)?.id!! }
         if (question != null && answersIndex.isNotEmpty()) {
-            questionnaireRepo.setChosenAnswers(question.id!!, answers)
+            tasksRepo.setChosenAnswers(question.id!!, answers)
         }
         return ChosenAnswers(question?.id!!, answers)
     }

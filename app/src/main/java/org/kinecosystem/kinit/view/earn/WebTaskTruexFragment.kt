@@ -53,7 +53,8 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
         //TODO update correct text
         if (activity != null) {
             val builder = AlertDialog.Builder(activity!!, R.style.CustomAlertDialog)
-            builder.setTitle(R.string.general_problem_title).setMessage(R.string.general_problem_body).setPositiveButton(R.string.dialog_ok, { dialogInterface, i ->
+            builder.setTitle(R.string.general_problem_title).setMessage(
+                R.string.general_problem_body).setPositiveButton(R.string.dialog_ok, { dialogInterface, i ->
                 dialogInterface.dismiss()
                 trueXmodel.navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
                 finish()

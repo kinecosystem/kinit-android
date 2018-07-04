@@ -21,15 +21,15 @@ import java.util.*
 
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
-class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wallet,
-                    val taskService: TaskService,
-                    val scheduler: Scheduler, val analytics: Analytics, private val navigator: Navigator) :
+class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
+    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
+    private val navigator: Navigator) :
     TabViewModel {
 
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
     var shouldShowNoTask = ObservableBoolean(false)
-    var isQuestionnaireStarted: ObservableBoolean
+    var isTaskStarted: ObservableBoolean
     var nextAvailableDate: ObservableField<String> = ObservableField("")
     var isAvailableTomorrow: ObservableBoolean = ObservableBoolean(false)
     var balance: ObservableField<String>
@@ -44,12 +44,12 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
 
     init {
         balance = wallet.balance
-        isQuestionnaireStarted = questionnaireRepository.isQuestionnaireStarted
+        isTaskStarted = taskRepository.isTaskStarted
         refresh()
     }
 
-    fun startQuestionnaire() {
-        val task = questionnaireRepository.task
+    fun startTask() {
+        val task = taskRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
             task?.provider?.name,
             task?.minToComplete,
@@ -61,7 +61,7 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
         analytics.logEvent(bEvent)
 
         val aEvent = Events.Analytics.ClickStartButtonOnTaskPage(
-            isQuestionnaireStarted.get(),
+            isTaskStarted.get(),
             task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,
@@ -74,7 +74,7 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
     }
 
     private fun refresh() {
-        val task = questionnaireRepository.task
+        val task = taskRepository.task
         authorName.set(task?.provider?.name)
         authorImageUrl.set(task?.provider?.imageUrl)
         title.set(task?.title)
@@ -88,7 +88,7 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
                 }
 
                 override fun onSuccess() {
-                    if (questionnaireRepository.task != null) {
+                    if (taskRepository.task != null) {
                         refresh()
                     }
                 }
@@ -101,14 +101,14 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
             scheduler.cancel(scheduledRunnable)
         }
 
-        if (questionnaireRepository.task == null) {
+        if (taskRepository.task == null) {
             shouldShowNoTask.set(true)
             shouldShowTask.set(false)
             shouldShowTaskNotAvailableYet.set(false)
         } else {
-            val questionnaireAvailable = isQuestionnaireAvailable()
-            shouldShowTask.set(questionnaireAvailable)
-            shouldShowTaskNotAvailableYet.set(!questionnaireAvailable)
+            val taskAvailable = isTaskAvailable()
+            shouldShowTask.set(taskAvailable)
+            shouldShowTaskNotAvailableYet.set(!taskAvailable)
             shouldShowNoTask.set(false)
 
             if (!shouldShowTask.get()) {
@@ -116,7 +116,7 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
                 nextAvailableDate.set(nextAvailableDate())
                 isAvailableTomorrow.set(isAvailableTomorrow())
                 if (isAvailableTomorrow.get()) {
-                    val diff = questionnaireRepository.task?.startDateInMillis()!! - scheduler.currentTimeMillis()
+                    val diff = taskRepository.task?.startDateInMillis()!! - scheduler.currentTimeMillis()
                     scheduledRunnable = Runnable {
                         shouldShowTask.set(true)
                         shouldShowTaskNotAvailableYet.set(false)
@@ -130,13 +130,13 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
         }
     }
 
-    private fun isQuestionnaireAvailable(): Boolean {
-        val taskDate: Long = questionnaireRepository.task?.startDateInMillis() ?: scheduler.currentTimeMillis()
+    private fun isTaskAvailable(): Boolean {
+        val taskDate: Long = taskRepository.task?.startDateInMillis() ?: scheduler.currentTimeMillis()
         return scheduler.currentTimeMillis() >= taskDate
     }
 
     private fun isAvailableTomorrow(): Boolean {
-        return timeToUnlockInDays(questionnaireRepository.task) == 1
+        return timeToUnlockInDays(taskRepository.task) == 1
     }
 
     private fun timeToUnlockInDays(task: Task?): Int {
@@ -147,7 +147,7 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
     }
 
     fun nextAvailableDate(): String {
-        val dateInMillis = questionnaireRepository.task?.startDateInMillis() ?: 0
+        val dateInMillis = taskRepository.task?.startDateInMillis() ?: 0
         return SimpleDateFormat(AVAILABILITY_DATE_FORMAT).format(Date(dateInMillis))
     }
 
@@ -163,7 +163,7 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
     }
 
     private fun onEarnScreenVisible() {
-        val task = questionnaireRepository.task
+        val task = taskRepository.task
         val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,
@@ -175,8 +175,8 @@ class EarnViewModel(val questionnaireRepository: TasksRepository, val wallet: Wa
     }
 
     private fun onLockedScreenVisible() {
-        val questionnaire = questionnaireRepository.task
-        val timeToUnlockInDays = timeToUnlockInDays(questionnaire)
+        val task = taskRepository.task
+        val timeToUnlockInDays = timeToUnlockInDays(task)
 
         val event = Events.Analytics.ViewLockedTaskPage(timeToUnlockInDays)
         analytics.logEvent(event)

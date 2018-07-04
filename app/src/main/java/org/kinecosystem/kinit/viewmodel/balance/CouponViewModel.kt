@@ -7,7 +7,7 @@ import org.kinecosystem.kinit.model.spend.Coupon
 import org.kinecosystem.kinit.view.adapter.CouponsListAdapter
 
 class CouponViewModel(val coupon: Coupon, private val position: Int,
-                      val parent: RecyclerView, val isExpanded: Boolean) {
+    val parent: RecyclerView, val isExpanded: Boolean) {
 
     fun onClick() {
         (parent.adapter as CouponsListAdapter).expandCollapse(isExpanded, position)
@@ -18,6 +18,7 @@ class CouponViewModel(val coupon: Coupon, private val position: Int,
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, coupon.value)
         sendIntent.type = "text/plain"
-        parent.context.startActivity(Intent.createChooser(sendIntent, parent.context.resources.getText(R.string.share_code_to)))
+        parent.context.startActivity(
+            Intent.createChooser(sendIntent, parent.context.resources.getText(R.string.share_code_to)))
     }
 }

@@ -32,7 +32,7 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
     @Inject
     lateinit var offersRepository: OffersRepository
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var tasksRepository: TasksRepository
 
     var title: String?
     var info: String?
@@ -138,10 +138,10 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
 
     fun onResume() {
         val offerPrice = offer.price ?: Int.MAX_VALUE
-        val taskId = questionnaireRepository.task?.id?.toInt() ?: 0
+        val taskId = tasksRepository.task?.id?.toInt() ?: 0
         var p2pValid = true
         if (isP2p && userRepository.isP2pEnabled) {
-            if (questionnaireRepository.task != null) {
+            if (tasksRepository.task != null) {
                 p2pValid = userRepository.p2pMinTasks <= taskId
             }
         }

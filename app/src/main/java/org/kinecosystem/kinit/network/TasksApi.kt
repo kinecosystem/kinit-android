@@ -32,6 +32,6 @@ interface TasksApi {
 
 
     @GET("/truex/activity")
-    fun truexActivity(@Header(USER_HEADER_KEY) userId: String, @Query("user-agent") agent:String): Call<TrueXResponse>
+    fun truexActivity(@Header(USER_HEADER_KEY) userId: String, @Query("user-agent") agent: String): Call<TrueXResponse>
 }
 

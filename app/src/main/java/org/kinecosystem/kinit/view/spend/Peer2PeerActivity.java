@@ -17,7 +17,7 @@ public class Peer2PeerActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_fragment_layout);
-       getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
             .add(R.id.fragment_container, Peer2PeerSendFragment.newInstance()).commit();
     }
 

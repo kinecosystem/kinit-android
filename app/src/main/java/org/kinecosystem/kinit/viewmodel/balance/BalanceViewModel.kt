@@ -10,7 +10,7 @@ import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
-class BalanceViewModel: TabViewModel {
+class BalanceViewModel : TabViewModel {
 
     var balance: ObservableField<String>
     val hasTransactions = ObservableBoolean(false)

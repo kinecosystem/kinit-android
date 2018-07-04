@@ -9,13 +9,14 @@ import javax.inject.Singleton;
 public class ContextModule {
 
     private Context context;
-    public ContextModule(Context context){
+
+    public ContextModule(Context context) {
         this.context = context;
     }
 
     @Provides
     @Singleton
-    public Context context(){
+    public Context context() {
         return context;
     }
 }

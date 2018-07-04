@@ -14,39 +14,39 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class TaskService(context: Context, api: TasksApi,
-                  val questionnaireRepo: TasksRepository,
-                  private val userId: String, private val walletService: Wallet) {
+    val tasksRepo: TasksRepository,
+    private val userId: String, private val walletService: Wallet) {
 
-    private val questionnaireApi: TasksApi = api
+    private val tasksApi: TasksApi = api
     private val applicationContext: Context = context.applicationContext
 
     fun submitQuestionnaireAnswers(
-            userInfo: UserInfo,
-            task: Task?,
-            chosenAnswers: List<ChosenAnswers>) {
+        userInfo: UserInfo,
+        task: Task?,
+        chosenAnswers: List<ChosenAnswers>) {
 
         if (!NetworkUtils.isConnected(applicationContext)) {
-            questionnaireRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
+            tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
             return
         }
 
         if (userInfo.publicAddress.isBlank()) {
-            questionnaireRepo.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
+            tasksRepo.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
             return
         }
 
         if (task == null || !task.isValid()) {
-            questionnaireRepo.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
+            tasksRepo.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
             return
         }
 
         val submitInfo = TasksApi.SubmitInfo(task.id.orEmpty(),
-                chosenAnswers, userInfo.publicAddress)
+            chosenAnswers, userInfo.publicAddress)
         submitQuestionnaireAnswers(submitInfo)
     }
 
-    fun getTrueXTask(agent: String, callback: OperationResultCallback<JsonElement?>) {
-        questionnaireApi.truexActivity(userId, agent).enqueue(object : Callback<TasksApi.TrueXResponse> {
+    fun retrieveTruexActivity(agent: String, callback: OperationResultCallback<JsonElement?>) {
+        tasksApi.truexActivity(userId, agent).enqueue(object : Callback<TasksApi.TrueXResponse> {
             override fun onFailure(call: Call<TasksApi.TrueXResponse>?, t: Throwable?) {
                 callback.onError(0)
             }
@@ -64,19 +64,19 @@ class TaskService(context: Context, api: TasksApi,
 
     fun retrieveNextTask(callback: OperationCompletionCallback? = null) {
 
-        questionnaireApi.nextTasks(userId).enqueue(object : Callback<TasksApi.NextTasksResponse> {
+        tasksApi.nextTasks(userId).enqueue(object : Callback<TasksApi.NextTasksResponse> {
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
-                                    response: Response<TasksApi.NextTasksResponse>?) {
+                response: Response<TasksApi.NextTasksResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     Log.d("TaskService", "onResponse: ${response.body()}")
                     val taskResponse = response.body()
                     val taskList: List<Task> = taskResponse?.taskList.orEmpty()
                     var task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
-                    questionnaireRepo.replaceQuestionnaire(task, applicationContext)
+                    tasksRepo.replaceTask(task, applicationContext)
                     callback?.onSuccess()
                 } else {
-                    questionnaireRepo.replaceQuestionnaire(null, applicationContext)
+                    tasksRepo.replaceTask(null, applicationContext)
                     Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
                     callback?.onError(ERROR_EMPTY_RESPONSE)
                 }
@@ -84,35 +84,35 @@ class TaskService(context: Context, api: TasksApi,
 
             override fun onFailure(call: Call<TasksApi.NextTasksResponse>?, t: Throwable?) {
                 Log.d("TaskService", "onFailure called with throwable $t")
-                questionnaireRepo.replaceQuestionnaire(null, applicationContext)
+                tasksRepo.replaceTask(null, applicationContext)
                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
         })
     }
 
     private fun submitQuestionnaireAnswers(submitInfo: TasksApi.SubmitInfo) {
-        questionnaireApi.submitTaskResults(userId, submitInfo).enqueue(
-                object : Callback<TasksApi.TaskSubmitResponse> {
-                    override fun onResponse(call: Call<TasksApi.TaskSubmitResponse>?,
-                                            response: Response<TasksApi.TaskSubmitResponse>?) {
+        tasksApi.submitTaskResults(userId, submitInfo).enqueue(
+            object : Callback<TasksApi.TaskSubmitResponse> {
+                override fun onResponse(call: Call<TasksApi.TaskSubmitResponse>?,
+                    response: Response<TasksApi.TaskSubmitResponse>?) {
 
-                        if (response != null && response.isSuccessful) {
-                            Log.d("TaskService", "onResponse: ${response.body()}")
-                            questionnaireRepo.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
+                    if (response != null && response.isSuccessful) {
+                        Log.d("TaskService", "onResponse: ${response.body()}")
+                        tasksRepo.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
 
-                            walletService.onEarnTransactionCompleted.set(false)
-                            retrieveNextTask()
-                        } else {
-                            Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
-                            questionnaireRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
-                        }
+                        walletService.onEarnTransactionCompleted.set(false)
+                        retrieveNextTask()
+                    } else {
+                        Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
+                        tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
                     }
+                }
 
-                    override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
-                        Log.d("TaskService", "onFailure called with throwable $t")
-                        questionnaireRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
-                    }
-                })
+                override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
+                    Log.d("TaskService", "onFailure called with throwable $t")
+                    tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
+                }
+            })
     }
 }
 

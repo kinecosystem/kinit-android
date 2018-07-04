@@ -30,7 +30,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [(ContextModule::class), (UserRepositoryModule::class), (QuestionnaireRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (NotificationModule::class), (DataStoreProviderModule::class), (ServicesProviderModule::class)])
+    modules = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (NotificationModule::class), (DataStoreProviderModule::class), (ServicesProviderModule::class)])
 interface CoreComponent {
 
     fun inject(balanceViewModel: BalanceViewModel)
@@ -42,7 +42,7 @@ interface CoreComponent {
     fun inject(splashViewModel: SplashViewModel)
     fun inject(questionnaireViewModel: QuestionnaireViewModel)
     fun inject(questionnaireCompleteViewModel: QuestionnaireCompleteViewModel)
-    fun inject(questionnaireRewardViewModel: TaskRewardViewModel)
+    fun inject(taskRewardViewModel: TaskRewardViewModel)
     fun inject(questionViewModel: QuestionViewModel)
     fun inject(peer2PeerViewModel: Peer2PeerViewModel)
     fun inject(phoneVerificationViewModel: PhoneVerificationViewModel)

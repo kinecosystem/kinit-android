@@ -39,12 +39,12 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
         walletService = servicesProvider.walletService
         balance = walletService.balance
         onTransactionComplete =
-                if (questionnaireRepository.taskState == TaskState.TRANSACTION_COMPLETED) {
-                    ObservableBoolean(true)
-                } else {
-                    waitForReward()
-                    walletService.onEarnTransactionCompleted
-                }
+            if (questionnaireRepository.taskState == TaskState.TRANSACTION_COMPLETED) {
+                ObservableBoolean(true)
+            } else {
+                waitForReward()
+                walletService.onEarnTransactionCompleted
+            }
     }
 
     fun onResume() {
@@ -61,28 +61,28 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
 
     private fun rewardPageShown() {
         val event = Events.Analytics.ViewRewardPage(
-                task?.provider?.name,
-                task?.minToComplete,
-                task?.kinReward,
-                task?.tagsString(),
-                task?.id,
-                task?.title,
-                task?.type)
+            task?.provider?.name,
+            task?.minToComplete,
+            task?.kinReward,
+            task?.tagsString(),
+            task?.id,
+            task?.title,
+            task?.type)
         analytics.logEvent(event)
     }
 
 
     private fun waitForReward() {
         scheduler.scheduleOnMain(
-                {
-                    if (!onTransactionComplete.get()) {
-                        timeoutCallback?.onTransactionTimeout()
-                        // update balance anyway in case kin has been received
-                        servicesProvider.walletService.updateBalance()
-                        walletService.retrieveTransactions()
-                    }
-                },
-                REWARD_TIMEOUT)
+            {
+                if (!onTransactionComplete.get()) {
+                    timeoutCallback?.onTransactionTimeout()
+                    // update balance anyway in case kin has been received
+                    servicesProvider.walletService.updateBalance()
+                    walletService.retrieveTransactions()
+                }
+            },
+            REWARD_TIMEOUT)
     }
 
 }

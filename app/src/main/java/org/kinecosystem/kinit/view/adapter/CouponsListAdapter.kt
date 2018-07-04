@@ -30,7 +30,7 @@ class CouponsListAdapter(val context: Context)
     }
 
     lateinit var parent: RecyclerView
-    private var coupons:ArrayList<Coupon>
+    private var coupons: ArrayList<Coupon>
     private var currentExpandedPosition = -1
     private var previousExpandedPosition = -1
 

@@ -4,7 +4,7 @@ import org.kinecosystem.kinit.model.KinTransaction
 import org.kinecosystem.kinit.util.TimeUtils
 import org.kinecosystem.kinit.view.adapter.TransactionsListAdapter
 
-class TransactionViewModel(val transaction: KinTransaction, viewType: Int?, transactionsCount : Int) {
+class TransactionViewModel(val transaction: KinTransaction, viewType: Int?, transactionsCount: Int) {
 
     private val txTimeInSeconds = transaction.date ?: 0
 

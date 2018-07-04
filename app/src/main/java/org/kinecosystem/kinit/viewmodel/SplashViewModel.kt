@@ -30,7 +30,7 @@ class SplashViewModel(var splashNavigator: SplashNavigator?) {
     @Inject
     lateinit var servicesProvider: ServicesProvider
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var tasksRepository: TasksRepository
 
     val showCreatingWallet: ObservableBoolean = ObservableBoolean(false)
     var callback: Observable.OnPropertyChangedCallback? = null
@@ -92,7 +92,7 @@ class SplashViewModel(var splashNavigator: SplashNavigator?) {
             splashNavigator?.moveToTutorialScreen()
         } else {
             splashNavigator?.moveToMainScreen()
-        }
+     }
     }
 
 

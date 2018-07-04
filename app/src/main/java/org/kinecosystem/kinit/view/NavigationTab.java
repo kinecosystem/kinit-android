@@ -22,7 +22,7 @@ public class NavigationTab extends ConstraintLayout {
     private int iconSelectedColor = getContext().getResources().getColor(R.color.tab_icon_color_selected);
 
     public NavigationTab(@NonNull Context context,
-                         @Nullable AttributeSet attrs) {
+        @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }

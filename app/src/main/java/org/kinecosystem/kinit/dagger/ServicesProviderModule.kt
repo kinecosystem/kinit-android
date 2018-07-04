@@ -13,18 +13,18 @@ import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Singleton
 
 @Module(
-    includes = [(ContextModule::class), (UserRepositoryModule::class), (QuestionnaireRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (AnalyticsModule::class), (DataStoreProviderModule::class)])
+    includes = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (AnalyticsModule::class), (DataStoreProviderModule::class)])
 class ServicesProviderModule {
 
     lateinit var serivce: ServicesProvider
     @Provides
     @Singleton
     fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider,
-                         userRepository: UserRepository, questionnaireRepo: TasksRepository,
-                         offersRepository: OffersRepository, analytics: Analytics,
-                         scheduler: Scheduler): ServicesProvider {
+        userRepository: UserRepository, tasksRepo: TasksRepository,
+        offersRepository: OffersRepository, analytics: Analytics,
+        scheduler: Scheduler): ServicesProvider {
         serivce = ServicesProvider(context, dataStoreProvider,
-            userRepository, questionnaireRepo, offersRepository, analytics, scheduler)
+            userRepository, tasksRepo, offersRepository, analytics, scheduler)
         return serivce
     }
 

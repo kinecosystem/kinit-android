@@ -28,7 +28,7 @@ public class TaskErrorFragment extends BaseFragment {
     @Inject
     Analytics analytics;
     @Inject
-    TasksRepository questionnaireRepository;
+    TasksRepository taskRepository;
 
     public static TaskErrorFragment newInstance(int error) {
         TaskErrorFragment fragment = new TaskErrorFragment();
@@ -54,7 +54,7 @@ public class TaskErrorFragment extends BaseFragment {
             {
                 reportClickOnCloseEvent(errorType);
                 BaseActivity activity = (BaseActivity) getActivity();
-                questionnaireRepository.resetTaskState();
+                taskRepository.resetTaskState();
                 activity.finish();
             }
         );

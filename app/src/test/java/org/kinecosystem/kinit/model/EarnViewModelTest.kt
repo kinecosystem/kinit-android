@@ -14,11 +14,11 @@ import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 
-private const val SAMPLE_QUESTIONNAIRE = """
+private const val SAMPLE_QUESTIONNAIRE_TASK = """
 {
     "id":"0",
-    "title":"A questionnaire title",
-    "desc":"A few words about the questionnaire, what you can find inside",
+    "title":"A task title",
+    "desc":"A few words about the task, what you can find inside",
     "type":"questionnaire",
     "memo":"memo",
     "price":100,
@@ -45,31 +45,32 @@ class EarnViewModelTest {
 
     private fun setupTaskWithTime(timeInMillis: Long) {
         val timeInSecs = timeInMillis / 1000
-        var task = SAMPLE_QUESTIONNAIRE.replace("__START_DATE__", timeInSecs.toString())
-        mockComponents.questionnaireRepository = TasksRepository(mockComponents, task)
+        var task = SAMPLE_QUESTIONNAIRE_TASK.replace("__START_DATE__", timeInSecs.toString())
+        mockComponents.tasksRepository = TasksRepository(mockComponents, task)
         `when`(mockComponents.wallet.balance).thenReturn(ObservableField("1"))
-        earnViewModelToTest = EarnViewModel(mockComponents.questionnaireRepository, mockComponents.wallet, mockComponents.taskService,
-             mockComponents.scheduler, mockComponents.analytics,
+        earnViewModelToTest = EarnViewModel(mockComponents.tasksRepository, mockComponents.wallet,
+            mockComponents.taskService,
+            mockComponents.scheduler, mockComponents.analytics,
             mockNavigator)
         earnViewModelToTest.onScreenVisibleToUser()
     }
 
     @Test
-    fun questionnaireNotAvailableWhenTaskTimeInOneHour() {
+    fun taskNotAvailableWhenTaskTimeInOneHour() {
         var timeIn1hour = System.currentTimeMillis() + HOUR_IN_MILLIS
         setupTaskWithTime(timeIn1hour)
         assertFalse(earnViewModelToTest.shouldShowTask.get())
     }
 
     @Test
-    fun questionnaireAvailableWhenTaskTimeBeforeOneHour() {
+    fun taskAvailableWhenTaskTimeBeforeOneHour() {
         var time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
         setupTaskWithTime(time1hourBefore)
         assertTrue(earnViewModelToTest.shouldShowTask.get())
     }
 
     @Test
-    fun questionnaireBecomesAvailableInAnHour() {
+    fun taskBecomesAvailableInAnHour() {
         var timeIn1hour = System.currentTimeMillis() + HOUR_IN_MILLIS
         setupTaskWithTime(timeIn1hour)
         (mockComponents.scheduler as MockScheduler).setCurrentTime(timeIn1hour)
@@ -77,7 +78,7 @@ class EarnViewModelTest {
     }
 
     @Test
-    fun questionnaireBecomesAvailableInADay() {
+    fun taskBecomesAvailableInADay() {
         var timeInAday = System.currentTimeMillis() + DAY_IN_MILLIS
         setupTaskWithTime(timeInAday)
         (mockComponents.scheduler as MockScheduler).setCurrentTime(timeInAday)
@@ -85,7 +86,7 @@ class EarnViewModelTest {
     }
 
     @Test
-    fun questionnaireDoesNotBecomeAvailableInADayWhenTaskIn2Days() {
+    fun taskDoesNotBecomeAvailableInADayWhenTaskIn2Days() {
         var timeInAday = System.currentTimeMillis() + DAY_IN_MILLIS
         var timeIn2days = timeInAday + DAY_IN_MILLIS
         setupTaskWithTime(timeIn2days)
@@ -94,7 +95,7 @@ class EarnViewModelTest {
     }
 
     @Test
-    fun questionnaireBecomesAvailableIn2Days() {
+    fun taskBecomesAvailableIn2Days() {
         val currentTime = System.currentTimeMillis()
         val mockScheduler = mockComponents.scheduler
         mockScheduler.setCurrentTime(currentTime)

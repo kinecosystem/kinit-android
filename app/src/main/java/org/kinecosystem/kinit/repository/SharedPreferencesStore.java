@@ -126,6 +126,6 @@ public class SharedPreferencesStore implements DataStore {
     @NonNull
     public Map<String, ?> getAll() {
         SharedPreferences sp = applicationContext.getSharedPreferences(storageSection, Context.MODE_PRIVATE);
-        return  sp.getAll();
+        return sp.getAll();
     }
 }

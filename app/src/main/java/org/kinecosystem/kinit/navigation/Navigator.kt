@@ -22,7 +22,7 @@ class Navigator(private val context: Context) {
     }
 
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var tasksRepository: TasksRepository
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -57,10 +57,10 @@ class Navigator(private val context: Context) {
     }
 
     private fun navigateToTask() {
-        if (questionnaireRepository.task != null) {
-            if (questionnaireRepository.task!!.isQuestionnaire()) {
+        if (tasksRepository.task != null) {
+            if (tasksRepository.task!!.isQuestionnaire()) {
                 context.startActivity(QuestionnaireActivity.getIntent(context))
-            } else if (questionnaireRepository.task!!.isTaskWebView()) {
+            } else if (tasksRepository.task!!.isTaskWebView()) {
                 context.startActivity(WebTaskActivity.getIntent(context))
             }
         }

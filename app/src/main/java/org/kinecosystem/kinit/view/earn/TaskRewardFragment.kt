@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.doOnPreDraw
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.databinding.QuestionnaireRewardFragmentBinding
+import org.kinecosystem.kinit.databinding.TaskRewardFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.earn.TaskRewardViewModel
 
@@ -19,13 +19,13 @@ interface TransactionTimeout {
 
 class TaskRewardFragment : BaseFragment(), TransactionTimeout {
     var model: TaskRewardViewModel? = null
-    lateinit var binding: QuestionnaireRewardFragmentBinding
+    lateinit var binding: TaskRewardFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.questionnaire_reward_fragment, container,
+        binding = DataBindingUtil.inflate(inflater, R.layout.task_reward_fragment, container,
             false)
-        model = TaskRewardViewModel( this)
+        model = TaskRewardViewModel(this)
         binding.model = model
         binding.transactionImage.doOnPreDraw {
             animateIn()

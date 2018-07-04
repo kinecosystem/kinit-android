@@ -22,14 +22,14 @@ class WebTaskActivity : BaseSingleFragmentActivity() {
     }
 
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var tasksRepository: TasksRepository
 
     override fun inject() {
         KinitApplication.coreComponent.inject(this)
     }
 
     override fun getFragment(): Fragment {
-        return when (questionnaireRepository.task!!.type) {
+        return when (tasksRepository.task!!.type) {
             "truex" -> WebTaskTruexFragment.getInstance()
             else -> WebTaskTruexFragment.getInstance()
         }

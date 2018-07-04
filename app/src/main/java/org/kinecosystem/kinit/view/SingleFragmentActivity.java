@@ -14,7 +14,7 @@ public abstract class SingleFragmentActivity extends BaseActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, getFragment()).commit();
     }
 
-    public void replaceFragment(Fragment fragment){
+    public void replaceFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
