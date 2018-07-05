@@ -1,8 +1,8 @@
 # kinit-app-android
 This repository hosts the code for the Kinit android app.
 Kin is set out to change the digital world and the way people experience and exchange value online. 
-Kinit is a mobile app with a standalone Kin experience. For more info about the app, you are welcome to read 
-[Kinit Beta App and the Lean Startup approach](https://medium.com/inside-kin/kinit-beta-app-and-the-lean-startup-approach-71bc81937f5).
+Kinit is a mobile app with a standalone Kin experience. For more info, you are welcome to read 
+[Open Sourcing Kinit](https://medium.com/inside-kin/open-sourcing-kinit-daf8b29f43dc).
 
 
 ## Build
