@@ -66,6 +66,6 @@ interface CoreComponent {
     fun inject(taskWebViewActivity: WebTaskActivity)
     fun inject(webModel: WebViewModel)
     fun inject(trueXModel: WebTaskTruexViewModel)
-
+    fun inject(questionDualFragmentViewModel:QuestionDualImageViewModel)
 
 }

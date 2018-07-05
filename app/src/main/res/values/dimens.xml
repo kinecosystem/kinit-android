@@ -26,4 +26,6 @@
     <dimen name="header_text_bottom_guid">267dp</dimen>
     <dimen name="header_text_bottom_guid_space">28dp</dimen>
     <dimen name="rounded_rec_small">8dp</dimen>
+    <dimen name="emoji_big">60sp</dimen>
+    <dimen name="emoji_normal">50sp</dimen>
 </resources>

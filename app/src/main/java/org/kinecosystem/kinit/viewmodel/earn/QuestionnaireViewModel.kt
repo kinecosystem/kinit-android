@@ -8,6 +8,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
+import org.kinecosystem.kinit.model.earn.isTypeDualImage
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.earn.*
@@ -21,7 +22,7 @@ private const val TRANSACTION_ERROR_PAGE = 4
 
 
 class QuestionnaireViewModel(restoreState: Boolean) :
-    QuestionnaireActions {
+        QuestionnaireActions {
 
     @Inject
     lateinit var questionnaireRepository: TasksRepository
@@ -37,19 +38,19 @@ class QuestionnaireViewModel(restoreState: Boolean) :
         KinitApplication.coreComponent.inject(this)
         task = questionnaireRepository.task
         currentPage =
-            when {
-                restoreState -> getPageFromState()
-                !questionnaireRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
-                else -> QUESTIONNAIRE_COMPLETE_PAGE
-            }
+                when {
+                    restoreState -> getPageFromState()
+                    !questionnaireRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
+                    else -> QUESTIONNAIRE_COMPLETE_PAGE
+                }
         moveToNextPage(currentPage)
     }
 
     override fun nextQuestion() {
         moveToNextPage(
-            if (!questionnaireRepository.isTaskComplete()) {
-                NEXT_QUESTION_PAGE
-            } else QUESTIONNAIRE_COMPLETE_PAGE
+                if (!questionnaireRepository.isTaskComplete()) {
+                    NEXT_QUESTION_PAGE
+                } else QUESTIONNAIRE_COMPLETE_PAGE
         )
     }
 
@@ -72,18 +73,24 @@ class QuestionnaireViewModel(restoreState: Boolean) :
     private fun moveToNextPage(page: Int) {
         currentPage = page
         questionnaireProgress.set(
-            ((questionnaireRepository.getNumOfAnsweredQuestions().toDouble() / task?.questions!!.size) * 100).toInt())
+                ((questionnaireRepository.getNumOfAnsweredQuestions().toDouble() / task?.questions!!.size) * 100).toInt())
         nextFragment.set(getFragment())
     }
 
     private fun getFragment(): Fragment {
 
         return when (currentPage) {
-            NEXT_QUESTION_PAGE -> QuestionFragment.newInstance(nextQuestionIndex())
+            NEXT_QUESTION_PAGE -> {
+                if (questionnaireRepository.task?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!!) {
+                    QuestionDualImageFragment.newInstance(nextQuestionIndex())
+                } else {
+                    QuestionFragment.newInstance(nextQuestionIndex())
+                }
+            }
             QUESTIONNAIRE_COMPLETE_PAGE -> QuestionnaireCompleteFragment.newInstance()
             REWARD_PAGE -> TaskRewardFragment.newInstance()
             TRANSACTION_ERROR_PAGE -> TaskErrorFragment.newInstance(
-                TaskErrorFragment.ERROR_TRANSACTION)
+                    TaskErrorFragment.ERROR_TRANSACTION)
             else -> TaskErrorFragment.newInstance(TaskErrorFragment.ERROR_SUBMIT)
         }
     }
@@ -92,25 +99,25 @@ class QuestionnaireViewModel(restoreState: Boolean) :
         val event: Events.Event
         if (questionnaireRepository.isTaskComplete()) {
             event = Events.Analytics.ClickCloseButtonOnRewardPage(task?.provider?.name,
-                task?.minToComplete,
-                task?.kinReward,
-                task?.tagsString(),
-                task?.id,
-                task?.title,
-                task?.type)
+                    task?.minToComplete,
+                    task?.kinReward,
+                    task?.tagsString(),
+                    task?.id,
+                    task?.title,
+                    task?.type)
         } else {
             val question = task?.questions?.get(nextQuestionIndex())
             event = Events.Analytics.ClickCloseButtonOnQuestionPage(task?.provider?.name,
-                task?.minToComplete,
-                task?.kinReward,
-                question?.answers?.count(),
-                task?.questions?.count(),
-                question?.id,
-                nextQuestionIndex() + 1,
-                question?.type,
-                task?.tagsString(),
-                task?.id,
-                task?.title)
+                    task?.minToComplete,
+                    task?.kinReward,
+                    question?.answers?.count(),
+                    task?.questions?.count(),
+                    question?.id,
+                    nextQuestionIndex() + 1,
+                    question?.type,
+                    task?.tagsString(),
+                    task?.id,
+                    task?.title)
         }
         analytics.logEvent(event)
     }
