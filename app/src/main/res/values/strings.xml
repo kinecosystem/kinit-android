@@ -26,7 +26,7 @@
     <string name="dialog_no_good_left_message">Please check back later</string>
     <string name="dialog_no_good_left_title">Oops! Someone grabbed the last one... for now</string>
     <string name="dialog_coupon_redeem_failed_title">Oops! Transaction incomplete</string>
-    <string name="dialog_coupon_redeem_failed_message">Sorry! We’re unable to retrieve your code. Please contact support.</string>
+    <string name="dialog_coupon_redeem_failed_message">Sorry! We\’re unable to retrieve your code. Please contact support.</string>
     <string name="dialog_exit_before_share_message">This code will only appear once.\nCopy and paste it somewhere safe</string>
     <string name="dialog_exit_before_share_title">Don’t leave without your code!</string>
     <string name="dialog_no_internet_message">Please check your internet connection and try again.</string>
