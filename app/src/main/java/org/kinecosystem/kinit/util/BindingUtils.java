@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 
+import org.kinecosystem.kinit.model.earn.Answer;
 import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
 
 
@@ -90,6 +91,13 @@ public class BindingUtils {
     public static void addOverListener(AnswerSelectedOverView view, AnswerSelectedOverView.OnSelectionListener listener) {
         if (listener != null) {
             view.setListener(listener);
+        }
+    }
+
+    @BindingAdapter("answer")
+    public static void answer(AnswerSelectedOverView view, Answer answer) {
+        if (answer != null) {
+            view.setAnswer(answer);
         }
     }
 }

@@ -19,8 +19,10 @@
 
         <TextView
             android:id="@+id/question"
-            android:layout_width="295dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal|center"
             android:text="@{model.questionText}"
@@ -56,22 +58,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion"
-
-
-            />
+            app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion" />
 
         <org.kinecosystem.kinit.view.customView.AnswerSelectedOverView
             android:id="@+id/answer_a"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:alpha="0"
+            app:answer="@{model.answers[0]}"
+            android:clickable="@{!model.onSelectionComplete}"
             app:layout_constraintBottom_toTopOf="@+id/guidelineDelimiter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion"
-            app:overSelectionListener="@{model.selectionListeners[0]}" />
+            app:overSelectionListener="@{model.selectionListener}" />
 
         <ImageView
             android:id="@+id/image_b"
@@ -92,13 +93,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:alpha="0"
-            android:clickable="true"
+            app:answer="@{model.answers[1]}"
+            android:clickable="@{!model.onSelectionComplete}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guidelineDelimiter"
-            app:overSelectionListener="@{model.selectionListeners[1]}" />
+            app:overSelectionListener="@{model.selectionListener}" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guidelineTopQuestion"
@@ -142,7 +144,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="@string/or"
-            android:textColor="#7884a5"
+            android:textColor="@color/grey"
             android:textSize="11sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/image_or"

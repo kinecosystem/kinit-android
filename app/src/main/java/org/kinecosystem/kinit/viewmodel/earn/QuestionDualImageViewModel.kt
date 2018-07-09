@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.viewmodel.earn
 
+import android.databinding.ObservableBoolean
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
@@ -18,43 +19,48 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var taskRepository: TasksRepository
     @Inject
     lateinit var analytics: Analytics
 
     private val POST_ANSWER_DELAY: Long = 400
-    private var question: Question? = null
-    var chosenAnswers: MutableList<String> = mutableListOf()
+    private var question: Question?
     var imageUrls: MutableList<String> = mutableListOf()
-    var selectionListeners: MutableList<OnSelectionListener> = mutableListOf()
     var questionText: String?
+    var answers: List<Answer>?
+    var onSelectionComplete = ObservableBoolean(false)
+
+    var selectionListener: OnSelectionListener = object : OnSelectionListener {
+        override fun onAnimComplete() {
+            scheduler.scheduleOnMain({
+                questionnaireActions?.nextQuestion()
+            }, POST_ANSWER_DELAY)
+        }
+
+        override fun onSelected(answer: Answer) {
+            onSelectionComplete.set(true)
+            onAnswered(answer)
+        }
+    }
 
     init {
         KinitApplication.coreComponent.inject(this)
-        question = questionnaireRepository.task?.questions?.get(questionIndex)
+        question = taskRepository.task?.questions?.get(questionIndex)
+        answers = question?.answers
         questionText = question?.text
-        for (answer in question?.answers!!) {
+        question?.answers?.forEach { answer ->
             answer.imageUrl?.let { imageUrls.add(it) }
-            selectionListeners.add(object : OnSelectionListener {
-                override fun onSelected() {
-                    val index = selectionListeners.indexOf(this)
-                    onAnswered(question?.answers!![index])
-                }
-            })
         }
     }
 
     fun onAnswered(answer: Answer) {
-        answer.id?.let { chosenAnswers.add(it) }
-        questionnaireRepository.setChosenAnswers(question?.id!!, chosenAnswers)
-        scheduler.scheduleOnMain({
-            questionnaireActions?.nextQuestion()
-        }, POST_ANSWER_DELAY)
-        analytics.logEvent(answerEvent(questionnaireRepository.task))
+        val answeredId = answer.id ?: ""
+        question?.id?.let { taskRepository.setChosenAnswers(it, listOf(answeredId)) }
+        analytics.logEvent(answerEvent(taskRepository.task, answeredId))
     }
 
     fun onResume() {
-        val task = questionnaireRepository.task
+        val task = taskRepository.task
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
@@ -68,9 +74,9 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
         analytics.logEvent(event)
     }
 
-    private fun answerEvent(task: Task?): Events.Event? {
+    private fun answerEvent(task: Task?, answerId: String): Events.Event? {
         return Events.Analytics.ClickAnswerButtonOnQuestionPage(
-                chosenAnswers[0],
+                answerId,
                 -1,
                 task?.provider?.name,
                 task?.minToComplete,

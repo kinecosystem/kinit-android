@@ -9,16 +9,18 @@ import android.view.MotionEvent
 import android.view.ViewAnimationUtils
 import androidx.core.animation.doOnEnd
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.model.earn.Answer
 
 
 class AnswerSelectedOverView : ConstraintLayout {
 
-
     interface OnSelectionListener {
-        fun onSelected()
+        fun onSelected(answer: Answer)
+        fun onAnimComplete()
     }
 
     var listener: OnSelectionListener? = null
+    lateinit var answer: Answer
 
     constructor(context: Context) : super(context) {
         init()
@@ -42,17 +44,19 @@ class AnswerSelectedOverView : ConstraintLayout {
 
     private fun reveal(x: Int, y: Int) {
         setOnTouchListener(null)
+        if (!isClickable) return
+        listener?.onSelected(answer)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val anim = ViewAnimationUtils.createCircularReveal(this, x, y, 0f, Math.max(width, height).toFloat())
             alpha = 1f
             anim.doOnEnd {
-                listener?.onSelected()
+                listener?.onAnimComplete()
             }
             anim.start()
         } else {
             val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime)
             animate().alpha(1f).setDuration(shortAnimTime.toLong()).withEndAction {
-                listener?.onSelected()
+                listener?.onAnimComplete()
             }
         }
     }

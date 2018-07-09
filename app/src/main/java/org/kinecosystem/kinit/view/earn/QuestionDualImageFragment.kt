@@ -19,10 +19,9 @@ class QuestionDualImageFragment : BaseFragment() {
         if (activity !is QuestionnaireActions) {
             onInvalidData()
         }
-        if (arguments == null || !arguments!!.containsKey(ARG_QUESTION_INDEX)) {
-            onInvalidData()
-        }
-        val questionIndex = arguments!!.getInt(ARG_QUESTION_INDEX, INVALID_QUESTION_INDEX)
+
+        val questionIndex = arguments?.getInt(ARG_QUESTION_INDEX, INVALID_QUESTION_INDEX)
+                ?: INVALID_QUESTION_INDEX
         if (questionIndex == INVALID_QUESTION_INDEX) {
             onInvalidData()
         }
@@ -33,7 +32,7 @@ class QuestionDualImageFragment : BaseFragment() {
 
     private fun onInvalidData() {
         Log.e(TAG, "Invalid data cant start ${QuestionDualImageFragment::class.simpleName}")
-        activity!!.finish()
+        activity?.finish()
     }
 
     companion object {
