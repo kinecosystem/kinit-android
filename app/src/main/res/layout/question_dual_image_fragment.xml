@@ -44,40 +44,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion" />
 
-        <TextView
-            android:id="@+id/text_a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="☝️"
-            android:textSize="@dimen/emoji_big"
-            app:layout_constraintBottom_toTopOf="@+id/guidelineDelimiter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion" />
-
-        <TextView
-            android:id="@+id/text_b"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="✌️"
-            android:textSize="@dimen/emoji_big"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guidelineDelimiter" />
-
 
         <ImageView
             android:id="@+id/image_a"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:clickable="@{model.clickable}"
-            android:onClick="@{model::onAnswered}"
-            app:onTouch="@{model.onTouchListener}"
+            android:clickable="false"
             android:scaleType="centerCrop"
-            android:tag="0"
             app:imageUrl="@{model.imageUrls[0]}"
             app:layout_constraintBottom_toTopOf="@+id/guidelineDelimiter"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,27 +65,20 @@
             android:id="@+id/answer_a"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:clickable="false"
-            app:circularReveal="@{model.isAnswerSelected[0]}"
-            app:startX="@{model.touchX}"
-            app:startY="@{model.touchY}"
-            android:visibility="invisible"
+            android:alpha="0"
             app:layout_constraintBottom_toTopOf="@+id/guidelineDelimiter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion" />
-
-
+            app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion"
+            app:overSelectionListener="@{model.selectionListeners[0]}" />
 
         <ImageView
             android:id="@+id/image_b"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:clickable="@{model.clickable}"
-            android:onClick="@{model::onAnswered}"
+            android:clickable="false"
             android:scaleType="centerCrop"
-            android:tag="1"
             app:imageUrl="@{model.imageUrls[1]}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -125,16 +91,14 @@
             android:id="@+id/answer_b"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:clickable="false"
-            app:circularReveal="@{model.isAnswerSelected[1]}"
-            app:startX="@{model.touchX}"
-            app:startY="@{model.touchY}"
-            android:visibility="invisible"
+            android:alpha="0"
+            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guidelineDelimiter" />
+            app:layout_constraintTop_toTopOf="@+id/guidelineDelimiter"
+            app:overSelectionListener="@{model.selectionListeners[1]}" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guidelineTopQuestion"

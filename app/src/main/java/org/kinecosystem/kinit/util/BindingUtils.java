@@ -1,17 +1,13 @@
 package org.kinecosystem.kinit.util;
 
-import android.animation.Animator;
 import android.databinding.BindingAdapter;
-import android.os.Build;
-import android.support.constraint.ConstraintSet;
 import android.support.constraint.Guideline;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 
-import org.kinecosystem.kinit.util.ImageUtils;
+import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
 
 
 public class BindingUtils {
@@ -20,13 +16,6 @@ public class BindingUtils {
     public static void loadImage(ImageView imageView, String url) {
         if (url != null && !url.isEmpty()) {
             ImageUtils.loadImageIntoView(imageView.getContext(), url, imageView);
-        }
-    }
-
-    @BindingAdapter("onTouch")
-    public static void addTouchListener(ImageView imageView, View.OnTouchListener listener) {
-        if (listener != null) {
-            imageView.setOnTouchListener(listener);
         }
     }
 
@@ -97,24 +86,10 @@ public class BindingUtils {
         }
     }
 
-    @BindingAdapter(value = {"circularReveal", "startX", "startY"})
-    public static void circleReavel(View view, boolean circularReveal, int startX, int startY) {
-        if (circularReveal) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // get the final radius for the clipping circle
-                float finalRadius = view.getWidth() >= view.getHeight() ? view.getWidth() : view.getHeight();
-
-                // create the animator for this view (the start radius is zero)
-                Animator anim =
-                        ViewAnimationUtils.createCircularReveal(view, startX, startY, 0, finalRadius);
-
-                // make the view visible and start the animation
-                view.setVisibility(View.VISIBLE);
-                anim.start();
-            } else {
-                // set the view to visible without a circular reveal animation below Lollipop
-                view.setVisibility(View.VISIBLE);
-            }
+    @BindingAdapter("overSelectionListener")
+    public static void addOverListener(AnswerSelectedOverView view, AnswerSelectedOverView.OnSelectionListener listener) {
+        if (listener != null) {
+            view.setListener(listener);
         }
     }
 }
