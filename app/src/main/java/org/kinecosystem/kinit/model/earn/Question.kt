@@ -15,6 +15,7 @@ data class Question(val id: String? = null,
     enum class QuestionType(val type: String) {
         TEXT("text"),
         TEXT_IMAGE("textimage"),
+        TEXT_DUAL_IMAGE("dual_image"),
         TEXT_EMOJI("textemoji"),
         TEXT_MULTIPLE("textmultiple");
     }
@@ -26,3 +27,5 @@ fun Question.isValid(): Boolean {
     }
     return answers.orEmpty().all { answer -> answer.isValid() }
 }
+
+fun Question.isTypeDualImage() = type?.equals(Question.QuestionType.TEXT_DUAL_IMAGE.type) ?: false

@@ -40,5 +40,6 @@
     <color name="konfetti3">#90fdf2</color>
     <color name="konfetti4">#1664e8</color>
     <color name="rounded_rec_stroke_grey">#d7dce9</color>
+    <color name="blue_selected_image">#80047cfc</color>
 
 </resources>

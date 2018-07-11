@@ -112,4 +112,5 @@
     <string name="change">change</string>
     <string name="transaction_completed">Transaction completed</string>
     <string name="transaction_complete_subtitle">You’ve successfully sent %dKIN, see transaction details under balance</string>
+    <string name="or">Or</string>
 </resources>

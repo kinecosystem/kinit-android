@@ -1,13 +1,14 @@
 package org.kinecosystem.kinit.util;
 
 import android.databinding.BindingAdapter;
-import android.support.constraint.ConstraintSet;
 import android.support.constraint.Guideline;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import org.kinecosystem.kinit.util.ImageUtils;
+
+import org.kinecosystem.kinit.model.earn.Answer;
+import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
 
 
 public class BindingUtils {
@@ -83,6 +84,20 @@ public class BindingUtils {
     public static void callJavaScript(WebView webView, boolean run, String script) {
         if (run) {
             webView.evaluateJavascript(script, null);
+        }
+    }
+
+    @BindingAdapter("overSelectionListener")
+    public static void addOverListener(AnswerSelectedOverView view, AnswerSelectedOverView.OnSelectionListener listener) {
+        if (listener != null) {
+            view.setListener(listener);
+        }
+    }
+
+    @BindingAdapter("answer")
+    public static void answer(AnswerSelectedOverView view, Answer answer) {
+        if (answer != null) {
+            view.setAnswer(answer);
         }
     }
 }
