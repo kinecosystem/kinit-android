@@ -46,16 +46,6 @@ class SpendViewModel(private val navigator: Navigator) :
             hasOffers.set(!offersRepository.offerList.isEmpty())
             showNoOffer.set(!hasOffers.get())
             balance.set(servicesProvider.walletService.balance.get().toString())
-            if (!hasOffers.get()) {
-                servicesProvider.offerService.retrieveOffers(object : OperationCompletionCallback {
-                    override fun onError(errorCode: Int) {
-                    }
-
-                    override fun onSuccess() {
-                        hasOffers.set(!offersRepository.offerList.isEmpty())
-                    }
-                })
-            }
         } else {
             hasNetwork.set(false)
             hasOffers.set(false)
@@ -63,8 +53,22 @@ class SpendViewModel(private val navigator: Navigator) :
         }
     }
 
+    private fun checkForUpdates() {
+        if (hasNetwork.get() && !hasOffers.get()) {
+            servicesProvider.offerService.retrieveOffers(object : OperationCompletionCallback {
+                override fun onError(errorCode: Int) {
+                }
+
+                override fun onSuccess() {
+                   refresh()
+                }
+            })
+        }
+    }
+
     override fun onScreenVisibleToUser() {
         refresh()
+        checkForUpdates()
         val event: Events.Event =
             if (!hasNetwork.get()) {
                 Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
