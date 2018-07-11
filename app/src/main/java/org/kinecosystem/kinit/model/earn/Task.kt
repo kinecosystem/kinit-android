@@ -29,12 +29,14 @@ data class Task(
     val provider: Provider? = null,
     @SerializedName("type")
     val type: String? = null,
+    @SerializedName("updated_at")
+    val lastUpdatedAt: Long? = null,
     @SerializedName("items")
     val questions: List<Question>? = null)
 
 fun Task.isValid(): Boolean {
     if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() ||
-        kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null) {
+        kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null || lastUpdatedAt == null) {
         return false
     }
     if (!questions.orEmpty().all { question -> question.isValid() }) {
