@@ -22,6 +22,7 @@ private const val DEFAULT_TASK = """
     "min_to_complete":6,
     "tags":["kin","crypto","product","research"],
     "provider":{"name": "Kin Team","image_url": "https://s3.amazonaws.com/kinapp-static/brand_img/dunkin.png"},
+    "updated_at":1519499896671,
     "items":[
         {"id":"435","text":"How did you hear about Kin?","type":"text",
             "results":[{"id":"235","text":"Friend / Family"},{"id":"34636363","text":"Facebook group"},{"id":"35345","text":"Blog"},
