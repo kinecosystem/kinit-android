@@ -43,7 +43,6 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
     val isP2p: Boolean
     val couponCode = ObservableField("")
     val couponPurchaseCompleted = ObservableBoolean(false)
-    private var canCloseScreen = true
     var purchaseOfferActions: PurchaseOfferActions? = null
     var canBuy: ObservableBoolean = ObservableBoolean(false)
 
@@ -62,40 +61,32 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
 
     fun onShareButtonClicked(view: View) {
         analytics.logEvent(
-            Events.Analytics.ClickShareButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                offer.title, offer.type))
+                Events.Analytics.ClickShareButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                        offer.title, offer.type))
         purchaseOfferActions?.shareCode(couponCode.get())
-        canCloseScreen = true
     }
 
     fun onBuyButtonClicked(view: View) {
         analytics.logEvent(
-            Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                offer.title, offer.type))
+                Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                        offer.title, offer.type))
         if (!servicesProvider.isNetworkConnected()) {
             purchaseOfferActions?.showDialog(
-                R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
-                R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
+                    R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
+                    R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
             return
         }
         if (isP2p) {
             navigator.navigateTo(Navigator.Destination.PEER2PEER)
         } else {
-            canCloseScreen = false
             purchaseOfferActions?.animateBuy()
             buy()
         }
     }
 
     fun onCloseButtonClicked(view: View?) {
-        if (canCloseScreen) {
-            navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
-            purchaseOfferActions?.closeScreen()
-        } else {
-            purchaseOfferActions?.showDialog(R.string.dialog_exit_before_share_title,
-                R.string.dialog_exit_before_share_message, R.string.dialog_got_it, false)
-            canCloseScreen = true
-        }
+        navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
+        purchaseOfferActions?.closeScreen()
     }
 
     private fun buy() {
@@ -108,8 +99,8 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
                 servicesProvider.walletService.retrieveTransactions()
                 servicesProvider.walletService.retrieveCoupons()
                 analytics.logEvent(
-                    Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                        offer.title, offer.type))
+                        Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                                offer.title, offer.type))
             }
 
             override fun onError(errorCode: Int) {
@@ -118,18 +109,18 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
                     ERROR_NO_INTERNET -> {
                         logErrorType = Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION
                         purchaseOfferActions?.showDialog(R.string.dialog_no_internet_title,
-                            R.string.dialog_no_internet_message, R.string.dialog_ok, false, logErrorType)
+                                R.string.dialog_no_internet_message, R.string.dialog_ok, false, logErrorType)
                     }
                     ERROR_REDEEM_COUPON_FAILED -> {
                         logErrorType = Analytics.VIEW_ERROR_TYPE_CODE_NOT_PROVIDED
                         purchaseOfferActions?.showDialog(
-                            R.string.dialog_coupon_redeem_failed_title, R.string.dialog_coupon_redeem_failed_message,
-                            R.string.dialog_back_to_list, true, logErrorType)
+                                R.string.dialog_coupon_redeem_failed_title, R.string.dialog_coupon_redeem_failed_message,
+                                R.string.dialog_back_to_list, true, logErrorType)
                     }
                     else -> { // ERROR_NO_GOOD_LEFT, ERROR_TRANSACTION_FAILED
                         logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
                         purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
-                            R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
+                                R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
                     }
                 }
             }
