@@ -108,7 +108,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 }
 
                 override fun onError(exception: java.lang.Exception) {
-                    Log.d("Wallet", "#### no update balance  " + balance.get())
+                    Log.d(TAG, "#### no update balance  " + balance.get())
                     analytics.logEvent(
                         Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
                     callback?.onError(exception)
