@@ -120,6 +120,7 @@ public class CodeVerificationFragment extends BaseFragment {
         subtitle = view.findViewById(R.id.subtitle);
         String subtitleStr = getResources().getString(R.string.verification_code_subtitle, phoneNumber);
         subtitle.setText(subtitleStr);
+        analytics.protectView(subtitle);
         resend = view.findViewById(R.id.resend);
         resend.setOnClickListener(view12 -> {
             sendEvent();

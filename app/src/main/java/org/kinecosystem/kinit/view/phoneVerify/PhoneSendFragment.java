@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import javax.inject.Inject;
+import junit.framework.TestFailure;
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
@@ -59,6 +60,7 @@ public class PhoneSendFragment extends BaseFragment {
         }
         prefix = view.findViewById(R.id.prefix);
         phone = view.findViewById(R.id.phone_input);
+        analytics.protectView(view);
         phone.requestFocus();
         next = view.findViewById(R.id.next);
         error = view.findViewById(R.id.error);
