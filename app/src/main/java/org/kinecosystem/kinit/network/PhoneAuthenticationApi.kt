@@ -8,8 +8,7 @@ import retrofit2.http.POST
 
 interface PhoneAuthenticationApi {
 
-    data class AuthInfo(@SerializedName("phone_number") val phoneNumber: String, @SerializedName(
-        "token") val token: String)
+    data class AuthInfo(@SerializedName("token") val token: String)
 
     @POST("/user/firebase/update-id-token")
     fun updatePhoneAuthToken(@Header(

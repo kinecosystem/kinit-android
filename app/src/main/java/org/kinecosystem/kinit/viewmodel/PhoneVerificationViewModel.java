@@ -100,7 +100,7 @@ public class PhoneVerificationViewModel {
                     user.getIdToken(true).addOnCompleteListener(tokenRequest -> {
                         if (tokenRequest.isComplete()) {
                             servicesProvider.getOnBoardingService()
-                                .sendPhoneAuthentication(phoneNumber, tokenRequest.getResult().getToken(),
+                                .sendAuthentication(tokenRequest.getResult().getToken(),
                                     verificationCallback);
                         } else {
                             verificationCallback.onError(PHONE_VERIF_ERROR_CANT_GET_FIREBASE_AUTH_TOKEN);

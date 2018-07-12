@@ -38,8 +38,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         callRegister(BuildConfig.VERSION_NAME)
     }
 
-    fun sendPhoneAuthentication(
-        phoneNumber: String, token: String, callback: OperationCompletionCallback) {
+    fun sendAuthentication(token: String, callback: OperationCompletionCallback) {
 
         if (!NetworkUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
@@ -47,7 +46,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         }
 
         phoneAuthenticationApi.updatePhoneAuthToken(userRepo.userId(),
-            PhoneAuthenticationApi.AuthInfo(phoneNumber, token)).enqueue(
+            PhoneAuthenticationApi.AuthInfo(token)).enqueue(
             object : Callback<StatusResponse> {
                 override fun onResponse(call: Call<StatusResponse>,
                     response: Response<StatusResponse>) {
