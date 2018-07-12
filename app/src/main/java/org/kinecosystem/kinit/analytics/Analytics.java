@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.analytics;
 
 import android.app.Application;
 import android.util.Log;
+import android.view.View;
 import com.amplitude.api.Amplitude;
 import com.amplitude.api.Identify;
 import com.crashlytics.android.Crashlytics;
@@ -46,6 +47,10 @@ public class Analytics {
         Amplitude.getInstance().setUserId(userId);
         Crashlytics.setUserIdentifier(userId);
         TestFairy.setUserId(userId);
+    }
+
+    public void protectView(View view){
+        TestFairy.hideView(view);
     }
 
     public void logEvent(Event event) {
