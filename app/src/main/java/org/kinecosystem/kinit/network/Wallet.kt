@@ -33,24 +33,25 @@ private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.wallet.mainnet"
 
 private const val NETWORK_ID_MAIN = "Public Global Kin Ecosystem Network ; June 2018"
 private const val NETWORK_ID_TEST = "Kin Playground Network ; June 2018"
-
+private const val KIN_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZVCX7XX5A5QXZIVK"
+private const val KIN_ISSUER_STAGE = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
 private const val ACTIVE_WALLET_KEY = "activeWallet"
 private const val WALLET_BALANCE_KEY = "WalletBalance"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
-             val userRepo: UserRepository,
-             val tasksRepository: TasksRepository,
-             val analytics: Analytics,
-             val onboardingApi: OnboardingApi,
-             val walletApi: WalletApi,
-             val scheduler: Scheduler,
-             type: Type = Type.Test) {
+    val userRepo: UserRepository,
+    val tasksRepository: TasksRepository,
+    val analytics: Analytics,
+    val onboardingApi: OnboardingApi,
+    val walletApi: WalletApi,
+    val scheduler: Scheduler) {
 
     enum class Type {
         Main,
         Test
     }
 
+    private val type: Type = if (BuildConfig.DEBUG) Type.Test else Type.Main
     private val walletCache: DataStore
     private var kinClient: KinClient
     private var account: KinAccount
@@ -65,7 +66,9 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         walletCache = dataStoreProvider.dataStore(walletCacheName)
         var providerUrl = if (type == Type.Main) MAIN_NET_URL else TEST_NET_URL
         var networkId = if (type == Type.Main) NETWORK_ID_MAIN else NETWORK_ID_TEST
-        kinClient = KinClient(context, KinitServiceProvider(providerUrl, networkId))
+        val issuer = if (type == Type.Main) KIN_ISSUER_MAIN else KIN_ISSUER_STAGE
+
+        kinClient = KinClient(context, KinitServiceProvider(providerUrl, networkId, issuer))
         if (!kinClient.hasAccount()) {
             kinClient.addAccount()
         }
@@ -99,14 +102,14 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             account.balance.run(object : ResultCallback<Balance> {
                 override fun onResult(currentBalance: Balance) {
                     balanceInt = currentBalance.value().toInt()
-                    Log.d("####", "#### update balance  " + balance.get())
+                    Log.d("Wallet", "#### update balance  " + balance.get())
                     callback?.onResult(currentBalance)
                 }
 
                 override fun onError(exception: java.lang.Exception) {
-                    Log.d("####", "#### no update balance  " + balance.get())
+                    Log.d("Wallet", "#### no update balance  " + balance.get())
                     analytics.logEvent(
-                            Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
+                        Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
                     callback?.onError(exception)
                 }
             })
@@ -117,27 +120,27 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun retrieveTransactions(callback: OperationCompletionCallback? = null) {
         walletApi.getTransactions(userRepo.userId()).enqueue(object : Callback<WalletApi.TransactionsResponse> {
             override fun onResponse(call: Call<WalletApi.TransactionsResponse>?,
-                                    response: Response<WalletApi.TransactionsResponse>?) {
+                response: Response<WalletApi.TransactionsResponse>?) {
                 if (response != null && response.isSuccessful) {
-                    Log.d("retrieveTransactions", "onResponse: ${response.body()}")
+                    Log.d("Wallet", "onResponse: ${response.body()}")
                     val transactionList = response.body()
                     if (transactionList?.txs != null && transactionList.txs.isNotEmpty() && transactionList.status.equals(
-                                    "ok")) {
+                        "ok")) {
                         injectTxsBalance(transactionList.txs)
                         transactions.set(transactionList.txs)
                     } else {
-                        Log.d("#####", "transaction list empty or null ")
+                        Log.d("Wallet", "transaction list empty or null ")
                         transactions.set(ArrayList())
                     }
                     callback?.onSuccess()
                 } else {
                     callback?.onError(ERROR_EMPTY_RESPONSE)
-                    Log.d("retrieveTransactions", "onResponse null or isSuccessful=false: $response")
+                    Log.d("Wallet", "onResponse null or isSuccessful=false: $response")
                 }
             }
 
             override fun onFailure(call: Call<WalletApi.TransactionsResponse>?, t: Throwable?) {
-                Log.d("retrieveTransactions", "onFailure called with throwable $t")
+                Log.d("Wallet", "onFailure called with throwable $t")
                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
         })
@@ -153,8 +156,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                     val inverter = if (txsOrderedTimeAsc[index].clientReceived == true) 1 else -1
                     val previousTransaction = txsOrderedTimeAsc[index - 1]
                     txsOrderedTimeAsc[index].txBalance = previousTransaction.txBalance?.plus(
-                            inverter * (txsOrderedTimeAsc[index].amount
-                                    ?: 0))
+                        inverter * (txsOrderedTimeAsc[index].amount
+                            ?: 0))
                 }
             }
         }
@@ -164,26 +167,26 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun retrieveCoupons(callback: OperationCompletionCallback? = null) {
         walletApi.getCoupons(userRepo.userId()).enqueue(object : Callback<WalletApi.CouponsResponse> {
             override fun onResponse(call: Call<WalletApi.CouponsResponse>?,
-                                    response: Response<WalletApi.CouponsResponse>?) {
+                response: Response<WalletApi.CouponsResponse>?) {
                 if (response != null && response.isSuccessful) {
-                    Log.d("retrieveCoupons", "onResponse: ${response.body()}")
+                    Log.d("Wallet", "onResponse: ${response.body()}")
                     val couponsList = response.body()
                     if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals(
-                                    "ok")) {
+                        "ok")) {
                         coupons.set(couponsList.coupons)
                     } else {
-                        Log.d("#####", "coupons® list empty or null ")
+                        Log.d("Wallet", "coupons® list empty or null ")
                         coupons.set(ArrayList())
                     }
                     callback?.onSuccess()
                 } else {
-                    Log.d("retrieveCoupons", "onResponse null or isSuccessful=false: $response")
+                    Log.d("Wallet", "onResponse null or isSuccessful=false: $response")
                     callback?.onError(ERROR_EMPTY_RESPONSE)
                 }
             }
 
             override fun onFailure(call: Call<WalletApi.CouponsResponse>?, t: Throwable?) {
-                Log.d("retrieveCoupons", "onFailure called with throwable $t")
+                Log.d("Wallet", "onFailure called with throwable $t")
                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
         })
@@ -210,7 +213,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     }
 
     fun initKinWallet() {
-        Log.d("OnboardingService", "#### try create Wallet")
+        Log.d("Wallet", "### initializing Kin Wallet")
         scheduler.executeOnBackground({
             updateBalanceSync()
         })
@@ -220,7 +223,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         var errorMessage = ""
         try {
             val call = onboardingApi.createAccount(userRepo.userId(),
-                    OnboardingApi.AccountInfo(account.publicAddress!!))
+                OnboardingApi.AccountInfo(account.publicAddress!!))
             val response = call.execute()
             if (response != null && response.isSuccessful && response.body() != null) {
                 val statusResponse = response.body()
@@ -233,8 +236,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             errorMessage = "Exception $e with message: ${e.message}"
         }
         analytics.logEvent(
-                if (errorMessage.isEmpty()) Events.BILog.StellarAccountCreationSucceeded()
-                else Events.BILog.StellarAccountCreationFailed(""))
+            if (errorMessage.isEmpty()) Events.BILog.StellarAccountCreationSucceeded()
+            else Events.BILog.StellarAccountCreationFailed(""))
 
         return errorMessage.isEmpty()
     }
@@ -248,7 +251,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         } catch (e: Exception) {
             Log.d("Wallet", "Exception occurred while activating account ${e.message}")
             analytics.logEvent(Events.BILog.StellarKinTrustlineSetupFailed(
-                    "Exception $e with message: ${e.message}"))
+                "Exception $e with message: ${e.message}"))
         }
         return false
     }
@@ -260,25 +263,25 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun logP2pTransactionCompleted(price: Int, orderId: String) {
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                orderId, TRANSACTION_TYPE_P2P))
+            orderId, TRANSACTION_TYPE_P2P))
     }
 
     fun logSpendTransactionCompleted(price: Int, orderId: String) {
         analytics.incrementUserProperty(Events.UserProperties.SPEND_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_SPENT,
-                price.toLong())
+            price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                orderId, TRANSACTION_TYPE_SPEND))
+            orderId, TRANSACTION_TYPE_SPEND))
     }
 
     fun logEarnTransactionCompleted(price: Int, orderId: String) {
         analytics.incrementUserProperty(Events.UserProperties.EARN_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_EARNED,
-                price.toLong())
+            price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                orderId, TRANSACTION_TYPE_EARN))
+            orderId, TRANSACTION_TYPE_EARN))
     }
 
     fun listenToPayment(memo: String) {
@@ -346,15 +349,15 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             }
         })
 
-        Log.d("###", "#### KinMessagingService transactionComplete: $transactionComplete")
+        Log.d("Wallet", "#### KinMessagingService transactionComplete: $transactionComplete")
     }
 
 
     private fun isValid(transactionComplete: Push.TransactionCompleteMessage): Boolean {
         return transactionComplete.kin != null &&
-                transactionComplete.kin > 0 &&
-                transactionComplete.userId != null &&
-                transactionComplete.userId == userRepo.userInfo.userId
+            transactionComplete.kin > 0 &&
+            transactionComplete.userId != null &&
+            transactionComplete.userId == userRepo.userInfo.userId
     }
 
     private fun setTaskState(state: Int) {
@@ -363,16 +366,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
 }
 
-class KinitServiceProvider(providerUrl: String, networkId: String) : ServiceProvider(providerUrl, networkId) {
-
-    private val KIN_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZVCX7XX5A5QXZIVK"
-    private val KIN_ISSUER_STAGE = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
+class KinitServiceProvider(providerUrl: String, networkId: String, private val issuer: String) :
+    ServiceProvider(providerUrl, networkId) {
 
     override fun getIssuerAccountId(): String {
-        return if (isMainNet) {
-            KIN_ISSUER_MAIN
-        } else {
-            KIN_ISSUER_STAGE
-        }
+        return issuer
     }
 }
