@@ -95,9 +95,8 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         if (task != null) {
             taskCache.putString(TASK_KEY, Gson().toJson(task))
             for (question: Question in task.questions.orEmpty()) {
-                if (Question.QuestionType.TEXT_IMAGE.type == question.type) {
-                    for (answer: Answer in question.answers.orEmpty())
-                        ImageUtils.fetchImages(applicationContext, answer.imageUrl)
+                if (question.hasImages()) {
+                    ImageUtils.fetchImages(applicationContext, question.getImagesUrls())
                 }
             }
         } else {

@@ -2,6 +2,8 @@ package org.kinecosystem.kinit
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
+import com.squareup.picasso.LruCache
+import com.squareup.picasso.Picasso
 import io.fabric.sdk.android.Fabric
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.dagger.*
@@ -21,6 +23,8 @@ class KinitApplication : Application(), DataStoreProvider {
         lateinit var coreComponent: CoreComponent
     }
 
+    val CACHE_SIZE = 1024 * 7 // 7MB
+
     @Inject
     lateinit var analytics: Analytics
     @Inject
@@ -34,15 +38,15 @@ class KinitApplication : Application(), DataStoreProvider {
         super.onCreate()
         Fabric.with(applicationContext, Crashlytics())
         coreComponent = DaggerCoreComponent.builder().contextModule(
-            ContextModule(applicationContext))
-            .dataStoreProviderModule(DataStoreProviderModule(this))
-            .userRepositoryModule(UserRepositoryModule())
-            .tasksRepositoryModule(TasksRepositoryModule())
-            .offersRepositoryModule(OffersRepositoryModule())
-            .analyticsModule(AnalyticsModule())
-            .notificationModule(NotificationModule())
-            .servicesProviderModule(ServicesProviderModule())
-            .build()
+                ContextModule(applicationContext))
+                .dataStoreProviderModule(DataStoreProviderModule(this))
+                .userRepositoryModule(UserRepositoryModule())
+                .tasksRepositoryModule(TasksRepositoryModule())
+                .offersRepositoryModule(OffersRepositoryModule())
+                .analyticsModule(AnalyticsModule())
+                .notificationModule(NotificationModule())
+                .servicesProviderModule(ServicesProviderModule())
+                .build()
 
         coreComponent.inject(this)
         analytics.init(this, userRepository.isFreshInstall)
@@ -52,6 +56,9 @@ class KinitApplication : Application(), DataStoreProvider {
         wallet.retrieveTransactions()
         wallet.retrieveCoupons()
         userRepository.isFreshInstall = false
+
+        val picasso = Picasso.Builder(this).memoryCache(LruCache(CACHE_SIZE)).build()
+        Picasso.setSingletonInstance(picasso)
     }
 
     override fun dataStore(storage: String): DataStore {
