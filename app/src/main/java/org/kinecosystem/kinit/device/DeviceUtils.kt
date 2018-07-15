@@ -34,7 +34,11 @@ class DeviceUtils(context: Context) {
             Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             val telephonyManager: TelephonyManager = applicationContext.getSystemService(
                 Context.TELEPHONY_SERVICE) as TelephonyManager
-            return telephonyManager.deviceId
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                telephonyManager.getImei()
+            } else {
+                telephonyManager.deviceId
+            }
         }
         return ""
     }

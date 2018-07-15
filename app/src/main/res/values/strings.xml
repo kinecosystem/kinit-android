@@ -57,6 +57,7 @@
         The following information will help us provide better support:
         \nUser id:%1$s
         \nPlatform:%2$s
+        \nVersion:%3$s
         \n=====================\n</string>
     <string name="kin_currency">KIN</string>
     <string name="version">version %s</string>

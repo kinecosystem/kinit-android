@@ -17,4 +17,8 @@ class OffersRepository {
     fun replaceOfferList(newOfferList: List<Offer>) {
         offerList = newOfferList
     }
+
+    fun hasValidOffer(index: Int): Boolean {
+        return index >= 0 && index < numOfOffers()
+    }
 }

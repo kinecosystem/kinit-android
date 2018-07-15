@@ -17,6 +17,7 @@ import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneAuthCompleteFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
+import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
@@ -67,5 +68,6 @@ interface CoreComponent {
     fun inject(webModel: WebViewModel)
     fun inject(trueXModel: WebTaskTruexViewModel)
     fun inject(questionDualFragmentViewModel:QuestionDualImageViewModel)
+    fun inject(purchaseOfferFragment: PurchaseOfferFragment)
 
 }

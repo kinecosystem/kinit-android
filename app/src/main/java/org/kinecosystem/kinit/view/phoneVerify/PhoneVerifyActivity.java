@@ -59,7 +59,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
                 GeneralUtils.closeKeyboard(PhoneVerifyActivity.this, findViewById(R.id.fragment_container));
                 getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, PhoneAuthCompleteFragment.newInstance())
-                    .commit();
+                    .commitAllowingStateLoss();
             }
         });
     }
