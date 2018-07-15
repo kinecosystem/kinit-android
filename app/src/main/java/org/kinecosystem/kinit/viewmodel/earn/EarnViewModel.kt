@@ -10,6 +10,7 @@ import org.kinecosystem.kinit.model.earn.startDateInMillis
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.network.OperationCompletionCallback
+import org.kinecosystem.kinit.network.OperationResultCallback
 import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
@@ -150,14 +151,15 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun checkForUpdates() {
-        taskService.retrieveNextTask(object : OperationCompletionCallback {
+        taskService.retrieveNextTask(object : OperationResultCallback<Boolean> {
             override fun onError(errorCode: Int) {
             }
 
-            override fun onSuccess() {
-                refresh()
+            override fun onResult(taskHasChanged:Boolean) {
+                if (taskHasChanged){
+                    refresh()
+                }
             }
-
         })
     }
 

@@ -62,7 +62,7 @@ class TaskService(context: Context, api: TasksApi,
         })
     }
 
-    fun retrieveNextTask(callback: OperationCompletionCallback? = null) {
+    fun retrieveNextTask(callback: OperationResultCallback<Boolean>? = null) {
 
         tasksApi.nextTasks(userId).enqueue(object : Callback<TasksApi.NextTasksResponse> {
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
@@ -74,11 +74,11 @@ class TaskService(context: Context, api: TasksApi,
                     val taskList: List<Task> = taskResponse?.taskList.orEmpty()
 
                     var task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
-                    if (taskChanged(task)) {
+                    if (hasChanged(task)) {
                         tasksRepo.replaceTask(task, applicationContext)
-                        callback?.onSuccess()
+                        callback?.onResult(true)
                     }
-                    else callback?.onError(ERROR_NO_CHANGE)
+                    else callback?.onResult(false)
                 } else {
                     Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
                     callback?.onError(ERROR_EMPTY_RESPONSE)
@@ -94,15 +94,14 @@ class TaskService(context: Context, api: TasksApi,
         })
     }
 
-    private fun taskChanged(task: Task?) : Boolean {
+    private fun hasChanged(task: Task?) : Boolean {
 
         tasksRepo.task?.let {
             return task != tasksRepo.task
         }
 
-        // if current task was null, then any valid
-        // new task is new
-        return task != null && task.isValid()
+        // previous task was null
+        return task != null
     }
 
     private fun submitQuestionnaireAnswers(submitInfo: TasksApi.SubmitInfo) {
