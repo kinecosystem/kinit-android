@@ -5,7 +5,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.repository.*
+import org.kinecosystem.kinit.repository.DataStoreProvider
+import org.kinecosystem.kinit.repository.OffersRepository
+import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.Scheduler
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,13 +36,13 @@ class ServicesProvider {
     private val applicationContext: Context
 
     constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
-        tasksRepo: TasksRepository, offerRepo: OffersRepository,
-        analytics: Analytics, scheduler: Scheduler
+                tasksRepo: TasksRepository, offerRepo: OffersRepository,
+                analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
 
         val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        interceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         val client = OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS).writeTimeout(20, TimeUnit.SECONDS)
             .addInterceptor(interceptor).build()
 
