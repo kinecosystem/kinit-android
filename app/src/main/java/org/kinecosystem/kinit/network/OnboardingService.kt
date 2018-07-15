@@ -51,7 +51,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 override fun onResponse(call: Call<StatusResponse>,
                     response: Response<StatusResponse>) {
                     if (response != null && response.isSuccessful) {
-                        taskService.retrieveNextTask(callback)
+                        taskService.retrieveNextTask()
                     }
                 }
 
