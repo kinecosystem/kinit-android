@@ -8,6 +8,7 @@ import kin.core.*
 import kin.core.exception.AccountNotActivatedException
 import kin.core.exception.AccountNotFoundException
 import kin.core.exception.OperationFailedException
+import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Analytics.*
 import org.kinecosystem.kinit.analytics.Events
@@ -40,12 +41,12 @@ private const val WALLET_BALANCE_KEY = "WalletBalance"
 private const val TAG = "Wallet"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
-    val userRepo: UserRepository,
-    val tasksRepository: TasksRepository,
-    val analytics: Analytics,
-    val onboardingApi: OnboardingApi,
-    val walletApi: WalletApi,
-    val scheduler: Scheduler) {
+             val userRepo: UserRepository,
+             val tasksRepository: TasksRepository,
+             val analytics: Analytics,
+             val onboardingApi: OnboardingApi,
+             val walletApi: WalletApi,
+             val scheduler: Scheduler) {
 
     enum class Type {
         Main,
@@ -121,12 +122,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun retrieveTransactions(callback: OperationCompletionCallback? = null) {
         walletApi.getTransactions(userRepo.userId()).enqueue(object : Callback<WalletApi.TransactionsResponse> {
             override fun onResponse(call: Call<WalletApi.TransactionsResponse>?,
-                response: Response<WalletApi.TransactionsResponse>?) {
+                                    response: Response<WalletApi.TransactionsResponse>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d(TAG, "onResponse: ${response.body()}")
                     val transactionList = response.body()
                     if (transactionList?.txs != null && transactionList.txs.isNotEmpty() && transactionList.status.equals(
-                        "ok")) {
+                            "ok")) {
                         injectTxsBalance(transactionList.txs)
                         transactions.set(transactionList.txs)
                     } else {
@@ -168,12 +169,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun retrieveCoupons(callback: OperationCompletionCallback? = null) {
         walletApi.getCoupons(userRepo.userId()).enqueue(object : Callback<WalletApi.CouponsResponse> {
             override fun onResponse(call: Call<WalletApi.CouponsResponse>?,
-                response: Response<WalletApi.CouponsResponse>?) {
+                                    response: Response<WalletApi.CouponsResponse>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d(TAG, "onResponse: ${response.body()}")
                     val couponsList = response.body()
                     if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals(
-                        "ok")) {
+                            "ok")) {
                         coupons.set(couponsList.coupons)
                     } else {
                         Log.d(TAG, "coupons® list empty or null ")
