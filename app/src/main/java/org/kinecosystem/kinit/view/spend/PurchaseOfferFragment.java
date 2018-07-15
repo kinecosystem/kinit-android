@@ -12,12 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.databinding.SpendDetailLayoutBinding;
 import org.kinecosystem.kinit.navigation.Navigator;
+import org.kinecosystem.kinit.repository.OffersRepository;
 import org.kinecosystem.kinit.view.BaseFragment;
 import org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel;
+
+import javax.inject.Inject;
 
 public class PurchaseOfferFragment extends BaseFragment implements PurchaseOfferActions {
 
@@ -27,6 +31,9 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
     private SpendDetailLayoutBinding binding;
     private PurchaseOfferViewModel model;
     private AlertDialog alertDialog;
+
+    @Inject
+    OffersRepository offersRepository;
 
     public PurchaseOfferViewModel getModel() {
         return model;
@@ -42,12 +49,17 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.spend_detail_layout, container, false);
+        KinitApplication.coreComponent.inject(this);
         int index = getArguments().getInt(ARG_OFFER_INDEX, INVALID_OFFER_INDEX);
         if (index == INVALID_OFFER_INDEX) {
             getActivity().finish();
-            Log.e(TAG, "Wrong offer index");
+            Log.e(TAG, "pass wrong offer index");
+        }
+        if (!offersRepository.hasValidOffer(index)) {
+            getActivity().finish();
+            Log.e(TAG, "Wrong offer index $index");
         }
         Navigator navigator = new Navigator(getActivity());
         model = new PurchaseOfferViewModel(navigator, index);
@@ -94,22 +106,22 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
 
     @Override
     public void showDialog(int titleStringRes, int messageStringRes, int actionStringRes, boolean finish,
-        String errorType) {
+                           String errorType) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
 
         if (errorType != null) {
             model.logViewErrorPopup(errorType);
         }
         builder.setTitle(titleStringRes).setMessage(messageStringRes).setPositiveButton(actionStringRes,
-            (dialogInterface, i) -> {
-                if (errorType != null) {
-                    model.logCloseErrorPopupClicked(errorType);
-                }
-                dialogInterface.dismiss();
-                if (finish) {
-                    getActivity().finish();
-                }
-            });
+                (dialogInterface, i) -> {
+                    if (errorType != null) {
+                        model.logCloseErrorPopupClicked(errorType);
+                    }
+                    dialogInterface.dismiss();
+                    if (finish) {
+                        getActivity().finish();
+                    }
+                });
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
