@@ -72,22 +72,37 @@ class TaskService(context: Context, api: TasksApi,
                     Log.d("TaskService", "onResponse: ${response.body()}")
                     val taskResponse = response.body()
                     val taskList: List<Task> = taskResponse?.taskList.orEmpty()
+
                     var task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
-                    tasksRepo.replaceTask(task, applicationContext)
-                    callback?.onSuccess()
+                    if (taskChanged(task)) {
+                        tasksRepo.replaceTask(task, applicationContext)
+                        callback?.onSuccess()
+                    }
+                    else callback?.onError(ERROR_NO_CHANGE)
                 } else {
-                    tasksRepo.replaceTask(null, applicationContext)
                     Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
                     callback?.onError(ERROR_EMPTY_RESPONSE)
                 }
+
+
             }
 
             override fun onFailure(call: Call<TasksApi.NextTasksResponse>?, t: Throwable?) {
                 Log.d("TaskService", "onFailure called with throwable $t")
-                tasksRepo.replaceTask(null, applicationContext)
                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
         })
+    }
+
+    private fun taskChanged(task: Task?) : Boolean {
+
+        tasksRepo.task?.let {
+            return task != tasksRepo.task
+        }
+
+        // if current task was null, then any valid
+        // new task is new
+        return task != null && task.isValid()
     }
 
     private fun submitQuestionnaireAnswers(submitInfo: TasksApi.SubmitInfo) {

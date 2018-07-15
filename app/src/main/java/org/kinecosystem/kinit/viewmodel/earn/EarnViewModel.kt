@@ -150,22 +150,12 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun checkForUpdates() {
-        val currentLastUpdatedTime = taskRepository.task?.lastUpdatedAt ?: 0
-        val currentTaskDisplayedId = taskRepository.task?.id.orEmpty()
-
         taskService.retrieveNextTask(object : OperationCompletionCallback {
             override fun onError(errorCode: Int) {
             }
 
             override fun onSuccess() {
-                if (taskRepository.task != null) {
-                    taskRepository.task?.lastUpdatedAt?.let {
-                        if (it > currentLastUpdatedTime ||
-                            currentTaskDisplayedId != taskRepository.task?.id.orEmpty()) {
-                            refresh()
-                        }
-                    }
-                }
+                refresh()
             }
 
         })
