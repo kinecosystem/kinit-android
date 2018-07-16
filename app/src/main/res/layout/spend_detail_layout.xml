@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel" />
     </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
+
         <ImageView
             android:id="@+id/header_image"
             android:layout_width="match_parent"
@@ -23,8 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <View
@@ -35,7 +36,7 @@
             android:background="@drawable/spend_detail_top_gradient"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/close_x"
@@ -45,27 +46,27 @@
             android:scaleType="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/close_white"/>
+            app:srcCompat="@drawable/close_white" />
 
         <ImageView
             android:id="@+id/provider_image"
             android:layout_width="52dp"
             android:layout_height="52dp"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/place_holder_rounded_rec_grey"
             android:scaleType="centerCrop"
             app:imageUrl="@{model.providerImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header_image"/>
+            app:layout_constraintTop_toBottomOf="@+id/header_image" />
+
         <TextView
             android:id="@+id/title"
-            android:textStyle="normal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="-0.02"
@@ -73,56 +74,63 @@
             android:text="@{model.title}"
             android:textColor="#5c6786"
             android:textSize="22sp"
+            android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/header_image"
-            tools:text="$5 Amazon Gift Card"/>
+            tools:text="$5 Amazon Gift Card" />
+
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="68dp"/>
+            app:layout_constraintGuide_begin="68dp" />
+
         <TextView
             android:id="@+id/info"
-            android:textStyle="normal"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="13dp"
             android:layout_marginBottom="13dp"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="28dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="13dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif"
+            android:isScrollContainer="true"
             android:letterSpacing="0.03"
             android:lineSpacingExtra="5sp"
+            android:paddingEnd="5dp"
+            android:scrollbars="vertical"
             android:text="@{model.info}"
             android:textColor="#7884a5"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/bottom_guide"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/type_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:text="The gist card expires 12 months after purchase. Save your code, copy or email it to yourself.Valid on every amazon store text. Another text is coming here."/>
+            tools:text="The gist card expires 12 months after purchase. Save your code, copy or email it to yourself.Valid on every amazon store text. Another text is coming here." />
+
         <android.support.constraint.Guideline
             android:id="@+id/bottom_guide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_end="71dp"/>
+            app:layout_constraintGuide_end="71dp" />
+
         <ImageView
             android:id="@+id/type_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="70dp"
             android:layout_marginEnd="70dp"
+            android:layout_marginStart="70dp"
             app:imageUrl="@{model.typeImageUrl}"
             app:layout_constraintBottom_toTopOf="@+id/bottom_guide"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <View
             android:id="@+id/shadow"
@@ -133,28 +141,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
             android:id="@+id/amount"
-            android:textStyle="normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="-0.02"
             android:text="@{model.price}"
-            android:visibility="@{!model.isP2p}"
             android:textColor="#047cfc"
             android:textSize="28sp"
+            android:textStyle="normal"
+            android:visibility="@{!model.isP2p}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bottom_guide"
-            tools:text="800,000"
-            />
+            tools:text="800,000" />
+
         <TextView
             android:id="@+id/kin_currency"
-            android:textStyle="normal"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -164,11 +171,12 @@
             android:text="@string/kin_currency"
             android:textColor="#047cfc"
             android:textSize="14sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/amount"
             app:layout_constraintStart_toEndOf="@+id/amount"
             app:layout_constraintTop_toTopOf="@+id/amount"
-            app:layout_constraintVertical_bias="0.0"
-            />
+            app:layout_constraintVertical_bias="0.0" />
+
         <ImageView
             android:id="@+id/kin_coin"
             android:layout_width="wrap_content"
@@ -177,28 +185,28 @@
             app:layout_constraintBottom_toBottomOf="@+id/kin_currency"
             app:layout_constraintStart_toEndOf="@+id/kin_currency"
             app:layout_constraintTop_toTopOf="@+id/kin_currency"
-            app:srcCompat="@drawable/k_letter_blue"/>
+            app:srcCompat="@drawable/k_letter_blue" />
 
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/code_button"
             style="@style/Button.OFFER_CODE"
-            android:textStyle="normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:paddingRight="17dp"
+            android:layout_marginStart="20dp"
             android:drawableRight="@drawable/share"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.03"
+            android:paddingRight="17dp"
             android:text="@{model.couponCode}"
             android:textSize="16sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bottom_guide"
-            app:visibilityOn="@{model.couponPurchaseCompleted}"/>
+            app:visibilityOn="@{model.couponPurchaseCompleted}" />
 
         <View
             android:id="@+id/share_btn"
@@ -216,24 +224,24 @@
         <org.kinecosystem.kinit.view.customView.BuyButton
             android:id="@+id/buyBtn"
             style="@style/Button.Blue"
-            android:textStyle="normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
             android:ellipsize="none"
             android:enabled="@{model.canBuy}"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.03"
             android:onClick="@{model::onBuyButtonClicked}"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
             android:singleLine="true"
             android:text="@{model.isP2p() ? @string/send_kin : @string/buy_now}"
             android:textSize="16sp"
+            android:textStyle="normal"
             android:visibility="@{!model.couponPurchaseCompleted}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/bottom_guide"/>
+            app:layout_constraintTop_toTopOf="@+id/bottom_guide" />
 
         <ProgressBar
             android:id="@+id/progress"
@@ -243,8 +251,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/buyBtn"
             app:layout_constraintEnd_toEndOf="@+id/buyBtn"
-            app:layout_constraintTop_toTopOf="@+id/buyBtn"
-            />
+            app:layout_constraintTop_toTopOf="@+id/buyBtn" />
 
 
     </android.support.constraint.ConstraintLayout>

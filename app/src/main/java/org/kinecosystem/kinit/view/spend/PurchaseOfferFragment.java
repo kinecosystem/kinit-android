@@ -7,6 +7,7 @@ import android.databinding.Observable;
 import android.databinding.Observable.OnPropertyChangedCallback;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,7 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
         Navigator navigator = new Navigator(getActivity());
         model = new PurchaseOfferViewModel(navigator, index);
         model.setPurchaseOfferActions(this);
+        binding.info.setMovementMethod(new ScrollingMovementMethod());
         binding.setModel(model);
         return binding.getRoot();
     }
