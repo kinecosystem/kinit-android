@@ -52,6 +52,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     response: Response<StatusResponse>) {
                     if (response != null && response.isSuccessful) {
                         taskService.retrieveNextTask()
+                        callback.onSuccess()
+                    } else {
+                        callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                     }
                 }
 
