@@ -61,19 +61,19 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
 
     fun onShareButtonClicked(view: View) {
         analytics.logEvent(
-                Events.Analytics.ClickShareButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                        offer.title, offer.type))
+            Events.Analytics.ClickShareButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                offer.title, offer.type))
         purchaseOfferActions?.shareCode(couponCode.get())
     }
 
     fun onBuyButtonClicked(view: View) {
         analytics.logEvent(
-                Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                        offer.title, offer.type))
+            Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                offer.title, offer.type))
         if (!servicesProvider.isNetworkConnected()) {
             purchaseOfferActions?.showDialog(
-                    R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
-                    R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
+                R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
+                R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
             return
         }
         if (isP2p) {
@@ -99,8 +99,8 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
                 servicesProvider.walletService.retrieveTransactions()
                 servicesProvider.walletService.retrieveCoupons()
                 analytics.logEvent(
-                        Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                                offer.title, offer.type))
+                    Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                        offer.title, offer.type))
             }
 
             override fun onError(errorCode: Int) {
@@ -109,18 +109,18 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
                     ERROR_NO_INTERNET -> {
                         logErrorType = Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION
                         purchaseOfferActions?.showDialog(R.string.dialog_no_internet_title,
-                                R.string.dialog_no_internet_message, R.string.dialog_ok, false, logErrorType)
+                            R.string.dialog_no_internet_message, R.string.dialog_ok, false, logErrorType)
                     }
                     ERROR_REDEEM_COUPON_FAILED -> {
                         logErrorType = Analytics.VIEW_ERROR_TYPE_CODE_NOT_PROVIDED
                         purchaseOfferActions?.showDialog(
-                                R.string.dialog_coupon_redeem_failed_title, R.string.dialog_coupon_redeem_failed_message,
-                                R.string.dialog_back_to_list, true, logErrorType)
+                            R.string.dialog_coupon_redeem_failed_title, R.string.dialog_coupon_redeem_failed_message,
+                            R.string.dialog_back_to_list, true, logErrorType)
                     }
                     else -> { // ERROR_NO_GOOD_LEFT, ERROR_TRANSACTION_FAILED
                         logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
                         purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
-                                R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
+                            R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
                     }
                 }
             }
@@ -129,14 +129,13 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
 
     fun onResume() {
         val offerPrice = offer.price ?: Int.MAX_VALUE
-        val taskId = tasksRepository.task?.id?.toInt() ?: 0
-        var p2pValid = true
-        if (isP2p && userRepository.isP2pEnabled) {
-            if (tasksRepository.task != null) {
-                p2pValid = userRepository.p2pMinTasks <= taskId
-            }
+        val numOfTasks = tasksRepository.task?.id?.toInt()  ?: Integer.MAX_VALUE
+        var offerEnabled = true
+        if (isP2p) {
+            offerEnabled = numOfTasks >= userRepository.p2pMinTasks
         }
-        canBuy.set(servicesProvider.walletService.balanceInt >= offerPrice && p2pValid)
+
+        canBuy.set(servicesProvider.walletService.balanceInt >= offerPrice && offerEnabled)
 
         analytics.logEvent(Events.Analytics.ViewOfferPage(offer.provider?.name,
             offer.price,
