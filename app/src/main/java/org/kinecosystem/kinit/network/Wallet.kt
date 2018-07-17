@@ -29,8 +29,8 @@ import java.math.BigDecimal
 
 private const val TEST_NET_URL = "https://horizon-playground.kininfrastructure.com/"
 private const val MAIN_NET_URL = "https://horizon-ecosystem.kininfrastructure.com/"
-private const val TEST_NET_WALLET_CACHE_NAME = "kin.app.wallet.testnet"
-private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.wallet.mainnet"
+private const val TEST_NET_WALLET_CACHE_NAME = "kinit.wallet.test"
+private const val MAIN_NET_WALLET_CACHE_NAME = "kinit.wallet.main"
 
 private const val NETWORK_ID_MAIN = "Public Global Kin Ecosystem Network ; June 2018"
 private const val NETWORK_ID_TEST = "Kin Playground Network ; June 2018"
