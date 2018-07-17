@@ -22,7 +22,6 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
 
     public static final String TAG = PhoneVerifyActivity.class.getSimpleName();
     public static final String FRAGMENT_CODE_TAG = "FRAGMENT_CODE_TAG";
-    protected static final String PHONE_AUTH_DATA_STORE = "PHONE_AUTH_DATA_STORE";
     private static final String HAS_PREVIOUS = "HAS_PREVIOUS";
     @Inject
     UserRepository userRepository;
