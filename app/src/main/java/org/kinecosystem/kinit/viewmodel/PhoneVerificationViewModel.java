@@ -30,7 +30,6 @@ public class PhoneVerificationViewModel {
     private OperationCompletionCallback verificationCallback;
 
     private FirebaseAuth auth;
-    private String phoneNumber;
 
     private String verificationId = "";
     private Activity activity;
@@ -74,7 +73,6 @@ public class PhoneVerificationViewModel {
     }
 
     public void startPhoneNumberVerification(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber,        // Phone number to verify
             60,                 // Timeout duration
