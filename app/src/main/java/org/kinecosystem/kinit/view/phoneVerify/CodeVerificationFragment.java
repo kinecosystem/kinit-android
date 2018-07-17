@@ -1,6 +1,8 @@
 package org.kinecosystem.kinit.view.phoneVerify;
 
 
+import static org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity.PHONE_AUTH_DATA_STORE;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -37,7 +39,6 @@ public class CodeVerificationFragment extends BaseFragment {
     public static final String TAG = CodeVerificationFragment.class.getSimpleName();
     private static final String KEY_RESEND_CODE = "KEY_RESEND_CODE";
     private static final String PHONE_NUMBER = "PHONE_NUMBER";
-    private static final String PHONE_AUTH_DATA_STORE = "kinit.phone.auth";
     private static final String SHOW_CONTACT_SUPPORT = "SHOW_CONTACT_SUPPORT";
     private static final long COUNT_DOWN = 16 * DateUtils.SECOND_IN_MILLIS;
     private static final long CODE_LENGTH = 6;

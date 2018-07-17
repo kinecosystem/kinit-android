@@ -8,8 +8,9 @@ import java.util.*
 private const val USER_ID_KEY = "user_id"
 private const val IS_REGISTERED_KEY = "is_registered"
 private const val IS_FRESH_INSTALL = "is_fresh_install"
+
 private const val FCM_TOKEN_SENT_KEY = "token_sent"
-private const val USER_CACHE_NAME = "kinit.user"
+private const val USER_CACHE_NAME = "kin.app.user"
 private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
