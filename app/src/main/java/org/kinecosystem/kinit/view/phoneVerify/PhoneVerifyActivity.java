@@ -23,12 +23,16 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
     public static final String TAG = PhoneVerifyActivity.class.getSimpleName();
     public static final String FRAGMENT_CODE_TAG = "FRAGMENT_CODE_TAG";
     private static final String HAS_PREVIOUS = "HAS_PREVIOUS";
+    private static final int MAX_SEND_PHONE_COUNT = 3;
+
     @Inject
     UserRepository userRepository;
     @Inject
     Analytics analytics;
     private PhoneVerificationViewModel model;
     private boolean hasPreviousScreen;
+    private int sendPhoneCount = 0;
+
 
     public static Intent getIntent(Context context, boolean hasPrevious) {
         Intent intent = new Intent(context, PhoneVerifyActivity.class);
@@ -44,13 +48,13 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
         setContentView(R.layout.phone_veriy_activity);
         hasPreviousScreen = getIntent().getBooleanExtra(HAS_PREVIOUS, false);
         getSupportFragmentManager().beginTransaction()
-            .add(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
-            .commit();
+                .add(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
+                .commit();
         model = new PhoneVerificationViewModel(this, new OperationCompletionCallback() {
             @Override
             public void onError(int error) {
                 CodeVerificationFragment codeVerificationFragment = (CodeVerificationFragment) getSupportFragmentManager()
-                    .findFragmentByTag(FRAGMENT_CODE_TAG);
+                        .findFragmentByTag(FRAGMENT_CODE_TAG);
                 if (codeVerificationFragment != null && codeVerificationFragment.isVisible()) {
                     codeVerificationFragment.onError();
                 }
@@ -63,18 +67,19 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
                 userRepository.setFirstTimeUser(false);
                 GeneralUtils.closeKeyboard(PhoneVerifyActivity.this, findViewById(R.id.fragment_container));
                 getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, PhoneAuthCompleteFragment.newInstance())
-                    .commitAllowingStateLoss();
+                        .replace(R.id.fragment_container, PhoneAuthCompleteFragment.newInstance())
+                        .commitAllowingStateLoss();
             }
         });
     }
 
     @Override
     public void onSendPhone(String phoneNumber) {
+        sendPhoneCount++;
         model.startPhoneNumberVerification(phoneNumber);
         getSupportFragmentManager().beginTransaction()
-            .replace(R.id.fragment_container, CodeVerificationFragment.newInstance(phoneNumber), FRAGMENT_CODE_TAG)
-            .commit();
+                .replace(R.id.fragment_container, CodeVerificationFragment.newInstance(phoneNumber, sendPhoneCount >= MAX_SEND_PHONE_COUNT), FRAGMENT_CODE_TAG)
+                .commit();
     }
 
     @Override
@@ -95,8 +100,8 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
             finish();
         } else if (fromPage == 1) {
             getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
-                .commit();
+                    .replace(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
+                    .commit();
         }
     }
 }

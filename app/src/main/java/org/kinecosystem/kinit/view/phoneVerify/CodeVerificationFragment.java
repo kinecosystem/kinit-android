@@ -20,15 +20,17 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.repository.DataStore;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
+import org.kinecosystem.kinit.util.SupportUtil;
 import org.kinecosystem.kinit.view.BaseFragment;
 
+import javax.inject.Inject;
 
 public class CodeVerificationFragment extends BaseFragment {
 
@@ -36,9 +38,11 @@ public class CodeVerificationFragment extends BaseFragment {
     private static final String KEY_RESEND_CODE = "KEY_RESEND_CODE";
     private static final String PHONE_NUMBER = "PHONE_NUMBER";
     private static final String PHONE_AUTH_DATA_STORE = "kinit.phone.auth";
+    private static final String SHOW_CONTACT_SUPPORT = "SHOW_CONTACT_SUPPORT";
     private static final long COUNT_DOWN = 16 * DateUtils.SECOND_IN_MILLIS;
     private static final long CODE_LENGTH = 6;
     private static final long VIBRATE_DURATION = 500;
+    private static final int MAX_ERROR_COUNT = 3;
     @Inject
     Analytics analytics;
     @Inject
@@ -49,6 +53,7 @@ public class CodeVerificationFragment extends BaseFragment {
     private ProgressBar progressBar;
     private PhoneVerificationUIActions actions;
     private View hitArea;
+    private int codeErrorCount = 0;
     private CountDownTimer timer = new CountDownTimer(COUNT_DOWN, DateUtils.SECOND_IN_MILLIS) {
         @Override
         public void onTick(long l) {
@@ -64,10 +69,11 @@ public class CodeVerificationFragment extends BaseFragment {
     };
 
 
-    public static CodeVerificationFragment newInstance(String phone) {
+    public static CodeVerificationFragment newInstance(String phone, boolean showContactSupport) {
         CodeVerificationFragment fragment = new CodeVerificationFragment();
         Bundle args = new Bundle();
         args.putString(PHONE_NUMBER, phone);
+        args.putBoolean(SHOW_CONTACT_SUPPORT, showContactSupport);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,7 +86,7 @@ public class CodeVerificationFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_code_verify_fragment, container, false);
         if (getActivity() instanceof PhoneVerificationUIActions) {
             actions = (PhoneVerificationUIActions) getActivity();
@@ -116,15 +122,20 @@ public class CodeVerificationFragment extends BaseFragment {
         String counterText = getResources().getString(R.string.code_sms_counter_subtitle, 15);
         counter.setText(counterText);
         final String phoneNumber = getArguments().getString(PHONE_NUMBER);
+        final boolean shouldShowContactSupport = getArguments().getBoolean(SHOW_CONTACT_SUPPORT, false);
         subtitle = view.findViewById(R.id.subtitle);
         String subtitleStr = getResources().getString(R.string.verification_code_subtitle, phoneNumber);
         subtitle.setText(subtitleStr);
         analytics.protectView(subtitle);
         resend = view.findViewById(R.id.resend);
-        resend.setOnClickListener(view12 -> {
-            sendEvent();
-            actions.onBackPressed(1);
-        });
+        if (shouldShowContactSupport) {
+            showContactSupport();
+        } else {
+            resend.setOnClickListener(resend -> {
+                sendEvent();
+                actions.onBackPressed(1);
+            });
+        }
         resend.setVisibility(View.GONE);
         next = view.findViewById(R.id.next);
         progressBar = view.findViewById(R.id.progressBar);
@@ -173,7 +184,7 @@ public class CodeVerificationFragment extends BaseFragment {
             }
             code.requestFocus();
             InputMethodManager mgr = (InputMethodManager) getActivity()
-                .getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    .getSystemService(getActivity().INPUT_METHOD_SERVICE);
             mgr.showSoftInput(code, InputMethodManager.SHOW_IMPLICIT);
 
         }, 50);
@@ -201,12 +212,24 @@ public class CodeVerificationFragment extends BaseFragment {
     }
 
     public void onError() {
-        analytics.logEvent(new Events.Analytics.ViewErrorMessageOnVerificationPage());
         progressBar.setVisibility(View.GONE);
         vibrate();
         animateWiggle();
         code.setText("");
         next.setEnabled(false);
+        codeErrorCount++;
+        if (codeErrorCount >= MAX_ERROR_COUNT) {
+            showContactSupport();
+        }
+        analytics.logEvent(new Events.Analytics.ViewErrorMessageOnVerificationPage());
+
+    }
+
+    private void showContactSupport() {
+        resend.setText(getResources().getString(R.string.contact_support) + " >");
+        resend.setOnClickListener(resend -> {
+            SupportUtil.INSTANCE.openEmailSupport(getActivity(), null);
+        });
     }
 
     private void animateWiggle() {
