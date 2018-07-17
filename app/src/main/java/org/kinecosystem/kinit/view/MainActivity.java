@@ -47,13 +47,13 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
         bottomTabNavigation = findViewById(R.id.navigation);
         int selectedTabIndex = (savedInstanceState != null) ? savedInstanceState.getInt(SELECTED_TAB_INDEX_KEY, 0) : 0;
         bottomTabNavigation.setSelectedTabIndex(selectedTabIndex);
+        enablePageSelection();
         tabsAdapter = new TabsAdapter();
         tabsAdapter.setPageSelectionListener(this);
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(tabsAdapter);
         if (!tabsAdapter.shouldShowAnimation()) {
             viewPager.setCurrentItem(TabsAdapter.EARN_TAB_INDEX, false);
-            enablePageSelection();
         }
         handleIntentExtras(getIntent().getExtras());
     }
