@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.network
 
 import android.content.Context
 import android.util.Log
+import com.google.firebase.iid.FirebaseInstanceId
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
@@ -65,14 +66,14 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     }
 
     private fun updateToken() {
-        if (userRepo.notSentFcmToken.isNotBlank()) {
-            updateToken(userRepo.notSentFcmToken)
+        if (!userRepo.fcmTokenSent ) {
+            FirebaseInstanceId.getInstance().token?.let {
+                updateToken(it)
+            }
         }
     }
 
     fun updateToken(token: String) {
-        //  saving it in case there is an error
-        userRepo.notSentFcmToken = token
 
         val call = appLaunchApi.updateToken(userRepo.userId(), OnboardingApi.TokenInfo(token))
         call.enqueue(
@@ -83,7 +84,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     // successfully sent the token update to server - so it is not longer needed
                     if (response != null && response.isSuccessful) {
                         // managed to send so can delete now
-                        userRepo.notSentFcmToken = ""
+                        userRepo.fcmTokenSent = true
                     }
                 }
 

@@ -8,7 +8,7 @@ import java.util.*
 private const val USER_ID_KEY = "user_id"
 private const val IS_REGISTERED_KEY = "is_registered"
 private const val IS_FRESH_INSTALL = "is_fresh_install"
-private const val FCM_TOKEN_KEY = "token"
+private const val FCM_TOKEN_SENT_KEY = "token_sent"
 private const val USER_CACHE_NAME = "kinit.user"
 private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
@@ -25,9 +25,9 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var userInfo: UserInfo
         private set
 
-    var notSentFcmToken: String
-        set(token) = userCache.putString(FCM_TOKEN_KEY, token)
-        get() = userCache.getString(FCM_TOKEN_KEY, "")
+    var fcmTokenSent: Boolean
+        set(tokenSent) = userCache.putBoolean(FCM_TOKEN_SENT_KEY, tokenSent)
+        get() = userCache.getBoolean(FCM_TOKEN_SENT_KEY, false)
 
     var isRegistered: Boolean
         set(registered) = userCache.putBoolean(IS_REGISTERED_KEY, registered)
