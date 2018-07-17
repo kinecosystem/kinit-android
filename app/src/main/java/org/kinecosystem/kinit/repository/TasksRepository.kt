@@ -8,8 +8,8 @@ import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.*
 import org.kinecosystem.kinit.util.ImageUtils
 
-private const val QUESTIONNAIRE_ANSWERS_STORAGE = "kinit.task.chosen.answers"
-private const val TASK_STORAGE = "kinit.task"
+private const val QUESTIONNAIRE_ANSWERS_STORAGE = "kin.app.task.chosen.answers"
+private const val TASK_STORAGE = "kin.app.task"
 private const val TASK_KEY = "task"
 private const val TASK_STATE_KEY = "task_state"
 
