@@ -3,9 +3,11 @@ package org.kinecosystem.kinit.view.phoneVerify;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.analytics.Analytics;
+import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.network.OperationCompletionCallback;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.util.GeneralUtils;
@@ -14,23 +16,26 @@ import org.kinecosystem.kinit.view.MainActivity;
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity;
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel;
 
+import javax.inject.Inject;
+
 public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificationUIActions {
 
     public static final String TAG = PhoneVerifyActivity.class.getSimpleName();
     public static final String FRAGMENT_CODE_TAG = "FRAGMENT_CODE_TAG";
     protected static final String PHONE_AUTH_DATA_STORE = "PHONE_AUTH_DATA_STORE";
     private static final String HAS_PREVIOUS = "HAS_PREVIOUS";
+    @Inject
+    UserRepository userRepository;
+    @Inject
+    Analytics analytics;
+    private PhoneVerificationViewModel model;
+    private boolean hasPreviousScreen;
 
     public static Intent getIntent(Context context, boolean hasPrevious) {
         Intent intent = new Intent(context, PhoneVerifyActivity.class);
         intent.putExtra(HAS_PREVIOUS, hasPrevious);
         return intent;
     }
-
-    @Inject
-    UserRepository userRepository;
-    private PhoneVerificationViewModel model;
-    private boolean hasPreviousScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
             @Override
             public void onSuccess() {
                 userRepository.setPhoneVerified(true);
+                analytics.logEvent(new Events.Business.UserVerified());
                 userRepository.setFirstTimeUser(false);
                 GeneralUtils.closeKeyboard(PhoneVerifyActivity.this, findViewById(R.id.fragment_container));
                 getSupportFragmentManager().beginTransaction()
