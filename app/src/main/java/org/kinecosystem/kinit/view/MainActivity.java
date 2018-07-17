@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
@@ -17,6 +17,8 @@ import org.kinecosystem.kinit.analytics.Events.Event;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.view.BottomTabNavigation.PageSelectionListener;
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity;
+
+import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity implements PageSelectionListener {
 
@@ -45,14 +47,20 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
         bottomTabNavigation = findViewById(R.id.navigation);
         int selectedTabIndex = (savedInstanceState != null) ? savedInstanceState.getInt(SELECTED_TAB_INDEX_KEY, 0) : 0;
         bottomTabNavigation.setSelectedTabIndex(selectedTabIndex);
-        bottomTabNavigation.setPageSelectionListener(this);
         tabsAdapter = new TabsAdapter();
+        tabsAdapter.setPageSelectionListener(this);
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(tabsAdapter);
         if (!tabsAdapter.shouldShowAnimation()) {
             viewPager.setCurrentItem(TabsAdapter.EARN_TAB_INDEX, false);
+            enablePageSelection();
         }
         handleIntentExtras(getIntent().getExtras());
+    }
+
+    @Override
+    public void enablePageSelection() {
+        bottomTabNavigation.setPageSelectionListener(this);
     }
 
     @Override
@@ -102,5 +110,6 @@ public class MainActivity extends BaseActivity implements PageSelectionListener 
         alertDialog.show();
         analytics.logEvent(new Events.Analytics.ViewPhoneAuthPopup());
     }
+
 
 }

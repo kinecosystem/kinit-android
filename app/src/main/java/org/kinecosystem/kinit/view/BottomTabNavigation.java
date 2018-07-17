@@ -11,21 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.network.Wallet;
 
-public class BottomTabNavigation extends FrameLayout implements OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
 
-    private PageSelectionListener pageSelectionListener;
-    private int currentTabSelectedIndex;
-    private List<NavigationTab> tabs = new ArrayList<>();
+import javax.inject.Inject;
+
+public class BottomTabNavigation extends FrameLayout implements OnClickListener {
 
     @Inject
     Wallet wallet;
+    private PageSelectionListener pageSelectionListener;
+    private int currentTabSelectedIndex;
+    private List<NavigationTab> tabs = new ArrayList<>();
 
     public BottomTabNavigation(@NonNull Context context) {
         super(context);
@@ -33,7 +35,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
     }
 
     public BottomTabNavigation(@NonNull Context context,
-        @Nullable AttributeSet attrs) {
+                               @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -45,7 +47,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
 
     @RequiresApi(api = VERSION_CODES.LOLLIPOP)
     public BottomTabNavigation(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr,
-        int defStyleRes) {
+                               int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -70,9 +72,9 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
         final NavigationTab navTab = (NavigationTab) tab;
         final String tabSelectedTitle = navTab.title();
         if (currentTabSelectedIndex != tabSelectedIndex) {
-            setSelectedTabIndex(tabSelectedIndex);
-            navTab.setNotificationIndicator(false);
             if (pageSelectionListener != null) {
+                setSelectedTabIndex(tabSelectedIndex);
+                navTab.setNotificationIndicator(false);
                 // Tabs starts at index 1
                 pageSelectionListener.onPageSelected(currentTabSelectedIndex + 1, tabSelectedTitle);
             }
@@ -103,6 +105,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
     }
 
     public interface PageSelectionListener {
+        void enablePageSelection();
 
         void onPageSelected(int index, String tabTitle);
     }

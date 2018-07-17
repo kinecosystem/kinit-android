@@ -15,6 +15,7 @@ import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
+import org.kinecosystem.kinit.view.BottomTabNavigation.PageSelectionListener
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
 import org.kinecosystem.kinit.view.customView.LockableViewPager
@@ -33,6 +34,7 @@ class TabsAdapter :
     private var models = arrayOfNulls<TabViewModel?>(NUMBER_OF_TABS)
     private var positionToBeViewed: Int? = null
     private var preAnimationWasShown = false
+    private var pageSelectionListener: PageSelectionListener? = null
 
     companion object {
         const val PRE_EARN_TAB_INDEX = 0
@@ -55,6 +57,10 @@ class TabsAdapter :
 
     init {
         KinitApplication.coreComponent.inject(this)
+    }
+
+    fun setPageSelectionListener(pageSelectionListener: PageSelectionListener) {
+        this.pageSelectionListener = pageSelectionListener
     }
 
     override fun instantiateItem(parent: ViewGroup, position: Int): View {
@@ -100,16 +106,16 @@ class TabsAdapter :
             R.layout.pre_earn_tab, parent, false)
         binding.model = PreEarnViewModel()
         models[position] = binding.model
-        moveToEarnTab(parent, position, binding)
+        moveToEarnTab(parent)
         return binding.root
     }
 
-    private fun moveToEarnTab(parent: ViewGroup, position: Int, binding: PreEarnTabBinding) {
+    private fun moveToEarnTab(parent: ViewGroup) {
         if (!preAnimationWasShown && tasksRepository.isTaskAvailable()) {
             parent.postDelayed({
                 if (parent is LockableViewPager) {
                     // move to Eran Tab
-                    parent.setCurrentItem(EARN_TAB_INDEX, true)
+                    parent.setCurrentItem(EARN_TAB_INDEX, true, LockableViewPager.TransitionCompletedListener { pageSelectionListener?.enablePageSelection() })
                     preAnimationWasShown = true
                 }
             }, PRE_EARN_SHOW_DURATION)

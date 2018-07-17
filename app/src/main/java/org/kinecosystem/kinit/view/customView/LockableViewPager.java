@@ -26,6 +26,30 @@ public class LockableViewPager extends ViewPager {
         swipeable = false;
     }
 
+    public void setCurrentItem(int item, boolean smoothScroll, TransitionCompletedListener listener) {
+        addOnPageChangeListener(new OnPageChangeListener() {
+            private boolean isPageChanged = false;
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                isPageChanged = true;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE && isPageChanged) {
+                    removeOnPageChangeListener(this);
+                    listener.onTransitionCompleted();
+                }
+            }
+        });
+        setCurrentItem(item, smoothScroll);
+    }
+
     private void setScroll() {
         try {
             Class<?> viewpager = ViewPager.class;
@@ -57,6 +81,10 @@ public class LockableViewPager extends ViewPager {
 
     public void enableSwipe(boolean enable) {
         swipeable = enable;
+    }
+
+    public interface TransitionCompletedListener {
+        void onTransitionCompleted();
     }
 
     public class SlowScroll extends Scroller {
