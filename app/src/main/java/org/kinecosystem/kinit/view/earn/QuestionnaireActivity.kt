@@ -29,8 +29,8 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         questionnaireModel.nextQuestion()
     }
 
-    override fun submissionComplete() {
-        questionnaireModel.submissionComplete()
+    override fun submissionAnimComplete() {
+        questionnaireModel.submissionAnimComplete()
     }
 
     override fun transactionError() {

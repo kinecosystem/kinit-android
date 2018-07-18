@@ -25,7 +25,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
         QuestionnaireActions {
 
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var taskRepository: TasksRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -36,11 +36,11 @@ class QuestionnaireViewModel(restoreState: Boolean) :
 
     init {
         KinitApplication.coreComponent.inject(this)
-        task = questionnaireRepository.task
+        task = taskRepository.task
         currentPage =
                 when {
                     restoreState -> getPageFromState()
-                    !questionnaireRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
+                    !taskRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
                     else -> QUESTIONNAIRE_COMPLETE_PAGE
                 }
         moveToNextPage(currentPage)
@@ -48,7 +48,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
 
     override fun nextQuestion() {
         moveToNextPage(
-                if (!questionnaireRepository.isTaskComplete()) {
+                if (!taskRepository.isTaskComplete()) {
                     NEXT_QUESTION_PAGE
                 } else QUESTIONNAIRE_COMPLETE_PAGE
         )
@@ -62,18 +62,18 @@ class QuestionnaireViewModel(restoreState: Boolean) :
         moveToNextPage(SUBMIT_ERROR_PAGE)
     }
 
-    override fun submissionComplete() {
+    override fun submissionAnimComplete() {
         moveToNextPage(REWARD_PAGE)
     }
 
     private fun nextQuestionIndex(): Int {
-        return questionnaireRepository.getNumOfAnsweredQuestions()
+        return taskRepository.getNumOfAnsweredQuestions()
     }
 
     private fun moveToNextPage(page: Int) {
         currentPage = page
         questionnaireProgress.set(
-                ((questionnaireRepository.getNumOfAnsweredQuestions().toDouble() / task?.questions!!.size) * 100).toInt())
+                ((taskRepository.getNumOfAnsweredQuestions().toDouble() / task?.questions!!.size) * 100).toInt())
         nextFragment.set(getFragment())
     }
 
@@ -81,7 +81,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
 
         return when (currentPage) {
             NEXT_QUESTION_PAGE -> {
-                if (questionnaireRepository.task?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!!) {
+                if (taskRepository.task?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!!) {
                     QuestionDualImageFragment.newInstance(nextQuestionIndex())
                 } else {
                     QuestionFragment.newInstance(nextQuestionIndex())
@@ -97,7 +97,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
 
     fun onBackPressed() {
         val event: Events.Event
-        if (questionnaireRepository.isTaskComplete()) {
+        if (taskRepository.isTaskComplete()) {
             event = Events.Analytics.ClickCloseButtonOnRewardPage(task?.provider?.name,
                     task?.minToComplete,
                     task?.kinReward,
@@ -125,13 +125,14 @@ class QuestionnaireViewModel(restoreState: Boolean) :
 
     private fun getPageFromState(): Int {
         return when {
-            questionnaireRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD -> REWARD_PAGE
-            questionnaireRepository.taskState == TaskState.TRANSACTION_COMPLETED -> REWARD_PAGE
-            questionnaireRepository.taskState == TaskState.TRANSACTION_ERROR -> TRANSACTION_ERROR_PAGE
-            questionnaireRepository.taskState == TaskState.SUBMIT_ERROR_RETRY -> QUESTIONNAIRE_COMPLETE_PAGE
-            questionnaireRepository.taskState == TaskState.SUBMIT_ERROR_NO_RETRY -> SUBMIT_ERROR_PAGE
+            taskRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD -> REWARD_PAGE
+            taskRepository.taskState == TaskState.TRANSACTION_COMPLETED -> REWARD_PAGE
+            taskRepository.taskState == TaskState.TRANSACTION_ERROR -> TRANSACTION_ERROR_PAGE
+            taskRepository.taskState == TaskState.SUBMIT_ERROR_RETRY -> QUESTIONNAIRE_COMPLETE_PAGE
+            taskRepository.taskState == TaskState.SUBMIT_ERROR_NO_RETRY -> SUBMIT_ERROR_PAGE
+            taskRepository.taskState == TaskState.SUBMITTED -> SUBMIT_ERROR_PAGE
             else -> {
-                if (!questionnaireRepository.isTaskComplete())
+                if (!taskRepository.isTaskComplete())
                     NEXT_QUESTION_PAGE
                 else QUESTIONNAIRE_COMPLETE_PAGE
             }

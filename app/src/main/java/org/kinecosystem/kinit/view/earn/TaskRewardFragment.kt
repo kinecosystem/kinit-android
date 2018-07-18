@@ -15,9 +15,11 @@ import org.kinecosystem.kinit.viewmodel.earn.TaskRewardViewModel
 
 interface TransactionTimeout {
     fun onTransactionTimeout()
+    fun onSubmitError()
 }
 
 class TaskRewardFragment : BaseFragment(), TransactionTimeout {
+
     var model: TaskRewardViewModel? = null
     lateinit var binding: TaskRewardFragmentBinding
 
@@ -66,6 +68,12 @@ class TaskRewardFragment : BaseFragment(), TransactionTimeout {
     override fun onTransactionTimeout() {
         if (activity != null && activity is TransactionActions) {
             (activity as TransactionActions).transactionError()
+        }
+    }
+
+    override fun onSubmitError() {
+        if (activity != null && activity is QuestionnaireActions) {
+            (activity as QuestionnaireActions).submissionError()
         }
     }
 
