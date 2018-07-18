@@ -21,9 +21,6 @@ class QuestionnaireCompleteViewModel {
     @Inject
     lateinit var taskRepository: TasksRepository
 
-    var submitComplete: Boolean = false
-        get() = (taskRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD || taskRepository.taskState == TaskState.TRANSACTION_COMPLETED)
-
     init {
         KinitApplication.coreComponent.inject(this)
         submitAnswers()

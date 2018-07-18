@@ -24,7 +24,7 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
     @Inject
     lateinit var servicesProvider: ServicesProvider
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var taskRepository: TasksRepository
     @Inject
     lateinit var analytics: Analytics
     var task: Task?
@@ -32,19 +32,21 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
     var balance: ObservableField<String>
     var onTransactionComplete: ObservableBoolean
 
+    private var submitFailed: Boolean = false
+        get() = (taskRepository.taskState == TaskState.SUBMITTED || taskRepository.taskState == TaskState.SUBMIT_ERROR_RETRY || taskRepository.taskState == TaskState.SUBMIT_ERROR_NO_RETRY)
 
     init {
         KinitApplication.coreComponent.inject(this)
-        task = questionnaireRepository.task
+        task = taskRepository.task
         walletService = servicesProvider.walletService
         balance = walletService.balance
         onTransactionComplete =
-            if (questionnaireRepository.taskState == TaskState.TRANSACTION_COMPLETED) {
-                ObservableBoolean(true)
-            } else {
-                waitForReward()
-                walletService.onEarnTransactionCompleted
-            }
+                if (taskRepository.taskState == TaskState.TRANSACTION_COMPLETED) {
+                    ObservableBoolean(true)
+                } else {
+                    waitForReward()
+                    walletService.onEarnTransactionCompleted
+                }
     }
 
     fun onResume() {
@@ -61,28 +63,32 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
 
     private fun rewardPageShown() {
         val event = Events.Analytics.ViewRewardPage(
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(event)
     }
 
 
     private fun waitForReward() {
         scheduler.scheduleOnMain(
-            {
-                if (!onTransactionComplete.get()) {
-                    timeoutCallback?.onTransactionTimeout()
-                    // update balance anyway in case kin has been received
-                    servicesProvider.walletService.updateBalance()
-                    walletService.retrieveTransactions()
-                }
-            },
-            REWARD_TIMEOUT)
+                {
+                    if (!onTransactionComplete.get()) {
+                        if (submitFailed) {
+                            timeoutCallback?.onSubmitError()
+                        } else {
+                            timeoutCallback?.onTransactionTimeout()
+                        }
+                        // update balance anyway in case kin has been received
+                        servicesProvider.walletService.updateBalance()
+                        walletService.retrieveTransactions()
+                    }
+                },
+                REWARD_TIMEOUT)
     }
 
 }

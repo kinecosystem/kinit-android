@@ -14,16 +14,16 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class TaskService(context: Context, api: TasksApi,
-    val tasksRepo: TasksRepository,
-    private val userId: String, private val walletService: Wallet) {
+                  val tasksRepo: TasksRepository,
+                  private val userId: String, private val walletService: Wallet) {
 
     private val tasksApi: TasksApi = api
     private val applicationContext: Context = context.applicationContext
 
     fun submitQuestionnaireAnswers(
-        userInfo: UserInfo,
-        task: Task?,
-        chosenAnswers: List<ChosenAnswers>) {
+            userInfo: UserInfo,
+            task: Task?,
+            chosenAnswers: List<ChosenAnswers>) {
 
         if (!NetworkUtils.isConnected(applicationContext)) {
             tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
@@ -40,8 +40,10 @@ class TaskService(context: Context, api: TasksApi,
             return
         }
 
+        tasksRepo.taskState = TaskState.SUBMITTED
+
         val submitInfo = TasksApi.SubmitInfo(task.id.orEmpty(),
-            chosenAnswers, userInfo.publicAddress)
+                chosenAnswers, userInfo.publicAddress)
         submitQuestionnaireAnswers(submitInfo)
     }
 
@@ -66,7 +68,7 @@ class TaskService(context: Context, api: TasksApi,
 
         tasksApi.nextTasks(userId).enqueue(object : Callback<TasksApi.NextTasksResponse> {
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
-                response: Response<TasksApi.NextTasksResponse>?) {
+                                    response: Response<TasksApi.NextTasksResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     Log.d("TaskService", "onResponse: ${response.body()}")
@@ -77,8 +79,7 @@ class TaskService(context: Context, api: TasksApi,
                     if (hasChanged(task)) {
                         tasksRepo.replaceTask(task, applicationContext)
                         callback?.onResult(true)
-                    }
-                    else callback?.onResult(false)
+                    } else callback?.onResult(false)
                 } else {
                     Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
                     callback?.onError(ERROR_EMPTY_RESPONSE)
@@ -94,7 +95,7 @@ class TaskService(context: Context, api: TasksApi,
         })
     }
 
-    private fun hasChanged(task: Task?) : Boolean {
+    private fun hasChanged(task: Task?): Boolean {
 
         tasksRepo.task?.let {
             return task != tasksRepo.task
@@ -106,27 +107,27 @@ class TaskService(context: Context, api: TasksApi,
 
     private fun submitQuestionnaireAnswers(submitInfo: TasksApi.SubmitInfo) {
         tasksApi.submitTaskResults(userId, submitInfo).enqueue(
-            object : Callback<TasksApi.TaskSubmitResponse> {
-                override fun onResponse(call: Call<TasksApi.TaskSubmitResponse>?,
-                    response: Response<TasksApi.TaskSubmitResponse>?) {
+                object : Callback<TasksApi.TaskSubmitResponse> {
+                    override fun onResponse(call: Call<TasksApi.TaskSubmitResponse>?,
+                                            response: Response<TasksApi.TaskSubmitResponse>?) {
 
-                    if (response != null && response.isSuccessful) {
-                        Log.d("TaskService", "onResponse: ${response.body()}")
-                        tasksRepo.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
+                        if (response != null && response.isSuccessful) {
+                            Log.d("TaskService", "onResponse: ${response.body()}")
+                            tasksRepo.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
 
-                        walletService.onEarnTransactionCompleted.set(false)
-                        retrieveNextTask()
-                    } else {
-                        Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
+                            walletService.onEarnTransactionCompleted.set(false)
+                            retrieveNextTask()
+                        } else {
+                            Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
+                            tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
+                        }
+                    }
+
+                    override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
+                        Log.d("TaskService", "onFailure called with throwable $t")
                         tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
                     }
-                }
-
-                override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
-                    Log.d("TaskService", "onFailure called with throwable $t")
-                    tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
-                }
-            })
+                })
     }
 }
 

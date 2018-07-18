@@ -8,5 +8,6 @@ class TaskState {
         const val SUBMIT_ERROR_NO_RETRY = 3
         const val TRANSACTION_ERROR = 4
         const val TRANSACTION_COMPLETED = 6
+        const val SUBMITTED = 7
     }
 }
