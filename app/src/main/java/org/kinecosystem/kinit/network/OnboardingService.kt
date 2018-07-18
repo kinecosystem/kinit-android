@@ -66,7 +66,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     }
 
     private fun updateToken() {
-        if (!userRepo.fcmTokenSent ) {
+        if (!userRepo.fcmTokenSent) {
             FirebaseInstanceId.getInstance().token?.let {
                 updateToken(it)
             }
@@ -117,7 +117,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     private fun callRegister(appVersion: String) {
         val deviceUtils = DeviceUtils(applicationContext)
         val userId: String = userRepo.userId()
-        val timeZoneWithoutGMT = deviceUtils.timeZone().drop(3)
+        val timeZoneWithoutGMT = deviceUtils.timeZone()
         deviceUtils.timeZoneDebugging(analytics)
         val displayMetrics = applicationContext.resources.displayMetrics
         val call = appLaunchApi.register(OnboardingApi.RegistrationInfo(userId,
