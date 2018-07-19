@@ -8,6 +8,7 @@
     <string name="by_author">By %s</string>
     <string name="min_to_complete">%s Min</string>
     <string name="kin_reward">+%s KIN</string>
+    <string name="kin_reward_upto">Up to %s KIN</string>
     <string name="reward_comming_your_way">are coming your way...</string>
     <string name="added_to_your_account">added to your account</string>
     <string name="next_task_available_on">Your next activity will be available on %s</string>

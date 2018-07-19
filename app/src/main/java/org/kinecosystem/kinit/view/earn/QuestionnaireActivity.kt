@@ -11,10 +11,12 @@ import android.view.View
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.QuestionnaireFragmentLayoutBinding
+import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.navigation.Navigator.Destination
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.BaseActivity
+import org.kinecosystem.kinit.viewmodel.earn.QuizViewModel
 import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel
 import javax.inject.Inject
 
@@ -25,8 +27,8 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
     private lateinit var questionnaireModel: QuestionnaireViewModel
     private lateinit var nextFragmentCallback: Observable.OnPropertyChangedCallback
 
-    override fun nextQuestion() {
-        questionnaireModel.nextQuestion()
+    override fun next() {
+        questionnaireModel.next()
     }
 
     override fun submissionAnimComplete() {
@@ -55,25 +57,35 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
         val binding: QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this,
-            R.layout.questionnaire_fragment_layout)
-        questionnaireModel = QuestionnaireViewModel(savedInstanceState != null)
-        binding.model = questionnaireModel
+                R.layout.questionnaire_fragment_layout)
 
-        findViewById<View>(R.id.header_x_btn).setOnClickListener { view ->
-            val navigator = Navigator(this@QuestionnaireActivity)
-            navigator.navigateTo(Destination.MAIN_SCREEN)
-            questionnaireRepository.resetTaskState()
-            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out)
+        if (questionnaireRepository.task == null)
             finish()
-        }
 
-        updateFragment(questionnaireModel.nextFragment.get())
-        nextFragmentCallback = object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(p0: Observable?, p1: Int) {
-                updateFragment(questionnaireModel.nextFragment.get())
+        questionnaireRepository.task?.let {
+            questionnaireModel = if (it.isQuiz()) {
+                QuizViewModel(savedInstanceState != null)
+            } else {
+                QuestionnaireViewModel(savedInstanceState != null)
             }
+            binding.model = questionnaireModel
+
+            findViewById<View>(R.id.header_x_btn).setOnClickListener { view ->
+                val navigator = Navigator(this@QuestionnaireActivity)
+                navigator.navigateTo(Destination.MAIN_SCREEN)
+                questionnaireRepository.resetTaskState()
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out)
+                finish()
+            }
+
+            updateFragment(questionnaireModel.nextFragment.get())
+            nextFragmentCallback = object : Observable.OnPropertyChangedCallback() {
+                override fun onPropertyChanged(p0: Observable?, p1: Int) {
+                    updateFragment(questionnaireModel.nextFragment.get())
+                }
+            }
+            questionnaireModel.nextFragment.addOnPropertyChangedCallback(nextFragmentCallback)
         }
-        questionnaireModel.nextFragment.addOnPropertyChangedCallback(nextFragmentCallback)
     }
 
     override fun onDestroy() {
@@ -98,11 +110,11 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (fragment != null) {
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .replace(R.id.fragment_container, newFragment).commitAllowingStateLoss()
+                    .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
+                    .replace(R.id.fragment_container, newFragment).commitAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, newFragment)
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitAllowingStateLoss()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitAllowingStateLoss()
         }
     }
 }

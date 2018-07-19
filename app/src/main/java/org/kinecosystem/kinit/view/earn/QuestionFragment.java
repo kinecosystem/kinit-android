@@ -61,7 +61,6 @@ public class QuestionFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
         questionModel.onResume();
     }
 

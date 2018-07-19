@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.model.earn.isQuestionnaire
 import org.kinecosystem.kinit.model.earn.isTaskWebView
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.TasksRepository
@@ -61,11 +60,11 @@ class Navigator(private val context: Context) {
     }
 
     private fun navigateToTask() {
-        if (tasksRepository.task != null) {
-            if (tasksRepository.task!!.isQuestionnaire()) {
-                context.startActivity(QuestionnaireActivity.getIntent(context))
-            } else if (tasksRepository.task!!.isTaskWebView()) {
+        tasksRepository.task?.let {
+            if (it.isTaskWebView()) {
                 context.startActivity(WebTaskActivity.getIntent(context))
+            } else {
+                context.startActivity(QuestionnaireActivity.getIntent(context))
             }
         }
         if (context is AppCompatActivity) {

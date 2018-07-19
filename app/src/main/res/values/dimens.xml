@@ -5,7 +5,7 @@
     <dimen name="author_image_size_width">129dp</dimen>
     <dimen name="author_image_size_height">98dp</dimen>
     <dimen name="task_icon_size">33dp</dimen>
-    <dimen name="question_size">22sp</dimen>
+    <dimen name="question_size">20sp</dimen>
     <dimen name="question_size_small">17sp</dimen>
     <dimen name="answer_gap">19dp</dimen>
     <dimen name="answer_corner">25dp</dimen>

@@ -11,6 +11,7 @@ import org.kinecosystem.kinit.view.SplashActivity
 import org.kinecosystem.kinit.view.TabsAdapter
 import org.kinecosystem.kinit.view.adapter.CouponsListAdapter
 import org.kinecosystem.kinit.view.adapter.TransactionsListAdapter
+import org.kinecosystem.kinit.view.customView.QuizAnswerView
 import org.kinecosystem.kinit.view.customView.TransactionLayoutView
 import org.kinecosystem.kinit.view.earn.*
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
@@ -69,5 +70,8 @@ interface CoreComponent {
     fun inject(trueXModel: WebTaskTruexViewModel)
     fun inject(questionDualFragmentViewModel:QuestionDualImageViewModel)
     fun inject(purchaseOfferFragment: PurchaseOfferFragment)
+    fun inject(quizViewModel: QuizQuestionViewModel)
+    fun inject(answerViewModel: AnswerViewModel)
+    fun inject(quizAnswerView: QuizAnswerView)
 
 }

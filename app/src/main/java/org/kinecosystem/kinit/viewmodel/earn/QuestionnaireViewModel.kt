@@ -7,21 +7,18 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
-import org.kinecosystem.kinit.model.earn.Task
-import org.kinecosystem.kinit.model.earn.isTypeDualImage
-import org.kinecosystem.kinit.model.earn.tagsString
+import org.kinecosystem.kinit.model.earn.*
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.earn.*
 import javax.inject.Inject
 
-private const val NEXT_QUESTION_PAGE = 0
-private const val QUESTIONNAIRE_COMPLETE_PAGE = 1
-private const val REWARD_PAGE = 2
-private const val SUBMIT_ERROR_PAGE = 3
-private const val TRANSACTION_ERROR_PAGE = 4
+const val NEXT_QUESTION_PAGE = 0
+const val QUESTIONNAIRE_COMPLETE_PAGE = 1
+const val REWARD_PAGE = 2
+const val SUBMIT_ERROR_PAGE = 3
+const val TRANSACTION_ERROR_PAGE = 4
 
-
-class QuestionnaireViewModel(restoreState: Boolean) :
+open class QuestionnaireViewModel(restoreState: Boolean) :
         QuestionnaireActions {
 
     @Inject
@@ -29,24 +26,24 @@ class QuestionnaireViewModel(restoreState: Boolean) :
     @Inject
     lateinit var analytics: Analytics
 
-    private var task: Task?
+    var task: Task?
     var questionnaireProgress: ObservableInt = ObservableInt()
     var nextFragment: ObservableField<Fragment> = ObservableField()
-    var currentPage: Int
+    var currentPageState: Int
 
     init {
         KinitApplication.coreComponent.inject(this)
         task = taskRepository.task
-        currentPage =
+        currentPageState =
                 when {
                     restoreState -> getPageFromState()
                     !taskRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
                     else -> QUESTIONNAIRE_COMPLETE_PAGE
                 }
-        moveToNextPage(currentPage)
+        moveToNextPage(currentPageState)
     }
 
-    override fun nextQuestion() {
+    override fun next() {
         moveToNextPage(
                 if (!taskRepository.isTaskComplete()) {
                     NEXT_QUESTION_PAGE
@@ -66,25 +63,28 @@ class QuestionnaireViewModel(restoreState: Boolean) :
         moveToNextPage(REWARD_PAGE)
     }
 
-    private fun nextQuestionIndex(): Int {
+    protected fun nextQuestionIndex(): Int {
         return taskRepository.getNumOfAnsweredQuestions()
     }
 
-    private fun moveToNextPage(page: Int) {
-        currentPage = page
+    protected fun questionIndex(): Int {
+        return taskRepository.getNumOfAnsweredQuestions() - 1
+    }
+
+    protected fun moveToNextPage(pageState: Int) {
+        currentPageState = pageState
         questionnaireProgress.set(
                 ((taskRepository.getNumOfAnsweredQuestions().toDouble() / task?.questions!!.size) * 100).toInt())
         nextFragment.set(getFragment())
     }
 
-    private fun getFragment(): Fragment {
-
-        return when (currentPage) {
+    open fun getFragment(): Fragment {
+        return when (currentPageState) {
             NEXT_QUESTION_PAGE -> {
-                if (taskRepository.task?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!!) {
-                    QuestionDualImageFragment.newInstance(nextQuestionIndex())
-                } else {
-                    QuestionFragment.newInstance(nextQuestionIndex())
+                when {
+                    task?.isQuiz()!! -> QuizFragment.newInstance(nextQuestionIndex())
+                    taskRepository.task?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!! -> QuestionDualImageFragment.newInstance(nextQuestionIndex())
+                    else -> QuestionFragment.newInstance(nextQuestionIndex())
                 }
             }
             QUESTIONNAIRE_COMPLETE_PAGE -> QuestionnaireCompleteFragment.newInstance()
@@ -123,7 +123,7 @@ class QuestionnaireViewModel(restoreState: Boolean) :
     }
 
 
-    private fun getPageFromState(): Int {
+    protected fun getPageFromState(): Int {
         return when {
             taskRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD -> REWARD_PAGE
             taskRepository.taskState == TaskState.TRANSACTION_COMPLETED -> REWARD_PAGE
