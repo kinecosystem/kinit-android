@@ -2,9 +2,8 @@
 <head>
 </head>
 <body style="background-color:white; margin:0">
-<script type='text/javascript' src='https://static.truex.com/js/client.js'></script>
+<script type='text/javascript' src='https://static.truex.com/js/client.js?mraid=1'></script>
 <script type='text/javascript'>
-
     function updateStatus(status) {
         Kinit.updateStatus(status);
     }
@@ -17,17 +16,18 @@
         Kinit.onCredit();
     }
 
+    function onClickthrough(url) {
+        Kinit.onClickthrough(url);
+    }
+
    function updateTruexActivityData(userId, activityString, hash){
         var options = {
                     'network_user_id': userId,
-                    'partner_config_hash': hash
+                    'partner_config_hash': hash,
+                    'handle_clickthrough_manually': true
                 };
         var activity = JSON.parse(activityString);
-        updateStatus(userId)
-        updateStatus(activityString)
         truex.client(options, function(client) {
-
-
                     client.prepareActivity(activity);
 
                     activity.onStart(function(activity) {
@@ -48,11 +48,14 @@
                         updateStatus('Activity Closed')
                     });
 
+                    activity.onClickthrough(function(url) {
+                        updateStatus('onClickthrough was called with param: ' + url)
+                        onClickthrough(url)
+                    });
+
                     client.loadActivityIntoContainer(activity, document.body, {'width': window.screen.availWidth, 'height': window.screen.availHeight});
             });
    }
-
-
 </script>
 </body>
 </html>
