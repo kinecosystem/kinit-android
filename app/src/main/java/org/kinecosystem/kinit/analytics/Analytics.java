@@ -3,18 +3,18 @@ package org.kinecosystem.kinit.analytics;
 import android.app.Application;
 import android.util.Log;
 import android.view.View;
+
 import com.amplitude.api.Amplitude;
 import com.amplitude.api.Identify;
 import com.crashlytics.android.Crashlytics;
 import com.testfairy.TestFairy;
+
 import org.json.JSONObject;
 import org.kinecosystem.kinit.BuildConfig;
 import org.kinecosystem.kinit.analytics.Events.Event;
 
 public class Analytics {
 
-    private static final String AMPLITUDE_API_KEY = BuildConfig.AnalyticsApiSecret;
-    private static final String TEST_FAIRY_KEY = BuildConfig.TestFairyApiSecret;
     public static final String VIEW_ERROR_TYPE_ONBOARDING = "Onboarding";
     public static final String VIEW_ERROR_TYPE_REWARD = "Reward";
     public static final String VIEW_ERROR_TYPE_TASK_SUBMISSION = "Task Submission";
@@ -28,7 +28,10 @@ public class Analytics {
     public static final String TRANSACTION_TYPE_SPEND = "spend";
     public static final String P2P_EXCEED_MIN_MAX = "Exceed max/min Kin";
     public static final String P2P_FRIEND_HAS_NO_ADDRESS = "Friend not exists";
+    public static final String P2P_SEND_KIN_TO_SELF = "Send Kin to self";
     public static final String P2P_NOT_ENOUGH_BALANCE = "Exceed existing Kin";
+    private static final String AMPLITUDE_API_KEY = BuildConfig.AnalyticsApiSecret;
+    private static final String TEST_FAIRY_KEY = BuildConfig.TestFairyApiSecret;
 
     public void init(Application app, boolean isFreshInstall) {
         Amplitude.getInstance().initialize(app, AMPLITUDE_API_KEY)
@@ -49,7 +52,7 @@ public class Analytics {
         TestFairy.setUserId(userId);
     }
 
-    public void protectView(View view){
+    public void protectView(View view) {
         TestFairy.hideView(view);
     }
 

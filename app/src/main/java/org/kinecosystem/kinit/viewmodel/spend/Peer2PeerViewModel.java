@@ -1,7 +1,5 @@
 package org.kinecosystem.kinit.viewmodel.spend;
 
-import static org.kinecosystem.kinit.network.OfferServiceKt.ERROR_TRANSACTION_FAILED;
-
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -11,7 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
@@ -25,8 +23,26 @@ import org.kinecosystem.kinit.util.Scheduler;
 import org.kinecosystem.kinit.view.spend.ContactData;
 import org.kinecosystem.kinit.view.spend.Peer2PeerActions;
 
+import javax.inject.Inject;
+
+import static org.kinecosystem.kinit.network.OfferServiceKt.ERROR_TRANSACTION_FAILED;
+
 public class Peer2PeerViewModel {
 
+    private static final long COMPLETE_TRANSACTION_SCREEN_TIMEOUT = 3000;
+    public ObservableField<String> name = new ObservableField<>("");
+    public ObservableBoolean sendEnabled = new ObservableBoolean(false);
+    public ObservableBoolean sendingTransaction = new ObservableBoolean(false);
+    public ObservableBoolean transactionComplete = new ObservableBoolean(false);
+    public ObservableInt maxTransferLength = new ObservableInt(1);
+    public ObservableInt amount = new ObservableInt(0);
+    public OnClickListener amountClickListener = view -> {
+        //keep the cursor at the end of the edittext view
+        if (view instanceof EditText) {
+            EditText editText = (EditText) view;
+            editText.setSelection(editText.getText().length());
+        }
+    };
     @Inject
     UserRepository userRepository;
     @Inject
@@ -35,13 +51,8 @@ public class Peer2PeerViewModel {
     ServicesProvider servicesProvider;
     @Inject
     Scheduler scheduler;
-
     private String address;
     private Peer2PeerActions actions;
-    public ObservableField<String> name = new ObservableField<>("");
-    public ObservableBoolean sendEnabled = new ObservableBoolean(false);
-    public ObservableBoolean sendingTransaction = new ObservableBoolean(false);
-    public ObservableBoolean transactionComplete = new ObservableBoolean(false);
     private ObservableField<Boolean> hasValidAddress = new ObservableField<Boolean>(false) {
         @Override
         public void set(Boolean value) {
@@ -56,18 +67,6 @@ public class Peer2PeerViewModel {
             sendEnabled.set(value && hasValidAddress.get());
         }
     };
-    public ObservableInt maxTransferLength = new ObservableInt(1);
-    public ObservableInt amount = new ObservableInt(0);
-    private static final long COMPLETE_TRANSACTION_SCREEN_TIMEOUT = 3000;
-    private int minKinTransfer, maxKinTransfer;
-    public OnClickListener amountClickListener = view -> {
-        //keep the cursor at the end of the edittext view
-        if (view instanceof EditText) {
-            EditText editText = (EditText) view;
-            editText.setSelection(editText.getText().length());
-        }
-    };
-
     public TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -89,6 +88,7 @@ public class Peer2PeerViewModel {
             amount.set(editable.length() > 0 ? Integer.valueOf(editable.toString()) : 0);
         }
     };
+    private int minKinTransfer, maxKinTransfer;
 
     public Peer2PeerViewModel() {
         KinitApplication.coreComponent.inject(this);
@@ -127,8 +127,13 @@ public class Peer2PeerViewModel {
             .sendContact(formattedNumber, new OperationResultCallback<String>() {
                 @Override
                 public void onResult(String addressResponse) {
-                    address = addressResponse;
-                    onGotValidAddress();
+                    if (userRepository.getUserInfo().getPublicAddress().equals(addressResponse)) {
+                        address = "";
+                        onSelfAddressMatch();
+                    } else {
+                        address = addressResponse;
+                        onGotValidAddress();
+                    }
                 }
 
                 @Override
@@ -145,6 +150,16 @@ public class Peer2PeerViewModel {
         if (actions != null) {
             actions.onReadyForTransaction();
         }
+    }
+
+    private void onSelfAddressMatch() {
+        name.set("");
+        hasValidAddress.set(false);
+        if (actions != null) {
+            actions.showDialog(R.string.p2p_self_transaction_title, R.string.p2p_select_valid_contact,
+                R.string.p2p_friend_has_no_kinit_action, true);
+        }
+        logEventPopUp(Analytics.P2P_SEND_KIN_TO_SELF);
     }
 
     private void onNoAddressMatch() {

@@ -114,4 +114,6 @@
     <string name="transaction_completed">Transaction completed</string>
     <string name="transaction_complete_subtitle">You’ve successfully sent %dKIN, see transaction details under balance</string>
     <string name="or">Or</string>
+    <string name="p2p_self_transaction_title">Sorry, you can not send Kin to yourself</string>
+    <string name="p2p_select_valid_contact">Please select a valid contact.</string>
 </resources>
