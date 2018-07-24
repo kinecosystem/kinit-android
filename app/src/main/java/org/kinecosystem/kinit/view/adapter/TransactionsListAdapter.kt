@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import org.kinecosystem.kinit.dagger.CoreComponent
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TransactionRowLayoutBinding
@@ -22,7 +21,7 @@ class TransactionsListAdapter(val context: Context)
     @Inject
     lateinit var servicesProvider: ServicesProvider
 
-    var transactions: ArrayList<KinTransaction>
+    var transactions: List<KinTransaction>
     private val updateTransactionsCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
             transactions = servicesProvider.walletService.transactions.get()

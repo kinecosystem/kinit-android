@@ -21,7 +21,7 @@ interface WalletApi {
     // Retrieve list of transactions
     data class TransactionsResponse(
         @SerializedName("status") val status: String?,
-        @SerializedName("txs") val txs: ArrayList<KinTransaction>?
+        @SerializedName("txs") val txs: List<KinTransaction>?
     )
 
     @GET("user/transactions")

@@ -60,8 +60,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private lateinit var paymentListener: ListenerRegistration
 
     val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
-    val transactions: ObservableField<ArrayList<KinTransaction>> = ObservableField(ArrayList())
-    val coupons: ObservableField<ArrayList<Coupon>> = ObservableField(ArrayList())
+    val transactions: ObservableField<List<KinTransaction>> = ObservableField(ArrayList())
+    val coupons: ObservableField<List<Coupon>> = ObservableField(ArrayList())
 
     init {
         val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
@@ -148,19 +148,15 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         })
     }
 
-    private fun injectTxsBalance(txs: ArrayList<KinTransaction>) {
-        val txsOrderedTimeAsc = txs.reversed()
-        for (index in txsOrderedTimeAsc.indices) {
-            when (index) {
-                0 -> txsOrderedTimeAsc[index].txBalance = txsOrderedTimeAsc[index].amount
-                txsOrderedTimeAsc.lastIndex -> txsOrderedTimeAsc[index].txBalance = this.balanceInt
-                else -> {
-                    val inverter = if (txsOrderedTimeAsc[index].clientReceived == true) 1 else -1
-                    val previousTransaction = txsOrderedTimeAsc[index - 1]
-                    txsOrderedTimeAsc[index].txBalance = previousTransaction.txBalance?.plus(
-                        inverter * (txsOrderedTimeAsc[index].amount
-                            ?: 0))
-                }
+    private fun injectTxsBalance(txs: List<KinTransaction>) {
+        for (index in txs.indices) {
+            if (index == 0) txs[0].txBalance = balanceInt
+            else {
+                val nextTx = txs[index - 1]
+                val multiplier = if (nextTx.clientReceived == true) 1 else -1
+                val nextBalance = nextTx.txBalance ?: 0
+                val nextAmount = nextTx.amount ?: 0
+                txs[index].txBalance = nextBalance - nextAmount * multiplier
             }
         }
     }
