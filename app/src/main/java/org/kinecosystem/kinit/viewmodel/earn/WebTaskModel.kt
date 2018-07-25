@@ -47,13 +47,14 @@ abstract class WebViewModel(val navigator: Navigator) {
 
 interface WebFragmentActions {
     fun showErrorDialog()
+    fun openBrowser(url: String)
     fun finish()
 }
 
 class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewModel(navigator) {
     val TRUEX_HASH: String = if (BuildConfig.DEBUG) BuildConfig.truexHashStage else BuildConfig.truexHashProd
 
-    override var url = "file:///android_asset/truex.html"
+    override var url = "file:///android_asset/truex.html?mraid=1"
     override var interfaceName: String = "Kinit"
     val USER_NET_ID_ELEMENT = "network_user_id"
     val loading: ObservableBoolean = ObservableBoolean(true)
@@ -78,6 +79,12 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
     fun onFinish() {
         Log.d("###", "### got web finish ")
         onComplete()
+    }
+
+    @JavascriptInterface
+    fun onClickthrough(url: String) {
+        Log.d("###", "### opening browser with url $url")
+        webFragmentActions.openBrowser(url)
     }
 
     fun loadData() {

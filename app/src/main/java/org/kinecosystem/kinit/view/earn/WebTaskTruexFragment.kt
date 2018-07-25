@@ -1,6 +1,8 @@
 package org.kinecosystem.kinit.view.earn
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
@@ -16,6 +18,18 @@ import org.kinecosystem.kinit.viewmodel.earn.WebFragmentActions
 import org.kinecosystem.kinit.viewmodel.earn.WebTaskTruexViewModel
 
 class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
+    override fun openBrowser(url: String) {
+        context?.let {
+            val parsedUrl = Uri.parse(url)
+            val intent = if (parsedUrl != null) Intent(Intent.ACTION_VIEW, parsedUrl) else null
+            if (intent?.resolveActivity(it.packageManager) != null) {
+                startActivity(intent)
+            } else {
+                showErrorDialog()
+            }
+        }
+    }
+
     companion object {
         fun getInstance(): WebTaskTruexFragment {
             return WebTaskTruexFragment()
@@ -27,7 +41,6 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.task_web_layout, container, false)
-
         trueXmodel = WebTaskTruexViewModel(binding.webview.settings.userAgentString, Navigator(context!!))
         trueXmodel.webFragmentActions = this
         binding.model = trueXmodel
@@ -36,15 +49,19 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 trueXmodel.loadData()
             }
         }
+
         //DEBUG
         //WebView.setWebContentsDebuggingEnabled(true)
         binding.webview.settings.javaScriptEnabled = true
+        binding.webview.settings.setSupportMultipleWindows(true)
+        binding.webview.settings.javaScriptCanOpenWindowsAutomatically = true
         binding.webview.addJavascriptInterface(trueXmodel, trueXmodel.interfaceName)
         binding.webview.loadUrl(trueXmodel.url)
     }
