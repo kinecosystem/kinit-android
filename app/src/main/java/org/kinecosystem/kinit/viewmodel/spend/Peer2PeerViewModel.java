@@ -116,7 +116,7 @@ public class Peer2PeerViewModel {
         hasValidAddress.set(false);
         if (actions != null) {
             actions.showDialog(R.string.p2p_friend_has_no_kinit_title, R.string.p2p_friend_has_no_kinit_body,
-                R.string.p2p_friend_has_no_kinit_action, true);
+                R.string.p2p_back_to_list_action, true);
         }
         logEventPopUp(Analytics.P2P_FRIEND_HAS_NO_ADDRESS);
     }
@@ -156,8 +156,8 @@ public class Peer2PeerViewModel {
         name.set("");
         hasValidAddress.set(false);
         if (actions != null) {
-            actions.showDialog(R.string.p2p_self_transaction_title, R.string.p2p_select_valid_contact,
-                R.string.p2p_friend_has_no_kinit_action, true);
+            actions.showDialog(R.string.p2p_send_kin_to_self_title, R.string.p2p_send_kin_to_self_body,
+                R.string.p2p_back_to_list_action, true);
         }
         logEventPopUp(Analytics.P2P_SEND_KIN_TO_SELF);
     }
@@ -167,7 +167,7 @@ public class Peer2PeerViewModel {
         hasValidAddress.set(false);
         if (actions != null) {
             actions.showDialog(R.string.p2p_friend_has_no_kinit_title, R.string.p2p_friend_has_no_kinit_body,
-                R.string.p2p_friend_has_no_kinit_action, true);
+                R.string.p2p_back_to_list_action, true);
         }
         logEventPopUp(Analytics.P2P_FRIEND_HAS_NO_ADDRESS);
     }

@@ -100,7 +100,7 @@
     <string name="p2p_server_problem_action">Back to list</string>
     <string name="p2p_friend_has_no_kinit_title">Sorry, you can only send Kin to Kinit users.</string>
     <string name="p2p_friend_has_no_kinit_body">Maybe send your friends to the app store?</string>
-    <string name="p2p_friend_has_no_kinit_action">Back to list</string>
+    <string name="p2p_back_to_list_action">Back to list</string>
     <string name="p2p_amount_too_big_title">That’s very kind</string>
     <string name="p2p_amount_too_big_body">But you can only send %1$dKIN at a time.</string>
     <string name="p2p_amount_not_valid_action">ok</string>
@@ -114,6 +114,7 @@
     <string name="transaction_completed">Transaction completed</string>
     <string name="transaction_complete_subtitle">You’ve successfully sent %dKIN, see transaction details under balance</string>
     <string name="or">Or</string>
-    <string name="p2p_self_transaction_title">Sorry, you can not send Kin to yourself</string>
+    <string name="p2p_send_kin_to_self_body">You cannot send Kin to yourself, right? 😉</string>
     <string name="p2p_select_valid_contact">Please select a valid contact.</string>
+    <string name="p2p_send_kin_to_self_title">You chose yourself!</string>
 </resources>
