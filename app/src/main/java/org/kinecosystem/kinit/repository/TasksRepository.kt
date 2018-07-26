@@ -27,7 +27,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
             taskCache.putInt(TASK_STATE_KEY, state)
         }
         get() {
-            return this.taskCache.getInt(TASK_STATE_KEY, TaskState.INITIAL)
+            return this.taskCache.getInt(TASK_STATE_KEY, TaskState.IDLE)
         }
 
 
@@ -39,7 +39,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     }
 
     fun resetTaskState() {
-        taskState = TaskState.INITIAL
+        taskState = TaskState.IDLE
     }
 
     private fun getCachedTask(defaultTask: String?): Task? {

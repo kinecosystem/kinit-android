@@ -5,11 +5,11 @@ import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.startDateInMillis
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.network.OperationCompletionCallback
 import org.kinecosystem.kinit.network.OperationResultCallback
 import org.kinecosystem.kinit.network.TaskService
 import org.kinecosystem.kinit.network.Wallet
@@ -50,6 +50,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     fun startTask() {
+        taskRepository.taskState = TaskState.IN_PROGRESS
         val task = taskRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
             task?.provider?.name,

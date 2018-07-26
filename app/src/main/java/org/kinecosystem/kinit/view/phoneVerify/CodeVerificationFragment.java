@@ -29,6 +29,7 @@ import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.repository.DataStore;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.util.SupportUtil;
 import org.kinecosystem.kinit.view.BaseFragment;
 
@@ -48,6 +49,9 @@ public class CodeVerificationFragment extends BaseFragment {
     Analytics analytics;
     @Inject
     DataStoreProvider dataStoreProvider;
+    @Inject
+    UserRepository userRepository;
+
     private TextView[] inputs = new TextView[6];
     private View[] lines = new View[6];
     private TextView code, next, subtitle, counter, resend;
@@ -87,7 +91,7 @@ public class CodeVerificationFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_code_verify_fragment, container, false);
         if (getActivity() instanceof PhoneVerificationUIActions) {
             actions = (PhoneVerificationUIActions) getActivity();
@@ -185,7 +189,7 @@ public class CodeVerificationFragment extends BaseFragment {
             }
             code.requestFocus();
             InputMethodManager mgr = (InputMethodManager) getActivity()
-                    .getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                .getSystemService(getActivity().INPUT_METHOD_SERVICE);
             mgr.showSoftInput(code, InputMethodManager.SHOW_IMPLICIT);
 
         }, 50);
@@ -229,7 +233,7 @@ public class CodeVerificationFragment extends BaseFragment {
     private void showContactSupport() {
         resend.setText(getResources().getString(R.string.contact_support) + " >");
         resend.setOnClickListener(resend -> {
-            SupportUtil.INSTANCE.openEmailSupport(getActivity(), null);
+            SupportUtil.INSTANCE.openEmailSupport(getActivity(), userRepository);
         });
     }
 

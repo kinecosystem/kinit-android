@@ -68,9 +68,10 @@ class TaskService(context: Context, api: TasksApi,
 
         tasksApi.nextTasks(userId).enqueue(object : Callback<TasksApi.NextTasksResponse> {
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
-                                    response: Response<TasksApi.NextTasksResponse>?) {
+                response: Response<TasksApi.NextTasksResponse>?) {
 
-                if (response != null && response.isSuccessful) {
+                if (response != null && response.isSuccessful &&
+                    tasksRepo.taskState != TaskState.IN_PROGRESS && tasksRepo.taskState != TaskState.SUBMITTED) {
                     Log.d("TaskService", "onResponse: ${response.body()}")
                     val taskResponse = response.body()
                     val taskList: List<Task> = taskResponse?.taskList.orEmpty()
@@ -84,8 +85,6 @@ class TaskService(context: Context, api: TasksApi,
                     Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
                     callback?.onError(ERROR_EMPTY_RESPONSE)
                 }
-
-
             }
 
             override fun onFailure(call: Call<TasksApi.NextTasksResponse>?, t: Throwable?) {

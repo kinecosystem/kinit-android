@@ -30,18 +30,20 @@ class DeviceUtils(context: Context) {
     }
 
     fun deviceId(): String {
+        var deviceId: String? = null
         if (ContextCompat.checkSelfPermission(applicationContext,
             Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             val telephonyManager: TelephonyManager = applicationContext.getSystemService(
                 Context.TELEPHONY_SERVICE) as TelephonyManager
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 telephonyManager.getImei()
             } else {
                 telephonyManager.deviceId
             }
         }
-        return ""
+        return deviceId.orEmpty()
     }
+
 
     fun deviceName(): String {
         val manufacturer = Build.MANUFACTURER
