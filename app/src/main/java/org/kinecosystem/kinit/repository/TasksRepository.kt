@@ -35,7 +35,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         task = getCachedTask(defaultTask)
         taskStorageName = QUESTIONNAIRE_ANSWERS_STORAGE + task?.id
         chosenAnswersCache = dataStoreProvider.dataStore(taskStorageName)
-        isTaskStarted = ObservableBoolean(getChosenAnswers().size > 0)
+        isTaskStarted = ObservableBoolean(taskState != TaskState.IDLE)
     }
 
     fun resetTaskState() {

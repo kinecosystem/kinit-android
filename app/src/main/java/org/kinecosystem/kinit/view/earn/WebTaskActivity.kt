@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.view.earn
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
 import org.kinecosystem.kinit.KinitApplication
@@ -11,10 +12,22 @@ import javax.inject.Inject
 
 
 class WebTaskActivity : BaseSingleFragmentActivity() {
+
+    private val TRUEX_TASK_STARTED_KEY = "Truex_task_started"
+    private var truexStarted = false
+
+
     override fun init() {
         val decorView = window.decorView
         val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
         decorView.systemUiVisibility = uiOptions
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        truexStarted = savedInstanceState?.getBoolean(TRUEX_TASK_STARTED_KEY, false) ?: false
+        if (truexStarted) finish()
+        else truexStarted = true
     }
 
     companion object {
@@ -26,6 +39,11 @@ class WebTaskActivity : BaseSingleFragmentActivity() {
 
     override fun inject() {
         KinitApplication.coreComponent.inject(this)
+    }
+
+    public override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putBoolean(TRUEX_TASK_STARTED_KEY, truexStarted)
+        super.onSaveInstanceState(outState)
     }
 
     override fun getFragment(): Fragment {
