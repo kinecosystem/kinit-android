@@ -15,7 +15,7 @@ import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.earn.TransactionTimeout
 import javax.inject.Inject
 
-const val REWARD_TIMEOUT: Long = 20000
+const val REWARD_TIMEOUT: Long = 30000
 
 class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = null) {
 
