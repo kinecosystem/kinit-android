@@ -134,9 +134,10 @@ class TabsAdapter :
     private fun getSpendTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<SpendTabBinding>(LayoutInflater.from(parent.context),
             R.layout.spend_tab, parent, false)
-        binding.model = SpendViewModel(Navigator(parent.context))
+        val spendingModel = SpendViewModel(Navigator(parent.context))
+        binding.model = spendingModel
         binding.offersList.layoutManager = LinearLayoutManager(parent.context)
-        binding.offersList.adapter = OfferListAdapter(parent.context, binding.model)
+        binding.offersList.adapter = OfferListAdapter(parent.context, spendingModel)
         models[position] = binding.model
         return binding.root
     }

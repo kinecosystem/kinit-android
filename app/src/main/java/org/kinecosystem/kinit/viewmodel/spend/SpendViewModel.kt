@@ -14,7 +14,7 @@ import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
 class SpendViewModel(private val navigator: Navigator) :
-    TabViewModel {
+        TabViewModel {
 
     @Inject
     lateinit var offersRepository: OffersRepository
@@ -36,14 +36,14 @@ class SpendViewModel(private val navigator: Navigator) :
         refresh()
     }
 
-    fun getOffers(): List<Offer> {
-        return offersRepository.offerList
+    fun offers(): List<Offer> {
+        return offersRepository.offers.get()
     }
 
     private fun refresh() {
         if (servicesProvider.isNetworkConnected()) {
             hasNetwork.set(true)
-            hasOffers.set(!offersRepository.offerList.isEmpty())
+            hasOffers.set(!offersRepository.isEmpty())
             showNoOffer.set(!hasOffers.get())
             balance.set(servicesProvider.walletService.balance.get().toString())
         } else {
@@ -54,13 +54,13 @@ class SpendViewModel(private val navigator: Navigator) :
     }
 
     private fun checkForUpdates() {
-        if (hasNetwork.get() && !hasOffers.get()) {
+        if (hasNetwork.get()) {
             servicesProvider.offerService.retrieveOffers(object : OperationCompletionCallback {
                 override fun onError(errorCode: Int) {
                 }
 
                 override fun onSuccess() {
-                   refresh()
+                    refresh()
                 }
             })
         }
@@ -70,27 +70,27 @@ class SpendViewModel(private val navigator: Navigator) :
         refresh()
         checkForUpdates()
         val event: Events.Event =
-            if (!hasNetwork.get()) {
-                Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
-            } else if (showNoOffer.get()) {
-                Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN)
-            } else {
-                Events.Analytics.ViewSpendPage(offersRepository.numOfOffers())
-            }
+                if (!hasNetwork.get()) {
+                    Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
+                } else if (showNoOffer.get()) {
+                    Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN)
+                } else {
+                    Events.Analytics.ViewSpendPage(offersRepository.offersCount())
+                }
         analytics.logEvent(event)
     }
 
     fun onItemClicked(position: Int) {
         navigator.navigateTo(Navigator.Destination.SPEND, position)
-        val offer = getOffers()[position]
+        val offer = offersRepository.offer(position)
         analytics.logEvent(Events.Analytics.ClickOfferItemOnSpendPage(offer.provider?.name,
-            offer.price,
-            offersRepository.numOfOffers(),
-            offer.domain,
-            offer.id,
-            offer.title,
-            position,
-            offer.type))
+                offer.price,
+                offersRepository.offersCount(),
+                offer.domain,
+                offer.id,
+                offer.title,
+                position,
+                offer.type))
     }
 
 }

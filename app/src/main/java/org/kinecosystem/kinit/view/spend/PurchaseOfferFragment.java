@@ -58,7 +58,7 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
             getActivity().finish();
             Log.e(TAG, "pass wrong offer index");
         }
-        if (!offersRepository.hasValidOffer(index)) {
+        if (!offersRepository.hasOffer(index)) {
             getActivity().finish();
             Log.e(TAG, "Wrong offer index $index");
         }
