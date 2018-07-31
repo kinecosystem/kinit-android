@@ -44,6 +44,7 @@ class NotificationPublisher(private val context: Context, private val analytics:
             .setContentTitle(contentTitle)
             .setContentText(notificationData.body)
             .setSmallIcon(R.drawable.k_notif)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(notificationData.body))
             .setColor(context.resources.getColor(R.color.status_bar_color))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
