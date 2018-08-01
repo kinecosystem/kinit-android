@@ -38,13 +38,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
                 if (response != null && response.isSuccessful) {
                     Log.d("OffersService", "onResponse: ${response.body()}")
-                    val offerResponse = response.body()
-                    if (offerResponse?.offerList != null && offerResponse.offerList.isNotEmpty()) {
-                        repository.replaceOfferList(offerResponse.offerList)
-                    } else {
-                        Log.d("OffersService", "offer list empty or null ")
-                        repository.replaceOfferList(ArrayList())
-                    }
+                    repository.updateOffers(response.body()?.offerList)
                     callback?.onSuccess()
                 } else {
                     Log.d("OffersService", "response null or isSuccessful=false: $response")

@@ -1,24 +1,39 @@
 package org.kinecosystem.kinit.repository
 
+import android.databinding.ObservableField
 import org.kinecosystem.kinit.model.spend.Offer
 
 class OffersRepository {
-    var offerList: List<Offer> = ArrayList()
+    var offers: ObservableField<List<Offer>> = ObservableField(ArrayList())
         private set
 
-    fun offer(i: Int): Offer {
-        return offerList[i]
+    fun offer(index: Int): Offer {
+        return offers.get()[index]
     }
 
-    fun numOfOffers(): Int {
-        return offerList.size
+    fun offersCount(): Int {
+        return offers.get().size
     }
 
-    fun replaceOfferList(newOfferList: List<Offer>) {
-        offerList = newOfferList
+    fun updateOffers(newOffers: List<Offer>?) {
+        if (isDifferent(newOffers.orEmpty())) {
+            offers.set(newOffers.orEmpty())
+        }
     }
 
-    fun hasValidOffer(index: Int): Boolean {
-        return index >= 0 && index < numOfOffers()
+    private fun isDifferent(newOffers: List<Offer>): Boolean {
+        if (newOffers.size != offersCount()) return true
+
+        for ((index, newOffer) in newOffers.withIndex()) {
+            if (newOffer != offer(index))
+                return true
+        }
+        return false
     }
+
+    fun hasOffer(index: Int): Boolean {
+        return index >= 0 && index < offersCount()
+    }
+
+    fun isEmpty() = offersCount() == 0
 }
