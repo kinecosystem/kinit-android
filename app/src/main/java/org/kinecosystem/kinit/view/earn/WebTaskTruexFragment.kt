@@ -47,9 +47,16 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
         return binding.root
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.webview.saveState(outState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        savedInstanceState?.let {
+            binding.webview.restoreState(savedInstanceState)
+        }
         binding.webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
