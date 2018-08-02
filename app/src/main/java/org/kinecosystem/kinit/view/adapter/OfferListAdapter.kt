@@ -14,10 +14,11 @@ import org.kinecosystem.kinit.model.spend.isP2p
 import org.kinecosystem.kinit.util.ImageUtils
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
 
-class OfferListAdapter(private val context: Context, private val model: SpendViewModel) : RecyclerView.Adapter<OfferListAdapter.ViewHolder>() {
+class OfferListAdapter(private val context: Context, private val model: SpendViewModel)
+    : RecyclerView.Adapter<OfferListAdapter.ViewHolder>() {
 
 
-    private var offerList: List<Offer> = model.offers()
+    private var offers: List<Offer> = model.offers()
     val propertyChangeCallBack = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
             refresh()
@@ -25,24 +26,25 @@ class OfferListAdapter(private val context: Context, private val model: SpendVie
     }
 
     fun refresh() {
-        offerList = model.offers()
+        offers = model.offers()
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): OfferListAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.offer_card, parent, false)
+            .inflate(R.layout.offer_card, parent, false)
         return ViewHolder(context, view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(offerList[position])
-        holder.view.setOnClickListener { view -> model.onItemClicked(position) }
+        val offer: Offer = offers[position]
+        holder.bind(offer)
+        holder.view.setOnClickListener { model.onItemClicked(offer, position) }
     }
 
     override fun getItemCount(): Int {
-        return offerList.size
+        return offers.size
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

@@ -14,7 +14,7 @@ import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
 class SpendViewModel(private val navigator: Navigator) :
-        TabViewModel {
+    TabViewModel {
 
     @Inject
     lateinit var offersRepository: OffersRepository
@@ -70,27 +70,26 @@ class SpendViewModel(private val navigator: Navigator) :
         refresh()
         checkForUpdates()
         val event: Events.Event =
-                if (!hasNetwork.get()) {
-                    Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
-                } else if (showNoOffer.get()) {
-                    Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN)
-                } else {
-                    Events.Analytics.ViewSpendPage(offersRepository.offersCount())
-                }
+            if (!hasNetwork.get()) {
+                Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
+            } else if (showNoOffer.get()) {
+                Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN)
+            } else {
+                Events.Analytics.ViewSpendPage(offersRepository.offersCount())
+            }
         analytics.logEvent(event)
     }
 
-    fun onItemClicked(position: Int) {
-        navigator.navigateTo(Navigator.Destination.SPEND, position)
-        val offer = offersRepository.offer(position)
+    fun onItemClicked(offer: Offer, position: Int) {
+        navigator.navigateTo(offer)
         analytics.logEvent(Events.Analytics.ClickOfferItemOnSpendPage(offer.provider?.name,
-                offer.price,
-                offersRepository.offersCount(),
-                offer.domain,
-                offer.id,
-                offer.title,
-                position,
-                offer.type))
+            offer.price,
+            offersRepository.offersCount(),
+            offer.domain,
+            offer.id,
+            offer.title,
+            position,
+            offer.type))
     }
 
 }

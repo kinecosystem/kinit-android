@@ -31,8 +31,8 @@ class OffersRepository {
         return false
     }
 
-    fun hasOffer(index: Int): Boolean {
-        return index >= 0 && index < offersCount()
+    fun hasOffer(offer: Offer): Boolean {
+        return offers.get().contains(offer)
     }
 
     fun isEmpty() = offersCount() == 0

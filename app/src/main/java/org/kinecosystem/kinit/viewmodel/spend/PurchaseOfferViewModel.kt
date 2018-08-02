@@ -14,23 +14,19 @@ import org.kinecosystem.kinit.network.ERROR_NO_INTERNET
 import org.kinecosystem.kinit.network.ERROR_REDEEM_COUPON_FAILED
 import org.kinecosystem.kinit.network.OperationResultCallback
 import org.kinecosystem.kinit.network.ServicesProvider
-import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActions
 import javax.inject.Inject
 
-class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) {
+class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer) {
 
-    var offer: Offer
     @Inject
     lateinit var analytics: Analytics
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
     lateinit var servicesProvider: ServicesProvider
-    @Inject
-    lateinit var offersRepository: OffersRepository
     @Inject
     lateinit var tasksRepository: TasksRepository
 
@@ -48,7 +44,6 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
 
     init {
         KinitApplication.coreComponent.inject(this)
-        offer = offersRepository.offer(offerIndex)
         title = offer.title
         info = offer.description
         price = offer.price.toString()
@@ -129,7 +124,7 @@ class PurchaseOfferViewModel(private val navigator: Navigator, offerIndex: Int) 
 
     fun onResume() {
         val offerPrice = offer.price ?: Int.MAX_VALUE
-        val numOfTasks = tasksRepository.task?.id?.toInt()  ?: Integer.MAX_VALUE
+        val numOfTasks = tasksRepository.task?.id?.toInt() ?: Integer.MAX_VALUE
         var offerEnabled = true
         if (isP2p) {
             offerEnabled = numOfTasks >= userRepository.p2pMinTasks

@@ -5,17 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
 import org.kinecosystem.kinit.R;
+import org.kinecosystem.kinit.model.spend.Offer;
 import org.kinecosystem.kinit.view.BaseActivity;
 import org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel;
 
 public class PurchaseOfferActivity extends BaseActivity {
 
-    private static final String INDEX_PARAM = "SpendActivity_index_param";
+    private static final String OFFER_PARAM = "SpendActivity_offer_param";
 
-    public static Intent getIntent(Context context, int index) {
+    public static Intent getIntent(Context context, Offer offer) {
         Intent intent = new Intent(context, PurchaseOfferActivity.class);
-        intent.putExtra(INDEX_PARAM, index);
+        intent.putExtra(OFFER_PARAM, offer);
         return intent;
     }
 
@@ -23,8 +25,8 @@ public class PurchaseOfferActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_fragment_layout);
-        int index = getIntent().getIntExtra(INDEX_PARAM, 0);
-        PurchaseOfferFragment fragment = PurchaseOfferFragment.newInstance(index);
+        Offer offer = getIntent().getParcelableExtra(OFFER_PARAM);
+        PurchaseOfferFragment fragment = PurchaseOfferFragment.newInstance(offer);
         getSupportFragmentManager().beginTransaction()
             .add(R.id.fragment_container, fragment).commit();
     }

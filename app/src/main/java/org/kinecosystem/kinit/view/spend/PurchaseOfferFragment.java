@@ -17,6 +17,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.databinding.SpendDetailLayoutBinding;
+import org.kinecosystem.kinit.model.spend.Offer;
 import org.kinecosystem.kinit.navigation.Navigator;
 import org.kinecosystem.kinit.repository.OffersRepository;
 import org.kinecosystem.kinit.view.BaseFragment;
@@ -26,26 +27,24 @@ import javax.inject.Inject;
 
 public class PurchaseOfferFragment extends BaseFragment implements PurchaseOfferActions {
 
-    public static final String ARG_OFFER_INDEX = "SpendOfferFragment_ARG_QUESTION_INDEX";
-    public static final int INVALID_OFFER_INDEX = -1;
+    public static final String ARG_OFFER = "PurchaseOfferFragment_ARG_OFFER_INDEX";
     public static final String TAG = PurchaseOfferFragment.class.getSimpleName();
+    @Inject
+    OffersRepository offersRepository;
     private SpendDetailLayoutBinding binding;
     private PurchaseOfferViewModel model;
     private AlertDialog alertDialog;
 
-    @Inject
-    OffersRepository offersRepository;
+    public static PurchaseOfferFragment newInstance(Offer offer) {
+        PurchaseOfferFragment fragment = new PurchaseOfferFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_OFFER, offer);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public PurchaseOfferViewModel getModel() {
         return model;
-    }
-
-    public static PurchaseOfferFragment newInstance(int offerIndex) {
-        PurchaseOfferFragment fragment = new PurchaseOfferFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_OFFER_INDEX, offerIndex);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -53,17 +52,13 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.spend_detail_layout, container, false);
         KinitApplication.coreComponent.inject(this);
-        int index = getArguments().getInt(ARG_OFFER_INDEX, INVALID_OFFER_INDEX);
-        if (index == INVALID_OFFER_INDEX) {
+        Offer offer = getArguments().getParcelable(ARG_OFFER);
+        if (offer == null) {
             getActivity().finish();
-            Log.e(TAG, "pass wrong offer index");
-        }
-        if (!offersRepository.hasOffer(index)) {
-            getActivity().finish();
-            Log.e(TAG, "Wrong offer index $index");
+            Log.e(TAG, "Offer could not be found");
         }
         Navigator navigator = new Navigator(getActivity());
-        model = new PurchaseOfferViewModel(navigator, index);
+        model = new PurchaseOfferViewModel(navigator, offer);
         model.setPurchaseOfferActions(this);
         binding.info.setMovementMethod(new ScrollingMovementMethod());
         binding.setModel(model);
@@ -115,15 +110,15 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
             model.logViewErrorPopup(errorType);
         }
         builder.setTitle(titleStringRes).setMessage(messageStringRes).setPositiveButton(actionStringRes,
-                (dialogInterface, i) -> {
-                    if (errorType != null) {
-                        model.logCloseErrorPopupClicked(errorType);
-                    }
-                    dialogInterface.dismiss();
-                    if (finish) {
-                        getActivity().finish();
-                    }
-                });
+            (dialogInterface, i) -> {
+                if (errorType != null) {
+                    model.logCloseErrorPopupClicked(errorType);
+                }
+                dialogInterface.dismiss();
+                if (finish) {
+                    getActivity().finish();
+                }
+            });
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
