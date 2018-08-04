@@ -13,11 +13,16 @@ import android.webkit.WebViewClient
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TaskWebLayoutBinding
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.earn.WebFragmentActions
 import org.kinecosystem.kinit.viewmodel.earn.WebTaskTruexViewModel
+import javax.inject.Inject
 
 class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
+    @Inject
+    lateinit var tasksRepository: TasksRepository
+
     override fun openBrowser(url: String) {
         context?.let {
             val parsedUrl = Uri.parse(url)
@@ -77,6 +82,7 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
         //TODO update correct text
         if (activity != null) {
             val builder = AlertDialog.Builder(activity!!, R.style.CustomAlertDialog)
+            tasksRepository.resetTaskState()
             builder.setTitle(R.string.general_problem_title).setMessage(
                 R.string.general_problem_body).setPositiveButton(R.string.dialog_ok, { dialogInterface, i ->
                 dialogInterface.dismiss()
