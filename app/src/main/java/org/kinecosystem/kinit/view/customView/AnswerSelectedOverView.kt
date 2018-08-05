@@ -36,15 +36,15 @@ class AnswerSelectedOverView : ConstraintLayout {
         inflater.inflate(R.layout.answer_image_selected_view, this, true)
         setOnTouchListener { _, event ->
             when (event?.action) {
-                MotionEvent.ACTION_DOWN -> reveal(event?.x.toInt(), event?.y.toInt())
+                MotionEvent.ACTION_UP -> reveal(event?.x.toInt(), event?.y.toInt())
             }
             true
         }
     }
 
     private fun reveal(x: Int, y: Int) {
+        if (x < 0 || y < 0 || y > height || !isClickable) return
         setOnTouchListener(null)
-        if (!isClickable) return
         listener?.onSelected(answer)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val anim = ViewAnimationUtils.createCircularReveal(this, x, y, 0f, Math.max(width, height).toFloat())
