@@ -5,6 +5,7 @@ import org.kinecosystem.kinit.model.Provider
 import org.kinecosystem.kinit.model.isValid
 
 const val TASK_TYPE_QUESTIONNAIRE: String = "questionnaire"
+const val TASK_TYPE_QUIZ: String = "quiz"
 const val TASK_TYPE_TRUEX: String = "truex"
 
 
@@ -47,8 +48,9 @@ fun Task.isValid(): Boolean {
 
 fun Task.isQuestionnaire(): Boolean = type.equals(TASK_TYPE_QUESTIONNAIRE)
 
-fun Task.isTaskWebView(): Boolean = type.equals(TASK_TYPE_TRUEX)
+fun Task.isQuiz(): Boolean = type.equals(TASK_TYPE_QUIZ)
 
+fun Task.isTaskWebView(): Boolean = type.equals(TASK_TYPE_TRUEX)
 
 fun Task.tagsString(): String? {
     return tags?.joinToString(", ")

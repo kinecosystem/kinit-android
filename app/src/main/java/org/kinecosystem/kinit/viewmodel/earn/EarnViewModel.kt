@@ -7,6 +7,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
+import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.model.earn.startDateInMillis
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
@@ -40,6 +41,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     var description = ObservableField<String?>()
     var kinReward = ObservableField<String>()
     var minToComplete = ObservableField<String>()
+    var isQuiz = ObservableBoolean(false)
 
     private var scheduledRunnable: Runnable? = null
 
@@ -76,13 +78,15 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun refresh() {
-        val task = taskRepository.task
-        authorName.set(task?.provider?.name)
-        authorImageUrl.set(task?.provider?.imageUrl)
-        title.set(task?.title)
-        description.set(task?.description)
-        kinReward.set(task?.kinReward?.toString())
-        minToComplete.set(convertMinToCompleteToString(task?.minToComplete))
+        taskRepository.task?.let {
+            isQuiz.set(it.isQuiz())
+            authorName.set(it.provider?.name)
+            authorImageUrl.set(it.provider?.imageUrl)
+            title.set(it.title)
+            description.set(it.description)
+            kinReward.set(it.kinReward?.toString())
+            minToComplete.set(convertMinToCompleteToString(it.minToComplete))
+        }
         handleAvailability()
     }
 

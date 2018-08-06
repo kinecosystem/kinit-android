@@ -33,7 +33,7 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
     var selectionListener: OnSelectionListener = object : OnSelectionListener {
         override fun onAnimComplete() {
             scheduler.scheduleOnMain({
-                questionnaireActions?.nextQuestion()
+                questionnaireActions?.next()
             }, POST_ANSWER_DELAY)
         }
 

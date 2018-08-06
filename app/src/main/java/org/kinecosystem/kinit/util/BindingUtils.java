@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import org.kinecosystem.kinit.model.earn.Answer;
 import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
+import org.kinecosystem.kinit.view.customView.QuizAnswerView;
 
 
 public class BindingUtils {
@@ -98,6 +99,32 @@ public class BindingUtils {
     public static void answer(AnswerSelectedOverView view, Answer answer) {
         if (answer != null) {
             view.setAnswer(answer);
+        }
+    }
+
+    @BindingAdapter({"answer", "correct"})
+    public static void setAnswer(QuizAnswerView view, Answer answer, Boolean isCorrect) {
+        view.setAnswer(answer);
+        view.setCorrect(isCorrect);
+    }
+
+    @BindingAdapter("showCorrect")
+    public static void showCorrect(QuizAnswerView view, Boolean showCorrect) {
+        if(showCorrect) {
+            view.showCorrect(false);
+        }
+    }
+
+    @BindingAdapter("reward")
+    public static void setReward(QuizAnswerView view, Integer reward) {
+        view.setReward(reward);
+    }
+
+
+    @BindingAdapter("onSelectionListener")
+    public static void setSelectionListener(QuizAnswerView view, QuizAnswerView.OnSelectionListener listener) {
+        if (listener != null) {
+            view.setListener(listener);
         }
     }
 }

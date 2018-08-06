@@ -7,6 +7,8 @@ data class Question(val id: String? = null,
                     val text: String? = null,
                     @SerializedName("type")
                     val type: String,
+                    @SerializedName("quiz_data")
+                    val quiz_data: QuizData? = null,
                     @SerializedName("image_url")
                     val image_url: String? = null,
                     @SerializedName("results")
@@ -21,9 +23,21 @@ data class Question(val id: String? = null,
     }
 }
 
+data class QuizData(@SerializedName("answer_id")
+                    val answer_id: String,
+                    @SerializedName("explanation")
+                    val explanation: String,
+                    @SerializedName("reward")
+                    val reward: Int)
+
 fun Question.isValid(): Boolean {
     if (id.isNullOrBlank() || text.isNullOrBlank() || type.isNullOrBlank() || answers.orEmpty().isEmpty()) {
         return false
+    }
+    quiz_data?.let {
+        if(it.explanation.isNullOrBlank() || it.answer_id.isNullOrEmpty() || it.reward < 0){
+            return false
+        }
     }
     return answers.orEmpty().all { answer -> answer.isValid() }
 }

@@ -81,7 +81,7 @@ open class QuestionViewModel(private var questionIndex: Int,
             questionAnswered = true
             val task = questionnaireRepository.task
             questionnaireRepository.setChosenAnswers(answerId, chosenAnswers)
-            questionnaireActions.nextQuestion()
+            questionnaireActions.next()
             analytics.logEvent(answerEvent(task))
         }
     }
@@ -101,7 +101,7 @@ open class QuestionViewModel(private var questionIndex: Int,
                     chosenAnswersCount.set(chosenAnswers.size)
                     questionnaireRepository.setChosenAnswers(questionId, chosenAnswers)
                     scheduler.scheduleOnMain({
-                        questionnaireActions.nextQuestion()
+                        questionnaireActions.next()
                     }, 200)
                     analytics.logEvent(answerEvent(task))
                     questionAnswered = true

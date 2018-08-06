@@ -40,7 +40,13 @@
     <color name="konfetti2">#f7da1a</color>
     <color name="konfetti3">#90fdf2</color>
     <color name="konfetti4">#1664e8</color>
-    <color name="rounded_rec_stroke_grey">#d7dce9</color>
+    <color name="konfetti5">#7966ff</color>
+    <color name="konfetti6">#ffe164</color>
+    <color name="konfetti7">#82ffee</color>
+    <color name="green_correct">#87e620</color>
+    <color name="red_wrong">#fc624f</color>
+
+    <color name="btn_stroke_grey">#d7dce9</color>
     <color name="blue_selected_image">#80047cfc</color>
 
 </resources>
