@@ -23,6 +23,7 @@
     <color name="button_blue_disable_font_color">#fff</color>
     <color name="grey_delimiter_line_color">#d2d7e1</color>
     <color name="answer_font_color">#7884a5</color>
+    <color name="bright_blue">#1693f3</color>
     <color name="grey">#7884a5</color>
     <color name="answer_font_color_selected">@color/white</color>
     <color name="status_bar_color">#047cfc</color>

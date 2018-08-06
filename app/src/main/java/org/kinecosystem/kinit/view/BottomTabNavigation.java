@@ -75,8 +75,7 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
             if (pageSelectionListener != null) {
                 setSelectedTabIndex(tabSelectedIndex);
                 navTab.setNotificationIndicator(false);
-                // Tabs starts at index 1
-                pageSelectionListener.onPageSelected(currentTabSelectedIndex + 1, tabSelectedTitle);
+                pageSelectionListener.onPageSelected(currentTabSelectedIndex, tabSelectedTitle);
             }
         }
     }
@@ -106,6 +105,8 @@ public class BottomTabNavigation extends FrameLayout implements OnClickListener 
 
     public interface PageSelectionListener {
         void enablePageSelection();
+
+        void disablePageSelection();
 
         void onPageSelected(int index, String tabTitle);
     }

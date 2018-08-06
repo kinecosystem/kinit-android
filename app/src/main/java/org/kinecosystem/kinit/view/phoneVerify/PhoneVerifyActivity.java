@@ -90,7 +90,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
 
     @Override
     public void onVerificationComplete() {
-        startActivity(MainActivity.getIntent(this));
+        startActivity(MainActivity.Companion.getIntent(this));
         finish();
     }
 

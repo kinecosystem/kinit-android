@@ -100,7 +100,7 @@ public class TutorialActivity extends BaseActivity {
         if (userRepository.isPhoneVerificationEnabled()) {
             startActivity(PhoneVerifyActivity.getIntent(this, true));
         } else {
-            startActivity(MainActivity.getIntent(this));
+            startActivity(MainActivity.Companion.getIntent(this));
         }
         finish();
     }

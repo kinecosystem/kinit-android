@@ -28,4 +28,9 @@
     <dimen name="rounded_rec_small">8dp</dimen>
     <dimen name="emoji_big">60sp</dimen>
     <dimen name="emoji_normal">50sp</dimen>
+    <dimen name="pre_earn_text_size">30sp</dimen>
+    <dimen name="pre_earn_end_padding">15dp</dimen>
+    <dimen name="pre_earn_start_padding">24dp</dimen>
+    <dimen name="pageviewer_padding_bottom">1dp</dimen>
+    <dimen name="bottom_navigation_delim_height">1dp</dimen>
 </resources>
