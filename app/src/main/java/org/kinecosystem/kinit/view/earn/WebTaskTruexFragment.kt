@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TaskWebLayoutBinding
 import org.kinecosystem.kinit.navigation.Navigator
@@ -44,6 +45,11 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
     lateinit var trueXmodel: WebTaskTruexViewModel
     lateinit var binding: TaskWebLayoutBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        KinitApplication.coreComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.task_web_layout, container, false)
         trueXmodel = WebTaskTruexViewModel(binding.webview.settings.userAgentString, Navigator(context!!))
@@ -58,6 +64,7 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         savedInstanceState?.let {
             binding.webview.restoreState(savedInstanceState)
@@ -84,7 +91,7 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
             val builder = AlertDialog.Builder(activity!!, R.style.CustomAlertDialog)
             tasksRepository.resetTaskState()
             builder.setTitle(R.string.general_problem_title).setMessage(
-                R.string.general_problem_body).setPositiveButton(R.string.dialog_ok, { dialogInterface, i ->
+                    R.string.general_problem_body).setPositiveButton(R.string.dialog_ok, { dialogInterface, i ->
                 dialogInterface.dismiss()
                 trueXmodel.navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
                 finish()
