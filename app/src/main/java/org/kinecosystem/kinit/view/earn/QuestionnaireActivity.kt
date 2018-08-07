@@ -111,10 +111,10 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         if (fragment != null) {
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                    .replace(R.id.fragment_container, newFragment).commitAllowingStateLoss()
+                    .replace(R.id.fragment_container, newFragment).commitNowAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, newFragment)
-                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitAllowingStateLoss()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitNowAllowingStateLoss()
         }
     }
 }
