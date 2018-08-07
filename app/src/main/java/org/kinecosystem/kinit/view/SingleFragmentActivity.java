@@ -11,11 +11,11 @@ public abstract class SingleFragmentActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_fragment_layout);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, getFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, getFragment()).commitNowAllowingStateLoss();
     }
 
     public void replaceFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commitNowAllowingStateLoss();
     }
 
     protected abstract Fragment getFragment();
