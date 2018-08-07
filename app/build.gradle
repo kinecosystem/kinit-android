@@ -26,7 +26,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 10
-        versionName "1.1.0"
+        versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         dataBinding {
