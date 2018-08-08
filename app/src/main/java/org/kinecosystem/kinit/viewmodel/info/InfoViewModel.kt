@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.viewmodel.info
 
+import android.databinding.ObservableBoolean
 import android.view.View
 import org.kinecosystem.kinit.dagger.CoreComponent
 import org.kinecosystem.kinit.BuildConfig
@@ -19,8 +20,11 @@ class InfoViewModel() : TabViewModel {
     @Inject
     lateinit var analytics: Analytics
 
+    var isBackedup = ObservableBoolean(false)
+
     init {
         KinitApplication.coreComponent.inject(this)
+        isBackedup.set(userRepository.isBackedup)
     }
 
     var version: String = if (BuildConfig.DEBUG) {

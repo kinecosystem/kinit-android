@@ -64,4 +64,45 @@
         <item name="colorAccent">@color/grey</item>
     </style>
 
+    <style name="settingHeader" parent="android:Widget.TextView">
+        <item name="android:background">@color/grey_settings_header</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingStart">17dp</item>
+    </style>
+
+    <style name="settingTitle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/answer_font_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="settingIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">19dp</item>
+    </style>
+
+    <style name="settingView">
+        <item name="android:background">@drawable/settings_bg_color</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">61dp</item>
+    </style>
+
+    <style name="settingViewDelimiter">
+        <item name="android:background">@color/grey_dark_medium</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
 </resources>

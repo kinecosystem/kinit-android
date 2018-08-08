@@ -1,74 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.info.InfoViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.info.InfoViewModel" />
     </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
-        <View
-            android:id="@+id/delim_top"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="24dp"
-            android:background="#d7dce9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/support"
-            android:textStyle="normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:fontFamily="sans-serif"
-            android:letterSpacing="-0.02"
-            android:lineSpacingExtra="4sp"
-            android:text="@string/support"
-            android:textColor="#7884a5"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/delim_bottom"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/delim_top"/>
-        <TextView
-            android:id="@+id/email_support"
-            style="@style/Button.Blue.Wide"
-            android:textStyle="normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:onClick="@{model::onContactSupportClicked}"
-            android:text="@string/email_us"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/delim_bottom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/delim_top"/>
-
-
-        <View
-            android:id="@+id/delim_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="96dp"
-            android:background="#d7dce9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/version"
-            android:textStyle="normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -78,9 +26,130 @@
             android:text="@{model.version}"
             android:textColor="#a4acc2"
             android:textSize="12sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/security_header"
+            style="@style/settingHeader"
+            android:text="Security"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/security_view"
+            style="@style/settingView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/security_header" />
+
+        <View
+            android:id="@+id/delimeter0"
+            style="@style/settingViewDelimiter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/security_view" />
+
+        <TextView
+            android:id="@+id/support_header"
+            style="@style/settingHeader"
+            android:text="Support"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/delimeter0" />
+
+        <View
+            android:id="@+id/support_view"
+            style="@style/settingView"
+            android:onClick="@{model::onContactSupportClicked}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/support_header" />
+
+        <ImageView
+            android:id="@+id/wallet_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/security_view"
+            app:layout_constraintEnd_toStartOf="@+id/icon_guide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/security_view"
+            app:srcCompat="@drawable/wallet_backup_icon" />
+
+        <ImageView
+            android:id="@+id/support_icon"
+            style="@style/settingIcon"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/support_view"
+            app:layout_constraintEnd_toStartOf="@+id/icon_guide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/support_view"
+            app:srcCompat="@drawable/support_icon" />
+
+        <View
+            android:id="@+id/delimter1"
+            style="@style/settingViewDelimiter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/support_view" />
+
+        <TextView
+            android:id="@+id/wallet_text"
+            style="@style/settingTitle"
+            android:layout_marginStart="6dp"
+            android:text="Wallet Backup"
+            app:layout_constraintBottom_toBottomOf="@+id/security_view"
+            app:layout_constraintStart_toStartOf="@+id/icon_guide"
+            app:layout_constraintTop_toTopOf="@+id/security_view" />
+
+        <TextView
+            android:id="@+id/support_text"
+            style="@style/settingTitle"
+            android:layout_marginStart="6dp"
+            android:text="Email Us"
+            app:layout_constraintBottom_toBottomOf="@+id/support_view"
+            app:layout_constraintStart_toStartOf="@+id/icon_guide"
+            app:layout_constraintTop_toTopOf="@+id/support_view" />
+
+        <ImageView
+            android:id="@+id/lock_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:visibility="@{!model.isBackedup()}"
+            app:layout_constraintBottom_toBottomOf="@+id/security_view"
+            app:layout_constraintEnd_toEndOf="@+id/security_view"
+            app:layout_constraintTop_toTopOf="@+id/security_view"
+            app:srcCompat="@drawable/lock_start_icon" />
+
+
+        <ImageView
+            android:id="@+id/lock_closed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:visibility="@{model.isBackedup()}"
+            app:layout_constraintBottom_toBottomOf="@+id/security_view"
+            app:layout_constraintEnd_toEndOf="@+id/security_view"
+            app:layout_constraintTop_toTopOf="@+id/security_view"
+            app:srcCompat="@drawable/lock_done_icon" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/icon_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="59dp" />
 
 
     </android.support.constraint.ConstraintLayout>
