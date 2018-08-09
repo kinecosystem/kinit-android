@@ -4,7 +4,10 @@ import android.databinding.ObservableBoolean
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.model.earn.*
+import org.kinecosystem.kinit.model.earn.Answer
+import org.kinecosystem.kinit.model.earn.Question
+import org.kinecosystem.kinit.model.earn.Task
+import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
@@ -28,7 +31,6 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
     var chosenAnswers: MutableList<String> = mutableListOf()
     var question: String?
     var answers: List<Answer>?
-    private var quizData: QuizData
     var reward: Int
     var clickable = ObservableBoolean(true)
     var showCorrect: ObservableBoolean = ObservableBoolean(false)
@@ -58,8 +60,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
         questionObj = taskRepository.task?.questions?.get(questionIndex)
         question = questionObj?.text
         answers = questionObj?.answers
-        quizData = questionObj?.quiz_data!!
-        reward = quizData.reward
+        reward = questionObj?.quiz_data?.reward ?: 0
     }
 
     private fun answerEvent(task: Task?): Events.Event? {
