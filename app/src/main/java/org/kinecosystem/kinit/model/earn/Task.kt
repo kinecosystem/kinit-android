@@ -40,6 +40,10 @@ fun Task.isValid(): Boolean {
         kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null || lastUpdatedAt == null) {
         return false
     }
+    if (isQuiz()) {
+        if (questions.isEmpty() || questions.any { question -> question.quiz_data == null })
+            return false
+    }
     if (!questions.orEmpty().all { question -> question.isValid() }) {
         return false
     }

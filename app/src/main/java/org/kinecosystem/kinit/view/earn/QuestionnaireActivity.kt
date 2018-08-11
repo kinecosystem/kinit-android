@@ -73,8 +73,7 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
             findViewById<View>(R.id.header_x_btn).setOnClickListener { view ->
                 val navigator = Navigator(this@QuestionnaireActivity)
                 navigator.navigateTo(Destination.MAIN_SCREEN)
-                questionnaireRepository.resetTaskState()
-                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out)
+                onBackPressed()
                 finish()
             }
 
@@ -102,6 +101,7 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        questionnaireRepository.resetTaskState()
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out)
         questionnaireModel.onBackPressed()
     }

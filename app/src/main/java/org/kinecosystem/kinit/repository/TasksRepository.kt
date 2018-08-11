@@ -2,7 +2,6 @@ package org.kinecosystem.kinit.repository
 
 import android.content.Context
 import android.databinding.ObservableBoolean
-import android.util.Log
 import com.google.gson.Gson
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.*
@@ -23,7 +22,6 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     var isTaskStarted: ObservableBoolean
     var taskState: Int
         set(state) {
-            Log.d("TasksRepository", "setting task state to $state")
             taskCache.putInt(TASK_STATE_KEY, state)
         }
         get() {
@@ -39,7 +37,10 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     }
 
     fun resetTaskState() {
-        taskState = TaskState.IDLE
+        taskState = if (getChosenAnswers().size > 0)
+            TaskState.TASK_START_ANSWERED
+        else
+            TaskState.IDLE
     }
 
     private fun getCachedTask(defaultTask: String?): Task? {
@@ -87,6 +88,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     fun clearChosenAnswers() {
         chosenAnswers.clear()
         chosenAnswersCache.clearAll()
+        taskState = TaskState.IDLE
         isTaskStarted.set(false)
     }
 

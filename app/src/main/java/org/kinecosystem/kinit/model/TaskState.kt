@@ -4,6 +4,8 @@ class TaskState {
     companion object {
         // new task
         const val IDLE = 0
+        // user has answered at least one question in a task
+        const val TASK_START_ANSWERED = 9
         // user has clicked on start or continue
         const val IN_PROGRESS = 8
         // user finished the task and we submitted to server
