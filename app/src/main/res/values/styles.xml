@@ -24,6 +24,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:textColor">@drawable/button_blue_font_color</item>
         <item name="android:background">@drawable/button_blue_bg</item>
+        <item name="fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="Button.Blue.Wide">

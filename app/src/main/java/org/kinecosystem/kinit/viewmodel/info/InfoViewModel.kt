@@ -2,17 +2,17 @@ package org.kinecosystem.kinit.viewmodel.info
 
 import android.databinding.ObservableBoolean
 import android.view.View
-import org.kinecosystem.kinit.dagger.CoreComponent
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
-class InfoViewModel() : TabViewModel {
+class InfoViewModel(val navigator: Navigator) : TabViewModel {
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -20,11 +20,11 @@ class InfoViewModel() : TabViewModel {
     @Inject
     lateinit var analytics: Analytics
 
-    var isBackedup = ObservableBoolean(false)
+    var isBackedUp = ObservableBoolean(false)
 
     init {
         KinitApplication.coreComponent.inject(this)
-        isBackedup.set(userRepository.isBackedup)
+        isBackedUp.set(userRepository.isBackedup)
     }
 
     var version: String = if (BuildConfig.DEBUG) {
@@ -37,6 +37,10 @@ class InfoViewModel() : TabViewModel {
         analytics.logEvent(Events.Analytics.ClickSupportButton())
         analytics.logEvent(Events.Business.SupportRequestSent())
         SupportUtil.openEmailSupport(view.context, userRepository)
+    }
+
+    fun onStartBackupClicked(view: View){
+        navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
     }
 
     override fun onScreenVisibleToUser() {

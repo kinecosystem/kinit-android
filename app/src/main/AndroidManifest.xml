@@ -44,6 +44,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".view.backup.WalletBackupActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".view.phoneVerify.PhoneVerifyActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />

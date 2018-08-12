@@ -121,7 +121,7 @@ class TabsAdapter :
     private fun getInfoTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<InfoTabBinding>(LayoutInflater.from(parent.context),
             R.layout.info_tab, parent, false)
-        binding.model = InfoViewModel()
+        binding.model = InfoViewModel(Navigator(parent.context))
         models[position] = binding.model
         return binding.root
     }

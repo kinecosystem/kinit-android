@@ -120,4 +120,8 @@
     <string name="p2p_select_valid_contact">Please select a valid contact.</string>
     <string name="p2p_send_kin_to_self_title">You chose yourself!</string>
     <string name="ready_to_earn_some_kin">Hi! 👋\nReady to earn some Kin?</string>
+    <string name="backup_info">Backing up your wallet will allow you to recover your Kin if you get locked out of the app or if your phone is ever lost or stolen.</string>
+    <string name="wallet_backup">Wallet Backup</string>
+    <string name="security">Security</string>
+    <string name="backup_now">Backup Now</string>
 </resources>
