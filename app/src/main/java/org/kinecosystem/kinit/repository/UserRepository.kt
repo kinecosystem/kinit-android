@@ -19,6 +19,8 @@ private const val P2P_MAX_KIN = "P2P_MAX_KIN"
 private const val P2P_MIN_KIN = "P2P_MIN_KIN"
 private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
 private const val P2P_ENABLED = "P2P_ENABLED"
+private const val BACKED_UP = "BACKED_UP"
+
 
 
 class UserRepository(dataStoreProvider: DataStoreProvider) {
@@ -70,6 +72,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(enable) = userCache.putBoolean(P2P_ENABLED, enable)
         get() = userCache.getBoolean(P2P_ENABLED, false)
 
+
+    var isBackedup: Boolean
+        set(backed) = userCache.putBoolean(BACKED_UP, backed)
+        get() = userCache.getBoolean(BACKED_UP, false)
     init {
         var userId = userCache.getString(USER_ID_KEY, "")
 
