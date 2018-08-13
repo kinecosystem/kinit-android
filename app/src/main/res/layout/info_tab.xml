@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/security_header"
             style="@style/settingHeader"
-            android:text="Security"
+            android:text="@string/security"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +43,7 @@
         <View
             android:id="@+id/security_view"
             style="@style/settingView"
+            android:onClick="@{model::onStartBackupClicked}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +60,7 @@
         <TextView
             android:id="@+id/support_header"
             style="@style/settingHeader"
-            android:text="Support"
+            android:text="@string/support"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +108,7 @@
             android:id="@+id/wallet_text"
             style="@style/settingTitle"
             android:layout_marginStart="6dp"
-            android:text="Wallet Backup"
+            android:text="@string/wallet_backup"
             app:layout_constraintBottom_toBottomOf="@+id/security_view"
             app:layout_constraintStart_toStartOf="@+id/icon_guide"
             app:layout_constraintTop_toTopOf="@+id/security_view" />
@@ -116,7 +117,7 @@
             android:id="@+id/support_text"
             style="@style/settingTitle"
             android:layout_marginStart="6dp"
-            android:text="Email Us"
+            android:text="@string/email_us"
             app:layout_constraintBottom_toBottomOf="@+id/support_view"
             app:layout_constraintStart_toStartOf="@+id/icon_guide"
             app:layout_constraintTop_toTopOf="@+id/support_view" />
@@ -126,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="23dp"
-            android:visibility="@{!model.isBackedup()}"
+            android:visibility="@{!model.isBackedUp()}"
             app:layout_constraintBottom_toBottomOf="@+id/security_view"
             app:layout_constraintEnd_toEndOf="@+id/security_view"
             app:layout_constraintTop_toTopOf="@+id/security_view"
@@ -138,7 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="23dp"
-            android:visibility="@{model.isBackedup()}"
+            android:visibility="@{model.isBackedUp()}"
             app:layout_constraintBottom_toBottomOf="@+id/security_view"
             app:layout_constraintEnd_toEndOf="@+id/security_view"
             app:layout_constraintTop_toTopOf="@+id/security_view"
