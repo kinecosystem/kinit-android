@@ -37,7 +37,7 @@
         android:background="@drawable/answer_bg"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
-        android:textColor="@color/answer_font_color"
+        android:textColor="@color/grey"
         android:textSize="16sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"

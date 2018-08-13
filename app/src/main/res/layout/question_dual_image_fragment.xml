@@ -27,7 +27,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal|center"
             android:text="@{model.questionText}"
-            android:textColor="@color/question_text_color"
+            android:textColor="@color/blue"
             android:textSize="@dimen/question_size_small"
             android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/guidelineTopQuestion"

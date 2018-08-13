@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/grey</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -13,7 +13,7 @@
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">sans-serif</item>
@@ -52,13 +52,13 @@
     </style>
 
     <style name="Questionnaire" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/status_bar_color</item>
-        <item name="colorPrimaryDark">@color/status_bar_color</item>
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/blue</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="CustomAlertDialog" parent="Base.Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/status_bar_color</item>
+        <item name="colorAccent">@color/blue</item>
     </style>
 
     <style name="AppTheme.DarkAccent">
@@ -80,7 +80,7 @@
 
     <style name="settingTitle" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textColor">@color/answer_font_color</item>
+        <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_width">wrap_content</item>
@@ -104,6 +104,16 @@
         <item name="android:background">@color/grey_dark_medium</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
+    </style>
+
+    <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <!--Input field style-->
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/grey</item>
+        <item name="colorControlActivated">@color/grey</item>
     </style>
 
 </resources>

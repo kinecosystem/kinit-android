@@ -110,7 +110,6 @@
     <string name="p2p_amount_too_small_body">Please choose a number above %1$dKIN</string>
     <string name="p2p_not_enough_balance_title">Looks like your balance is a bit low</string>
     <string name="p2p_not_enough_balance_body">Make sure you have at least %1$dKIN.</string>
-
     <string name="to">To</string>
     <string name="change">change</string>
     <string name="transaction_completed">Transaction completed</string>
@@ -125,4 +124,26 @@
     <string name="wallet_backup">Wallet Backup</string>
     <string name="security">Security</string>
     <string name="backup_now">Backup Now</string>
+    <string name="choose_hint">Choose Question</string>
+    <string name="yay">YAY!</string>
+    <string name="your_wallet_is_backed_up">Your wallet is backed up!</string>
+    <string name="confirm">Confirm</string>
+    <string name="check_email"><![CDATA[Please check your email to make sure you received your QR code.\n
+        If you did, click confirm below.\n
+        If not, <u><font color=#047cfc>resend</font></u>  or check your spam folder]]></string>
+    <string name="email_warning">Make sure to keep the code someplace safe because you’ll need it if you need to recover your account.</string>
+    <string name="qr_code">QR CODE</string>
+    <string name="qr_code_subtitle">To keep your account secure, we’ll generate a unique QR code and send it to you by email.</string>
+    <string name="your_email_address">Your Email Address</string>
+    <string name="email_correct_note">* Make sure your email is written correctly. You don’t want your wallet QR code to get to the hands of someone else.</string>
+    <string name="send_email">Send Email</string>
+    <string name="security_questions">Security Questions</string>
+    <string name="choose_2_security_questions">Choose 2 security questions.</string>
+    <string name="your_answer">Your Answer</string>
+    <string name="minimum_4_characters">* Minimum 4 characters</string>
+    <string-array name="questions_count">
+        <item >"First Question"</item>
+        <item >"Second Question"</item>
+        <item >"Third Question"</item>
+    </string-array>
 </resources>

@@ -47,7 +47,7 @@
             android:gravity="center_horizontal|center"
             android:lineSpacingExtra="5sp"
             android:text="@{model.question}"
-            android:textColor="@color/question_text_color"
+            android:textColor="@color/blue"
             android:textSize="@{model.headerImageAvailable ? @dimen/question_size_small : @dimen/question_size}"
             app:layout_constraintBottom_toTopOf="@+id/bottom_gl"
             app:layout_constraintEnd_toEndOf="parent"

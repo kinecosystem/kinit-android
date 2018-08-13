@@ -17,7 +17,7 @@
             android:id="@+id/spend_balance"
             android:layout_width="match_parent"
             android:layout_height="@dimen/balance_height"
-            android:background="@color/status_bar_color"
+            android:background="@color/blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
@@ -96,7 +96,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:text="@string/no_offers_title"
-            android:textColor="#7884a5"
+            android:textColor="@color/grey"
             android:textSize="16sp"
             android:visibility="@{model.showNoOffer}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +154,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
                 android:text="@string/no_internet_title"
-                android:textColor="#7884a5"
+                android:textColor="@color/grey"
                 android:textSize="16sp"
                 />
 

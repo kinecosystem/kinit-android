@@ -2,5 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
         <item android:color="@color/grey_dark_medium" android:state_enabled="false"/>
         <item android:color="@color/white" android:state_pressed="true" />
-        <item android:color="@color/button_send_p2p_font_color_normal"  />
+        <item android:color="@color/blue"  />
 </selector>

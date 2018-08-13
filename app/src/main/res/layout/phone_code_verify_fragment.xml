@@ -43,7 +43,7 @@
         android:fontFamily="sans-serif"
         android:lineSpacingExtra="3sp"
         android:text="@string/verification_code_subtitle"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -56,7 +56,7 @@
         android:gravity="left"
         android:inputType="number"
         android:maxLength="6"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="84dp"
         tools:layout_editor_absoluteY="16dp"/>
@@ -157,7 +157,7 @@
         android:maxEms="1"
         android:minEms="1"
         android:text="0"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/input1"
         app:layout_constraintEnd_toStartOf="@+id/input1"
@@ -189,7 +189,7 @@
         android:clickable="false"
 
         android:text="0"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/input2"
         app:layout_constraintEnd_toStartOf="@+id/input2"
@@ -221,7 +221,7 @@
         android:clickable="false"
 
         android:text="0"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/input3"
         app:layout_constraintEnd_toStartOf="@+id/input3"
@@ -253,7 +253,7 @@
 
         android:minEms="1"
         android:text="0"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/input4"
         app:layout_constraintEnd_toStartOf="@+id/input4"
@@ -285,7 +285,7 @@
 
         android:minEms="1"
         android:text="0"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/input5"
         app:layout_constraintEnd_toStartOf="@+id/input5"
@@ -318,7 +318,7 @@
 
         android:minEms="1"
         android:text="0"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.5"
@@ -348,6 +348,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/input5"/>
+
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -31,7 +31,7 @@
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
         android:text="@string/your_kin_is_on_its_way_with_a_brief_delay"
-        android:textColor="#7884a5"
+        android:textColor="@color/grey"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"

@@ -4,7 +4,7 @@
     >
     <solid android:color="@color/white"/>
     <stroke
-        android:color="@color/button_blue_selected"
+        android:color="@color/blue"
         android:width="1dp"/>
     <corners
         android:bottomLeftRadius="@dimen/image_answer_corner"

@@ -32,6 +32,7 @@ class ServicesProvider {
     val taskService: TaskService
     val walletService: Wallet
     val offerService: OfferService
+    val backupService: BackupService
 
     private val applicationContext: Context
 
@@ -68,6 +69,7 @@ class ServicesProvider {
             userRepo, analytics, taskService, walletService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
             userRepo.userId(), offerRepo, analytics, walletService, scheduler)
+        backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))
     }
 
     fun isNetworkConnected(): Boolean {

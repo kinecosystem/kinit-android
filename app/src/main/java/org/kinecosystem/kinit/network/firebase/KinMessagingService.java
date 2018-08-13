@@ -1,15 +1,13 @@
 package org.kinecosystem.kinit.network.firebase;
 
-import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
-
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import java.util.Map;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.BILog.AuthTokenAckFailed;
@@ -19,7 +17,14 @@ import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
 import org.kinecosystem.kinit.network.ServicesProvider;
 import org.kinecosystem.kinit.notification.NotificationPublisher;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.util.Scheduler;
+
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
 
 
 public class KinMessagingService extends FirebaseMessagingService {
@@ -28,6 +33,8 @@ public class KinMessagingService extends FirebaseMessagingService {
 
     @Inject
     NotificationPublisher notificationPublisher;
+    @Inject
+    UserRepository userRepository;
     @Inject
     ServicesProvider servicesProvider;
     @Inject
@@ -58,16 +65,17 @@ public class KinMessagingService extends FirebaseMessagingService {
 
                     if (type.equals(Push.TYPE_TX_COMPLETED)) {
                         scheduler.post(() ->
-                            servicesProvider.getWalletService()
-                                .onTransactionMessageReceived(
-                                    gson.fromJson(message, TransactionCompleteMessage.class))
+                                servicesProvider.getWalletService()
+                                        .onTransactionMessageReceived(
+                                                gson.fromJson(message, TransactionCompleteMessage.class))
                         );
                     } else if (type.equals(Push.TYPE_AUTH_TOKEN)) {
                         analytics.logEvent(new AuthTokenReceived());
                         AuthTokenMessage authTokenMessage = gson.fromJson(message, AuthTokenMessage.class);
                         if (!TextUtils.isEmpty(authTokenMessage.getAuthToken())) {
+                            userRepository.setAuthToken(authTokenMessage.getAuthToken());
                             servicesProvider.getOnBoardingService()
-                                .sendAuthTokenAck(authTokenMessage.getAuthToken());
+                                    .sendAuthTokenAck(authTokenMessage.getAuthToken());
                         } else {
                             analytics.logEvent(new AuthTokenAckFailed("empty auth token" + authTokenMessage));
                         }
@@ -79,7 +87,7 @@ public class KinMessagingService extends FirebaseMessagingService {
                         String id = data.get(Push.ID_DATA_KEY);
                         NotificationMessage notificationMessage = gson.fromJson(message, NotificationMessage.class);
                         if (!TextUtils.isEmpty(id) && notificationMessage != null && !TextUtils
-                            .isEmpty(notificationMessage.getBody())) {
+                                .isEmpty(notificationMessage.getBody())) {
                             servicesProvider.getWalletService().updateBalance(null);
                             servicesProvider.getWalletService().retrieveTransactions(null);
                             notificationPublisher.notify(id, notificationMessage);
@@ -90,7 +98,7 @@ public class KinMessagingService extends FirebaseMessagingService {
                     Log.e(TAG, "error json content not valid " + data);
                     if (type != null && type.equals(Push.TYPE_AUTH_TOKEN)) {
                         analytics.logEvent(new AuthTokenAckFailed(
-                            "JsonException for message=" + message + ", e = " + e.getMessage()));
+                                "JsonException for message=" + message + ", e = " + e.getMessage()));
 
                     }
                 }

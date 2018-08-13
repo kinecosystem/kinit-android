@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.repository
 
 import android.util.Log
 import org.kinecosystem.kinit.model.user.UserInfo
+import org.kinecosystem.kinit.network.BackupApi
 import java.util.*
 
 
@@ -12,6 +13,7 @@ private const val IS_FRESH_INSTALL = "is_fresh_install"
 private const val FCM_TOKEN_SENT_KEY = "token_sent"
 private const val USER_CACHE_NAME = "kin.app.user"
 private const val TOS = "tos"
+private const val AUTH_TOKEN = "authToken"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
 private const val FIRST_TIME_USER = "FIRST_TIME_USER"
@@ -20,7 +22,6 @@ private const val P2P_MIN_KIN = "P2P_MIN_KIN"
 private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
 private const val P2P_ENABLED = "P2P_ENABLED"
 private const val BACKED_UP = "BACKED_UP"
-
 
 
 class UserRepository(dataStoreProvider: DataStoreProvider) {
@@ -72,10 +73,16 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(enable) = userCache.putBoolean(P2P_ENABLED, enable)
         get() = userCache.getBoolean(P2P_ENABLED, false)
 
+    var authToken: String
+        set(toekn) = userCache.putString(AUTH_TOKEN, toekn)
+        get() = userCache.getString(AUTH_TOKEN, "")
 
     var isBackedup: Boolean
         set(backed) = userCache.putBoolean(BACKED_UP, backed)
         get() = userCache.getBoolean(BACKED_UP, false)
+    lateinit var backUpHints: List<BackupApi.BackUpQuestion>
+
+
     init {
         var userId = userCache.getString(USER_ID_KEY, "")
 
