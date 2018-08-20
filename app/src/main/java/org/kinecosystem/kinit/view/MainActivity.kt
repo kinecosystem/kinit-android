@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.view
 import android.app.AlertDialog.Builder
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -75,6 +76,11 @@ class MainActivity : BaseActivity(), PageSelectionListener {
     }
 
     private fun showPreEarnAnimation() {
+        var textRes = R.string.ready_to_earn_some_kin
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            textRes = R.string.ready_to_earn_some_kin_compat
+        }
+        ready_to_earn_image.text = resources.getText(textRes)
         view_pager.visibility = View.INVISIBLE
         val slideLeftIn = AnimationUtils.loadAnimation(this, R.anim.slide_left_in)
         val slideLeftOut = AnimationUtils.loadAnimation(this, R.anim.slide_left_out)

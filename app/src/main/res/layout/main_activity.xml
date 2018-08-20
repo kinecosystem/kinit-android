@@ -15,7 +15,6 @@
         android:fontFamily="sans-serif-light"
         android:paddingEnd="@dimen/pre_earn_end_padding"
         android:paddingStart="@dimen/pre_earn_start_padding"
-        android:text="@string/ready_to_earn_some_kin"
         android:textColor="@color/bright_blue"
         android:textSize="@dimen/pre_earn_text_size"
         android:textStyle="normal"
