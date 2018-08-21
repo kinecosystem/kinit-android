@@ -37,22 +37,206 @@ private const val SAMPLE_QUESTIONNAIRE_TASK = """
     ]
 }"""
 
+private const val SAMPLE_QUIZ_TASK = """
+{
+            "desc": "t",
+            "id": "0",
+            "items": [
+                {
+                    "id": "1",
+                    "quiz_data": {
+                        "answer_id": "4",
+                        "explanation": "t" ,
+                        "reward": 4
+                    },
+                    "results": [
+                        {
+                            "id": "1",
+                            "text": "7"
+                        },
+                        {
+                            "id": "2",
+                            "text": "21"
+                        },
+                        {
+                            "id": "3",
+                            "text": "9"
+                        },
+                        {
+                            "id": "4",
+                            "text": "correct"
+                        }
+                    ],
+                    "text": "t" ,
+                    "type": "text"
+                },
+                {
+                    "id": "2",
+                    "quiz_data": {
+                        "answer_id": "2",
+                        "explanation": "t" ,
+                        "reward": 4
+                    },
+                    "results": [
+                        {
+                            "id": "1",
+                            "text": "t"
+                        },
+                        {
+                            "id": "2",
+                            "text": "t"
+                        },
+                        {
+                            "id ": "3",
+                            "text": "t"
+                        },
+                        {
+                            "id": "4",
+                            "text": "t"
+                        }
+                    ],
+                    "text": "t" ,
+                    "type": "t"
+                },
+                {
+                    "id": "3",
+                    "quiz_data": {
+                        "answer_id": "4",
+                        "explanation": "t" ,
+                        "reward": 4
+                    },
+                    "results": [
+                        {
+                            "id": "1",
+                            "text": "t"
+                        },
+                        {
+                            "id": "2",
+                            "text": "t"
+                        },
+                        {
+                            "id": "3 ",
+                            "text": "t"
+                        },
+                        {
+                            "id": "4",
+                            "text": "t"
+                        }
+                    ],
+                    "text": "t" ,
+                    "type": "text"
+                },
+                {
+                    "id": "4",
+                    "quiz_data": {
+                        "answer_id": "3",
+                        "explanation": "t" ,
+                        "reward": 4
+                    },
+                    "results": [
+                        {
+                            "id": "1",
+                            "text": "t"
+                        },
+                        {
+                            "id": "2",
+                            "text": "t"
+                        },
+                        {
+                            "id": "3",
+                            "text": "t"
+                        },
+                        {
+                            "id": "4",
+                            "text": "t"
+                        }
+                    ],
+                    "text": "t" ,
+                    "type": "text"
+                },
+                {
+                    " id": "5",
+                    "quiz_data": {
+                        "answer_id": "1",
+                        "explanation": "t" ,
+                        "reward": 4
+                    },
+                    "results": [
+                        {
+                            "id": "1",
+                            "text": "correct"
+                        },
+                        {
+                            "id": "2",
+                            "text": "t"
+                        },
+                        {
+                            "id": "3",
+                            "text": "t"
+                        },
+                        {
+                            "id": "4",
+                            "text": "t"
+                        }
+                    ],
+                    "text":§,
+                    "type": "text"
+                }
+            ],
+            "memo": "t",
+            "min_client_version_android": "1.0.5",
+            "min_client_version_ios": "1.0.0",
+            "min_to_complete": 1.0,
+            "price": 5,
+            "provider": {
+                "image_url": "t",
+                "name": "t"
+            },
+            "start_date": 1534671023,
+            "tags": [
+                "t"
+            ],
+            "title": "t",
+            "type": "quiz",
+            "updated_at": 1533818463
+        }
+"""
+
+private const val SAMPLE_QUIZ_TASK_REWARD = 20
+
 class EarnViewModelTest {
 
     private val mockComponents = MockComponentsProvider()
     private val mockNavigator: Navigator = Mockito.mock(Navigator::class.java)
     private lateinit var earnViewModelToTest: EarnViewModel
 
-    private fun setupTaskWithTime(timeInMillis: Long) {
+    private fun setupTaskWithTime(timeInMillis: Long, task: String? = null) {
         val timeInSecs = timeInMillis / 1000
-        var task = SAMPLE_QUESTIONNAIRE_TASK.replace("__START_DATE__", timeInSecs.toString())
-        mockComponents.tasksRepository = TasksRepository(mockComponents, task)
+        val sampleTask = (task
+                ?: SAMPLE_QUESTIONNAIRE_TASK).replace("__START_DATE__", timeInSecs.toString())
+        mockComponents.tasksRepository = TasksRepository(mockComponents, sampleTask)
         `when`(mockComponents.wallet.balance).thenReturn(ObservableField("1"))
         earnViewModelToTest = EarnViewModel(mockComponents.tasksRepository, mockComponents.wallet,
-            mockComponents.taskService,
-            mockComponents.scheduler, mockComponents.analytics,
-            mockNavigator)
+                mockComponents.taskService,
+                mockComponents.scheduler, mockComponents.analytics,
+                mockNavigator)
         earnViewModelToTest.onScreenVisibleToUser()
+    }
+
+    @Test
+    fun quizRewardCalculation() {
+        var time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
+        setupTaskWithTime(time1hourBefore, SAMPLE_QUIZ_TASK)
+        val kinReward = earnViewModelToTest.kinReward.get()?.toInt()
+        assertTrue(kinReward == SAMPLE_QUIZ_TASK_REWARD)
+    }
+
+    @Test
+    fun taskRewardCalculation() {
+        var time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
+        setupTaskWithTime(time1hourBefore, SAMPLE_QUESTIONNAIRE_TASK)
+        val kinReward = earnViewModelToTest.kinReward.get()?.toInt()
+        assertTrue(kinReward == earnViewModelToTest.taskRepository.task?.kinReward)
     }
 
     @Test
