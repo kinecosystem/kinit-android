@@ -9,17 +9,32 @@ abstract class SingleFragmentActivity : BaseActivity() {
 
     protected abstract fun getFragment(): Fragment
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.single_fragment_layout)
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container, getFragment()).commitNowAllowingStateLoss()
+    open fun beforeSuper() {
+
     }
 
-    fun replaceFragment(fragment: Fragment, withSlideAnimation: Boolean = false) {
+    open fun init() {
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        beforeSuper()
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.single_fragment_layout)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, getFragment()).commitNowAllowingStateLoss()
+        init()
+    }
+
+    fun replaceFragment(fragment: Fragment, withSlideAnimation: Boolean = false, forwardAnimation: Boolean = true) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         if (withSlideAnimation) {
-            fragmentTransaction.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
+            if (forwardAnimation) {
+                fragmentTransaction.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
+            } else {
+                fragmentTransaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out)
+            }
         }
-        fragmentTransaction.replace(R.id.fragment_container, fragment).commitNowAllowingStateLoss()
+        fragmentTransaction.replace(R.id.fragment_container, fragment, "TAG").commitNowAllowingStateLoss()
     }
+
 }
