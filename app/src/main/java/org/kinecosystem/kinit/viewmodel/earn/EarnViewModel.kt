@@ -24,9 +24,9 @@ import java.util.*
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
 class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
-    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
-    private val navigator: Navigator) :
-    TabViewModel {
+                    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
+                    private val navigator: Navigator) :
+        TabViewModel {
 
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
@@ -55,37 +55,43 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
         taskRepository.taskState = TaskState.IN_PROGRESS
         val task = taskRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(bEvent)
 
         val aEvent = Events.Analytics.ClickStartButtonOnTaskPage(
-            isTaskStarted.get(),
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                isTaskStarted.get(),
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(aEvent)
         navigator.navigateTo(Navigator.Destination.TASK)
     }
 
     private fun refresh() {
-        taskRepository.task?.let {
-            isQuiz.set(it.isQuiz())
-            authorName.set(it.provider?.name)
-            authorImageUrl.set(it.provider?.imageUrl)
-            title.set(it.title)
-            description.set(it.description)
-            kinReward.set(it.kinReward?.toString())
-            minToComplete.set(convertMinToCompleteToString(it.minToComplete))
+        taskRepository.task?.let { task ->
+            isQuiz.set(task.isQuiz())
+            authorName.set(task.provider?.name)
+            authorImageUrl.set(task.provider?.imageUrl)
+            title.set(task.title)
+            description.set(task.description)
+            kinReward.set(if (task.isQuiz()) {
+                var totalReward = 0
+                (task.questions?.forEach { question ->
+                    totalReward += (question.quiz_data?.reward ?: 0)
+                })
+                totalReward.toString()
+            } else task.kinReward?.toString())
+            minToComplete.set(convertMinToCompleteToString(task.minToComplete))
         }
         handleAvailability()
     }
@@ -125,7 +131,8 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun isTaskAvailable(): Boolean {
-        val taskDate: Long = taskRepository.task?.startDateInMillis() ?: scheduler.currentTimeMillis()
+        val taskDate: Long = taskRepository.task?.startDateInMillis()
+                ?: scheduler.currentTimeMillis()
         return scheduler.currentTimeMillis() >= taskDate
     }
 
@@ -160,8 +167,8 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
             override fun onError(errorCode: Int) {
             }
 
-            override fun onResult(taskHasChanged:Boolean) {
-                if (taskHasChanged){
+            override fun onResult(taskHasChanged: Boolean) {
+                if (taskHasChanged) {
                     refresh()
                 }
             }
@@ -171,12 +178,12 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     private fun onEarnScreenVisible() {
         val task = taskRepository.task
         val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(event)
     }
 
@@ -193,10 +200,10 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun convertMinToCompleteToString(minToComplete: Float?): String =
-        when {
-            minToComplete == null -> "0"
-            (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
-            else -> minToComplete.toString()
-        }
+            when {
+                minToComplete == null -> "0"
+                (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
+                else -> minToComplete.toString()
+            }
 }
 
