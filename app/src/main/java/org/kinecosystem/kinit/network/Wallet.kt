@@ -193,7 +193,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun updateBalanceSync() {
         try {
             val balanceResult = account.balanceSync
-            scheduler.post({ balanceInt = balanceResult.value().toInt() })
+            scheduler.post {
+                balanceInt = balanceResult.value().toInt()
+                activeWallet = true
+            }
         } catch (e: AccountNotFoundException) {
             if (createAccountSync()) {
                 activateAccountSync()
