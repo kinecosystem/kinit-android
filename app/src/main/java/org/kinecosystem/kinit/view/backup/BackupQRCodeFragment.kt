@@ -12,6 +12,7 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.BackupQrcodeBinding
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseFragment
+import org.kinecosystem.kinit.view.customView.AlertManager
 
 
 class BackupQRCodeFragment : BaseFragment() {
@@ -25,7 +26,11 @@ class BackupQRCodeFragment : BaseFragment() {
         next.setOnClickListener {
             activity?.let {
                 GeneralUtils.closeKeyboard(activity, next)
-                (it as BackupActions).getBackUpModel().onNext()
+                if (GeneralUtils.isConnected(activity)) {
+                    (it as BackupActions).getBackUpModel().onNext()
+                } else {
+                    AlertManager.showAlertNoIternetDismiss(it)
+                }
             }
         }
 

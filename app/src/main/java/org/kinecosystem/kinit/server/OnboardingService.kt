@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.server.api.OnboardingApi
 import org.kinecosystem.kinit.server.api.OnboardingApi.StatusResponse
 import org.kinecosystem.kinit.server.api.PhoneAuthenticationApi
 import org.kinecosystem.kinit.util.DeviceUtils
-import org.kinecosystem.kinit.util.NetworkUtils
+import org.kinecosystem.kinit.util.GeneralUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +30,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     var isInBlackList: Boolean = false
 
     fun appLaunch() {
-        if (!NetworkUtils.isConnected(applicationContext))
+        if (!GeneralUtils.isConnected(applicationContext))
             return
         processRegistration()
         if (userRepo.isRegistered) {
@@ -44,7 +44,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
     fun sendAuthentication(token: String, callback: OperationCompletionCallback) {
 
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
             return
         }
@@ -188,6 +188,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         userRepo.tos = config?.tos ?: ""
         userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled ?: false
         userRepo.isP2pEnabled = config?.p2p_enabled ?: false
+        userRepo.isBackupNagAlertEnabled = config?.backupNagEnabled ?: false
         userRepo.p2pMaxKin = config?.p2p_max_kin ?: 0
         userRepo.p2pMinKin = config?.p2p_min_kin ?: 0
         userRepo.p2pMinTasks = config?.p2p_min_tasks ?: 0

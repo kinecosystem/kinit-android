@@ -13,7 +13,6 @@ import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.server.api.BackupApi
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.isValidEmail
-import org.kinecosystem.kinit.view.backup.AlertErrorType
 import org.kinecosystem.kinit.view.backup.UIActions
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +25,7 @@ const val QUESTIONS_COUNT = 2
 class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener, TextWatcher {
 
     enum class BackupState {
-        Welcome, Question, Summery, QRCode, Confirm, Complete
+        Welcome, Question, Summary, QRCode, Confirm, Complete
     }
 
     @Inject
@@ -40,6 +39,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
 
     @Inject
     lateinit var userRepository: UserRepository
+
     var isQuestionSelected = ObservableBoolean(false)
     var isClickable = ObservableBoolean(false)
     var isNextEnabled = ObservableBoolean(false)
@@ -95,8 +95,8 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
         onQuestionSelected(getHints()[index])
     }
 
-    fun initHints() {
-        servicesProvider.backupService.initHints()
+    fun retrieveHints() {
+        servicesProvider.backupService.retrieveHints()
     }
 
     fun onNext() {
@@ -111,7 +111,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
     fun getState(): BackupState {
         return when (step) {
             in 1..QUESTIONS_COUNT -> BackupState.Question
-            QUESTIONS_COUNT + 1 -> BackupState.Summery
+            QUESTIONS_COUNT + 1 -> BackupState.Summary
             QUESTIONS_COUNT + 2 -> BackupState.QRCode
             QUESTIONS_COUNT + 3 -> BackupState.Confirm
             QUESTIONS_COUNT + 4 -> BackupState.Complete
@@ -123,6 +123,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
     }
 
     fun getHints(): List<BackupApi.BackUpQuestion> {
+        Log.d("###", "### get hints ${userRepository.backUpHints.size} ${userRepository.backUpHints}")
         val tmpList = userRepository.backUpHints.toMutableList()
         for (pair in questionsAndAnswers) {
             if (tmpList.contains(pair.first)) {
@@ -163,7 +164,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
                 saveQuestionAnswer()
                 onMoveNextStep()
             }
-            BackupState.Summery -> {
+            BackupState.Summary -> {
                 initBackupAccountStr()
             }
             BackupState.QRCode -> {
@@ -190,7 +191,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
                 if (encryptedAccountStr != null) {
                     onMoveNextStep()
                 } else {
-                    uiActions.showErrorAlert(AlertErrorType.SDK)
+                    uiActions.showErrorAlert()
                 }
             }
         }
@@ -201,11 +202,17 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
             encryptedAccountStr?.let { encryptedStr ->
                 servicesProvider.backupService.updateBackupDataTo(address, encryptedStr, object : Callback<BackupApi.StatusResponse> {
                     override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
-                        uiActions.showErrorAlert(AlertErrorType.Server)
+                        uiActions.showErrorAlert()
                     }
 
                     override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
-                        onMoveNextStep()
+                        response?.let {
+                            if (it.isSuccessful) {
+                                onMoveNextStep()
+                            } else {
+                                uiActions.showErrorAlert()
+                            }
+                        }
                     }
 
                 })
@@ -228,15 +235,20 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
         }
         servicesProvider.backupService.updateHints(list, object : Callback<BackupApi.StatusResponse> {
             override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
-                uiActions.showErrorAlert(AlertErrorType.Server)
+                uiActions.showErrorAlert()
             }
 
             override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
-                userRepository.isBackedup = true
-                onMoveNextStep()
-                Log.d("BackupModel", "#### BackupModel send list of question ids $list")
+                response?.let {
+                    if (it.isSuccessful) {
+                        userRepository.isBackedup = true
+                        onMoveNextStep()
+                        Log.d("BackupModel", "#### BackupModel send list of question ids $list")
+                    } else {
+                        uiActions.showErrorAlert()
+                    }
+                }
             }
-
         })
     }
 

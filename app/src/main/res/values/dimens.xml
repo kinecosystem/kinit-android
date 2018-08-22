@@ -38,4 +38,5 @@
     <dimen name="progress_step_height">5dp</dimen>
     <dimen name="backup_title_size">22sp</dimen>
     <dimen name="next_text_size">18sp</dimen>
+    <dimen name="min_touch_size">48dp</dimen>
 </resources>

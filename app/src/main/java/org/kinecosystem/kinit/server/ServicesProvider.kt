@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.*
-import org.kinecosystem.kinit.util.NetworkUtils
+import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.Scheduler
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -76,6 +76,6 @@ class ServicesProvider {
     }
 
     fun isNetworkConnected(): Boolean {
-        return NetworkUtils.isConnected(applicationContext)
+        return GeneralUtils.isConnected(applicationContext)
     }
 }

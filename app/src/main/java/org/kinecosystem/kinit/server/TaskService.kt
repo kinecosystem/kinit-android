@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.model.user.UserInfo
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.server.api.TasksApi
-import org.kinecosystem.kinit.util.NetworkUtils
+import org.kinecosystem.kinit.util.GeneralUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +28,7 @@ class TaskService(context: Context, api: TasksApi,
             task: Task?,
             chosenAnswers: List<ChosenAnswers>) {
 
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
             return
         }

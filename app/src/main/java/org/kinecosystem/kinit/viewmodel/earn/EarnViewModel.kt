@@ -18,6 +18,7 @@ import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.TimeUtils
 import org.kinecosystem.kinit.view.TabViewModel
+import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +26,7 @@ private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
 class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
                     val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
-                    private val navigator: Navigator) :
+                    private val navigator: Navigator, private val backupAlertManager: BackupAlertManager?) :
         TabViewModel {
 
     var shouldShowTask = ObservableBoolean()
@@ -105,14 +106,17 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
             shouldShowNoTask.set(true)
             shouldShowTask.set(false)
             shouldShowTaskNotAvailableYet.set(false)
+            backupAlertManager?.showNagAlertIfNeeded()
         } else {
             val taskAvailable = isTaskAvailable()
             shouldShowTask.set(taskAvailable)
             shouldShowTaskNotAvailableYet.set(!taskAvailable)
             shouldShowNoTask.set(false)
+            if(!taskAvailable){
+                backupAlertManager?.showNagAlertIfNeeded()
+            }
 
             if (!shouldShowTask.get()) {
-
                 nextAvailableDate.set(nextAvailableDate())
                 isAvailableTomorrow.set(isAvailableTomorrow())
                 if (isAvailableTomorrow.get()) {

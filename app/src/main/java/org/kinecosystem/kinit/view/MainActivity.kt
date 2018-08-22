@@ -58,7 +58,7 @@ class MainActivity : BaseActivity(), PageSelectionListener {
         setContentView(R.layout.main_activity)
 
         navigation.selectedTabIndex = selectedTabIndex
-        view_pager.adapter = TabsAdapter()
+        view_pager.adapter = TabsAdapter(this)
 
         if (shouldShowPreEarnAnimation()) {
             disablePageSelection()

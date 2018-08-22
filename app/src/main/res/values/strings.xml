@@ -147,6 +147,7 @@
     <string name="first_question">First Question:</string>
     <string name="second_question">Second Question:</string>
     <string name="answer">Answer:</string>
+    <string name="summary">Summary</string>
     <string-array name="questions_count">
         <item>"First Question"</item>
         <item>"Second Question"</item>
@@ -154,4 +155,27 @@
     </string-array>
     <string name="oh_no">Oh no!</string>
     <string name="wallet_creation_timeout_string">It might take up to 20 sec</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="no_internet_message">Please check your connection and try again</string>
+    <string name="back">Back</string>
+    <string name="new_backup">New Backup</string>
+    <string name="cancel">Cancel</string>
+    <string name="cancel_backup">Cancel Backup</string>
+    <string name="continue_backup">Continue Backup</string>
+    <string name="cancel_backup_title">Wait, You’re Almost There!</string>
+    <string name="cancel_backup_message">Skipping this process will result in your kin not being backed up.</string>
+    <string name="huh_that_doesn_t_seem_right">Huh, that doesn’t seem right</string>
+    <string name="problem_email_confirmation">Sorry, it looks like there’s a problem with the email confirmation. Please try starting the backup process again in a little while.</string>
+    <string name="rebackup_title">Are you sure you want to create a new back up?</string>
+    <string name="reback_message">Keep in mind that by creating a new backup, the old one will be deleted.</string>
+    <string name="back_up_your_kin">Back up your Kin</string>
+    <string name="back_up">Back up</string>
+    <string name="later">Later</string>
+    <string name="backup_message_phone_lost">Now it’s possible to backup your Kin in case your phone is lost</string>
+    <string name="your_kin_is_really_rolling_in">Your Kin is really rolling in</string>
+    <string name="backup_message_safe">Back it up today to make sure it’s always safe</string>
+    <string name="we_care_about_your_kin">We care about your Kin</string>
+    <string name="backup_message_easy">That’s why we offer easy backup to keep your wallet safe</string>
+    <string name="knock_knock">Knock knock</string>
+    <string name="backup_message_today">It’s your Kin. It wants to be kept safe. Back it up today.</string>
 </resources>

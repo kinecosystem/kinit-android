@@ -219,7 +219,7 @@ class EarnViewModelTest {
         earnViewModelToTest = EarnViewModel(mockComponents.tasksRepository, mockComponents.wallet,
                 mockComponents.taskService,
                 mockComponents.scheduler, mockComponents.analytics,
-                mockNavigator)
+                mockNavigator, mockComponents.backupAlertManager)
         earnViewModelToTest.onScreenVisibleToUser()
     }
 
