@@ -35,7 +35,7 @@
             android:id="@+id/security_header"
             style="@style/settingHeader"
             android:text="@string/security"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
