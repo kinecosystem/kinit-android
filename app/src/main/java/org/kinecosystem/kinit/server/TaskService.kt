@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.server
 
 import android.content.Context
 import android.util.Log
@@ -8,7 +8,10 @@ import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isValid
 import org.kinecosystem.kinit.model.user.UserInfo
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.server.api.TasksApi
+import org.kinecosystem.kinit.util.NetworkUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -6,9 +6,9 @@ import android.view.View
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.network.ServicesProvider
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.SplashNavigator
 import javax.inject.Inject
@@ -36,6 +36,7 @@ class SplashViewModel(var splashNavigator: SplashNavigator?) {
     var callback: Observable.OnPropertyChangedCallback? = null
     var googlePlayServicesAvailable: Boolean = true
     private var walletReady: ObservableBoolean
+    var inBlackList: ObservableBoolean = ObservableBoolean(false)
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -85,14 +86,14 @@ class SplashViewModel(var splashNavigator: SplashNavigator?) {
 
     private fun moveToNextScreen() {
         if (userRepository.isFirstTimeUser
-            && userRepository.isPhoneVerificationEnabled
-            && !userRepository.isPhoneVerified) {
+                && userRepository.isPhoneVerificationEnabled
+                && !userRepository.isPhoneVerified) {
             splashNavigator?.moveToTutorialScreen()
         } else if (userRepository.isFirstTimeUser && !userRepository.isPhoneVerificationEnabled) {
             splashNavigator?.moveToTutorialScreen()
         } else {
             splashNavigator?.moveToMainScreen()
-     }
+        }
     }
 
 
@@ -109,15 +110,17 @@ class SplashViewModel(var splashNavigator: SplashNavigator?) {
 
     private fun scheduleTimeout() {
         scheduler.scheduleOnMain(
-            {
-                if (walletReady.get()) {
-                    moveToNextScreen()
-                } else {
-                    analytics.logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
-                    splashNavigator?.moveToErrorScreen()
-                }
-            },
-            CREATE_WALLET_TIMEOUT)
+                {
+                    if (walletReady.get()) {
+                        moveToNextScreen()
+                    } else if (!servicesProvider.onBoardingService.isInBlackList) {
+                        analytics.logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
+                        splashNavigator?.moveToErrorScreen()
+                    } else {
+                        inBlackList.set(true)
+                    }
+                },
+                CREATE_WALLET_TIMEOUT)
     }
 }
 

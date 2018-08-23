@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.server.api
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
@@ -12,5 +12,5 @@ interface PhoneAuthenticationApi {
 
     @POST("/user/firebase/update-id-token")
     fun updatePhoneAuthToken(@Header(
-        USER_HEADER_KEY) userId: String, @Body authInfo: AuthInfo): Call<OnboardingApi.StatusResponse>
+            USER_HEADER_KEY) userId: String, @Body authInfo: AuthInfo): Call<OnboardingApi.StatusResponse>
 }

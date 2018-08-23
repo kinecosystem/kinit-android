@@ -3,9 +3,8 @@ package org.kinecosystem.kinit.viewmodel.earn
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import javax.inject.Inject

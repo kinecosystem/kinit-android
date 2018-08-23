@@ -16,8 +16,8 @@ import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickSendButtonOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPopupOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewSendKinPage;
-import org.kinecosystem.kinit.network.OperationResultCallback;
-import org.kinecosystem.kinit.network.ServicesProvider;
+import org.kinecosystem.kinit.server.OperationResultCallback;
+import org.kinecosystem.kinit.server.ServicesProvider;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.util.Scheduler;
 import org.kinecosystem.kinit.view.spend.ContactData;
@@ -25,7 +25,7 @@ import org.kinecosystem.kinit.view.spend.Peer2PeerActions;
 
 import javax.inject.Inject;
 
-import static org.kinecosystem.kinit.network.OfferServiceKt.ERROR_TRANSACTION_FAILED;
+import static org.kinecosystem.kinit.server.OfferServiceKt.ERROR_TRANSACTION_FAILED;
 
 public class Peer2PeerViewModel {
 

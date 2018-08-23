@@ -1,14 +1,17 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.server
 
 import android.content.Context
 import android.util.Log
 import kin.core.exception.OperationFailedException
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.model.spend.TYPE_P2P
 import org.kinecosystem.kinit.model.spend.isValid
 import org.kinecosystem.kinit.repository.OffersRepository
+import org.kinecosystem.kinit.server.api.OffersApi
+import org.kinecosystem.kinit.util.NetworkUtils
 import org.kinecosystem.kinit.util.Scheduler
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,7 +25,7 @@ private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
 private const val P2P_ORDER_ID = "1-kit-p2p"
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userId: String,
-    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
+                   val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
 
     val applicationContext: Context = context.applicationContext
 
@@ -34,7 +37,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
         offersApi.offers(userId).enqueue(object : Callback<OffersApi.OffersResponse> {
             override fun onResponse(call: Call<OffersApi.OffersResponse>?,
-                response: Response<OffersApi.OffersResponse>?) {
+                                    response: Response<OffersApi.OffersResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     Log.d("OffersService", "onResponse: ${response.body()}")

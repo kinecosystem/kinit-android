@@ -1,8 +1,9 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.server.api
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 
@@ -30,6 +31,8 @@ interface OnboardingApi {
     data class StatusResponse(@SerializedName("status") val status: String,
         @SerializedName("config") val config: Config)
 
+    data class BlackListAreaCode(@SerializedName("areacodes") val list: List<String>)
+
     @POST("/user/register")
     fun register(@Body registrationInfo: RegistrationInfo): Call<StatusResponse>
 
@@ -51,4 +54,7 @@ interface OnboardingApi {
 
     @POST("/user/auth/ack")
     fun authTokenAck(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<StatusResponse>
+
+    @GET("/blacklist/areacodes")
+    fun blacklistAreaCodes(): Call<BlackListAreaCode>
 }

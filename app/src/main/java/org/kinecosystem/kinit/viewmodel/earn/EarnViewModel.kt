@@ -11,9 +11,9 @@ import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.model.earn.startDateInMillis
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.network.OperationResultCallback
-import org.kinecosystem.kinit.network.TaskService
-import org.kinecosystem.kinit.network.Wallet
+import org.kinecosystem.kinit.server.OperationResultCallback
+import org.kinecosystem.kinit.server.TaskService
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.TimeUtils

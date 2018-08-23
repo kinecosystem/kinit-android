@@ -8,8 +8,8 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.network.ServicesProvider
-import org.kinecosystem.kinit.network.Wallet
+import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.earn.TransactionTimeout

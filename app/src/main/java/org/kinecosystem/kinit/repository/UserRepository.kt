@@ -76,6 +76,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isBackedup: Boolean
         set(backed) = userCache.putBoolean(BACKED_UP, backed)
         get() = userCache.getBoolean(BACKED_UP, false)
+
     init {
         var userId = userCache.getString(USER_ID_KEY, "")
 

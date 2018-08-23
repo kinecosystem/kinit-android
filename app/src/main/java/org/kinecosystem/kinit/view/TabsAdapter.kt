@@ -14,8 +14,8 @@ import org.kinecosystem.kinit.databinding.EarnTabBinding
 import org.kinecosystem.kinit.databinding.InfoTabBinding
 import org.kinecosystem.kinit.databinding.SpendTabBinding
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.network.TaskService
-import org.kinecosystem.kinit.network.Wallet
+import org.kinecosystem.kinit.server.TaskService
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter

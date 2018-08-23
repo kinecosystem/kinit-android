@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.server.api
 
 import com.google.gson.annotations.SerializedName
 import org.kinecosystem.kinit.model.KinTransaction

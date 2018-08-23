@@ -11,14 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import javax.inject.Inject;
-import junit.framework.TestFailure;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.util.PhoneUtils;
 import org.kinecosystem.kinit.view.BaseFragment;
+
+import javax.inject.Inject;
 
 
 public class PhoneSendFragment extends BaseFragment {
@@ -50,7 +51,7 @@ public class PhoneSendFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_send_fragment, container, false);
         if (getActivity() instanceof PhoneVerificationUIActions) {
             actions = (PhoneVerificationUIActions) getActivity();

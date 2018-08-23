@@ -3,8 +3,8 @@ package org.kinecosystem.kinit.dagger
 import dagger.Component
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.network.firebase.KinInstanceIdService
-import org.kinecosystem.kinit.network.firebase.KinMessagingService
+import org.kinecosystem.kinit.firebase.KinInstanceIdService
+import org.kinecosystem.kinit.firebase.KinMessagingService
 import org.kinecosystem.kinit.view.BottomTabNavigation
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.SplashActivity

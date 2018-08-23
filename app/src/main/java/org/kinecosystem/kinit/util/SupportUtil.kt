@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.device.DeviceUtils
 import org.kinecosystem.kinit.repository.UserRepository
 
 object SupportUtil {
@@ -28,7 +27,7 @@ object SupportUtil {
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, context.resources.getString(R.string.support_email_subject))
             val message = context.resources
                 .getString(R.string.support_email_body_template, userRepository.userId(),
-                    "android: " + DeviceUtils(context).deviceName(), versionName)
+                    "android: " + DeviceUtils.deviceName(), versionName)
             emailIntent.putExtra(Intent.EXTRA_TEXT, message)
             context.startActivity(emailIntent)
         } else {
