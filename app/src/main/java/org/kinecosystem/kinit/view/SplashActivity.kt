@@ -1,7 +1,10 @@
 package org.kinecosystem.kinit.view
 
 import android.databinding.DataBindingUtil
+import android.databinding.Observable
+import android.databinding.Observable.OnPropertyChangedCallback
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import org.kinecosystem.kinit.KinitApplication
@@ -23,12 +26,14 @@ class SplashActivity : BaseActivity(), SplashNavigator {
     @Inject
     lateinit var userRepository: UserRepository
 
-    override fun moveToTutorialScreen() {
-        startActivity(TutorialActivity.getIntent(this))
-        finish()
+    private lateinit var splashViewModel: SplashViewModel
+    private val isBLackedListListener = object : OnPropertyChangedCallback() {
+        override fun onPropertyChanged(observable: Observable?, propertyId: Int) {
+            if(splashViewModel.inBlackList.get()){
+                showDialogBlackedList()
+            }
+        }
     }
-
-    private var splashViewModel: SplashViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
@@ -44,7 +49,7 @@ class SplashActivity : BaseActivity(), SplashNavigator {
 
     override fun moveToErrorScreen() {
         val binding = DataBindingUtil.setContentView<OnboardingErrorCreatingWalletLayoutBinding>(this,
-            R.layout.onboarding_error_creating_wallet_layout)
+                R.layout.onboarding_error_creating_wallet_layout)
         binding.model = splashViewModel
     }
 
@@ -57,10 +62,38 @@ class SplashActivity : BaseActivity(), SplashNavigator {
         finish()
     }
 
+    override fun onPause() {
+        super.onPause()
+        splashViewModel.inBlackList.removeOnPropertyChangedCallback(isBLackedListListener)
+    }
+
     override fun onResume() {
         super.onResume()
         checkGoogleServices()
-        splashViewModel?.onResume()
+        splashViewModel.onResume()
+        splashViewModel.inBlackList.addOnPropertyChangedCallback(isBLackedListListener)
+        if (splashViewModel.inBlackList.get()) {
+            showDialogBlackedList()
+            splashViewModel.inBlackList.removeOnPropertyChangedCallback(isBLackedListListener)
+        }
+    }
+
+    private fun showDialogBlackedList() {
+        val builder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
+        var alertDialog: AlertDialog? = null
+        builder.setTitle(resources.getString(R.string.oh_no))
+                .setMessage(resources.getString(R.string.block_area_code_message))
+                .setPositiveButton(resources.getString(R.string.dialog_ok)) { _, _ ->
+                    alertDialog?.dismiss()
+                    finish()
+                }
+        alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    override fun moveToTutorialScreen() {
+        startActivity(TutorialActivity.getIntent(this))
+        finish()
     }
 
     private fun checkGoogleServices() {
@@ -73,7 +106,9 @@ class SplashActivity : BaseActivity(), SplashNavigator {
 
     override fun onDestroy() {
         super.onDestroy()
-        splashViewModel?.onDestroy()
+        splashViewModel.inBlackList.removeOnPropertyChangedCallback(isBLackedListListener)
+        splashViewModel.onDestroy()
+
     }
 
 }

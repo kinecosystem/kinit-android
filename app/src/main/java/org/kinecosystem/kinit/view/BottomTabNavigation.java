@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
-import org.kinecosystem.kinit.network.Wallet;
+import org.kinecosystem.kinit.blockchain.Wallet;
 
 import java.util.ArrayList;
 import java.util.List;

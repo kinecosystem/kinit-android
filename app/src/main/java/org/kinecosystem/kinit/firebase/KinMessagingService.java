@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network.firebase;
+package org.kinecosystem.kinit.firebase;
 
 import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
 
@@ -17,7 +17,7 @@ import org.kinecosystem.kinit.analytics.Events.BILog.AuthTokenReceived;
 import org.kinecosystem.kinit.model.Push;
 import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
-import org.kinecosystem.kinit.network.ServicesProvider;
+import org.kinecosystem.kinit.server.ServicesProvider;
 import org.kinecosystem.kinit.notification.NotificationPublisher;
 import org.kinecosystem.kinit.util.Scheduler;
 

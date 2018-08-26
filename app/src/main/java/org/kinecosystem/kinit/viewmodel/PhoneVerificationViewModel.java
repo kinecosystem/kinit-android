@@ -12,8 +12,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import org.kinecosystem.kinit.KinitApplication;
-import org.kinecosystem.kinit.network.OperationCompletionCallback;
-import org.kinecosystem.kinit.network.ServicesProvider;
+import org.kinecosystem.kinit.server.OperationCompletionCallback;
+import org.kinecosystem.kinit.server.ServicesProvider;
 
 public class PhoneVerificationViewModel {
 
@@ -72,13 +72,17 @@ public class PhoneVerificationViewModel {
         this.verificationCallback = actions;
     }
 
-    public void startPhoneNumberVerification(String phoneNumber) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber,        // Phone number to verify
-            60,                 // Timeout duration
-            TimeUnit.SECONDS,   // Unit of timeout
-            activity,               // Activity (for callback binding)
-            callbacks);        // OnVerificationStateChangedCallbacks
+    public boolean startPhoneNumberVerification(String phoneNumber) {
+        if (servicesProvider.getOnBoardingService().isValidNumber(phoneNumber)) {
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    phoneNumber,        // Phone number to verify
+                    60,                 // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    activity,               // Activity (for callback binding)
+                    callbacks);        // OnVerificationStateChangedCallbacks
+            return true;
+        }
+        return false;
     }
 
     public void verifyPhoneNumberWithCode(String code) {

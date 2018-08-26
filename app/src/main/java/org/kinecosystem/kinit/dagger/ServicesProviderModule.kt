@@ -4,11 +4,15 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.network.*
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.OfferService
+import org.kinecosystem.kinit.server.OnboardingService
+import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Singleton
 
@@ -24,7 +28,7 @@ class ServicesProviderModule {
         offersRepository: OffersRepository, analytics: Analytics,
         scheduler: Scheduler): ServicesProvider {
         serivce = ServicesProvider(context, dataStoreProvider,
-            userRepository, tasksRepo, offersRepository, analytics, scheduler)
+                userRepository, tasksRepo, offersRepository, analytics, scheduler)
         return serivce
     }
 

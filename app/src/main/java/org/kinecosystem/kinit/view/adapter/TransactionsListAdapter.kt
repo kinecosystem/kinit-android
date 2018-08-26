@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TransactionRowLayoutBinding
 import org.kinecosystem.kinit.model.KinTransaction
-import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.viewmodel.balance.TransactionViewModel
 import javax.inject.Inject
 

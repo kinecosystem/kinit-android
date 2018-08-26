@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.server.api
 
 import com.google.gson.annotations.SerializedName
 import org.kinecosystem.kinit.model.spend.Offer
@@ -50,7 +50,7 @@ interface OffersApi {
 
     @POST("/user/transaction/p2p")
     fun sendTransactionInfo(@Header(
-        USER_HEADER_KEY) userId: String, @Body transactionInfo: TransactionInfo): Call<StatusResponse>
+            USER_HEADER_KEY) userId: String, @Body transactionInfo: TransactionInfo): Call<StatusResponse>
 
     // redeem coupon after paying
     data class PaymentReceipt(@SerializedName("tx_hash") val txHash: String)

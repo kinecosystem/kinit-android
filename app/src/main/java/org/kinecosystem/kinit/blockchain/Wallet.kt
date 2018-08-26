@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.blockchain
 
 import android.content.Context
 import android.databinding.ObservableBoolean
@@ -20,6 +20,11 @@ import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.ERROR_APP_SERVER_FAILED_RESPONSE
+import org.kinecosystem.kinit.server.ERROR_EMPTY_RESPONSE
+import org.kinecosystem.kinit.server.OperationCompletionCallback
+import org.kinecosystem.kinit.server.api.OnboardingApi
+import org.kinecosystem.kinit.server.api.WalletApi
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.viewmodel.earn.REWARD_TIMEOUT
 import retrofit2.Call

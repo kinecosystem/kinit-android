@@ -125,4 +125,6 @@
     <string name="wallet_backup">Wallet Backup</string>
     <string name="security">Security</string>
     <string name="backup_now">Backup Now</string>
+    <string name="oh_no">Oh no!</string>
+    <string name="block_area_code_message">Kinit is currently not available in your country.We are continuing to grow, so check back again soon.</string>
 </resources>

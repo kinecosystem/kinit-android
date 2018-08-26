@@ -1,6 +1,5 @@
 package org.kinecosystem.kinit.navigation
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity

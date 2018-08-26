@@ -8,9 +8,9 @@ import com.google.gson.JsonElement
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.network.OperationResultCallback
-import org.kinecosystem.kinit.network.TaskService
-import org.kinecosystem.kinit.network.Wallet
+import org.kinecosystem.kinit.server.OperationResultCallback
+import org.kinecosystem.kinit.server.TaskService
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
 import javax.inject.Inject
 

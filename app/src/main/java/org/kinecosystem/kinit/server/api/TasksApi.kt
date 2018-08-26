@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network
+package org.kinecosystem.kinit.server.api
 
 import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
@@ -22,8 +22,8 @@ interface TasksApi {
 
     @POST("/user/task/results")
     fun submitTaskResults(
-        @Header(USER_HEADER_KEY) userId: String,
-        @Body submitInfo: SubmitInfo): Call<TaskSubmitResponse>
+            @Header(USER_HEADER_KEY) userId: String,
+            @Body submitInfo: SubmitInfo): Call<TaskSubmitResponse>
 
     data class NextTasksResponse(@SerializedName("tasks") val taskList: List<Task>)
 

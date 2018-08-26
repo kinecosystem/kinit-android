@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.network;
+package org.kinecosystem.kinit.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

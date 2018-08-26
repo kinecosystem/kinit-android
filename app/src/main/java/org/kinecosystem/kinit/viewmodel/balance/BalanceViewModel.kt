@@ -2,11 +2,10 @@ package org.kinecosystem.kinit.viewmodel.balance
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import org.kinecosystem.kinit.dagger.CoreComponent
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.network.ServicesProvider
+import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 

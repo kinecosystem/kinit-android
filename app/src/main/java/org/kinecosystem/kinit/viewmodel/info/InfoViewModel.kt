@@ -39,7 +39,7 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
         SupportUtil.openEmailSupport(view.context, userRepository)
     }
 
-    fun onStartBackupClicked(view: View){
+    fun onStartBackupClicked(view: View) {
         navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
     }
 
