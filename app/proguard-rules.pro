@@ -69,7 +69,7 @@
 
 # Keep model classes
 -keep class org.kinecosystem.kinit.model.** { *; }
--keep interface org.kinecosystem.kinit.network.** { *; }
+-keep interface org.kinecosystem.kinit.server.** { *; }
 -keep class org.kinecosystem.kinit.analytics.** { *; }
 -keep class android.support.v4.view.ViewPager{ *; }
 
