@@ -32,10 +32,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     fun appLaunch() {
         if (!NetworkUtils.isConnected(applicationContext))
             return
+        processRegistration()
         if (userRepo.isRegistered) {
             callAppLaunch(BuildConfig.VERSION_NAME)
-        } else {
-            processRegistration()
         }
     }
 
@@ -131,7 +130,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
             override fun onFailure(call: Call<OnboardingApi.BlackListAreaCode>, t: Throwable) {
                 blackList = listOf()
                 isInBlackList = false
-                callRegister(BuildConfig.VERSION_NAME)
+                if(!userRepo.isRegistered) {
+                    callRegister(BuildConfig.VERSION_NAME)
+                }
             }
 
             override fun onResponse(call: Call<OnboardingApi.BlackListAreaCode>, response: Response<OnboardingApi.BlackListAreaCode>) {
@@ -140,7 +141,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         blackList = it
                         if (!blackList.contains(DeviceUtils.getLocalDialPrefix(applicationContext))) {
                             isInBlackList = false
-                            callRegister(BuildConfig.VERSION_NAME)
+                            if(!userRepo.isRegistered) {
+                                callRegister(BuildConfig.VERSION_NAME)
+                            }
                         }
                     }
                 }

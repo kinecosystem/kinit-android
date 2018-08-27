@@ -18,7 +18,7 @@ class SplashViewModel(var splashNavigator: SplashNavigator?) {
 
     private companion object {
         const val SPLASH_DURATION: Long = 2000L
-        const val CREATE_WALLET_TIMEOUT = 20000L
+        const val CREATE_WALLET_TIMEOUT = 30000L
     }
 
     @Inject
