@@ -9,7 +9,7 @@ import org.kinecosystem.kinit.model.earn.isTaskWebView
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.MainActivity
-import org.kinecosystem.kinit.view.backup.WalletBackupActivity
+import org.kinecosystem.kinit.view.backup.BackupWalletActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
@@ -46,7 +46,7 @@ class Navigator(private val context: Context) {
             Destination.TASK -> navigateToTask()
             Destination.PEER2PEER -> navigateToActivity(Peer2PeerActivity.getIntent(context))
             Destination.COMPLETE_WEB_TASK -> navigateToActivity(WebTaskCompleteActivity.getIntent(context))
-            Destination.WALLET_BACKUP -> navigateToActivity(WalletBackupActivity.getIntent(context))
+            Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context))
             else -> navigateToActivity(MainActivity.getIntent(context), false)
         }
     }

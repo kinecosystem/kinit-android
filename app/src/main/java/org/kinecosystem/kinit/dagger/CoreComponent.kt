@@ -20,6 +20,7 @@ import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
+import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
@@ -73,5 +74,5 @@ interface CoreComponent {
     fun inject(quizViewModel: QuizQuestionViewModel)
     fun inject(answerViewModel: AnswerViewModel)
     fun inject(quizAnswerView: QuizAnswerView)
-
+    fun inject(backupModel: BackupModel)
 }

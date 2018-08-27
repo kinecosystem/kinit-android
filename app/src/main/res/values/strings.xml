@@ -121,10 +121,36 @@
     <string name="p2p_send_kin_to_self_title">You chose yourself!</string>
     <string name="ready_to_earn_some_kin">Hi! 👋\nReady to earn some Kin?</string>
     <string name="ready_to_earn_some_kin_compat">Hi!\nReady to earn some Kin?</string>
+     <string name="oh_no">Oh no!</string>
+    <string name="block_area_code_message">Kinit is currently not available in your country.We are continuing to grow, so check back again soon.</string>
     <string name="backup_info">Backing up your wallet will allow you to recover your Kin if you get locked out of the app or if your phone is ever lost or stolen.</string>
     <string name="wallet_backup">Wallet Backup</string>
     <string name="security">Security</string>
     <string name="backup_now">Backup Now</string>
-    <string name="oh_no">Oh no!</string>
-    <string name="block_area_code_message">Kinit is currently not available in your country.We are continuing to grow, so check back again soon.</string>
+    <string name="choose_hint">Choose Question</string>
+    <string name="yay">YAY!</string>
+    <string name="your_wallet_is_backed_up">Your wallet is backed up!</string>
+    <string name="confirm">Confirm</string>
+    <string name="check_email"><![CDATA[Please check your email to make sure you received your QR code.\n
+        If you did, click confirm below.\n
+        If not, <u><font color=#047cfc>resend</font></u>  or check your spam folder]]></string>
+    <string name="email_warning">Make sure to keep the code someplace safe because you’ll need it if you need to recover your account.</string>
+    <string name="qr_code">QR CODE</string>
+    <string name="qr_code_subtitle">To keep your account secure, we’ll generate a unique QR code and send it to you by email.</string>
+    <string name="your_email_address">Your Email Address</string>
+    <string name="email_correct_note">* Make sure your email is written correctly. You don’t want your wallet QR code to get to the hands of someone else.</string>
+    <string name="send_email">Send Email</string>
+    <string name="security_questions">Security Questions</string>
+    <string name="choose_2_security_questions">Choose 2 security questions.</string>
+    <string name="your_answer">Your Answer</string>
+    <string name="minimum_4_characters">* Minimum 4 characters</string>
+    <string name="review_your_security_questions">Review your security questions.</string>
+    <string name="first_question">First Question:</string>
+    <string name="second_question">Second Question:</string>
+    <string name="answer">Answer:</string>
+    <string-array name="questions_count">
+        <item >"First Question"</item>
+        <item >"Second Question"</item>
+        <item >"Third Question"</item>
+    </string-array>
 </resources>

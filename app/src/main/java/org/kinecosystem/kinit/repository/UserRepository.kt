@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.repository
 
 import android.util.Log
 import org.kinecosystem.kinit.model.user.UserInfo
+import org.kinecosystem.kinit.server.api.BackupApi
 import java.util.*
 
 
@@ -20,6 +21,8 @@ private const val P2P_MIN_KIN = "P2P_MIN_KIN"
 private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
 private const val P2P_ENABLED = "P2P_ENABLED"
 private const val BACKED_UP = "BACKED_UP"
+private const val AUTH_TOKEN = "authToken"
+
 
 
 
@@ -76,6 +79,12 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isBackedup: Boolean
         set(backed) = userCache.putBoolean(BACKED_UP, backed)
         get() = userCache.getBoolean(BACKED_UP, false)
+
+    var authToken: String
+        set(token) = userCache.putString(AUTH_TOKEN, token)
+        get() = userCache.getString(AUTH_TOKEN, "")
+
+    lateinit var backUpHints: List<BackupApi.BackUpQuestion>
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")

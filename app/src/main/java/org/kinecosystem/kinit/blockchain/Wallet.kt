@@ -5,9 +5,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
 import kin.core.*
-import kin.core.exception.AccountNotActivatedException
-import kin.core.exception.AccountNotFoundException
-import kin.core.exception.OperationFailedException
+import kin.core.exception.*
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Analytics.*
@@ -116,7 +114,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 override fun onError(exception: java.lang.Exception) {
                     Log.d(TAG, "#### no update balance  " + balance.get())
                     analytics.logEvent(
-                        Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
+                            Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
                     callback?.onError(exception)
                 }
             })
@@ -132,7 +130,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                     Log.d(TAG, "onResponse: ${response.body()}")
                     val transactionList = response.body()
                     if (transactionList?.txs != null && transactionList.txs.isNotEmpty() && transactionList.status.equals(
-                            "ok")) {
+                                    "ok")) {
                         injectTxsBalance(transactionList.txs)
                         transactions.set(transactionList.txs)
                     } else {
@@ -175,7 +173,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                     Log.d(TAG, "onResponse: ${response.body()}")
                     val couponsList = response.body()
                     if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals(
-                            "ok")) {
+                                    "ok")) {
                         coupons.set(couponsList.coupons)
                     } else {
                         Log.d(TAG, "coupons® list empty or null ")
@@ -225,11 +223,33 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         })
     }
 
+    fun exportAccountToStr(passphrase: String): String? {
+        return try {
+            account.export(passphrase)
+        } catch (cryptoException: CryptoException) {
+            null
+        }
+    }
+
+    fun importBakedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
+        return try {
+            kinClient.importAccount(exportedStr, passphrase)
+        } catch (cryptoException: CryptoException) {
+            null
+        } catch (createAccountException: CreateAccountException) {
+            null
+        }
+    }
+
+    fun replaceToBakcupAccount(backedUpKinAccount: KinAccount) {
+        account = backedUpKinAccount
+    }
+
     private fun createAccountSync(): Boolean {
         var errorMessage = ""
         try {
             val call = onboardingApi.createAccount(userRepo.userId(),
-                OnboardingApi.AccountInfo(account.publicAddress!!))
+                    OnboardingApi.AccountInfo(account.publicAddress!!))
             val response = call.execute()
             if (response != null && response.isSuccessful && response.body() != null) {
                 val statusResponse = response.body()
@@ -242,8 +262,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             errorMessage = "Exception $e with message: ${e.message}"
         }
         analytics.logEvent(
-            if (errorMessage.isEmpty()) Events.BILog.StellarAccountCreationSucceeded()
-            else Events.BILog.StellarAccountCreationFailed(""))
+                if (errorMessage.isEmpty()) Events.BILog.StellarAccountCreationSucceeded()
+                else Events.BILog.StellarAccountCreationFailed(""))
 
         return errorMessage.isEmpty()
     }
@@ -257,7 +277,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         } catch (e: Exception) {
             Log.d(TAG, "Exception occurred while activating account ${e.message}")
             analytics.logEvent(Events.BILog.StellarKinTrustlineSetupFailed(
-                "Exception $e with message: ${e.message}"))
+                    "Exception $e with message: ${e.message}"))
         }
         return false
     }
@@ -269,25 +289,25 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun logP2pTransactionCompleted(price: Int, orderId: String) {
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-            orderId, TRANSACTION_TYPE_P2P))
+                orderId, TRANSACTION_TYPE_P2P))
     }
 
     fun logSpendTransactionCompleted(price: Int, orderId: String) {
         analytics.incrementUserProperty(Events.UserProperties.SPEND_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_SPENT,
-            price.toLong())
+                price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-            orderId, TRANSACTION_TYPE_SPEND))
+                orderId, TRANSACTION_TYPE_SPEND))
     }
 
     fun logEarnTransactionCompleted(price: Int, orderId: String) {
         analytics.incrementUserProperty(Events.UserProperties.EARN_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_EARNED,
-            price.toLong())
+                price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-            orderId, TRANSACTION_TYPE_EARN))
+                orderId, TRANSACTION_TYPE_EARN))
     }
 
     fun listenToPayment(memo: String) {
@@ -361,9 +381,9 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     private fun isValid(transactionComplete: Push.TransactionCompleteMessage): Boolean {
         return transactionComplete.kin != null &&
-            transactionComplete.kin > 0 &&
-            transactionComplete.userId != null &&
-            transactionComplete.userId == userRepo.userInfo.userId
+                transactionComplete.kin > 0 &&
+                transactionComplete.userId != null &&
+                transactionComplete.userId == userRepo.userInfo.userId
     }
 
     private fun setTaskState(state: Int) {
@@ -373,7 +393,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 }
 
 class KinitServiceProvider(providerUrl: String, networkId: String, private val issuer: String) :
-    ServiceProvider(providerUrl, networkId) {
+        ServiceProvider(providerUrl, networkId) {
 
     override fun getIssuerAccountId(): String {
         return issuer

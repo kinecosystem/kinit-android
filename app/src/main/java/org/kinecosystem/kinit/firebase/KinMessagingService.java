@@ -17,6 +17,7 @@ import org.kinecosystem.kinit.analytics.Events.BILog.AuthTokenReceived;
 import org.kinecosystem.kinit.model.Push;
 import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.server.ServicesProvider;
 import org.kinecosystem.kinit.notification.NotificationPublisher;
 import org.kinecosystem.kinit.util.Scheduler;
@@ -30,6 +31,8 @@ public class KinMessagingService extends FirebaseMessagingService {
     NotificationPublisher notificationPublisher;
     @Inject
     ServicesProvider servicesProvider;
+    @Inject
+    UserRepository userRepository;
     @Inject
     Scheduler scheduler;
     @Inject
@@ -65,9 +68,10 @@ public class KinMessagingService extends FirebaseMessagingService {
                     } else if (type.equals(Push.TYPE_AUTH_TOKEN)) {
                         analytics.logEvent(new AuthTokenReceived());
                         AuthTokenMessage authTokenMessage = gson.fromJson(message, AuthTokenMessage.class);
-                        if (!TextUtils.isEmpty(authTokenMessage.getAuthToken())) {
-                            servicesProvider.getOnBoardingService()
-                                .sendAuthTokenAck(authTokenMessage.getAuthToken());
+                        String token = authTokenMessage.getAuthToken();
+                        if (!TextUtils.isEmpty(token)) {
+                            userRepository.setAuthToken(token);
+                            servicesProvider.getOnBoardingService().sendAuthTokenAck(token);
                         } else {
                             analytics.logEvent(new AuthTokenAckFailed("empty auth token" + authTokenMessage));
                         }
