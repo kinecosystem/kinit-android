@@ -30,6 +30,8 @@ import org.kinecosystem.kinit.analytics.Events;
 import org.kinecosystem.kinit.repository.DataStore;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
 import org.kinecosystem.kinit.repository.UserRepository;
+import org.kinecosystem.kinit.util.GeneralUtils;
+import org.kinecosystem.kinit.util.PhoneUtils;
 import org.kinecosystem.kinit.util.SupportUtil;
 import org.kinecosystem.kinit.view.BaseFragment;
 
@@ -187,11 +189,10 @@ public class CodeVerificationFragment extends BaseFragment {
             if (trigger != null) {
                 trigger.clearFocus();
             }
-            code.requestFocus();
-            InputMethodManager mgr = (InputMethodManager) getActivity()
-                .getSystemService(getActivity().INPUT_METHOD_SERVICE);
-            mgr.showSoftInput(code, InputMethodManager.SHOW_IMPLICIT);
-
+            if(code != null) {
+                code.requestFocus();
+                GeneralUtils.openKeyboard(getActivity(), code);
+            }
         }, 50);
     }
 

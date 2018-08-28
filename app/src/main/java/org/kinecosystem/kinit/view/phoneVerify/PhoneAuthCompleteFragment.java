@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+
 import javax.inject.Inject;
+
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
@@ -41,7 +44,7 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_auth_complete_fragment, container, false);
         if (getActivity() instanceof PhoneVerificationUIActions) {
             actions = (PhoneVerificationUIActions) getActivity();
@@ -49,7 +52,11 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
             Log.e(TAG, "activity must implements PhoneVerificationActions");
             getActivity().finish();
         }
-        view.postDelayed(() -> actions.onVerificationComplete(), TIMEOUT);
+        view.postDelayed(() -> {
+            if (actions != null) {
+                actions.onVerificationComplete();
+            }
+        }, TIMEOUT);
         konfettiView = view.findViewById(R.id.view_konfetti);
         konfettiView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @Override
@@ -66,16 +73,16 @@ public class PhoneAuthCompleteFragment extends BaseFragment {
 
     private void startKonfettiAnim() {
         konfettiView.build()
-            .addColors(getResources().getColor(R.color.konfetti1), getResources().getColor(R.color.konfetti2),
-                getResources().getColor(R.color.konfetti3), getResources().getColor(R.color.konfetti4))
-            .setDirection(0.0, 359.0)
-            .setSpeed(0f, 8f)
-            .setFadeOutEnabled(true)
-            .setTimeToLive(1000L)
-            .addShapes(Shape.RECT, Shape.CIRCLE)
-            .addSizes(new Size(10, 5))
-            .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
-            .stream(200, 5000L);
+                .addColors(getResources().getColor(R.color.konfetti1), getResources().getColor(R.color.konfetti2),
+                        getResources().getColor(R.color.konfetti3), getResources().getColor(R.color.konfetti4))
+                .setDirection(0.0, 359.0)
+                .setSpeed(0f, 8f)
+                .setFadeOutEnabled(true)
+                .setTimeToLive(1000L)
+                .addShapes(Shape.RECT, Shape.CIRCLE)
+                .addSizes(new Size(10, 5))
+                .setPosition(-50f, konfettiView.getWidth() + 50f, -50f, -50f)
+                .stream(200, 5000L);
     }
 
     @Override

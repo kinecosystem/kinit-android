@@ -1,7 +1,7 @@
 package org.kinecosystem.kinit.view.customView;
 
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.databinding.BindingAdapter;
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
+
 import org.kinecosystem.kinit.R;
 
 
@@ -37,9 +38,9 @@ public class TransactionView extends FrameLayout {
     public TransactionView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.getTheme().obtainStyledAttributes(
-            attrs,
-            R.styleable.TransactionView,
-            0, 0);
+                attrs,
+                R.styleable.TransactionView,
+                0, 0);
         try {
             looping = a.getBoolean(R.styleable.TransactionView_looping, false);
         } finally {
@@ -50,7 +51,7 @@ public class TransactionView extends FrameLayout {
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.transaction_view, this, true);
         image = view.findViewById(R.id.transaction_image);
     }
@@ -58,12 +59,7 @@ public class TransactionView extends FrameLayout {
     public void startLoopAnimation() {
         looping = true;
         image.setRotation(0);
-        image.animate().rotation(360).setInterpolator(new LinearInterpolator()).setListener(new AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
+        image.animate().rotation(360).setInterpolator(new LinearInterpolator()).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (looping) {
@@ -71,16 +67,6 @@ public class TransactionView extends FrameLayout {
                 } else {
                     image.clearAnimation();
                 }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
             }
         }).setDuration(1500).start();
     }

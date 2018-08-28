@@ -44,6 +44,7 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
     }
 
     override fun onScreenVisibleToUser() {
+        isBackedUp.set(userRepository.isBackedup)
         analytics.logEvent(Events.Analytics.ViewProfilePage())
     }
 }

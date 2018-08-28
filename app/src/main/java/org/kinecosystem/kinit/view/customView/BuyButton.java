@@ -1,7 +1,7 @@
 package org.kinecosystem.kinit.view.customView;
 
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.databinding.BindingAdapter;
@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.animation.AnticipateInterpolator;
+
 import org.kinecosystem.kinit.R;
 
 public class BuyButton extends android.support.v7.widget.AppCompatTextView {
@@ -33,25 +34,10 @@ public class BuyButton extends android.support.v7.widget.AppCompatTextView {
             }
         });
         anim.setDuration(350);
-        anim.addListener(new AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
+        anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animator) {
                 animate().alpha(0).setDuration(150);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
             }
         });
         anim.start();

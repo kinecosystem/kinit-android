@@ -35,6 +35,7 @@ class ServicesProvider {
     val taskService: TaskService
     val walletService: Wallet
     val offerService: OfferService
+    val backupService: BackupService
 
     private val applicationContext: Context
 
@@ -47,14 +48,14 @@ class ServicesProvider {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         val client = OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS).writeTimeout(20, TimeUnit.SECONDS)
-            .addInterceptor(interceptor).build()
+                .addInterceptor(interceptor).build()
 
         val baseUrl = if (BuildConfig.DEBUG) STAGE_BASE_URL else PROD_BASE_URL
         val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
         val onboardingApi = retrofit.create<OnboardingApi>(OnboardingApi::class.java)
         val walletApi = retrofit.create<WalletApi>(WalletApi::class.java)
@@ -71,6 +72,7 @@ class ServicesProvider {
                 userRepo, analytics, taskService, walletService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
                 userRepo.userId(), offerRepo, analytics, walletService, scheduler)
+        backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))
     }
 
     fun isNetworkConnected(): Boolean {

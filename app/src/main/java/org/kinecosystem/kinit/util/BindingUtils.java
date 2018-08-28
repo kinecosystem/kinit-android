@@ -2,10 +2,14 @@ package org.kinecosystem.kinit.util;
 
 import android.databinding.BindingAdapter;
 import android.support.constraint.Guideline;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import org.kinecosystem.kinit.model.earn.Answer;
 import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
@@ -125,6 +129,35 @@ public class BindingUtils {
     public static void setSelectionListener(QuizAnswerView view, QuizAnswerView.OnSelectionListener listener) {
         if (listener != null) {
             view.setListener(listener);
+        }
+    }
+
+    @BindingAdapter("onType")
+    public static void setInputListener(EditText view, TextWatcher listener) {
+        if (listener != null) {
+            view.addTextChangedListener(listener);
+        }
+    }
+
+    @BindingAdapter("onSpinnerItemSelected")
+    public static void setSpinnerItemListener(Spinner view, AdapterView.OnItemSelectedListener listener) {
+        if (listener != null) {
+            view.setOnItemSelectedListener(listener);
+        }
+    }
+
+    @BindingAdapter("visibilityOn")
+    public static void setVisibilityOn(EditText view, boolean visible) {
+        if (visible) {
+            view.setVisibility(View.VISIBLE);
+            view.postDelayed(() -> view.requestFocus(), 250);
+            GeneralUtils.openKeyboard(view.getContext(), view);
+            view.requestFocus();
+        } else {
+            view.setVisibility(View.GONE);
+            view.postDelayed(() -> view.clearFocus(), 250);
+            GeneralUtils.closeKeyboard(view.getContext(), view);
+            view.setText("");
         }
     }
 }
