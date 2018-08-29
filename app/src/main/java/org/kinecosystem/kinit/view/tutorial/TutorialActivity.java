@@ -13,7 +13,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
@@ -23,23 +23,22 @@ import org.kinecosystem.kinit.view.BaseActivity;
 import org.kinecosystem.kinit.view.MainActivity;
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity;
 
+import javax.inject.Inject;
+
 public class TutorialActivity extends BaseActivity {
 
 
-    public static Intent getIntent(Context context) {
-        return new Intent(context, TutorialActivity.class);
-    }
-
-
+    final static int NUM_ITEMS = 3;
     @Inject
     Analytics analytics;
     @Inject
     UserRepository userRepository;
-
-    final static int NUM_ITEMS = 3;
     private View[] pages = new View[NUM_ITEMS];
     private int currentPage = 0;
 
+    public static Intent getIntent(Context context) {
+        return new Intent(context, TutorialActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
