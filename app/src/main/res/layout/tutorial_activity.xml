@@ -25,8 +25,8 @@
         android:layout_width="5dp"
         android:layout_height="5dp"
         android:layout_marginBottom="24dp"
-        android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
         android:background="@drawable/tutorial_page_background"
         app:layout_constraintBottom_toTopOf="@+id/start_app"
         app:layout_constraintEnd_toStartOf="@+id/page2"
@@ -60,45 +60,43 @@
 
     <TextView
         android:id="@+id/start_app"
-        android:textStyle="normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="70dp"
         android:layout_marginLeft="49dp"
         android:layout_marginRight="49dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:background="@drawable/button_white_bg_normal"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:letterSpacing="0.03"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/start_tutorial_text"
         android:textColor="#047cfc"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/tos_text"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
-
-    <TextView
+    <Button
         android:id="@+id/tos_text"
-        android:textStyle="normal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="29dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_height="0dp"
+        android:background="@null"
         android:fontFamily="sans-serif"
-        android:gravity="center_horizontal"
+        android:gravity="center_horizontal|center"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:textAllCaps="false"
         android:textColor="#ffffff"
         android:textSize="12sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/tos"
-        />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/start_app"
+        tools:text="@string/tos" />
 </android.support.constraint.ConstraintLayout>
