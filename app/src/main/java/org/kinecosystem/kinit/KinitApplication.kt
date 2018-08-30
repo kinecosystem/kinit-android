@@ -2,17 +2,16 @@ package org.kinecosystem.kinit
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
-import com.squareup.picasso.LruCache
 import com.squareup.picasso.Picasso
 import io.fabric.sdk.android.Fabric
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.dagger.*
-import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.blockchain.Wallet
+import org.kinecosystem.kinit.dagger.*
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.SharedPreferencesStore
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.ServicesProvider
 import javax.inject.Inject
 
 
@@ -22,8 +21,6 @@ class KinitApplication : Application(), DataStoreProvider {
         @JvmStatic
         lateinit var coreComponent: CoreComponent
     }
-
-    val CACHE_SIZE = 1024 * 7 // 7MB
 
     @Inject
     lateinit var analytics: Analytics
@@ -57,7 +54,7 @@ class KinitApplication : Application(), DataStoreProvider {
         wallet.retrieveCoupons()
         userRepository.isFreshInstall = false
 
-        val picasso = Picasso.Builder(this).memoryCache(LruCache(CACHE_SIZE)).build()
+        val picasso = Picasso.Builder(this).build()
         Picasso.setSingletonInstance(picasso)
     }
 

@@ -95,7 +95,7 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
                 dialogInterface.dismiss()
                 trueXmodel.navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
                 finish()
-            }).create().show()
+            }).setCancelable(false).create().show()
         }
     }
 
