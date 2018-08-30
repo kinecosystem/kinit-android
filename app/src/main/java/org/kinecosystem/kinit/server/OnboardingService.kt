@@ -27,7 +27,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
     private val applicationContext: Context = context.applicationContext
     private var blackList = listOf<String>()
-    var isInBlackList: Boolean = true
+    var isInBlackList: Boolean = false
 
     fun appLaunch() {
         if (!NetworkUtils.isConnected(applicationContext))

@@ -31,7 +31,7 @@ public class ImageUtils {
             }
         }
         String urlWithResolution = urlWithResolution(serverUrl, context);
-        Picasso.with(context).load(urlWithResolution).error(R.drawable.error_illustration).into(view);
+        Picasso.with(context).load(urlWithResolution).into(view);
     }
 
     public static void fetchImage(Context context, String url) {
