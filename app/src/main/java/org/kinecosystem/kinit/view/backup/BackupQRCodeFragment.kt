@@ -25,7 +25,7 @@ class BackupQRCodeFragment : BaseFragment() {
         next.setOnClickListener {
             activity?.let {
                 GeneralUtils.closeKeyboard(activity, next)
-                (it as BackupActions).onNext()
+                (it as BackupActions).getBackUpModel().onNext()
             }
         }
 

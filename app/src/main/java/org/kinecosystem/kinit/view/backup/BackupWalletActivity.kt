@@ -7,17 +7,26 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 
-class BackupWalletActivity : SingleFragmentActivity(), BackupActions {
+class BackupWalletActivity : SingleFragmentActivity(), BackupActions, UIActions {
 
-    private var model: BackupModel = BackupModel()
+    private var model: BackupModel = BackupModel(this)
+    private var needToReplace: Boolean = false
 
     override fun getBackUpModel(): BackupModel {
         return model
     }
 
-    override fun onNext() {
-        model.onNext()
-        replaceFragment(getFragment(), true)
+    override fun replaceFragment() {
+        if (inForeground) {
+            needToReplace = false
+            replaceFragment(getFragment(), true)
+        } else {
+            needToReplace = true
+        }
+    }
+
+    override fun showErrorAlert(alertErrorType: AlertErrorType) {
+        //TODO
     }
 
     override fun onBack() {
@@ -28,6 +37,14 @@ class BackupWalletActivity : SingleFragmentActivity(), BackupActions {
     override fun init() {
         model.titles = resources.getStringArray(R.array.questions_count)
         model.initHints()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (needToReplace) {
+            replaceFragment(getFragment(), true)
+            needToReplace = false
+        }
     }
 
     override fun getFragment(): Fragment {
@@ -47,7 +64,15 @@ class BackupWalletActivity : SingleFragmentActivity(), BackupActions {
 }
 
 interface BackupActions {
-    fun onNext()
     fun onBack()
     fun getBackUpModel(): BackupModel
+}
+
+interface UIActions {
+    fun replaceFragment()
+    fun showErrorAlert(alertErrorType: AlertErrorType)
+}
+
+enum class AlertErrorType {
+    Server, SDK
 }

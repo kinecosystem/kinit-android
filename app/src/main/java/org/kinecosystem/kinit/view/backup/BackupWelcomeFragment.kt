@@ -20,7 +20,7 @@ class WelcomeBackupFragment : Fragment() {
         closeBtn.setOnClickListener { activity?.finish() }
         backupBtn.setOnClickListener {
             activity?.let {
-                (it as BackupActions).onNext()
+                (it as BackupActions).getBackUpModel().onNext()
             }
         }
     }

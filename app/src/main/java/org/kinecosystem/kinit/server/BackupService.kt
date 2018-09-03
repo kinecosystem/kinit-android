@@ -29,28 +29,12 @@ class BackupService(val applicationContext: Context, val userRepo: UserRepositor
         })
     }
 
-    fun updateHints(hintsIds: List<Int>) {
-        server.updateHints(userRepo.userId(), userRepo.authToken, BackupApi.Hints(hintsIds)).enqueue(object : Callback<BackupApi.StatusResponse> {
-            override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
-                //TODO
-            }
-
-            override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
-            }
-
-        })
+    fun updateHints(hintsIds: List<Int>, response : Callback<BackupApi.StatusResponse>) {
+        server.updateHints(userRepo.userId(), userRepo.authToken, BackupApi.Hints(hintsIds)).enqueue(response)
     }
 
-    fun updateBackupDataTo(emailAddress: String, key: String) {
-        server.sendBackUpEmail(userRepo.userId(), userRepo.authToken, BackupApi.BackupData(emailAddress, key)).enqueue(object : Callback<BackupApi.StatusResponse> {
-            override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
-                //TODO
-            }
-
-            override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
-            }
-
-        })
+    fun updateBackupDataTo(emailAddress: String, key: String, response : Callback<BackupApi.StatusResponse>) {
+        server.sendBackUpEmail(userRepo.userId(), userRepo.authToken, BackupApi.BackupData(emailAddress, key)).enqueue(response)
     }
 
 }

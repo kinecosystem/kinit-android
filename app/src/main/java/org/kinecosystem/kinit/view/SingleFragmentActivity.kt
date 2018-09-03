@@ -2,12 +2,13 @@ package org.kinecosystem.kinit.view
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-
 import org.kinecosystem.kinit.R
 
 abstract class SingleFragmentActivity : BaseActivity() {
 
     protected abstract fun getFragment(): Fragment
+    var inForeground: Boolean = false
+        private set
 
     open fun beforeSuper() {
 
@@ -15,6 +16,16 @@ abstract class SingleFragmentActivity : BaseActivity() {
 
     open fun init() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        inForeground = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        inForeground = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,5 +47,4 @@ abstract class SingleFragmentActivity : BaseActivity() {
         }
         fragmentTransaction.replace(R.id.fragment_container, fragment, "TAG").commitNowAllowingStateLoss()
     }
-
 }

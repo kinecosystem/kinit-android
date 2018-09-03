@@ -11,14 +11,19 @@ import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.server.api.BackupApi
+import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.isValidEmail
+import org.kinecosystem.kinit.view.backup.AlertErrorType
+import org.kinecosystem.kinit.view.backup.UIActions
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 const val INVALID_HINT_ID = -1
 const val QUESTIONS_COUNT = 2
 
-class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
-
+class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener, TextWatcher {
 
     enum class BackupState {
         Welcome, Question, Summery, QRCode, Confirm, Complete
@@ -31,8 +36,12 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
     lateinit var wallet: Wallet
 
     @Inject
+    lateinit var scheduler: Scheduler
+
+    @Inject
     lateinit var userRepository: UserRepository
     var isQuestionSelected = ObservableBoolean(false)
+    var isClickable = ObservableBoolean(false)
     var isNextEnabled = ObservableBoolean(false)
     var titles: Array<String> = listOf("Next Question").toTypedArray()
     private var isAnswerValid = ObservableBoolean(false)
@@ -91,8 +100,7 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
     }
 
     fun onNext() {
-        onStateComplete()
-        step++
+        performStateJob()
     }
 
     fun getTitle() = when (step - 1) {
@@ -148,20 +156,25 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
 
     fun answersFilledCount(): Int = questionsAndAnswers.size
 
-    private fun onStateComplete() {
+    private fun performStateJob() {
+        isClickable.set(false)
         when (getState()) {
             BackupState.Question -> {
-                saveQAandReset()
+                saveQuestionAnswer()
+                onMoveNextStep()
             }
             BackupState.Summery -> {
-                sendChosenQuestions()
                 initBackupAccountStr()
             }
             BackupState.QRCode -> {
                 sendEmailDataToServer()
             }
             BackupState.Confirm -> {
-                userRepository.isBackedup = true
+                sendChosenQuestions()
+            }
+            BackupState.Welcome -> {
+                reset()
+                onMoveNextStep()
             }
         }
     }
@@ -171,17 +184,41 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
         questionsAndAnswers.forEach {
             passphrase += it.second
         }
-        encryptedAccountStr = wallet.exportAccountToStr(passphrase)
+        scheduler.executeOnBackground {
+            encryptedAccountStr = wallet.exportAccountToStr(passphrase)
+            scheduler.post {
+                if (encryptedAccountStr != null) {
+                    onMoveNextStep()
+                } else {
+                    uiActions.showErrorAlert(AlertErrorType.SDK)
+                }
+            }
+        }
     }
 
     private fun sendEmailDataToServer() {
         emailAddress?.let { address ->
             encryptedAccountStr?.let { encryptedStr ->
-                servicesProvider.backupService.updateBackupDataTo(address, encryptedStr)
+                servicesProvider.backupService.updateBackupDataTo(address, encryptedStr, object : Callback<BackupApi.StatusResponse> {
+                    override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
+                        uiActions.showErrorAlert(AlertErrorType.Server)
+                    }
+
+                    override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
+                        onMoveNextStep()
+                    }
+
+                })
                 emailAddress = null
                 isNextEnabled.set(false)
             }
         }
+    }
+
+    private fun onMoveNextStep() {
+        step++
+        uiActions.replaceFragment()
+        isClickable.set(true)
     }
 
     private fun sendChosenQuestions() {
@@ -189,11 +226,22 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
         questionsAndAnswers.forEach {
             list.add(it.first.id)
         }
-        servicesProvider.backupService.updateHints(list)
-        Log.d("BackupModel", "#### BackupModel send list of question ids $list")
+        servicesProvider.backupService.updateHints(list, object : Callback<BackupApi.StatusResponse> {
+            override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
+                uiActions.showErrorAlert(AlertErrorType.Server)
+            }
+
+            override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
+                userRepository.isBackedup = true
+                onMoveNextStep()
+                Log.d("BackupModel", "#### BackupModel send list of question ids $list")
+            }
+
+        })
     }
 
     private fun reset() {
+        isClickable.set(true)
         currentAnswer = null
         currentQuestion = null
         step = 0
@@ -201,7 +249,7 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
         encryptedAccountStr = null
     }
 
-    private fun saveQAandReset() {
+    private fun saveQuestionAnswer() {
         currentQuestion?.let { question ->
             currentAnswer?.let { answer ->
                 questionsAndAnswers.add(question to answer)
