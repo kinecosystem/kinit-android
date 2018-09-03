@@ -29,25 +29,29 @@ class BackupService(val applicationContext: Context, val userRepo: UserRepositor
         })
     }
 
-    fun updateHints(hintsIds: List<Int>) {
+    fun updateHints(hintsIds: List<Int>, callback: OperationCompletionCallback) {
         server.updateHints(userRepo.userId(), userRepo.authToken, BackupApi.Hints(hintsIds)).enqueue(object : Callback<BackupApi.StatusResponse> {
             override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
-                //TODO
+                callback.onError(-1)
+                Log.e("BackupService", "updateHints failed")
             }
 
             override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
+                callback.onSuccess()
             }
 
         })
     }
 
-    fun updateBackupDataTo(emailAddress: String, key: String) {
+    fun updateBackupDataTo(emailAddress: String, key: String, callback: OperationCompletionCallback) {
         server.sendBackUpEmail(userRepo.userId(), userRepo.authToken, BackupApi.BackupData(emailAddress, key)).enqueue(object : Callback<BackupApi.StatusResponse> {
             override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
-                //TODO
+                callback.onError(-1)
+                Log.e("BackupService", "updateBackupDataTo failed")
             }
 
             override fun onResponse(call: Call<BackupApi.StatusResponse>?, response: Response<BackupApi.StatusResponse>?) {
+                callback.onSuccess()
             }
 
         })

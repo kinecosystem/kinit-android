@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.server.api.BackupApi
 import org.kinecosystem.kinit.util.isValidEmail
@@ -35,6 +36,8 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
     var isQuestionSelected = ObservableBoolean(false)
     var isNextEnabled = ObservableBoolean(false)
     var titles: Array<String> = listOf("Next Question").toTypedArray()
+    var needToWaitForResponse: Boolean = false
+    var responseReadyToNextStep: ObservableBoolean = ObservableBoolean(false)
     private var isAnswerValid = ObservableBoolean(false)
     private var currentAnswer: String? = null
     private var emailAddress: String? = null
@@ -91,8 +94,7 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
     }
 
     fun onNext() {
-        onStateComplete()
-        step++
+        onStateCompleted()
     }
 
     fun getTitle() = when (step - 1) {
@@ -148,20 +150,31 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
 
     fun answersFilledCount(): Int = questionsAndAnswers.size
 
-    private fun onStateComplete() {
+    private fun onStateCompleted() {
         when (getState()) {
+            BackupState.Welcome ->{
+                needToWaitForResponse = false
+                step++
+            }
             BackupState.Question -> {
+                needToWaitForResponse = false
                 saveQAandReset()
+                step++
             }
             BackupState.Summery -> {
-                sendChosenQuestions()
+                responseReadyToNextStep.set(false)
+                needToWaitForResponse = true
                 initBackupAccountStr()
             }
             BackupState.QRCode -> {
+                needToWaitForResponse = false
+                step++
                 sendEmailDataToServer()
             }
             BackupState.Confirm -> {
-                userRepository.isBackedup = true
+                responseReadyToNextStep.set(false)
+                needToWaitForResponse = true
+                sendChosenQuestions()
             }
         }
     }
@@ -172,12 +185,33 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
             passphrase += it.second
         }
         encryptedAccountStr = wallet.exportAccountToStr(passphrase)
+        if (encryptedAccountStr != null) {
+            step++
+            Thread.sleep(5000)
+            responseReadyToNextStep.set(true)
+            Log.d("####", "##### initBackupAccountStr  responseReadyToNextStep.set(true) ")
+        } else {
+            //TODO on error
+            Log.d("####", "##### initBackupAccountStr error ")
+        }
     }
 
     private fun sendEmailDataToServer() {
         emailAddress?.let { address ->
             encryptedAccountStr?.let { encryptedStr ->
-                servicesProvider.backupService.updateBackupDataTo(address, encryptedStr)
+                servicesProvider.backupService.updateBackupDataTo(address, encryptedStr, object : OperationCompletionCallback {
+                    override fun onSuccess() {
+                        step++
+                       Thread.sleep(5000)
+                        responseReadyToNextStep.set(true)
+                        Log.d("####", "##### sendEmailDataToServer  responseReadyToNextStep.set(true) ")
+                    }
+
+                    override fun onError(errorCode: Int) {
+                        //TODO
+                    }
+
+                })
                 emailAddress = null
                 isNextEnabled.set(false)
             }
@@ -189,7 +223,20 @@ class BackupModel : AdapterView.OnItemSelectedListener, TextWatcher {
         questionsAndAnswers.forEach {
             list.add(it.first.id)
         }
-        servicesProvider.backupService.updateHints(list)
+        servicesProvider.backupService.updateHints(list, object : OperationCompletionCallback {
+            override fun onSuccess() {
+                step++
+                Thread.sleep(5000)
+                responseReadyToNextStep.set(true)
+                userRepository.isBackedup = true
+                Log.d("####", "##### sendChosenQuestions  responseReadyToNextStep.set(true) ")
+            }
+
+            override fun onError(errorCode: Int) {
+                //TODO error
+            }
+
+        })
         Log.d("BackupModel", "#### BackupModel send list of question ids $list")
     }
 
