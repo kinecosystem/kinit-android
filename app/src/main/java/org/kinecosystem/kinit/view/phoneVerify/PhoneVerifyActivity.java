@@ -10,12 +10,11 @@ import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
+import org.kinecosystem.kinit.navigation.Navigator;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.server.OperationCompletionCallback;
 import org.kinecosystem.kinit.util.GeneralUtils;
 import org.kinecosystem.kinit.view.BaseActivity;
-import org.kinecosystem.kinit.view.MainActivity;
-import org.kinecosystem.kinit.view.tutorial.TutorialActivity;
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel;
 
 import javax.inject.Inject;
@@ -37,10 +36,8 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
     private int sendPhoneCount = 0;
 
 
-    public static Intent getIntent(Context context, boolean hasPrevious) {
-        Intent intent = new Intent(context, PhoneVerifyActivity.class);
-        intent.putExtra(HAS_PREVIOUS, hasPrevious);
-        return intent;
+    public static Intent getIntent(Context context) {
+        return new Intent(context, PhoneVerifyActivity.class);
     }
 
     @Override
@@ -67,13 +64,18 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
             public void onSuccess() {
                 userRepository.setPhoneVerified(true);
                 analytics.logEvent(new Events.Business.UserVerified());
-                userRepository.setFirstTimeUser(false);
                 GeneralUtils.closeKeyboard(PhoneVerifyActivity.this, findViewById(R.id.fragment_container));
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, PhoneAuthCompleteFragment.newInstance())
-                        .commitNowAllowingStateLoss();
+                Navigator navigator = new Navigator(PhoneVerifyActivity.this);
+                navigator.navigateTo(Navigator.Destination.WALLET_CREATION);
+                PhoneVerifyActivity.this.finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        model.removeListener();
     }
 
     @Override
@@ -84,12 +86,12 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
                     .replace(R.id.fragment_container, CodeVerificationFragment.newInstance(phoneNumber, sendPhoneCount >= MAX_SEND_PHONE_COUNT), FRAGMENT_CODE_TAG)
                     .commit();
         } else {
-            showDialogBlackedList();
+            showBlackListDialog();
         }
     }
 
-    private void showDialogBlackedList() {
-        new AlertDialog.Builder(this, R.style.CustomAlertDialog).setTitle(getResources().getString(R.string.oh_no)).setMessage(getResources().getString(R.string.block_area_code_message))
+    private void showBlackListDialog() {
+        new AlertDialog.Builder(this, R.style.CustomAlertDialog).setTitle(getResources().getString(R.string.oh_no)).setMessage(getResources().getString(R.string.block_area_code_message)).setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -104,17 +106,18 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
         model.verifyPhoneNumberWithCode(code);
     }
 
+
     @Override
-    public void onVerificationComplete() {
-        startActivity(MainActivity.Companion.getIntent(this));
-        finish();
+    public void onBackPressed() {
+        onBackPressed(0);
     }
 
     @Override
     public void onBackPressed(int fromPage) {
         if (fromPage == 0) {
-            startActivity(TutorialActivity.getIntent(this));
-            finish();
+            Navigator navigator = new Navigator(PhoneVerifyActivity.this);
+            navigator.navigateTo(Navigator.Destination.TUTORIAL);
+            PhoneVerifyActivity.this.finish();
         } else if (fromPage == 1) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))

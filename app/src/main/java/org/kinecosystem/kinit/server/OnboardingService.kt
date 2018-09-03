@@ -27,7 +27,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
     private val applicationContext: Context = context.applicationContext
     private var blackList = listOf<String>()
-    var isInBlackList: Boolean = true
+    var isInBlackList: Boolean = false
 
     fun appLaunch() {
         if (!NetworkUtils.isConnected(applicationContext))
@@ -129,7 +129,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         appLaunchApi.blacklistAreaCodes().enqueue(object : Callback<OnboardingApi.BlackListAreaCode> {
             override fun onFailure(call: Call<OnboardingApi.BlackListAreaCode>, t: Throwable) {
                 blackList = listOf()
-                isInBlackList = false
                 if(!userRepo.isRegistered) {
                     callRegister(BuildConfig.VERSION_NAME)
                 }
@@ -139,11 +138,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 if (response.isSuccessful) {
                     response.body()?.list?.let {
                         blackList = it
-                        if (!blackList.contains(DeviceUtils.getLocalDialPrefix(applicationContext))) {
-                            isInBlackList = false
-                            if(!userRepo.isRegistered) {
-                                callRegister(BuildConfig.VERSION_NAME)
-                            }
+                        isInBlackList = blackList.contains(DeviceUtils.getLocalDialPrefix(applicationContext))
+                        if (!isInBlackList && !userRepo.isRegistered) {
+                            callRegister(BuildConfig.VERSION_NAME)
                         }
                     }
                 }
@@ -173,10 +170,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     updateToken()
                     analytics.logEvent(UserRegistered())
                     userRepo.isRegistered = true
-                    wallet.initKinWallet()
-                    if (!userRepo.isPhoneVerificationEnabled) {
-                        taskService.retrieveNextTask()
-                    }
                 } else {
                     Log.d("OnboardingService", "### register onResponse NOT SUCCESSFULL OR null: $response")
                     analytics.logEvent(Events.BILog.UserRegistrationFailed("response: $response"))
@@ -209,7 +202,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                             response: Response<StatusResponse>?) {
                         if (response != null && response.isSuccessful) {
                             updateConfig(response)
-                            wallet.initKinWallet()
                             Log.d("OnboardingService",
                                     "appLaunch onResponse: $response" + " config " + response?.body()?.config)
                         }

@@ -57,7 +57,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
 
     var isFirstTimeUser: Boolean
         set(firstTime) = userCache.putBoolean(FIRST_TIME_USER, firstTime)
-        get() = userCache.getBoolean(FIRST_TIME_USER, false)
+        get() = userCache.getBoolean(FIRST_TIME_USER, true)
 
     var p2pMaxKin: Int
         set(max) = userCache.putInt(P2P_MAX_KIN, max)
@@ -74,7 +74,6 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isP2pEnabled: Boolean
         set(enable) = userCache.putBoolean(P2P_ENABLED, enable)
         get() = userCache.getBoolean(P2P_ENABLED, false)
-
 
     var isBackedup: Boolean
         set(backed) = userCache.putBoolean(BACKED_UP, backed)

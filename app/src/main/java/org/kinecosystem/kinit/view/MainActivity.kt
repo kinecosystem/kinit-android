@@ -18,10 +18,10 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickMenuItem
+import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.BottomTabNavigation.PageSelectionListener
-import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), PageSelectionListener {
@@ -140,7 +140,6 @@ class MainActivity : BaseActivity(), PageSelectionListener {
         super.onResume()
         (view_pager.adapter as TabsAdapter).onTabVisibleToUser(view_pager.currentItem)
 
-        userRepository.isFirstTimeUser = false
         if (userRepository.isPhoneVerificationEnabled && !userRepository.isPhoneVerified) {
             showPhoneVerifyPopup()
         }
@@ -152,7 +151,7 @@ class MainActivity : BaseActivity(), PageSelectionListener {
                 .setMessage(R.string.pop_verify_phone_sub_title)
                 .setPositiveButton(R.string.pop_verify_phone_possitive) { _, _ ->
                     analytics.logEvent(Events.Analytics.ClickVerifyButtonOnPhoneAuthPopup())
-                    startActivity(PhoneVerifyActivity.getIntent(this@MainActivity, false))
+                    Navigator(this@MainActivity).navigateTo(Navigator.Destination.MAIN_SCREEN)
                     finish()
                 }
         val alertDialog = builder.create()

@@ -121,7 +121,6 @@
     <string name="p2p_send_kin_to_self_title">You chose yourself!</string>
     <string name="ready_to_earn_some_kin">Hi! 👋\nReady to earn some Kin?</string>
     <string name="ready_to_earn_some_kin_compat">Hi!\nReady to earn some Kin?</string>
-     <string name="oh_no">Oh no!</string>
     <string name="block_area_code_message">Kinit is currently not available in your country.We are continuing to grow, so check back again soon.</string>
     <string name="backup_info">Backing up your wallet will allow you to recover your Kin if you get locked out of the app or if your phone is ever lost or stolen.</string>
     <string name="wallet_backup">Wallet Backup</string>
@@ -149,8 +148,10 @@
     <string name="second_question">Second Question:</string>
     <string name="answer">Answer:</string>
     <string-array name="questions_count">
-        <item >"First Question"</item>
-        <item >"Second Question"</item>
-        <item >"Third Question"</item>
+        <item>"First Question"</item>
+        <item>"Second Question"</item>
+        <item>"Third Question"</item>
     </string-array>
+    <string name="oh_no">Oh no!</string>
+    <string name="wallet_creation_timeout_string">It might take up to 20 sec</string>
 </resources>

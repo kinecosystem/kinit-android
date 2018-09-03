@@ -10,17 +10,20 @@ import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
+import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
+import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
+import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import javax.inject.Inject
 
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        TASK, MAIN_SCREEN, SPEND, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP
+        TASK, MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATION, TUTORIAL, PHONE_VERIFY
     }
 
     @Inject
@@ -43,11 +46,14 @@ class Navigator(private val context: Context) {
 
     fun navigateTo(dest: Destination, index: Int = 0) {
          when (dest) {
-            Destination.TASK -> navigateToTask()
-            Destination.PEER2PEER -> navigateToActivity(Peer2PeerActivity.getIntent(context))
-            Destination.COMPLETE_WEB_TASK -> navigateToActivity(WebTaskCompleteActivity.getIntent(context))
-            Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context))
-            else -> navigateToActivity(MainActivity.getIntent(context), false)
+             Destination.TASK -> navigateToTask()
+             Destination.PEER2PEER -> navigateToActivity(Peer2PeerActivity.getIntent(context))
+             Destination.COMPLETE_WEB_TASK -> navigateToActivity(WebTaskCompleteActivity.getIntent(context))
+             Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context))
+             Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context))
+             Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context))
+             Destination.WALLET_CREATION -> navigateToActivity(CreateWalletActivity.getIntent(context))
+             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context))
         }
     }
 
@@ -63,8 +69,7 @@ class Navigator(private val context: Context) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
     }
-
-
+    
     private fun navigateToActivity(intent: Intent, withSlideAnimation: Boolean = true) {
         context.startActivity(intent)
         if (withSlideAnimation && context is AppCompatActivity) {

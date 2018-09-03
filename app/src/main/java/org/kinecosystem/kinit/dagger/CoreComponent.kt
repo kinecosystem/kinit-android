@@ -2,24 +2,31 @@ package org.kinecosystem.kinit.dagger
 
 import dagger.Component
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.firebase.KinInstanceIdService
 import org.kinecosystem.kinit.firebase.KinMessagingService
+import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.BottomTabNavigation
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.SplashActivity
 import org.kinecosystem.kinit.view.TabsAdapter
 import org.kinecosystem.kinit.view.adapter.CouponsListAdapter
 import org.kinecosystem.kinit.view.adapter.TransactionsListAdapter
+import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
+import org.kinecosystem.kinit.view.createWallet.CreateWalletCompleteFragment
+import org.kinecosystem.kinit.view.createWallet.CreateWalletErrorFragment
+import org.kinecosystem.kinit.view.createWallet.CreateWalletFragment
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
 import org.kinecosystem.kinit.view.customView.TransactionLayoutView
-import org.kinecosystem.kinit.view.earn.*
+import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
+import org.kinecosystem.kinit.view.earn.TaskErrorFragment
+import org.kinecosystem.kinit.view.earn.WebTaskActivity
+import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
-import org.kinecosystem.kinit.view.phoneVerify.PhoneAuthCompleteFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
+import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
 import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
@@ -58,7 +65,6 @@ interface CoreComponent {
     fun inject(phoneSendFragment: PhoneSendFragment)
     fun inject(taskErrorFragment: TaskErrorFragment)
     fun inject(codeVerificationFragment: CodeVerificationFragment)
-    fun inject(phoneAuthCompleteFragment: PhoneAuthCompleteFragment)
     fun inject(questionnaireActivity: QuestionnaireActivity)
     fun inject(app: KinitApplication)
     fun inject(splashActivity: SplashActivity)
@@ -74,5 +80,10 @@ interface CoreComponent {
     fun inject(quizViewModel: QuizQuestionViewModel)
     fun inject(answerViewModel: AnswerViewModel)
     fun inject(quizAnswerView: QuizAnswerView)
+    fun inject(createWalletCompleteFragment: CreateWalletCompleteFragment)
+    fun inject(createWalletFragment: CreateWalletFragment)
+    fun inject(createWalletErrorFragment: CreateWalletErrorFragment)
+    fun inject(createWalletViewModel: CreateWalletViewModel)
+    fun inject(createWalletActivity: CreateWalletActivity)
     fun inject(backupModel: BackupModel)
 }
