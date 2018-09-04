@@ -31,7 +31,7 @@ class BackupConfirmFragment : BaseFragment() {
 
         next.setOnClickListener {
             activity?.let {
-                (it as BackupActions).onNext()
+                (it as BackupActions).getBackUpModel().onNext()
             }
         }
 

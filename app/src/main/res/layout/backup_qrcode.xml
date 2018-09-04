@@ -97,6 +97,7 @@
             android:id="@+id/next"
             android:layout_width="0dp"
             android:layout_height="@dimen/auth_phone_next_height"
+            android:clickable="@{model.isClickable()}"
             android:enabled="@{model.isNextEnabled()}"
             android:fontFamily="sans-serif"
             android:gravity="center"
