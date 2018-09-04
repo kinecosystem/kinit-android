@@ -39,4 +39,11 @@ class BackupCompleteFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.backup_complete, container, false)
     }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.let {
+            (it as BackupActions).getBackUpModel().onResumeFragment()
+        }
+    }
 }

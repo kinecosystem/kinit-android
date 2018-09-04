@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ServicesProvider
@@ -36,6 +38,9 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
 
     @Inject
     lateinit var scheduler: Scheduler
+
+    @Inject
+    lateinit var analytics: Analytics
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -103,6 +108,29 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
         performStateJob()
     }
 
+    fun onResumeFragment() {
+        when (getState()) {
+            BackupState.Welcome -> {
+                analytics.logEvent(Events.Analytics.ViewBackupIntroPage())
+            }
+            BackupState.Question -> {
+                analytics.logEvent(Events.Analytics.ViewBackupFlowPage("Security question " + step))
+            }
+            BackupState.Summary -> {
+                analytics.logEvent(Events.Analytics.ViewBackupFlowPage("Security questions confirmation"))
+            }
+            BackupState.QRCode -> {
+                analytics.logEvent(Events.Analytics.ViewBackupFlowPage("Send Email"))
+            }
+            BackupState.Confirm -> {
+                analytics.logEvent(Events.Analytics.ViewBackupFlowPage("Email confirmation"))
+            }
+            BackupState.Complete -> {
+                analytics.logEvent(Events.Analytics.ViewBackupCompletedPage())
+            }
+        }
+    }
+
     fun getTitle() = when (step - 1) {
         in 0 until titles.size -> titles[step - 1]
         else -> "Next Question"
@@ -163,21 +191,29 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
             BackupState.Question -> {
                 saveQuestionAnswer()
                 onMoveNextStep()
+                logNextStepEvent("Security question " + (step - 1))
             }
             BackupState.Summary -> {
                 initBackupAccountStr()
+                logNextStepEvent("Security questions confirmation")
             }
             BackupState.QRCode -> {
                 sendEmailDataToServer()
+                logNextStepEvent("Send Email")
             }
             BackupState.Confirm -> {
                 sendChosenQuestions()
+                logNextStepEvent("Email confirmation")
             }
             BackupState.Welcome -> {
                 reset()
                 onMoveNextStep()
             }
         }
+    }
+
+    private fun logNextStepEvent(eventParam: String) {
+        analytics.logEvent(Events.Analytics.ClickCompletedStepButtonOnBackupFlowPage(eventParam))
     }
 
     private fun initBackupAccountStr() {
@@ -243,6 +279,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
                     if (it.isSuccessful) {
                         userRepository.isBackedup = true
                         onMoveNextStep()
+                        analytics.logEvent(Events.Business.WalletBackedUp())
                         Log.d("BackupModel", "#### BackupModel send list of question ids $list")
                     } else {
                         uiActions.showErrorAlert()
