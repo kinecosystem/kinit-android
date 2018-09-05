@@ -74,6 +74,9 @@ class RestoreWalletAnswerHintsFragment : BaseFragment() {
                 answers_wrapper?.addView(singleHintView, index)
             }
         }
-        backBtn.setOnClickListener { actions.moveBack() }
+        backBtn.setOnClickListener {
+            actions.moveBack()
+            model.answersSubmitted.set(false)
+        }
     }
 }

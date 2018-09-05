@@ -59,8 +59,10 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
     }
 
     override fun moveBack() {
-        model.onBack()
-        replaceFragment(getFragment(), true, false)
+        if (getFragment() != onboaridngCompleteFragment && model.getState() != RestoreState.Welcomeback) {
+            model.onBack()
+            replaceFragment(getFragment(), true, false)
+        }
     }
 
     override fun onBackPressed() {

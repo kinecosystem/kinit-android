@@ -85,6 +85,7 @@ class RestoreWalletViewModel {
 
     private fun restart() {
         step = 0
+        answersSubmitted.set(false)
     }
 
     fun onCodeReceived(qrCode: String) {
@@ -93,7 +94,7 @@ class RestoreWalletViewModel {
 
     fun setPassphrase(id: Int, str: String?) {
         passphrase = ""
-        answers[id] = str.toString()
+        answers[id] = str.toString().replace(" ", "")
         for (answer in answers)
             passphrase += answer
 
