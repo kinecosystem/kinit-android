@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.backup_welcome_layout.*
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.util.GeneralUtils
+import org.kinecosystem.kinit.view.customView.AlertManager
 
 class WelcomeBackupFragment : Fragment() {
 
@@ -20,7 +22,13 @@ class WelcomeBackupFragment : Fragment() {
         closeBtn.setOnClickListener { activity?.finish() }
         backupBtn.setOnClickListener {
             activity?.let {
-                (it as BackupActions).getBackUpModel().onNext()
+                if (GeneralUtils.isConnected(it)) {
+                    (it as BackupActions).getBackUpModel().onNext()
+                } else {
+                    AlertManager.showAlert(it, R.string.no_internet_connection, R.string.no_internet_message, R.string.back, {
+                        it.finish()
+                    })
+                }
             }
         }
     }

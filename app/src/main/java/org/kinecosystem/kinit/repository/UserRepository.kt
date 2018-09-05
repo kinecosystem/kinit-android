@@ -14,6 +14,8 @@ private const val FCM_TOKEN_SENT_KEY = "token_sent"
 private const val USER_CACHE_NAME = "kin.app.user"
 private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
+private const val BACKUP_NAG_ALERT_ENABLED = "BACKUP_NAG_ALERT_ENABLED"
+
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
 private const val FIRST_TIME_USER = "FIRST_TIME_USER"
 private const val P2P_MAX_KIN = "P2P_MAX_KIN"
@@ -83,7 +85,11 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(token) = userCache.putString(AUTH_TOKEN, token)
         get() = userCache.getString(AUTH_TOKEN, "")
 
-    lateinit var backUpHints: List<BackupApi.BackUpQuestion>
+    var backUpHints: List<BackupApi.BackUpQuestion> = listOf()
+
+    var isBackupNagAlertEnabled: Boolean
+        set(enabled) = userCache.putBoolean(BACKUP_NAG_ALERT_ENABLED, enabled)
+        get() = userCache.getBoolean(BACKUP_NAG_ALERT_ENABLED, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")

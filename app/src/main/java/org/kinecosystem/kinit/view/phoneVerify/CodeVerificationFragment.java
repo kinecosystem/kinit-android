@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,7 +30,6 @@ import org.kinecosystem.kinit.repository.DataStore;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.util.GeneralUtils;
-import org.kinecosystem.kinit.util.PhoneUtils;
 import org.kinecosystem.kinit.util.SupportUtil;
 import org.kinecosystem.kinit.view.BaseFragment;
 

@@ -11,22 +11,22 @@ import retrofit2.Response
 class BackupService(val applicationContext: Context, val userRepo: UserRepository, val server: BackupApi) {
 
 
-    fun initHints() {
-        server.getHints().enqueue(object : Callback<BackupApi.HintsResponse> {
-            override fun onResponse(call: Call<BackupApi.HintsResponse>?, response: Response<BackupApi.HintsResponse>?) {
-                if (response != null && response.isSuccessful) {
-                    response.body()?.let {
-                        userRepo.backUpHints = it.hints
+    fun retrieveHints() {
+        if (userRepo.backUpHints.isEmpty()) {
+            server.getHints().enqueue(object : Callback<BackupApi.HintsResponse> {
+                override fun onResponse(call: Call<BackupApi.HintsResponse>?, response: Response<BackupApi.HintsResponse>?) {
+                    if (response != null && response.isSuccessful) {
+                        response.body()?.let {
+                            userRepo.backUpHints = it.hints
+                        }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<BackupApi.HintsResponse>?, t: Throwable?) {
-                Log.e("BackupService", "getHints failed")
-                userRepo.backUpHints = listOf()
-            }
-
-        })
+                override fun onFailure(call: Call<BackupApi.HintsResponse>?, t: Throwable?) {
+                    Log.e("BackupService", "getHints failed")
+                }
+            })
+        }
     }
 
     fun updateHints(hintsIds: List<Int>, response : Callback<BackupApi.StatusResponse>) {

@@ -33,7 +33,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="9dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Summery"
+            android:text="@string/summary"
             android:textColor="@color/grey"
             android:textSize="22sp"
             android:textStyle="normal"

@@ -52,6 +52,7 @@ class KinitApplication : Application(), DataStoreProvider {
         analytics.init(this, userRepository.isFreshInstall)
         analytics.setUserId(userRepository.userId())
         servicesProvider.onBoardingService.appLaunch()
+        servicesProvider.backupService.retrieveHints()
         servicesProvider.offerService.retrieveOffers()
         wallet.retrieveTransactions()
         wallet.retrieveCoupons()

@@ -20,6 +20,8 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
     @Inject
     lateinit var analytics: Analytics
 
+    var showCreateNewBackupAlert = ObservableBoolean(false)
+
     var isBackedUp = ObservableBoolean(false)
 
     init {
@@ -33,6 +35,10 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
         BuildConfig.VERSION_NAME
     }
 
+    fun onShowingCreateNewBackupAlert(){
+        showCreateNewBackupAlert.set(false)
+    }
+
     fun onContactSupportClicked(view: View) {
         analytics.logEvent(Events.Analytics.ClickSupportButton())
         analytics.logEvent(Events.Business.SupportRequestSent())
@@ -40,7 +46,11 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
     }
 
     fun onStartBackupClicked(view: View) {
-        navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
+        if (isBackedUp.get()) {
+            showCreateNewBackupAlert.set(true)
+        } else {
+            navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
+        }
     }
 
     override fun onScreenVisibleToUser() {

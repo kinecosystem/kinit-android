@@ -7,15 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.backup_summery.*
+import kotlinx.android.synthetic.main.backup_summary.*
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.databinding.BackupSummeryBinding
+import org.kinecosystem.kinit.databinding.BackupSummaryBinding
+import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseFragment
+import org.kinecosystem.kinit.view.customView.AlertManager
 
 
-class BackupSummeryFragment : BaseFragment() {
+class BackupSummaryFragment : BaseFragment() {
     companion object {
-        fun newInstance(): Fragment = BackupSummeryFragment()
+        fun newInstance(): Fragment = BackupSummaryFragment()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -24,7 +26,11 @@ class BackupSummeryFragment : BaseFragment() {
 
         next.setOnClickListener {
             activity?.let {
-                (it as BackupActions).getBackUpModel().onNext()
+                if (GeneralUtils.isConnected(it)) {
+                    (it as BackupActions).getBackUpModel().onNext()
+                } else {
+                    AlertManager.showAlertNoIternetDismiss(it)
+                }
             }
         }
 
@@ -37,10 +43,10 @@ class BackupSummeryFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (activity !is BackupActions) {
-            Log.e("BackupSummeryFragment", "Activity must implement BackupActions")
+            Log.e("BackupSummaryFragment", "Activity must implement BackupActions")
             activity?.finish()
         }
-        val binding = DataBindingUtil.inflate<BackupSummeryBinding>(inflater, R.layout.backup_summery, container, false)
+        val binding = DataBindingUtil.inflate<BackupSummaryBinding>(inflater, R.layout.backup_summary, container, false)
         binding.model = (activity as BackupActions).getBackUpModel()
         return binding.root
     }

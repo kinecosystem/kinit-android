@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.model.spend.TYPE_P2P
 import org.kinecosystem.kinit.model.spend.isValid
 import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.server.api.OffersApi
-import org.kinecosystem.kinit.util.NetworkUtils
+import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.Scheduler
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +31,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
     fun retrieveOffers(callback: OperationCompletionCallback? = null) {
 
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             return
         }
 
@@ -57,7 +57,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
     }
 
     fun sendContact(phones: String, callback: OperationResultCallback<String>) {
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
         }
         scheduler.executeOnBackground({
@@ -76,7 +76,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
     fun buyOffer(offer: Offer, callback: OperationResultCallback<String>) {
 
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
         }
 
@@ -169,7 +169,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
     fun p2pTransfer(toAddress: String, amount: Int, callback: OperationResultCallback<String>) {
 
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
         }
         scheduler.executeOnBackground(object : Runnable {

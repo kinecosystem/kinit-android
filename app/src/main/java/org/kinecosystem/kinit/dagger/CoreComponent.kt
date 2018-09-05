@@ -30,6 +30,7 @@ import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
 import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
+import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.*
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
@@ -86,4 +87,5 @@ interface CoreComponent {
     fun inject(createWalletViewModel: CreateWalletViewModel)
     fun inject(createWalletActivity: CreateWalletActivity)
     fun inject(backupModel: BackupModel)
+    fun inject(backupAlertManager: BackupAlertManager)
 }
