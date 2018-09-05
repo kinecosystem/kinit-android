@@ -36,6 +36,11 @@ class RestoreWalletAnswerHintsFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        actions.getModel().onResume()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         try {

@@ -26,6 +26,11 @@ class RestoreWalletWelcomebackFragment : BaseFragment() {
         KinitApplication.coreComponent.inject(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        actions.getModel().onResume()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         try {

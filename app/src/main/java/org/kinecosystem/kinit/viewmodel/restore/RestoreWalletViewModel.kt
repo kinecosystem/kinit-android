@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.viewmodel.restore
 import android.databinding.ObservableBoolean
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.OnboardingService
@@ -104,6 +105,14 @@ class RestoreWalletViewModel {
 
     fun getHintQuestionById(id: Int): BackupApi.BackUpQuestion {
         return userRepository.backUpHints.filter { it.id == id }[0]
+    }
+
+    fun onResume() {
+        when (getState()) {
+            RestoreState.Welcomeback -> analytics.logEvent(Events.Analytics.ViewWelcomeBackPage())
+            RestoreState.Intro -> analytics.logEvent(Events.Analytics.ViewScanPage())
+            RestoreState.SecurityQuestions -> analytics.logEvent(Events.Analytics.ViewAnswerSecurityQuestionsPage())
+        }
     }
 }
 

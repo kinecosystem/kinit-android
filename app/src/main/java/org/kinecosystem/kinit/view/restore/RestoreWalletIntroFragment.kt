@@ -11,13 +11,14 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.intro_fragment.*
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
 
 class RestoreWalletIntroFragment : BaseFragment() {
 
     lateinit var model: RestoreWalletViewModel
-    private var actions: RestoreWalletActions? = null
+    lateinit var actions: RestoreWalletActions
 
     companion object {
         val TAG = RestoreWalletIntroFragment::class.java.simpleName
@@ -43,22 +44,28 @@ class RestoreWalletIntroFragment : BaseFragment() {
         return inflater.inflate(R.layout.intro_fragment, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        actions.getModel().onResume()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity !is RestoreWalletActions) {
             Log.e(TAG, "Activity must implement RestoreActions")
             activity?.finish()
         }
-        backBtn.setOnClickListener { actions?.moveBack() }
+        backBtn.setOnClickListener { actions.moveBack() }
         startBtn.setOnClickListener { moveToScanner() }
     }
 
     private fun moveToScanner() {
         activity?.let {
             if (ContextCompat.checkSelfPermission(it, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                actions?.moveToNextScreen()
+                actions.getModel().analytics.logEvent(Events.Analytics.ClickScanButtonOnScanPage())
+                actions.moveToNextScreen()
             } else {
-                actions?.getCameraPermissions()
+                actions.getCameraPermissions()
             }
         }
     }

@@ -14,8 +14,11 @@ import org.kinecosystem.kinit.viewmodel.earn.QuestionDualImageViewModel
 
 class QuestionDualImageFragment : BaseFragment() {
 
+    lateinit var binding: QuestionDualImageFragmentBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         if (activity !is QuestionnaireActions) {
             onInvalidData()
         }
@@ -25,9 +28,14 @@ class QuestionDualImageFragment : BaseFragment() {
         if (questionIndex == INVALID_QUESTION_INDEX) {
             onInvalidData()
         }
-        val binding = DataBindingUtil.inflate<QuestionDualImageFragmentBinding>(inflater, R.layout.question_dual_image_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.question_dual_image_fragment, container, false)
         binding.model = QuestionDualImageViewModel(questionIndex, activity as QuestionnaireActions?)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.model?.onResume()
     }
 
     private fun onInvalidData() {

@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.SupportUtil
@@ -96,6 +97,7 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
                         moveToMainScreen()
                     }
                 }
+                getModel().analytics.logEvent(Events.Analytics.ViewWalletRestoredPage())
                 onboaridngCompleteFragment
             }
         }
