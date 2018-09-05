@@ -31,10 +31,7 @@ public class ImageUtils {
             }
         }
         String urlWithResolution = urlWithResolution(serverUrl, context);
-        Picasso.Builder builder = new Picasso.Builder(context);
-        builder.listener((picasso, uri, exception) -> Log.e("ImageUtils", "onImageLoadFailed with exception: " + exception));
-        builder.build().load(urlWithResolution).error(R.drawable.error_illustration).into(view);
-
+        Picasso.with(context).load(urlWithResolution).into(view);
     }
 
     public static void fetchImage(Context context, String url) {
