@@ -18,6 +18,7 @@ import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
+import org.kinecosystem.kinit.blockchain.Wallet;
 import org.kinecosystem.kinit.navigation.Navigator;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.view.BaseActivity;
@@ -32,6 +33,9 @@ public class TutorialActivity extends BaseActivity {
     Analytics analytics;
     @Inject
     UserRepository userRepository;
+    @Inject
+    Wallet wallet;
+
     private View[] pages = new View[NUM_ITEMS];
     private int currentPage = 0;
 
@@ -98,6 +102,8 @@ public class TutorialActivity extends BaseActivity {
         Navigator navigator = new Navigator(this);
         if (userRepository.isPhoneVerificationEnabled()) {
             navigator.navigateTo(Navigator.Destination.PHONE_VERIFY);
+        } else if (!wallet.getReady().get()) {
+            navigator.navigateTo(Navigator.Destination.WALLET_CREATE);
         } else {
             navigator.navigateTo(Navigator.Destination.MAIN_SCREEN);
         }

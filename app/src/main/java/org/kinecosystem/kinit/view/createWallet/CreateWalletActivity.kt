@@ -47,7 +47,13 @@ class CreateWalletActivity : SingleFragmentActivity(), CreateWalletActions, Crea
     }
 
     override fun onWalletCreated() {
-        replaceFragment(CreateWalletCompleteFragment.newInstance())
+        val fragment = OnboardingCompleteFragment.newInstance()
+        fragment.listener = object : OnboardingCompleteFragment.AfterAnimationListener {
+            override fun onAnimationEnd() {
+                moveToMainScreen()
+            }
+        }
+        replaceFragment(fragment)
     }
 
     override fun onCreateWalletError() {

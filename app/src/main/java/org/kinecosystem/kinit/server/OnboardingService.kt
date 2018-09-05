@@ -51,18 +51,19 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
         phoneAuthenticationApi.updatePhoneAuthToken(userRepo.userId(),
                 PhoneAuthenticationApi.AuthInfo(token)).enqueue(
-                object : Callback<StatusResponse> {
-                    override fun onResponse(call: Call<StatusResponse>,
-                                            response: Response<StatusResponse>) {
+                object : Callback<OnboardingApi.HintsResponse> {
+                    override fun onResponse(call: Call<OnboardingApi.HintsResponse>,
+                                            response: Response<OnboardingApi.HintsResponse>) {
                         if (response.isSuccessful) {
                             taskService.retrieveNextTask()
+                            userRepo.restoreHints = response.body()?.hints ?: listOf()
                             callback.onSuccess()
                         } else {
                             callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                         }
                     }
 
-                    override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<OnboardingApi.HintsResponse>, t: Throwable) {
                         callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                     }
                 })
@@ -123,6 +124,29 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         analytics.logEvent(Events.BILog.AuthTokenAckFailed("Received onFailure with t=$t"))
                     }
                 })
+    }
+
+    fun restoreAccount(address: String, callback: OperationCompletionCallback) {
+        val call = appLaunchApi.restoreAccount(userRepo.userId(), OnboardingApi.AccountAddress(address))
+        call.enqueue(
+                object : Callback<OnboardingApi.AccountAddressResponds> {
+                    override fun onFailure(call: Call<OnboardingApi.AccountAddressResponds>, t: Throwable) {
+                        callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                    }
+
+                    override fun onResponse(call: Call<OnboardingApi.AccountAddressResponds>, response: Response<OnboardingApi.AccountAddressResponds>) {
+                        if (response.isSuccessful) {
+                            if (response.body()?.userId.isNullOrEmpty()) {
+                                callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                            } else {
+                                userRepo.updateUserId(response.body()?.userId ?: "")
+                                taskService.retrieveNextTask()
+                                callback.onSuccess()
+                            }
+                        }
+                    }
+                }
+        )
     }
 
     private fun processRegistration() {

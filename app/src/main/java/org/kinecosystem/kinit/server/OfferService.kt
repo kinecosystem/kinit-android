@@ -10,6 +10,7 @@ import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.model.spend.TYPE_P2P
 import org.kinecosystem.kinit.model.spend.isValid
 import org.kinecosystem.kinit.repository.OffersRepository
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.OffersApi
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.Scheduler
@@ -24,7 +25,7 @@ const val ERROR_NO_GOOD_LEFT = 200
 private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
 private const val P2P_ORDER_ID = "1-kit-p2p"
 
-class OfferService(context: Context, private val offersApi: OffersApi, val userId: String,
+class OfferService(context: Context, private val offersApi: OffersApi, val userRepo: UserRepository,
                    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
 
     val applicationContext: Context = context.applicationContext
@@ -35,7 +36,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
             return
         }
 
-        offersApi.offers(userId).enqueue(object : Callback<OffersApi.OffersResponse> {
+        offersApi.offers(userRepo.userId()).enqueue(object : Callback<OffersApi.OffersResponse> {
             override fun onResponse(call: Call<OffersApi.OffersResponse>?,
                                     response: Response<OffersApi.OffersResponse>?) {
 
@@ -61,7 +62,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
             callback.onError(ERROR_NO_INTERNET)
         }
         scheduler.executeOnBackground({
-            val response = offersApi.sendContact(userId, OffersApi.ContactInfo(phones)).execute()
+            val response = offersApi.sendContact(userRepo.userId(), OffersApi.ContactInfo(phones)).execute()
             if (response.isSuccessful && response.body() != null && !response.body()!!.address.isEmpty()) {
                 scheduler.post {
                     callback.onResult(response.body()!!.address)
@@ -91,7 +92,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
 
                 val response: Response<OffersApi.BookOfferResponse>
                 try {
-                    response = offersApi.bookOffer(userId,
+                    response = offersApi.bookOffer(userRepo.userId(),
                         OffersApi.OfferInfo(offer.id!!)).execute()
                 } catch (e: SocketTimeoutException) {
                     callbackWithError(ERROR_NO_INTERNET)
@@ -121,7 +122,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                     wallet.updateBalanceSync()
                     wallet.logSpendTransactionCompleted(offer.price, bookOfferResponse.orderId)
 
-                    val response2 = offersApi.redeemOffer(userId,
+                    val response2 = offersApi.redeemOffer(userRepo.userId(),
                         OffersApi.PaymentReceipt(transactionId.id())).execute()
 
                     if (!response2.isSuccessful || response2.body() == null) {
@@ -183,7 +184,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userI
                         }
                         wallet.logP2pTransactionCompleted(amount, transactionId.id())
                         //update to the server the transactionId
-                        offersApi.sendTransactionInfo(userId,
+                        offersApi.sendTransactionInfo(userRepo.userId(),
                             OffersApi.TransactionInfo(transactionId.id(), toAddress, amount)).execute()
                         wallet.retrieveTransactions()
                     }

@@ -121,10 +121,13 @@
     <string name="p2p_send_kin_to_self_title">You chose yourself!</string>
     <string name="ready_to_earn_some_kin">Hi! 👋\nReady to earn some Kin?</string>
     <string name="ready_to_earn_some_kin_compat">Hi!\nReady to earn some Kin?</string>
-    <string name="block_area_code_message">Kinit is currently not available in your country.We are continuing to grow, so check back again soon.</string>
+    <string name="welcome_back">We have identified your wallet.\nWhat would you like to do?</string>
     <string name="backup_info">Backing up your wallet will allow you to recover your Kin if you get locked out of the app or if your phone is ever lost or stolen.</string>
     <string name="wallet_backup">Wallet Backup</string>
     <string name="security">Security</string>
+    <string name="qr_activity_desc_string">Restore requires to Scan your QR code and answer 2 security questions</string>
+    <string name="start_backup">Start</string>
+    <string name="qr_activity_title_string"><![CDATA[Scan & Answer]]></string>
     <string name="backup_now">Backup Now</string>
     <string name="choose_hint">Choose Question</string>
     <string name="yay">YAY!</string>
@@ -154,6 +157,7 @@
         <item>"Third Question"</item>
     </string-array>
     <string name="oh_no">Oh no!</string>
+    <string name="block_area_code_message">Kinit is currently not available in your country.We are continuing to grow, so check back again soon.</string>
     <string name="wallet_creation_timeout_string">It might take up to 20 sec</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="no_internet_message">Please check your connection and try again</string>
@@ -178,4 +182,22 @@
     <string name="backup_message_easy">That’s why we offer easy backup to keep your wallet safe</string>
     <string name="knock_knock">Knock knock</string>
     <string name="backup_message_today">It’s your Kin. It wants to be kept safe. Back it up today.</string>
+    <string name="create_new_wallet">Create new wallet</string>
+    <string name="restore">Restore</string>
+    <string name="wallet_identified_string">We have identified your wallet.\nWhat would you like to do?</string>
+    <string name="security_questions_title">Security Questions</string>
+    <string name="security_questions_desc">Answer your security questions to unlock your account</string>
+    <string name="create_new_wallet_warning_title">Create a new wallet?</string>
+    <string name="create_new_wallet_warning_msg">You are about to create a new Wallet.\nAre you sure?</string>
+    <string name="create_new_wallet_warning_positive">Yes! Create new wallet</string>
+    <string name="create_new_wallet_warning_negative">Cancel</string>
+    <string name="network_error_message_title">No internet connection</string>
+    <string name="network_error_message_msg">Please check your connection and try again</string>
+    <string name="network_error_message_positive">Back</string>
+    <string name="qr_error_title">Something went wrong</string>
+    <string name="qr_error_msg">QR code is invalid, please try again</string>
+    <string name="restore_error_title">Feeling forgetful?</string>
+    <string name="restore_error_msg">It looks like your answers don’t match. Please contact support for assistance.</string>
+    <string name="try_again">Try again</string>
+    <string name="question_block_string">Q%d:</string>
 </resources>

@@ -1,7 +1,6 @@
 package org.kinecosystem.kinit.view.createWallet
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,17 +15,21 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
 import javax.inject.Inject
 
-class CreateWalletCompleteFragment : BaseFragment() {
+class OnboardingCompleteFragment : BaseFragment() {
     @Inject
     lateinit var analytics: Analytics
-    private var actions: CreateWalletActions? = null
+    var listener: AfterAnimationListener? = null
+
+    interface AfterAnimationListener {
+        fun onAnimationEnd()
+    }
 
     companion object {
-        val TAG = CreateWalletCompleteFragment::class.java.simpleName
-        const val TIMEOUT: Long = 5000
+        val TAG = OnboardingCompleteFragment::class.java.simpleName
+        const val ANIMATION_DURATION: Long = 5000
         @JvmStatic
-        fun newInstance(): CreateWalletCompleteFragment {
-            return CreateWalletCompleteFragment()
+        fun newInstance(): OnboardingCompleteFragment {
+            return OnboardingCompleteFragment()
         }
     }
 
@@ -38,13 +41,7 @@ class CreateWalletCompleteFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.create_wallet_complete_fragment, container, false)
-        if (activity is CreateWalletActions?) {
-            actions = activity as CreateWalletActions?
-        } else {
-            Log.e(TAG, "activity must implements CreateWalletActions")
-            activity?.finish()
-        }
-        view.postDelayed({ actions?.moveToMainScreen() }, TIMEOUT)
+        view.postDelayed({ listener?.onAnimationEnd() }, ANIMATION_DURATION)
         return view
     }
 
@@ -71,7 +68,7 @@ class CreateWalletCompleteFragment : BaseFragment() {
                 .addShapes(Shape.RECT, Shape.CIRCLE)
                 .addSizes(Size(10, 5f))
                 .setPosition(-50f, view_konfetti.width + 50f, -50f, -50f)
-                .stream(200, 5000L)
+                .stream(200, ANIMATION_DURATION)
     }
 
     override fun onResume() {

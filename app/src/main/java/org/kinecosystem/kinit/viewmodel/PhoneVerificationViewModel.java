@@ -12,6 +12,8 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import org.kinecosystem.kinit.KinitApplication;
+import org.kinecosystem.kinit.navigation.Navigator;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.server.OperationCompletionCallback;
 import org.kinecosystem.kinit.server.ServicesProvider;
 
@@ -31,6 +33,8 @@ public class PhoneVerificationViewModel {
     public static final String TAG = PhoneVerificationViewModel.class.getSimpleName();
     @Inject
     ServicesProvider servicesProvider;
+    @Inject
+    UserRepository userRepository;
     private OperationCompletionCallback verificationCallback;
 
     private FirebaseAuth auth;
@@ -87,7 +91,7 @@ public class PhoneVerificationViewModel {
                     phoneNumber,        // Phone number to verify
                     60,                 // Timeout duration
                     TimeUnit.SECONDS,   // Unit of timeout
-                    activity,               // Activity (for callback binding)
+                    activity,               // Activity (for listener binding)
                     callbacks);        // OnVerificationStateChangedCallbacks
             return true;
         }
@@ -131,5 +135,12 @@ public class PhoneVerificationViewModel {
                     }
                 }
             });
+    }
+
+    public Navigator.Destination nextActivity() {
+        if (!userRepository.getRestoreHints().isEmpty()) {
+            return Navigator.Destination.WALLET_RESTORE;
+        }
+        return Navigator.Destination.WALLET_CREATE;
     }
 }

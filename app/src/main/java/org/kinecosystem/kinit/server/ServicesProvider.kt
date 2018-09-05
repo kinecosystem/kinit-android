@@ -65,13 +65,13 @@ class ServicesProvider {
                 onboardingApi, walletApi, scheduler)
         taskService = TaskService(applicationContext,
                 retrofit.create<TasksApi>(TasksApi::class.java),
-                tasksRepo, userRepo.userId(), walletService)
+                tasksRepo, userRepo, walletService)
         onBoardingService = OnboardingService(applicationContext,
                 retrofit.create<OnboardingApi>(OnboardingApi::class.java),
                 retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
                 userRepo, analytics, taskService, walletService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
-                userRepo.userId(), offerRepo, analytics, walletService, scheduler)
+                userRepo, offerRepo, analytics, walletService, scheduler)
         backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))
     }
 

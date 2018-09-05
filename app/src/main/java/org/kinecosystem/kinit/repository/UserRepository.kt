@@ -24,6 +24,7 @@ private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
 private const val P2P_ENABLED = "P2P_ENABLED"
 private const val BACKED_UP = "BACKED_UP"
 private const val AUTH_TOKEN = "authToken"
+private const val RESTORE_HINTS = "RESTORE_HINTS"
 
 
 
@@ -55,7 +56,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
 
     var isPhoneVerificationEnabled: Boolean
         set(enable) = userCache.putBoolean(PHONE_VERIFICATION_ENABLED, enable)
-        get() = userCache.getBoolean(PHONE_VERIFICATION_ENABLED, false)
+        get() = userCache.getBoolean(PHONE_VERIFICATION_ENABLED, true)
 
     var isFirstTimeUser: Boolean
         set(firstTime) = userCache.putBoolean(FIRST_TIME_USER, firstTime)
@@ -85,6 +86,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(token) = userCache.putString(AUTH_TOKEN, token)
         get() = userCache.getString(AUTH_TOKEN, "")
 
+    var restoreHints: List<Int>
+        set(hints) = userCache.putStringList(RESTORE_HINTS, hints.map { it -> it.toString() })
+        get() = userCache.getStringList(RESTORE_HINTS, listOf()).map { it -> it.toInt() }
+
     var backUpHints: List<BackupApi.BackUpQuestion> = listOf()
 
     var isBackupNagAlertEnabled: Boolean
@@ -102,8 +107,15 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         userInfo = UserInfo(userId)
     }
 
+    fun updateUserId(userId: String) {
+        userCache.putString(USER_ID_KEY, userId)
+        userInfo = UserInfo(userId)
+        Log.d("UserRepository", "### user id $userId")
+    }
+
 
     fun userId(): String {
+        Log.d("UserRepository", "### user id ${userInfo.userId}")
         return userInfo.userId
     }
 }

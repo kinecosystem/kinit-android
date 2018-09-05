@@ -32,6 +32,9 @@ interface OnboardingApi {
     data class StatusResponse(@SerializedName("status") val status: String,
                               @SerializedName("config") val config: Config)
 
+    data class HintsResponse(@SerializedName("status") val status: String,
+                             @SerializedName("hints") val hints: List<Int>)
+
     data class BlackListAreaCode(@SerializedName("areacodes") val list: List<String>)
 
     @POST("/user/register")
@@ -58,4 +61,13 @@ interface OnboardingApi {
 
     @GET("/blacklist/areacodes")
     fun blacklistAreaCodes(): Call<BlackListAreaCode>
+
+    @POST("/user/restore")
+    fun restoreAccount(@Header(USER_HEADER_KEY) userId: String, @Body accountAddress: AccountAddress): Call<AccountAddressResponds>
+
+    data class AccountAddress(@SerializedName("address") val publicAddress: String)
+
+    data class AccountAddressResponds(@SerializedName("status") val status: String,
+                                      @SerializedName("user_id") val userId: String)
+
 }

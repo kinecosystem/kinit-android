@@ -12,10 +12,11 @@ import org.kinecosystem.kinit.view.TabsAdapter
 import org.kinecosystem.kinit.view.adapter.CouponsListAdapter
 import org.kinecosystem.kinit.view.adapter.TransactionsListAdapter
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
-import org.kinecosystem.kinit.view.createWallet.CreateWalletCompleteFragment
 import org.kinecosystem.kinit.view.createWallet.CreateWalletErrorFragment
 import org.kinecosystem.kinit.view.createWallet.CreateWalletFragment
+import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
+import org.kinecosystem.kinit.view.customView.SecurityQuestionAnswerView
 import org.kinecosystem.kinit.view.customView.TransactionLayoutView
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.TaskErrorFragment
@@ -24,16 +25,18 @@ import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
+import org.kinecosystem.kinit.view.restore.*
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
-import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
+import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.*
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
+import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
 import org.kinecosystem.kinit.viewmodel.spend.Peer2PeerViewModel
 import org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
@@ -81,11 +84,18 @@ interface CoreComponent {
     fun inject(quizViewModel: QuizQuestionViewModel)
     fun inject(answerViewModel: AnswerViewModel)
     fun inject(quizAnswerView: QuizAnswerView)
-    fun inject(createWalletCompleteFragment: CreateWalletCompleteFragment)
+    fun inject(onboardingCompleteFragment: OnboardingCompleteFragment)
     fun inject(createWalletFragment: CreateWalletFragment)
     fun inject(createWalletErrorFragment: CreateWalletErrorFragment)
     fun inject(createWalletViewModel: CreateWalletViewModel)
     fun inject(createWalletActivity: CreateWalletActivity)
     fun inject(backupModel: BackupModel)
     fun inject(backupAlertManager: BackupAlertManager)
+    fun inject(securityQuestionAnswerView: SecurityQuestionAnswerView)
+    fun inject(restoreWalletBarcodeScannerFragment: RestoreWalletBarcodeScannerFragment)
+    fun inject(restoreWalletViewModel: RestoreWalletViewModel)
+    fun inject(restoreWalletActivity: RestoreWalletActivity)
+    fun inject(restoreWalletIntroFragment: RestoreWalletIntroFragment)
+    fun inject(restoreWalletWelcomebackFragment: RestoreWalletWelcomebackFragment)
+    fun inject(restoreWalletAnswerHintsFragment: RestoreWalletAnswerHintsFragment)
 }

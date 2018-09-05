@@ -15,6 +15,7 @@ import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
+import org.kinecosystem.kinit.view.restore.RestoreWalletActivity
 import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        TASK, MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATION, TUTORIAL, PHONE_VERIFY
+        TASK, MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE
     }
 
     @Inject
@@ -52,8 +53,9 @@ class Navigator(private val context: Context) {
              Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context))
              Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context))
              Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context))
-             Destination.WALLET_CREATION -> navigateToActivity(CreateWalletActivity.getIntent(context))
+             Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context))
              Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context))
+             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context))
         }
     }
 

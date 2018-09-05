@@ -11,7 +11,6 @@ import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 class BackupWalletActivity : SingleFragmentActivity(), BackupActions, UIActions {
 
     private var model: BackupModel = BackupModel(this)
-    private var needToReplace: Boolean = false
     private var resendEmailCount = 0
     private val RESEND_EMAIL_WARNING = 3
 
@@ -20,12 +19,7 @@ class BackupWalletActivity : SingleFragmentActivity(), BackupActions, UIActions 
     }
 
     override fun replaceFragment() {
-        if (inForeground) {
-            needToReplace = false
-            replaceFragment(getFragment(), true)
-        } else {
-            needToReplace = true
-        }
+        replaceFragment(getFragment(), true)
     }
 
     override fun showErrorAlert() {
@@ -51,14 +45,6 @@ class BackupWalletActivity : SingleFragmentActivity(), BackupActions, UIActions 
     override fun init() {
         model.titles = resources.getStringArray(R.array.questions_count)
         model.retrieveHints()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (needToReplace) {
-            replaceFragment(getFragment(), true)
-            needToReplace = false
-        }
     }
 
     override fun getFragment(): Fragment {

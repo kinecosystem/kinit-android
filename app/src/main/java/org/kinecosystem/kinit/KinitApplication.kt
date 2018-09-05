@@ -6,13 +6,13 @@ import com.squareup.picasso.LruCache
 import com.squareup.picasso.Picasso
 import io.fabric.sdk.android.Fabric
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.dagger.*
-import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.blockchain.Wallet
+import org.kinecosystem.kinit.dagger.*
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.SharedPreferencesStore
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.ServicesProvider
 import javax.inject.Inject
 
 

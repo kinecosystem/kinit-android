@@ -176,7 +176,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                                     "ok")) {
                         coupons.set(couponsList.coupons)
                     } else {
-                        Log.d(TAG, "coupons® list empty or null ")
+                        Log.d(TAG, "coupons list empty or null ")
                         coupons.set(ArrayList())
                     }
                     callback?.onSuccess()
@@ -241,8 +241,14 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
     }
 
-    fun replaceToBakcupAccount(backedUpKinAccount: KinAccount) {
+    fun restoreWallet(backedUpKinAccount: KinAccount) {
         account = backedUpKinAccount
+        userRepo.userInfo.publicAddress = account.publicAddress!!
+        analytics.setUserId(userRepo.userId())
+        initKinWallet()
+        retrieveTransactions()
+        retrieveCoupons()
+        userRepo.isBackedup = true
     }
 
     private fun createAccountSync(): Boolean {

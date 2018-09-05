@@ -66,7 +66,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
                 analytics.logEvent(new Events.Business.UserVerified());
                 GeneralUtils.closeKeyboard(PhoneVerifyActivity.this, findViewById(R.id.fragment_container));
                 Navigator navigator = new Navigator(PhoneVerifyActivity.this);
-                navigator.navigateTo(Navigator.Destination.WALLET_CREATION);
+                navigator.navigateTo(model.nextActivity());
                 PhoneVerifyActivity.this.finish();
             }
         });

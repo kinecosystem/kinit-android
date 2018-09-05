@@ -7,8 +7,8 @@ import org.kinecosystem.kinit.R
 abstract class SingleFragmentActivity : BaseActivity() {
 
     protected abstract fun getFragment(): Fragment
-    var inForeground: Boolean = false
-        private set
+    private var needToReplace: Boolean = false
+    private var inForeground: Boolean = false
 
     open fun beforeSuper() {
 
@@ -21,6 +21,10 @@ abstract class SingleFragmentActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         inForeground = true
+        if (needToReplace) {
+            replaceFragment(getFragment(), true)
+            needToReplace = false
+        }
     }
 
     override fun onPause() {
@@ -37,14 +41,19 @@ abstract class SingleFragmentActivity : BaseActivity() {
     }
 
     fun replaceFragment(fragment: Fragment, withSlideAnimation: Boolean = false, forwardAnimation: Boolean = true) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        if (withSlideAnimation) {
-            if (forwardAnimation) {
-                fragmentTransaction.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-            } else {
-                fragmentTransaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out)
+        if (inForeground) {
+            needToReplace = false
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            if (withSlideAnimation) {
+                if (forwardAnimation) {
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
+                } else {
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out)
+                }
             }
+            fragmentTransaction.replace(R.id.fragment_container, fragment, "TAG").commitNowAllowingStateLoss()
+        } else {
+            needToReplace = true
         }
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "TAG").commitNowAllowingStateLoss()
     }
 }
