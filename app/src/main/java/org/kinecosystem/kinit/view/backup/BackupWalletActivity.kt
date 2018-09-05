@@ -42,6 +42,10 @@ class BackupWalletActivity : SingleFragmentActivity(), BackupActions, UIActions 
         replaceFragment(getFragment(), true, false)
     }
 
+    override fun onBackPressed() {
+        //disable native back
+    }
+
     override fun init() {
         model.titles = resources.getStringArray(R.array.questions_count)
         model.retrieveHints()
