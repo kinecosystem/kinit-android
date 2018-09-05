@@ -21,6 +21,8 @@ class BackupConfirmFragment : BaseFragment() {
         fun newInstance(): Fragment = BackupConfirmFragment()
     }
 
+    lateinit var model:BackupActions
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var seenBackAlert = false
@@ -69,5 +71,12 @@ class BackupConfirmFragment : BaseFragment() {
         val binding = DataBindingUtil.inflate<BackupConfirmBinding>(inflater, R.layout.backup_confirm, container, false)
         binding.model = (activity as BackupActions).getBackUpModel()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.let {
+            (it as BackupActions).getBackUpModel().onResumeFragment()
+        }
     }
 }

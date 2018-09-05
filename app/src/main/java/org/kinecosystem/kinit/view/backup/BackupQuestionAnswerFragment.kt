@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.backup_question_answer_layout.*
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.databinding.BackupQuestionAnswerLayoutBinding
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.backup.BackupModel
+import javax.inject.Inject
 
 
 class BackupQuestionAnswerFragment : BaseFragment() {
@@ -21,6 +24,9 @@ class BackupQuestionAnswerFragment : BaseFragment() {
     }
 
     lateinit var model: BackupModel
+
+    @Inject
+    lateinit var analytics: Analytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,6 +50,13 @@ class BackupQuestionAnswerFragment : BaseFragment() {
                 (it as BackupActions).onBack()
             }
         })
+        analytics.protectView(userInput)
+        analytics.protectView(questions)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        KinitApplication.coreComponent.inject(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,5 +68,12 @@ class BackupQuestionAnswerFragment : BaseFragment() {
         val binding = DataBindingUtil.inflate<BackupQuestionAnswerLayoutBinding>(inflater, R.layout.backup_question_answer_layout, container, false)
         binding.model = model
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.let {
+            (it as BackupActions).getBackUpModel().onResumeFragment()
+        }
     }
 }

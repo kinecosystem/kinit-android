@@ -173,7 +173,7 @@
     <string name="rebackup_title">Are you sure you want to create a new back up?</string>
     <string name="reback_message">Keep in mind that by creating a new backup, the old one will be deleted.</string>
     <string name="back_up_your_kin">Back up your Kin</string>
-    <string name="back_up">Back up</string>
+    <string name="back_up">Backup</string>
     <string name="later">Later</string>
     <string name="backup_message_phone_lost">Now it’s possible to backup your Kin in case your phone is lost</string>
     <string name="your_kin_is_really_rolling_in">Your Kin is really rolling in</string>

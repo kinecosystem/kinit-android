@@ -5,6 +5,8 @@ import android.support.annotation.StringRes
 import android.text.format.DateUtils
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
@@ -27,9 +29,11 @@ class BackupAlertManager(val context: Context) {
     @Inject
     lateinit var dataStoreProvider: DataStoreProvider
 
-    private var dataStore: DataStore
+    @Inject
+    lateinit var analytics: Analytics
 
-    var navigator: Navigator = Navigator(context)
+    private var dataStore: DataStore
+    private var navigator: Navigator = Navigator(context)
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -80,25 +84,27 @@ class BackupAlertManager(val context: Context) {
         if (alertType == BackupAlertType.None) return
         when (alertType) {
             BackupAlertType.BackupNagImmediate -> {
-                showPositiveBackupNag(R.string.back_up_your_kin, R.string.backup_message_phone_lost)
+                showPositiveBackupNag(R.string.back_up_your_kin, R.string.backup_message_phone_lost, "Day 1")
             }
             BackupAlertType.BackupNagWeek -> {
-                showPositiveBackupNag(R.string.your_kin_is_really_rolling_in, R.string.backup_message_safe)
+                showPositiveBackupNag(R.string.your_kin_is_really_rolling_in, R.string.backup_message_safe,"Day 7")
             }
             BackupAlertType.BackupNag2Weeks -> {
-                showPositiveBackupNag(R.string.we_care_about_your_kin, R.string.backup_message_easy)
+                showPositiveBackupNag(R.string.we_care_about_your_kin, R.string.backup_message_easy, "Day 14")
             }
             BackupAlertType.BackupNagMonth -> {
-                showPositiveBackupNag(R.string.knock_knock, R.string.backup_message_today)
+                showPositiveBackupNag(R.string.knock_knock, R.string.backup_message_today,"Day 30")
             }
         }
         dataStore.putBoolean(alertType.name, true)
         dataStore.putLong(LAST_SEEN_NAG_ALARM, System.currentTimeMillis())
     }
 
-    private fun showPositiveBackupNag(@StringRes title: Int, @StringRes message: Int) {
-        AlertManager.showPositiveAlert(context, R.string.backup_now, R.string.backup_info, R.string.back, {
+    private fun showPositiveBackupNag(@StringRes title: Int, @StringRes message: Int, eventParam:String) {
+        AlertManager.showPositiveAlert(context, title, message, R.string.back_up, {
             navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
+            analytics.logEvent(Events.Analytics.ClickBackupButtonOnBackupNotificationPopup(eventParam))
         }, R.string.cancel, {})
+        analytics.logEvent(Events.Analytics.ViewBackupNotificationPopup(eventParam))
     }
 }

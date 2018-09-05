@@ -40,4 +40,11 @@ class WelcomeBackupFragment : Fragment() {
         }
         return inflater.inflate(R.layout.backup_welcome_layout, container, false)
     }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.let {
+            (it as BackupActions).getBackUpModel().onResumeFragment()
+        }
+    }
 }

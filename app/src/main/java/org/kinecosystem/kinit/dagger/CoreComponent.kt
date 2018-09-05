@@ -11,6 +11,9 @@ import org.kinecosystem.kinit.view.SplashActivity
 import org.kinecosystem.kinit.view.TabsAdapter
 import org.kinecosystem.kinit.view.adapter.CouponsListAdapter
 import org.kinecosystem.kinit.view.adapter.TransactionsListAdapter
+import org.kinecosystem.kinit.view.backup.BackupQRCodeFragment
+import org.kinecosystem.kinit.view.backup.BackupQuestionAnswerFragment
+import org.kinecosystem.kinit.view.backup.BackupSummaryFragment
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletErrorFragment
 import org.kinecosystem.kinit.view.createWallet.CreateWalletFragment
@@ -98,4 +101,7 @@ interface CoreComponent {
     fun inject(restoreWalletIntroFragment: RestoreWalletIntroFragment)
     fun inject(restoreWalletWelcomebackFragment: RestoreWalletWelcomebackFragment)
     fun inject(restoreWalletAnswerHintsFragment: RestoreWalletAnswerHintsFragment)
+    fun inject(backupQuestionAnswerFragment: BackupQuestionAnswerFragment)
+    fun inject(backupQRCodeFragment: BackupQRCodeFragment)
+    fun inject(backupSummaryFragment: BackupSummaryFragment)
 }
