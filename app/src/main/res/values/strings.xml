@@ -184,13 +184,12 @@
     <string name="backup_message_today">It’s your Kin. It wants to be kept safe. Back it up today.</string>
     <string name="create_new_wallet">Create new wallet</string>
     <string name="restore">Restore</string>
-    <string name="wallet_identified_string">We have identified your wallet.\nWhat would you like to do?</string>
     <string name="security_questions_title">Security Questions</string>
     <string name="security_questions_desc">Answer your security questions to unlock your account</string>
-    <string name="create_new_wallet_warning_title">Create a new wallet?</string>
-    <string name="create_new_wallet_warning_msg">You are about to create a new Wallet.\nAre you sure?</string>
-    <string name="create_new_wallet_warning_positive">Yes! Create new wallet</string>
-    <string name="create_new_wallet_warning_negative">Cancel</string>
+    <string name="create_new_wallet_warning_title">We already know each other!</string>
+    <string name="create_new_wallet_warning_msg">Creating a new wallet will erase your balance, are you sure you don’t want to restore?</string>
+    <string name="create_new_wallet_warning_positive">Continue</string>
+    <string name="create_new_wallet_warning_negative">Back</string>
     <string name="network_error_message_title">No internet connection</string>
     <string name="network_error_message_msg">Please check your connection and try again</string>
     <string name="network_error_message_positive">Back</string>

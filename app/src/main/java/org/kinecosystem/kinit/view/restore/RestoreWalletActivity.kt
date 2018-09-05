@@ -164,6 +164,8 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
 
         if (negativeString != null)
             builder.setNegativeButton(negativeString, listener)
+        else
+            builder.setCancelable(false)
 
         builder.show()
     }
