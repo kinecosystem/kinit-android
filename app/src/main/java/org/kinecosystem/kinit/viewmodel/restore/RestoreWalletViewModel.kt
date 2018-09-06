@@ -78,7 +78,7 @@ class RestoreWalletViewModel {
             4 -> RestoreState.Complete
             else -> {
                 restart()
-                RestoreState.Intro
+                RestoreState.Welcomeback
             }
         }
     }
