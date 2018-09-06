@@ -74,10 +74,13 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         val issuer = if (type == Type.Main) KIN_ISSUER_MAIN else KIN_ISSUER_STAGE
 
         kinClient = KinClient(context, KinitServiceProvider(providerUrl, networkId, issuer))
-        if (!kinClient.hasAccount()) {
-            kinClient.addAccount()
+        if (kinClient.hasAccount()) {
+            account = kinClient.getAccount(kinClient.accountCount-1)
         }
-        account = kinClient.getAccount(0)
+        else {
+            account = kinClient.addAccount()
+        }
+
         userRepo.userInfo.publicAddress = account.publicAddress!!
     }
 
