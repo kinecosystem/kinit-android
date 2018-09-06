@@ -21,9 +21,9 @@ class SecurityQuestionAnswerView: ConstraintLayout {
         KinitApplication.coreComponent.inject(this)
     }
 
-    constructor(context: Context, model: RestoreWalletViewModel, questionIndex: Int, backupQuestionIndex: Int) : super(context) {
+    constructor(context: Context, model: RestoreWalletViewModel, questionIndex: Int, backupQuestionId: Int) : super(context) {
         this.model = model
-        this.backupQuestion = model.getHintQuestionById(backupQuestionIndex)
+        this.backupQuestion = model.getHintQuestionById(backupQuestionId)
         this.index = questionIndex
         init(context)
     }
