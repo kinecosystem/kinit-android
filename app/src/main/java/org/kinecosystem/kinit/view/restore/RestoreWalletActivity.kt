@@ -153,6 +153,10 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
                 title = getString(R.string.restore_error_title)
                 message = getString(R.string.restore_error_msg)
             }
+            RestoreWalletActivityMessages.RESTORE_SERVER_ERROR -> {
+                title = getString(R.string.general_problem_title)
+                message = getString(R.string.general_problem_body)
+            }
         }
         builder.setTitle(title)
                 .setMessage(message)

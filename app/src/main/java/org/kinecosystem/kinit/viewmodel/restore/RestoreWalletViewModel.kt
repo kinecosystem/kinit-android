@@ -53,19 +53,20 @@ class RestoreWalletViewModel {
                     walletService.restoreWallet(restoredAccount)
                     listener?.onSuccess()
                 }
+
                 override fun onError(errorCode: Int) {
                     answersSubmitted.set(false)
-                    listener?.onError(RestoreWalletActivityMessages.NETWORK_ERROR)
+                    listener?.onError(RestoreWalletActivityMessages.RESTORE_SERVER_ERROR)
                 }
             })
         }
     }
 
-    fun onBack(){
+    fun onBack() {
         step--
     }
 
-    fun onNext(){
+    fun onNext() {
         step++
     }
 
@@ -125,5 +126,6 @@ enum class RestoreWalletActivityMessages {
     CREATE_WALLET_WARNING,
     QR_ERROR,
     NETWORK_ERROR,
-    RESTORE_ERROR
+    RESTORE_ERROR,
+    RESTORE_SERVER_ERROR
 }
