@@ -93,9 +93,9 @@ class RestoreWalletViewModel {
         this.qrCode = qrCode
     }
 
-    fun setPassphrase(id: Int, str: String?) {
+    fun setPassphrase(index: Int, str: String) {
         passphrase = ""
-        answers[id] = str.toString().replace(" ", "")
+        answers[index] = str
         for (answer in answers)
             passphrase += answer
 
