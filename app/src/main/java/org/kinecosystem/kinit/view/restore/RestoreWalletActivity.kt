@@ -27,13 +27,6 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
 
     @Inject
     lateinit var userRepository: UserRepository
-
-    private val welcomebackFragment: RestoreWalletWelcomebackFragment by lazy { RestoreWalletWelcomebackFragment.newInstance() }
-    private val introFragment: RestoreWalletIntroFragment by lazy { RestoreWalletIntroFragment.newInstance() }
-    private val scannerFragment: RestoreWalletBarcodeScannerFragment by lazy { RestoreWalletBarcodeScannerFragment.newInstance() }
-    private val answerHintsFragment: RestoreWalletAnswerHintsFragment by lazy { RestoreWalletAnswerHintsFragment.newInstance() }
-    private val onboaridngCompleteFragment: OnboardingCompleteFragment by lazy { OnboardingCompleteFragment.newInstance() }
-
     private var model: RestoreWalletViewModel = RestoreWalletViewModel()
 
     override fun onError(msg: RestoreWalletActivityMessages?) {
@@ -59,15 +52,14 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
     }
 
     override fun moveBack() {
-        if (getFragment() != onboaridngCompleteFragment && model.getState() != RestoreState.Welcomeback) {
-            model.onBack()
-            replaceFragment(getFragment(), true, false)
-        }
+        model.onBack()
+        replaceFragment(getFragment(), true, false)
     }
 
     override fun onBackPressed() {
-        if (getFragment() != RestoreState.Complete)
+        if (model.getState() != RestoreState.Welcomeback)
             moveBack()
+        else finish()
     }
 
     override fun beforeSuper() {
@@ -80,9 +72,10 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
 
     override fun getFragment(): Fragment {
         return when (model.getState()) {
-            RestoreState.Welcomeback -> welcomebackFragment
-            RestoreState.Intro -> introFragment
+            RestoreState.Welcomeback -> RestoreWalletWelcomebackFragment.newInstance()
+            RestoreState.Intro -> RestoreWalletIntroFragment.newInstance()
             RestoreState.QrScan -> {
+                val scannerFragment = RestoreWalletBarcodeScannerFragment.newInstance()
                 scannerFragment.listener = object : RestoreWalletBarcodeScannerFragment.BarcodeScannerListener {
                     override fun onQrDecoded(qrCode: String) {
                         scannerFragment.listener = null
@@ -92,8 +85,9 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
                 }
                 scannerFragment
             }
-            RestoreState.SecurityQuestions -> answerHintsFragment
+            RestoreState.SecurityQuestions -> RestoreWalletAnswerHintsFragment.newInstance()
             RestoreState.Complete -> {
+                val onboaridngCompleteFragment = OnboardingCompleteFragment.newInstance()
                 onboaridngCompleteFragment.listener = object : OnboardingCompleteFragment.AfterAnimationListener {
                     override fun onAnimationEnd() {
                         moveToMainScreen()
@@ -179,7 +173,7 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (getFragment() == introFragment) {
+        if (model.getState() == RestoreState.Intro) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 moveToNextScreen()
             }
