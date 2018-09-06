@@ -70,7 +70,7 @@ class RestoreWalletAnswerHintsFragment : BaseFragment() {
         activity?.let {
             val hints = model.userRepository.restoreHints
             for (index in hints.indices) {
-                val singleHintView = SecurityQuestionAnswerView(it, model, index, hints[index])
+                val singleHintView = SecurityQuestionAnswerView(it, model, index, hints[index].toInt())
                 answers_wrapper?.addView(singleHintView, index)
             }
         }

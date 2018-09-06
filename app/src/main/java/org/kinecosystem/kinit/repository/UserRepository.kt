@@ -86,9 +86,16 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(token) = userCache.putString(AUTH_TOKEN, token)
         get() = userCache.getString(AUTH_TOKEN, "")
 
-    var restoreHints: List<Int>
-        set(hints) = userCache.putStringList(RESTORE_HINTS, hints.map { it -> it.toString() })
-        get() = userCache.getStringList(RESTORE_HINTS, listOf()).map { it -> it.toInt() }
+    var restoreHints: List<String>
+        set(hints) {
+            val hintsString = hints.joinToString(separator = ";")
+            userCache.putString(RESTORE_HINTS, hintsString)
+        }
+        get() {
+            val hintsString = userCache.getString(RESTORE_HINTS, "")
+            val hintsList = hintsString.split(';')
+            return hintsList
+        }
 
     var backUpHints: List<BackupApi.BackUpQuestion> = listOf()
 
@@ -101,7 +108,6 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
 
         if (userId.isEmpty()) {
             userId = UUID.randomUUID().toString()
-            Log.d("UserRepository", "### user id $userId")
             userCache.putString(USER_ID_KEY, userId)
         }
         userInfo = UserInfo(userId)
