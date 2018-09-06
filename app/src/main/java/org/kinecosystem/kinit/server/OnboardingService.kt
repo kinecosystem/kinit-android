@@ -97,9 +97,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 })
     }
 
-    fun isValidNumber(phoneNumber:String) : Boolean {
-        for(prefix in blackList){
-            if(phoneNumber.startsWith(prefix)){
+    fun isValidNumber(phoneNumber: String): Boolean {
+        for (prefix in blackList) {
+            if (phoneNumber.startsWith(prefix)) {
                 return false
             }
         }
@@ -143,6 +143,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                 taskService.retrieveNextTask()
                                 callback.onSuccess()
                             }
+                        } else {
+                            callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                         }
                     }
                 }
@@ -153,7 +155,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         appLaunchApi.blacklistAreaCodes().enqueue(object : Callback<OnboardingApi.BlackListAreaCode> {
             override fun onFailure(call: Call<OnboardingApi.BlackListAreaCode>, t: Throwable) {
                 blackList = listOf()
-                if(!userRepo.isRegistered) {
+                if (!userRepo.isRegistered) {
                     callRegister(BuildConfig.VERSION_NAME)
                 }
             }
