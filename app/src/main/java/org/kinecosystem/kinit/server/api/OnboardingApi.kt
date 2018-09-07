@@ -33,7 +33,7 @@ interface OnboardingApi {
                               @SerializedName("config") val config: Config)
 
     data class HintsResponse(@SerializedName("status") val status: String,
-                             @SerializedName("hints") val hints: List<Int>)
+                             @SerializedName("hints") val hints: ArrayList<String>)
 
     data class BlackListAreaCode(@SerializedName("areacodes") val list: List<String>)
 
