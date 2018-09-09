@@ -93,7 +93,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         }
         get() {
             val hintsString = userCache.getString(RESTORE_HINTS, "")
-            val hintsList = hintsString.split(';')
+            val hintsList = if (hintsString.isBlank()) listOf() else hintsString.split(';')
             return hintsList
         }
 
