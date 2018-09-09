@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.server.api.OnboardingApi
 import org.kinecosystem.kinit.server.api.OnboardingApi.StatusResponse
 import org.kinecosystem.kinit.server.api.PhoneAuthenticationApi
 import org.kinecosystem.kinit.util.DeviceUtils
-import org.kinecosystem.kinit.util.NetworkUtils
+import org.kinecosystem.kinit.util.GeneralUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,10 +27,10 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
     private val applicationContext: Context = context.applicationContext
     private var blackList = listOf<String>()
-    var isInBlackList: Boolean = true
+    var isInBlackList: Boolean = false
 
     fun appLaunch() {
-        if (!NetworkUtils.isConnected(applicationContext))
+        if (!GeneralUtils.isConnected(applicationContext))
             return
         processRegistration()
         if (userRepo.isRegistered) {
@@ -44,25 +44,26 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
     fun sendAuthentication(token: String, callback: OperationCompletionCallback) {
 
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
             return
         }
 
         phoneAuthenticationApi.updatePhoneAuthToken(userRepo.userId(),
                 PhoneAuthenticationApi.AuthInfo(token)).enqueue(
-                object : Callback<StatusResponse> {
-                    override fun onResponse(call: Call<StatusResponse>,
-                                            response: Response<StatusResponse>) {
+                object : Callback<OnboardingApi.HintsResponse> {
+                    override fun onResponse(call: Call<OnboardingApi.HintsResponse>,
+                                            response: Response<OnboardingApi.HintsResponse>) {
                         if (response.isSuccessful) {
                             taskService.retrieveNextTask()
+                            userRepo.restoreHints = response.body()?.hints ?: listOf()
                             callback.onSuccess()
                         } else {
                             callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                         }
                     }
 
-                    override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<OnboardingApi.HintsResponse>, t: Throwable) {
                         callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                     }
                 })
@@ -96,9 +97,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 })
     }
 
-    fun isValidNumber(phoneNumber:String) : Boolean {
-        for(prefix in blackList){
-            if(phoneNumber.startsWith(prefix)){
+    fun isValidNumber(phoneNumber: String): Boolean {
+        for (prefix in blackList) {
+            if (phoneNumber.startsWith(prefix)) {
                 return false
             }
         }
@@ -125,12 +126,36 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 })
     }
 
+    fun restoreAccount(address: String, callback: OperationCompletionCallback) {
+        val call = appLaunchApi.restoreAccount(userRepo.userId(), OnboardingApi.AccountAddress(address))
+        call.enqueue(
+                object : Callback<OnboardingApi.AccountAddressResponds> {
+                    override fun onFailure(call: Call<OnboardingApi.AccountAddressResponds>, t: Throwable) {
+                        callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                    }
+
+                    override fun onResponse(call: Call<OnboardingApi.AccountAddressResponds>, response: Response<OnboardingApi.AccountAddressResponds>) {
+                        if (response.isSuccessful) {
+                            if (response.body()?.userId.isNullOrEmpty()) {
+                                callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                            } else {
+                                userRepo.updateUserId(response.body()?.userId ?: "")
+                                taskService.retrieveNextTask()
+                                callback.onSuccess()
+                            }
+                        } else {
+                            callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                        }
+                    }
+                }
+        )
+    }
+
     private fun processRegistration() {
         appLaunchApi.blacklistAreaCodes().enqueue(object : Callback<OnboardingApi.BlackListAreaCode> {
             override fun onFailure(call: Call<OnboardingApi.BlackListAreaCode>, t: Throwable) {
                 blackList = listOf()
-                isInBlackList = false
-                if(!userRepo.isRegistered) {
+                if (!userRepo.isRegistered) {
                     callRegister(BuildConfig.VERSION_NAME)
                 }
             }
@@ -139,11 +164,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 if (response.isSuccessful) {
                     response.body()?.list?.let {
                         blackList = it
-                        if (!blackList.contains(DeviceUtils.getLocalDialPrefix(applicationContext))) {
-                            isInBlackList = false
-                            if(!userRepo.isRegistered) {
-                                callRegister(BuildConfig.VERSION_NAME)
-                            }
+                        isInBlackList = blackList.contains(DeviceUtils.getLocalDialPrefix(applicationContext))
+                        if (!isInBlackList && !userRepo.isRegistered) {
+                            callRegister(BuildConfig.VERSION_NAME)
                         }
                     }
                 }
@@ -173,10 +196,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     updateToken()
                     analytics.logEvent(UserRegistered())
                     userRepo.isRegistered = true
-                    wallet.initKinWallet()
-                    if (!userRepo.isPhoneVerificationEnabled) {
-                        taskService.retrieveNextTask()
-                    }
                 } else {
                     Log.d("OnboardingService", "### register onResponse NOT SUCCESSFULL OR null: $response")
                     analytics.logEvent(Events.BILog.UserRegistrationFailed("response: $response"))
@@ -195,6 +214,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         userRepo.tos = config?.tos ?: ""
         userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled ?: false
         userRepo.isP2pEnabled = config?.p2p_enabled ?: false
+        userRepo.isBackupNagAlertEnabled = config?.backupNagEnabled ?: false
         userRepo.p2pMaxKin = config?.p2p_max_kin ?: 0
         userRepo.p2pMinKin = config?.p2p_min_kin ?: 0
         userRepo.p2pMinTasks = config?.p2p_min_tasks ?: 0
@@ -209,7 +229,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                             response: Response<StatusResponse>?) {
                         if (response != null && response.isSuccessful) {
                             updateConfig(response)
-                            wallet.initKinWallet()
                             Log.d("OnboardingService",
                                     "appLaunch onResponse: $response" + " config " + response?.body()?.config)
                         }

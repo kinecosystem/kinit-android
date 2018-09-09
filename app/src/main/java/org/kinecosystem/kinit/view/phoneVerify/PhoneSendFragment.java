@@ -16,7 +16,7 @@ import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
-import org.kinecosystem.kinit.util.PhoneUtils;
+import org.kinecosystem.kinit.util.DeviceUtils;
 import org.kinecosystem.kinit.view.BaseFragment;
 
 import javax.inject.Inject;
@@ -73,7 +73,7 @@ public class PhoneSendFragment extends BaseFragment {
             back.setOnClickListener(view13 -> actions.onBackPressed(0));
         }
         clear.setOnClickListener(view12 -> phone.setText(""));
-        String countryZipCode = PhoneUtils.getLocalDialPrefix(getActivity());
+        String countryZipCode = DeviceUtils.Companion.getLocalDialPrefix(getActivity());
         if (!countryZipCode.isEmpty()) {
             prefix.setText(countryZipCode);
             prefix.setKeyListener(null);

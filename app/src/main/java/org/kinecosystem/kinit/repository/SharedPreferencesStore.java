@@ -128,4 +128,5 @@ public class SharedPreferencesStore implements DataStore {
         SharedPreferences sp = applicationContext.getSharedPreferences(storageSection, Context.MODE_PRIVATE);
         return sp.getAll();
     }
+
 }

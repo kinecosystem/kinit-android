@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.backup.BackupModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/back" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="17dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/confirm"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/backup_title_size"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="17dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif"
+            android:clickable="true"
+            android:text="@string/check_email"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/small_text_size"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <TextView
+            android:id="@+id/restriction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/email_warning"
+            android:textColor="@color/grey"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/shadow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/icon" />
+
+        <TextView
+            android:id="@+id/next"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/auth_phone_next_height"
+            android:clickable="@{model.isClickable()}"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="@drawable/auth_next_font_color"
+            android:textSize="@dimen/next_text_size"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/grey_dark_medium"
+            app:layout_constraintBottom_toTopOf="@+id/next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/restriction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle"
+            app:layout_constraintVertical_chainStyle="spread"
+            app:srcCompat="@drawable/confirm_email" />
+
+        <LinearLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="123dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/backBtn"
+            app:layout_constraintTop_toTopOf="@+id/backBtn">
+
+
+            <View
+                android:id="@+id/progress1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/progress_step_height"
+                android:layout_marginRight="@dimen/progress_steps_padding"
+                android:layout_weight="1"
+                android:background="@drawable/backup_progress_gradient" />
+
+            <View
+                android:id="@+id/progress2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/progress_step_height"
+                android:layout_marginRight="@dimen/progress_steps_padding"
+                android:layout_weight="1"
+                android:background="@drawable/backup_progress_gradient" />
+
+            <View
+                android:id="@+id/progress3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/progress_step_height"
+                android:layout_marginRight="@dimen/progress_steps_padding"
+                android:layout_weight="1"
+                android:background="@drawable/backup_progress_gradient" />
+
+            <View
+                android:id="@+id/progress4"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/progress_step_height"
+                android:layout_marginRight="@dimen/progress_steps_padding"
+                android:layout_weight="1"
+                android:background="@drawable/backup_progress_grey" />
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

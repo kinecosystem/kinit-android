@@ -6,7 +6,5 @@ public interface PhoneVerificationUIActions {
 
     void onSendCode(String code);
 
-    void onVerificationComplete();
-
     void onBackPressed(int fromPage);
 }

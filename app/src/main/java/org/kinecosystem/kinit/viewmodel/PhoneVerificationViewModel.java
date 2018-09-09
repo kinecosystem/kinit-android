@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.viewmodel;
 
 import android.app.Activity;
 import android.util.Log;
+
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,11 +10,16 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import java.util.concurrent.TimeUnit;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
+import org.kinecosystem.kinit.navigation.Navigator;
+import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.server.OperationCompletionCallback;
 import org.kinecosystem.kinit.server.ServicesProvider;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 public class PhoneVerificationViewModel {
 
@@ -27,6 +33,8 @@ public class PhoneVerificationViewModel {
     public static final String TAG = PhoneVerificationViewModel.class.getSimpleName();
     @Inject
     ServicesProvider servicesProvider;
+    @Inject
+    UserRepository userRepository;
     private OperationCompletionCallback verificationCallback;
 
     private FirebaseAuth auth;
@@ -42,15 +50,17 @@ public class PhoneVerificationViewModel {
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-            if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                verificationCallback.onError(PHONE_VERIF_ERROR_INVALID_PHONE_CREDENTIALS);
-                Log.e(TAG, "invalid code FirebaseAuthInvalidCredentialsException");
-            } else if (e instanceof FirebaseTooManyRequestsException) {
-                verificationCallback.onError(PHONE_VERIF_ERROR_SMS_QUOTA_FOR_PROJECT_EXCEEDED);
-                Log.e(TAG, "reached sms quota limit FirebaseTooManyRequestsException");
+            if (verificationCallback != null) {
+                if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                    verificationCallback.onError(PHONE_VERIF_ERROR_INVALID_PHONE_CREDENTIALS);
+                    Log.e(TAG, "invalid code FirebaseAuthInvalidCredentialsException");
+                } else if (e instanceof FirebaseTooManyRequestsException) {
+                    verificationCallback.onError(PHONE_VERIF_ERROR_SMS_QUOTA_FOR_PROJECT_EXCEEDED);
+                    Log.e(TAG, "reached sms quota limit FirebaseTooManyRequestsException");
+                }
+                verificationCallback.onError(PHONE_VERIF_ERROR_VERIFICATION_FAILED);
+                Log.e(TAG, "Exception occurred while verifying code " + e.getMessage());
             }
-            verificationCallback.onError(PHONE_VERIF_ERROR_VERIFICATION_FAILED);
-            Log.e(TAG, "Exception occurred while verifying code " + e.getMessage());
         }
 
         @Override
@@ -63,7 +73,6 @@ public class PhoneVerificationViewModel {
         }
     };
 
-
     public PhoneVerificationViewModel(Activity activity,
         OperationCompletionCallback actions) {
         KinitApplication.coreComponent.inject(this);
@@ -72,13 +81,17 @@ public class PhoneVerificationViewModel {
         this.verificationCallback = actions;
     }
 
+    public void removeListener() {
+        this.verificationCallback = null;
+    }
+
     public boolean startPhoneNumberVerification(String phoneNumber) {
         if (servicesProvider.getOnBoardingService().isValidNumber(phoneNumber)) {
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
                     phoneNumber,        // Phone number to verify
                     60,                 // Timeout duration
                     TimeUnit.SECONDS,   // Unit of timeout
-                    activity,               // Activity (for callback binding)
+                    activity,               // Activity (for listener binding)
                     callbacks);        // OnVerificationStateChangedCallbacks
             return true;
         }
@@ -90,7 +103,9 @@ public class PhoneVerificationViewModel {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             signInWithPhoneAuthCredential(credential);
         } else {
-            verificationCallback.onError(PHONE_VERIF_ERROR_WRONG_CODE);
+            if (verificationCallback != null) {
+                verificationCallback.onError(PHONE_VERIF_ERROR_WRONG_CODE);
+            }
         }
     }
 
@@ -100,7 +115,7 @@ public class PhoneVerificationViewModel {
                 if (task.isSuccessful()) {
                     FirebaseUser user = task.getResult().getUser();
                     user.getIdToken(true).addOnCompleteListener(tokenRequest -> {
-                        if (tokenRequest.isComplete()) {
+                        if (tokenRequest.isComplete() && verificationCallback != null) {
                             servicesProvider.getOnBoardingService()
                                 .sendAuthentication(tokenRequest.getResult().getToken(),
                                     verificationCallback);
@@ -109,14 +124,23 @@ public class PhoneVerificationViewModel {
                         }
                     });
                 } else {
-                    if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                    if (task.getException() instanceof FirebaseAuthInvalidCredentialsException && verificationCallback != null) {
                         verificationCallback.onError(PHONE_VERIF_ERROR_WRONG_CODE);
                     } else {
                         Log.e(TAG, "Can't sign in with phone, exception " + task.getException() + ", message " + task
                             .getException().getMessage());
-                        verificationCallback.onError(PHONE_VERIF_ERROR_OTHER);
+                        if (verificationCallback != null) {
+                            verificationCallback.onError(PHONE_VERIF_ERROR_OTHER);
+                        }
                     }
                 }
             });
+    }
+
+    public Navigator.Destination nextActivity() {
+        if (!userRepository.getRestoreHints().isEmpty()) {
+            return Navigator.Destination.WALLET_RESTORE;
+        }
+        return Navigator.Destination.WALLET_CREATE;
     }
 }

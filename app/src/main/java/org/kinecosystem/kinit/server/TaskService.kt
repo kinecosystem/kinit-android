@@ -3,22 +3,23 @@ package org.kinecosystem.kinit.server
 import android.content.Context
 import android.util.Log
 import com.google.gson.JsonElement
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isValid
 import org.kinecosystem.kinit.model.user.UserInfo
-import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.TasksApi
-import org.kinecosystem.kinit.util.NetworkUtils
+import org.kinecosystem.kinit.util.GeneralUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class TaskService(context: Context, api: TasksApi,
                   val tasksRepo: TasksRepository,
-                  private val userId: String, private val walletService: Wallet) {
+                  private val userRepo: UserRepository, private val walletService: Wallet) {
 
     private val tasksApi: TasksApi = api
     private val applicationContext: Context = context.applicationContext
@@ -28,7 +29,7 @@ class TaskService(context: Context, api: TasksApi,
             task: Task?,
             chosenAnswers: List<ChosenAnswers>) {
 
-        if (!NetworkUtils.isConnected(applicationContext)) {
+        if (!GeneralUtils.isConnected(applicationContext)) {
             tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
             return
         }
@@ -51,7 +52,7 @@ class TaskService(context: Context, api: TasksApi,
     }
 
     fun retrieveTruexActivity(agent: String, callback: OperationResultCallback<JsonElement?>) {
-        tasksApi.truexActivity(userId, agent).enqueue(object : Callback<TasksApi.TrueXResponse> {
+        tasksApi.truexActivity(userRepo.userId(), agent).enqueue(object : Callback<TasksApi.TrueXResponse> {
             override fun onFailure(call: Call<TasksApi.TrueXResponse>?, t: Throwable?) {
                 callback.onError(0)
             }
@@ -69,7 +70,7 @@ class TaskService(context: Context, api: TasksApi,
 
     fun retrieveNextTask(callback: OperationResultCallback<Boolean>? = null) {
 
-        tasksApi.nextTasks(userId).enqueue(object : Callback<TasksApi.NextTasksResponse> {
+        tasksApi.nextTasks(userRepo.userId()).enqueue(object : Callback<TasksApi.NextTasksResponse> {
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
                                     response: Response<TasksApi.NextTasksResponse>?) {
 
@@ -108,7 +109,7 @@ class TaskService(context: Context, api: TasksApi,
     }
 
     private fun submitQuestionnaireAnswers(submitInfo: TasksApi.SubmitInfo) {
-        tasksApi.submitTaskResults(userId, submitInfo).enqueue(
+        tasksApi.submitTaskResults(userRepo.userId(), submitInfo).enqueue(
                 object : Callback<TasksApi.TaskSubmitResponse> {
                     override fun onResponse(call: Call<TasksApi.TaskSubmitResponse>?,
                                             response: Response<TasksApi.TaskSubmitResponse>?) {

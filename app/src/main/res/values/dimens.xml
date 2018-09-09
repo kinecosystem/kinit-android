@@ -8,6 +8,7 @@
     <dimen name="question_size">20sp</dimen>
     <dimen name="question_size_small">17sp</dimen>
     <dimen name="answer_gap">19dp</dimen>
+    <dimen name="small_text_size">16sp</dimen>
     <dimen name="answer_corner">25dp</dimen>
     <dimen name="spend_place_holder_corner">8dp</dimen>
     <dimen name="tab_text_size">10sp</dimen>
@@ -33,4 +34,9 @@
     <dimen name="pre_earn_start_padding">24dp</dimen>
     <dimen name="pageviewer_padding_bottom">1dp</dimen>
     <dimen name="bottom_navigation_delim_height">1dp</dimen>
+    <dimen name="progress_steps_padding">15dp</dimen>
+    <dimen name="progress_step_height">5dp</dimen>
+    <dimen name="backup_title_size">22sp</dimen>
+    <dimen name="next_text_size">18sp</dimen>
+    <dimen name="min_touch_size">48dp</dimen>
 </resources>

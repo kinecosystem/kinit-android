@@ -11,6 +11,7 @@
     <color name="balance_text_color">#FFF</color>
     <color name="question_text_color">#047cfc</color>
     <color name="white">#FFF</color>
+    <color name="blue">#047cfc</color>
     <color name="answer_stroke">#d2d7e1</color>
     <color name="blue_light">#0e6ddc</color>
     <color name="blue_sky">#48a1fc</color>
@@ -25,6 +26,7 @@
     <color name="answer_font_color">#7884a5</color>
     <color name="bright_blue">#1693f3</color>
     <color name="grey">#7884a5</color>
+    <color name="qr_overlay_gray">#cc384056</color>
     <color name="answer_font_color_selected">@color/white</color>
     <color name="status_bar_color">#047cfc</color>
     <color name="question_gray_text_color">#8b97b4</color>

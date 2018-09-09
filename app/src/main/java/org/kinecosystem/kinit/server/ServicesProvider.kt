@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.*
-import org.kinecosystem.kinit.util.NetworkUtils
+import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.Scheduler
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -35,6 +35,7 @@ class ServicesProvider {
     val taskService: TaskService
     val walletService: Wallet
     val offerService: OfferService
+    val backupService: BackupService
 
     private val applicationContext: Context
 
@@ -47,14 +48,14 @@ class ServicesProvider {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         val client = OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS).writeTimeout(20, TimeUnit.SECONDS)
-            .addInterceptor(interceptor).build()
+                .addInterceptor(interceptor).build()
 
         val baseUrl = if (BuildConfig.DEBUG) STAGE_BASE_URL else PROD_BASE_URL
         val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
         val onboardingApi = retrofit.create<OnboardingApi>(OnboardingApi::class.java)
         val walletApi = retrofit.create<WalletApi>(WalletApi::class.java)
@@ -64,16 +65,17 @@ class ServicesProvider {
                 onboardingApi, walletApi, scheduler)
         taskService = TaskService(applicationContext,
                 retrofit.create<TasksApi>(TasksApi::class.java),
-                tasksRepo, userRepo.userId(), walletService)
+                tasksRepo, userRepo, walletService)
         onBoardingService = OnboardingService(applicationContext,
                 retrofit.create<OnboardingApi>(OnboardingApi::class.java),
                 retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
                 userRepo, analytics, taskService, walletService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
-                userRepo.userId(), offerRepo, analytics, walletService, scheduler)
+                userRepo, offerRepo, analytics, walletService, scheduler)
+        backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))
     }
 
     fun isNetworkConnected(): Boolean {
-        return NetworkUtils.isConnected(applicationContext)
+        return GeneralUtils.isConnected(applicationContext)
     }
 }

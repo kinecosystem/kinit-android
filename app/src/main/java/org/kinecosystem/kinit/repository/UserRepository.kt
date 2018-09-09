@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.repository
 
 import android.util.Log
 import org.kinecosystem.kinit.model.user.UserInfo
+import org.kinecosystem.kinit.server.api.BackupApi
 import java.util.*
 
 
@@ -13,6 +14,8 @@ private const val FCM_TOKEN_SENT_KEY = "token_sent"
 private const val USER_CACHE_NAME = "kin.app.user"
 private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
+private const val BACKUP_NAG_ALERT_ENABLED = "BACKUP_NAG_ALERT_ENABLED"
+
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
 private const val FIRST_TIME_USER = "FIRST_TIME_USER"
 private const val P2P_MAX_KIN = "P2P_MAX_KIN"
@@ -20,6 +23,9 @@ private const val P2P_MIN_KIN = "P2P_MIN_KIN"
 private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
 private const val P2P_ENABLED = "P2P_ENABLED"
 private const val BACKED_UP = "BACKED_UP"
+private const val AUTH_TOKEN = "authToken"
+private const val RESTORE_HINTS = "RESTORE_HINTS"
+
 
 
 
@@ -50,11 +56,11 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
 
     var isPhoneVerificationEnabled: Boolean
         set(enable) = userCache.putBoolean(PHONE_VERIFICATION_ENABLED, enable)
-        get() = userCache.getBoolean(PHONE_VERIFICATION_ENABLED, false)
+        get() = userCache.getBoolean(PHONE_VERIFICATION_ENABLED, true)
 
     var isFirstTimeUser: Boolean
         set(firstTime) = userCache.putBoolean(FIRST_TIME_USER, firstTime)
-        get() = userCache.getBoolean(FIRST_TIME_USER, false)
+        get() = userCache.getBoolean(FIRST_TIME_USER, true)
 
     var p2pMaxKin: Int
         set(max) = userCache.putInt(P2P_MAX_KIN, max)
@@ -72,24 +78,50 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(enable) = userCache.putBoolean(P2P_ENABLED, enable)
         get() = userCache.getBoolean(P2P_ENABLED, false)
 
-
     var isBackedup: Boolean
         set(backed) = userCache.putBoolean(BACKED_UP, backed)
         get() = userCache.getBoolean(BACKED_UP, false)
+
+    var authToken: String
+        set(token) = userCache.putString(AUTH_TOKEN, token)
+        get() = userCache.getString(AUTH_TOKEN, "")
+
+    var restoreHints: List<String>
+        set(hints) {
+            val hintsString = hints.joinToString(separator = ";")
+            userCache.putString(RESTORE_HINTS, hintsString)
+        }
+        get() {
+            val hintsString = userCache.getString(RESTORE_HINTS, "")
+            val hintsList = hintsString.split(';')
+            return hintsList
+        }
+
+    var backUpHints: List<BackupApi.BackUpQuestion> = listOf()
+
+    var isBackupNagAlertEnabled: Boolean
+        set(enabled) = userCache.putBoolean(BACKUP_NAG_ALERT_ENABLED, enabled)
+        get() = userCache.getBoolean(BACKUP_NAG_ALERT_ENABLED, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")
 
         if (userId.isEmpty()) {
             userId = UUID.randomUUID().toString()
-            Log.d("UserRepository", "### user id $userId")
             userCache.putString(USER_ID_KEY, userId)
         }
         userInfo = UserInfo(userId)
     }
 
+    fun updateUserId(userId: String) {
+        userCache.putString(USER_ID_KEY, userId)
+        userInfo = UserInfo(userId)
+        Log.d("UserRepository", "### user id $userId")
+    }
+
 
     fun userId(): String {
+        Log.d("UserRepository", "### user id ${userInfo.userId}")
         return userInfo.userId
     }
 }
