@@ -24,7 +24,7 @@ import javax.inject.Inject
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        TASK, MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE
+        TASK, MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, INFO_TAB
     }
 
     @Inject
@@ -55,6 +55,9 @@ class Navigator(private val context: Context) {
              Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context))
              Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context))
              Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context))
+             Destination.INFO_TAB -> {
+                 navigateToActivity(MainActivity.getIntent(context, 3))
+             }
              Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context))
         }
     }

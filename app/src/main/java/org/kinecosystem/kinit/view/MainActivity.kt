@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -33,8 +34,10 @@ class MainActivity : BaseActivity(), PageSelectionListener {
         private const val PRE_ANIMATION_DURATION = 500L
         private const val PRE_ANIMATION_WAIT = 2500L
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
+        fun getIntent(context: Context, tabIndex: Int = 0): Intent {
+            var intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(SELECTED_TAB_INDEX_KEY, tabIndex)
+            return intent
         }
     }
 
@@ -51,14 +54,20 @@ class MainActivity : BaseActivity(), PageSelectionListener {
     @Inject
     lateinit var taskRepository: TasksRepository
 
+    override fun onCreateView(name: String?, context: Context?, attrs: AttributeSet?): View {
+        return super.onCreateView(name, context, attrs)
+        navigation.selectedTabIndex = 3
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
-        val selectedTabIndex = savedInstanceState?.getInt(SELECTED_TAB_INDEX_KEY, 0) ?: 0
+        val selectedTabIndex = savedInstanceState?.getInt(SELECTED_TAB_INDEX_KEY, 0) ?: intent?.extras?.getInt(SELECTED_TAB_INDEX_KEY, 0) ?: 0
         setContentView(R.layout.main_activity)
 
-        navigation.selectedTabIndex = selectedTabIndex
         view_pager.adapter = TabsAdapter(this)
+        navigation.selectedTabIndex = selectedTabIndex
+
 
         if (shouldShowPreEarnAnimation()) {
             disablePageSelection()
