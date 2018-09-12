@@ -295,28 +295,28 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.setUserProperty(Events.UserProperties.BALANCE, balance)
     }
 
-    fun logP2pTransactionCompleted(price: Int, orderId: String) {
+    fun logP2pTransactionCompleted(price: Int, txHash: String) {
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                orderId, TRANSACTION_TYPE_P2P))
+                txHash, TRANSACTION_TYPE_P2P))
     }
 
-    fun logSpendTransactionCompleted(price: Int, orderId: String) {
+    fun logSpendTransactionCompleted(price: Int, txHash: String) {
         analytics.incrementUserProperty(Events.UserProperties.SPEND_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_SPENT,
                 price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                orderId, TRANSACTION_TYPE_SPEND))
+                txHash, TRANSACTION_TYPE_SPEND))
     }
 
-    fun logEarnTransactionCompleted(price: Int, orderId: String) {
+    fun logEarnTransactionCompleted(price: Int, txHash: String) {
         analytics.incrementUserProperty(Events.UserProperties.EARN_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_EARNED,
                 price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                orderId, TRANSACTION_TYPE_EARN))
+                txHash, TRANSACTION_TYPE_EARN))
     }
 
     fun listenToPayment(memo: String) {

@@ -120,7 +120,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                     val transactionId = wallet.payForOrder(offer.address!!, offer.price!!, bookOfferResponse?.orderId!!)
 
                     wallet.updateBalanceSync()
-                    wallet.logSpendTransactionCompleted(offer.price, bookOfferResponse.orderId)
+                    wallet.logSpendTransactionCompleted(offer.price, transactionId.id())
 
                     val response2 = offersApi.redeemOffer(userRepo.userId(),
                         OffersApi.PaymentReceipt(transactionId.id())).execute()
