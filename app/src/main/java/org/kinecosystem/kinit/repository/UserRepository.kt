@@ -25,6 +25,7 @@ private const val P2P_ENABLED = "P2P_ENABLED"
 private const val BACKED_UP = "BACKED_UP"
 private const val AUTH_TOKEN = "authToken"
 private const val RESTORE_HINTS = "RESTORE_HINTS"
+private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
 
 
 
@@ -52,7 +53,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
 
     var tos: String
         set(tos) = userCache.putString(TOS, tos)
-        get() = userCache.getString(TOS, "")
+        get() = userCache.getString(TOS, TOS_DEFAULT)
 
     var isPhoneVerificationEnabled: Boolean
         set(enable) = userCache.putBoolean(PHONE_VERIFICATION_ENABLED, enable)
