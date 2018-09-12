@@ -43,7 +43,10 @@ class RestoreWalletViewModel {
 
     fun onAnswersSubmit() {
         answersSubmitted.set(true)
-        val restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase)
+        var restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase.trim())
+        if (restoredAccount == null || restoredAccount.publicAddress == null) {
+            restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase)
+        }
         if (restoredAccount == null || restoredAccount.publicAddress == null) {
             answersSubmitted.set(false)
             listener?.onError(RestoreWalletActivityMessages.RESTORE_ERROR)

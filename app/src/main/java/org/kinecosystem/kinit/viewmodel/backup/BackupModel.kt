@@ -73,7 +73,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
                 BackupState.Question -> {
                     currentAnswer = if (it.trim().length >= 4) {
                         isAnswerValid.set(true)
-                        it.toString()
+                        it.toString().trim()
                     } else {
                         isAnswerValid.set(false)
                         null
