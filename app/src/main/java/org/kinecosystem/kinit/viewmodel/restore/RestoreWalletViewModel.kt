@@ -43,7 +43,12 @@ class RestoreWalletViewModel {
 
     fun onAnswersSubmit() {
         answersSubmitted.set(true)
-        val restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase)
+        passphrase = answers.joinToString(separator = "") { it.trim() }
+        var restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase)
+        if (restoredAccount == null || restoredAccount.publicAddress == null) {
+            passphrase = answers.joinToString(separator = "")
+            restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase)
+        }
         if (restoredAccount == null || restoredAccount.publicAddress == null) {
             answersSubmitted.set(false)
             listener?.onError(RestoreWalletActivityMessages.RESTORE_ERROR)
@@ -93,12 +98,8 @@ class RestoreWalletViewModel {
         this.qrCode = qrCode
     }
 
-    fun setPassphrase(index: Int, str: String) {
-        passphrase = ""
+    fun setAnswer(index: Int, str: String) {
         answers[index] = str
-        for (answer in answers)
-            passphrase += answer
-
         if (answers.none { answer -> answer.length < 4 })
             nextEnabled.set(true)
         else

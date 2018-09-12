@@ -35,7 +35,7 @@ class SecurityQuestionAnswerView: ConstraintLayout {
         q_text.text = backupQuestion?.hint
         userInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                model.setPassphrase(index, s.toString())
+                model.setAnswer(index, s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
