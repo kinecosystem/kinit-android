@@ -186,7 +186,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 appVersion = appVersion,
                 screenWidth = displayMetrics.widthPixels,
                 screenHeight = displayMetrics.heightPixels,
-                density = displayMetrics.densityDpi))
+                density = displayMetrics.densityDpi,
+                packageId = applicationContext.packageName))
         call.enqueue(object : Callback<StatusResponse> {
             override fun onResponse(call: Call<StatusResponse>?,
                                     response: Response<StatusResponse>?) {

@@ -17,7 +17,8 @@ interface OnboardingApi {
                                 @SerializedName("app_ver") val appVersion: String,
                                 @SerializedName("screen_w") val screenWidth: Int,
                                 @SerializedName("screen_h") val screenHeight: Int,
-                                @SerializedName("density") val density: Int)
+                                @SerializedName("density") val density: Int,
+                                @SerializedName("package_id") val packageId: String)
 
 
     data class Config(@SerializedName("auth_token_enabled") val auth_token_enabled: Boolean,
