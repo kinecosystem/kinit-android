@@ -32,6 +32,7 @@ public class Peer2PeerViewModel {
     private static final long COMPLETE_TRANSACTION_SCREEN_TIMEOUT = 3000;
     public ObservableField<String> name = new ObservableField<>("");
     public ObservableBoolean sendEnabled = new ObservableBoolean(false);
+    public ObservableBoolean isClickable = new ObservableBoolean(true);
     public ObservableBoolean sendingTransaction = new ObservableBoolean(false);
     public ObservableBoolean transactionComplete = new ObservableBoolean(false);
     public ObservableInt maxTransferLength = new ObservableInt(1);
@@ -116,7 +117,7 @@ public class Peer2PeerViewModel {
         hasValidAddress.set(false);
         if (actions != null) {
             actions.showDialog(R.string.p2p_friend_has_no_kinit_title, R.string.p2p_friend_has_no_kinit_body,
-                R.string.p2p_back_to_list_action, true);
+                    R.string.p2p_back_to_list_action, true);
         }
         logEventPopUp(Analytics.P2P_FRIEND_HAS_NO_ADDRESS);
     }
@@ -124,24 +125,24 @@ public class Peer2PeerViewModel {
     private void sendPhone(String phoneNumber) {
         final String formattedNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
         servicesProvider.getOfferService()
-            .sendContact(formattedNumber, new OperationResultCallback<String>() {
-                @Override
-                public void onResult(String addressResponse) {
-                    if (userRepository.getUserInfo().getPublicAddress().equals(addressResponse)) {
-                        address = "";
-                        onSelfAddressMatch();
-                    } else {
-                        address = addressResponse;
-                        onGotValidAddress();
+                .sendContact(formattedNumber, new OperationResultCallback<String>() {
+                    @Override
+                    public void onResult(String addressResponse) {
+                        if (userRepository.getUserInfo().getPublicAddress().equals(addressResponse)) {
+                            address = "";
+                            onSelfAddressMatch();
+                        } else {
+                            address = addressResponse;
+                            onGotValidAddress();
+                        }
                     }
-                }
 
-                @Override
-                public void onError(int errorCode) {
-                    address = "";
-                    onNoAddressMatch();
-                }
-            });
+                    @Override
+                    public void onError(int errorCode) {
+                        address = "";
+                        onNoAddressMatch();
+                    }
+                });
 
     }
 
@@ -157,7 +158,7 @@ public class Peer2PeerViewModel {
         hasValidAddress.set(false);
         if (actions != null) {
             actions.showDialog(R.string.p2p_send_kin_to_self_title, R.string.p2p_send_kin_to_self_body,
-                R.string.p2p_back_to_list_action, true);
+                    R.string.p2p_back_to_list_action, true);
         }
         logEventPopUp(Analytics.P2P_SEND_KIN_TO_SELF);
     }
@@ -167,7 +168,7 @@ public class Peer2PeerViewModel {
         hasValidAddress.set(false);
         if (actions != null) {
             actions.showDialog(R.string.p2p_friend_has_no_kinit_title, R.string.p2p_friend_has_no_kinit_body,
-                R.string.p2p_back_to_list_action, true);
+                    R.string.p2p_back_to_list_action, true);
         }
         logEventPopUp(Analytics.P2P_FRIEND_HAS_NO_ADDRESS);
     }
@@ -188,37 +189,40 @@ public class Peer2PeerViewModel {
         analytics.logEvent(new ClickSendButtonOnSendKinPage((float) amount.get()));
         if (isValidAmount()) {
             sendingTransaction.set(true);
+            isClickable.set(false);
             if (actions != null) {
                 actions.onStartTransaction();
             }
             servicesProvider.getOfferService()
-                .p2pTransfer(address, amount.get(), new OperationResultCallback<String>() {
-                    @Override
-                    public void onResult(String transactionId) {
-                        sendingTransaction.set(false);
-                        transactionComplete.set(true);
-                        if (actions != null) {
-                            actions.onTransactionComplete();
-                            scheduler.scheduleOnMain(() -> {
-                                if (actions != null) {
-                                    actions.closeScreen();
-                                }
-                            }, COMPLETE_TRANSACTION_SCREEN_TIMEOUT);
-                        }
-                    }
-
-                    @Override
-                    public void onError(int errorCode) {
-                        if (actions != null) {
-                            if (errorCode == ERROR_TRANSACTION_FAILED) {
-                                actions.showDialog(R.string.p2p_server_problem_title, R.string.general_problem_body,
-                                    R.string.dialog_back_to_list, true);
-                                sendingTransaction.set(false);
-                                transactionComplete.set(false);
+                    .p2pTransfer(address, amount.get(), new OperationResultCallback<String>() {
+                        @Override
+                        public void onResult(String transactionId) {
+                            isClickable.set(true);
+                            sendingTransaction.set(false);
+                            transactionComplete.set(true);
+                            if (actions != null) {
+                                actions.onTransactionComplete();
+                                scheduler.scheduleOnMain(() -> {
+                                    if (actions != null) {
+                                        actions.closeScreen();
+                                    }
+                                }, COMPLETE_TRANSACTION_SCREEN_TIMEOUT);
                             }
                         }
-                    }
-                });
+
+                        @Override
+                        public void onError(int errorCode) {
+                            isClickable.set(true);
+                            if (actions != null) {
+                                if (errorCode == ERROR_TRANSACTION_FAILED) {
+                                    actions.showDialog(R.string.p2p_server_problem_title, R.string.general_problem_body,
+                                            R.string.dialog_back_to_list, true);
+                                    sendingTransaction.set(false);
+                                    transactionComplete.set(false);
+                                }
+                            }
+                        }
+                    });
         }
     }
 
@@ -230,18 +234,18 @@ public class Peer2PeerViewModel {
         if (amount.get() < minKinTransfer) {
             logEventPopUp(Analytics.P2P_EXCEED_MIN_MAX);
             actions.showDialog(R.string.p2p_amount_too_small_title, R.string.p2p_amount_too_small_body, minKinTransfer,
-                R.string.p2p_amount_not_valid_action, false);
+                    R.string.p2p_amount_not_valid_action, false);
             return false;
         } else if (amount.get() > maxKinTransfer) {
             logEventPopUp(Analytics.P2P_EXCEED_MIN_MAX);
             actions.showDialog(R.string.p2p_amount_too_big_title, R.string.p2p_amount_too_big_body, maxKinTransfer,
-                R.string.p2p_amount_not_valid_action, false);
+                    R.string.p2p_amount_not_valid_action, false);
             return false;
         } else if (amount.get() > servicesProvider.getWalletService().getBalanceInt()) {
             logEventPopUp(Analytics.P2P_NOT_ENOUGH_BALANCE);
             actions
-                .showDialog(R.string.p2p_not_enough_balance_title, R.string.p2p_not_enough_balance_body, minKinTransfer,
-                    R.string.p2p_amount_not_valid_action, false);
+                    .showDialog(R.string.p2p_not_enough_balance_title, R.string.p2p_not_enough_balance_body, minKinTransfer,
+                            R.string.p2p_amount_not_valid_action, false);
             return false;
         }
         return true;
