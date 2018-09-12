@@ -1,6 +1,7 @@
 package org.kinecosystem.kinit.server
 
 import android.content.Context
+import android.text.TextUtils
 import android.util.Log
 import kin.core.exception.OperationFailedException
 import org.kinecosystem.kinit.analytics.Analytics
@@ -26,7 +27,7 @@ private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
 private const val P2P_ORDER_ID = "1-kit-p2p"
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userRepo: UserRepository,
-                   val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
+    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
 
     val applicationContext: Context = context.applicationContext
 
@@ -38,7 +39,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
 
         offersApi.offers(userRepo.userId()).enqueue(object : Callback<OffersApi.OffersResponse> {
             override fun onResponse(call: Call<OffersApi.OffersResponse>?,
-                                    response: Response<OffersApi.OffersResponse>?) {
+                response: Response<OffersApi.OffersResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     Log.d("OffersService", "onResponse: ${response.body()}")
@@ -63,12 +64,11 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
         }
         scheduler.executeOnBackground({
             val response = offersApi.sendContact(userRepo.userId(), OffersApi.ContactInfo(phones)).execute()
-            if (response.isSuccessful && response.body() != null && !response.body()!!.address.isEmpty()) {
-                scheduler.post {
-                    callback.onResult(response.body()!!.address)
-                }
-            } else {
-                scheduler.post {
+            scheduler.post {
+                val address = response.body()?.address.orEmpty()
+                if (response.isSuccessful && !TextUtils.isEmpty(address)) {
+                    callback.onResult(address)
+                } else {
                     callback.onError(ERROR_EMPTY_RESPONSE)
                 }
             }
@@ -117,7 +117,8 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                 }
 
                 try {
-                    val transactionId = wallet.payForOrder(offer.address!!, offer.price!!, bookOfferResponse?.orderId!!)
+                    val transactionId = wallet.payForOrder(offer.address!!, offer.price!!,
+                        bookOfferResponse?.orderId!!)
 
                     wallet.updateBalanceSync()
                     wallet.logSpendTransactionCompleted(offer.price, transactionId.id())
