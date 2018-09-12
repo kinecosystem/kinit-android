@@ -87,7 +87,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private var activeWallet: Boolean
         set(value) {
             walletCache.putBoolean(ACTIVE_WALLET_KEY, value)
-            analytics.logEvent(Events.Business.WalletCreated())
             ready.set(value)
         }
         get() = walletCache.getBoolean(ACTIVE_WALLET_KEY, false)
@@ -280,6 +279,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private fun activateAccountSync(): Boolean {
         try {
             account.activateSync()
+            analytics.logEvent(Events.Business.WalletCreated())
             scheduler.post({ activeWallet = true })
             analytics.logEvent(Events.BILog.StellarKinTrustlineSetupSucceeded())
             return true
