@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -13,7 +12,6 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <TextView
             android:id="@+id/version"
@@ -49,31 +47,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/security_header" />
 
-        <View
-            android:id="@+id/delimeter0"
-            style="@style/settingViewDelimiter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/security_view" />
 
         <TextView
-            android:id="@+id/support_header"
-            style="@style/settingHeader"
-            android:text="@string/support"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/delimeter0" />
-
-        <View
-            android:id="@+id/support_view"
-            style="@style/settingView"
-            android:onClick="@{model::onContactSupportClicked}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/support_header" />
+            android:id="@+id/wallet_text"
+            style="@style/settingTitle"
+            android:layout_marginStart="6dp"
+            android:text="@string/wallet_backup"
+            app:layout_constraintBottom_toBottomOf="@+id/security_view"
+            app:layout_constraintStart_toStartOf="@+id/icon_guide"
+            app:layout_constraintTop_toTopOf="@+id/security_view" />
 
         <ImageView
             android:id="@+id/wallet_icon"
@@ -85,16 +67,84 @@
             app:layout_constraintTop_toTopOf="@+id/security_view"
             app:srcCompat="@drawable/wallet_backup_icon" />
 
+        <View
+            android:id="@+id/delimeter0"
+            style="@style/settingViewDelimiter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/security_view" />
+
+        <TextView
+            android:id="@+id/settings_header"
+            style="@style/settingHeader"
+            android:text="@string/settings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/delimeter0" />
+
+        <View
+            android:id="@+id/helpcenter_view"
+            style="@style/settingView"
+            android:onClick="@{model::onHelpCenterClicked}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settings_header" />
+
         <ImageView
-            android:id="@+id/support_icon"
-            style="@style/settingIcon"
+            android:id="@+id/helpcenter_icon"
+            style="@style/feedbackIcon"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/support_view"
+            app:layout_constraintBottom_toBottomOf="@+id/helpcenter_view"
             app:layout_constraintEnd_toStartOf="@+id/icon_guide"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/support_view"
+            app:layout_constraintTop_toTopOf="@+id/helpcenter_view"
             app:srcCompat="@drawable/support_icon" />
+
+        <View
+            android:id="@+id/feedback_view"
+            style="@style/settingView"
+            android:onClick="@{model::onSendFeedbackClicked}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpcenter_view" />
+
+        <ImageView
+            android:id="@+id/feedback_info_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="21dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/feedback_view"
+            app:layout_constraintEnd_toEndOf="@+id/lock_closed"
+            app:layout_constraintStart_toStartOf="@+id/lock_closed"
+            app:layout_constraintTop_toTopOf="@+id/feedback_view"
+            app:srcCompat="@drawable/info_icon" />
+
+        <ImageView
+            android:id="@+id/feedback_icon"
+            style="@style/feedbackIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/feedback_view"
+            app:layout_constraintEnd_toStartOf="@+id/icon_guide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/feedback_view"
+            app:srcCompat="@drawable/feedback_ic" />
+
+        <View
+            android:id="@+id/delimter2"
+            style="@style/settingViewDelimiter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feedback_view" />
 
         <View
             android:id="@+id/delimter1"
@@ -102,25 +152,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/support_view" />
+            app:layout_constraintTop_toBottomOf="@+id/helpcenter_view" />
 
         <TextView
-            android:id="@+id/wallet_text"
+            android:id="@+id/feedback_text"
             style="@style/settingTitle"
             android:layout_marginStart="6dp"
-            android:text="@string/wallet_backup"
-            app:layout_constraintBottom_toBottomOf="@+id/security_view"
+            android:text="@string/send_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/feedback_view"
             app:layout_constraintStart_toStartOf="@+id/icon_guide"
-            app:layout_constraintTop_toTopOf="@+id/security_view" />
+            app:layout_constraintTop_toTopOf="@+id/feedback_view" />
 
         <TextView
-            android:id="@+id/support_text"
+            android:id="@+id/helpcenter_text"
             style="@style/settingTitle"
             android:layout_marginStart="6dp"
-            android:text="@string/email_us"
-            app:layout_constraintBottom_toBottomOf="@+id/support_view"
+            android:text="@string/help_center"
+            app:layout_constraintBottom_toBottomOf="@+id/helpcenter_view"
             app:layout_constraintStart_toStartOf="@+id/icon_guide"
-            app:layout_constraintTop_toTopOf="@+id/support_view" />
+            app:layout_constraintTop_toTopOf="@+id/helpcenter_view" />
 
         <ImageView
             android:id="@+id/lock_open"

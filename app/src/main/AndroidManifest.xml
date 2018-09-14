@@ -74,6 +74,10 @@
             android:name=".view.earn.WebTaskActivity"
             android:screenOrientation="landscape" />
 
+        <activity
+            android:name=".view.faq.FAQActivity"
+            android:screenOrientation="portrait" />
+
         <service android:name=".firebase.KinInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

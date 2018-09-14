@@ -39,10 +39,12 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
         showCreateNewBackupAlert.set(false)
     }
 
-    fun onContactSupportClicked(view: View) {
-        analytics.logEvent(Events.Analytics.ClickSupportButton())
-        analytics.logEvent(Events.Business.SupportRequestSent())
-        SupportUtil.openEmailSupport(view.context, userRepository)
+    fun onSendFeedbackClicked(view: View) {
+        SupportUtil.openEmailFeedback(view.context, userRepository)
+    }
+
+    fun onHelpCenterClicked(view: View) {
+        navigator.navigateTo(Navigator.Destination.FAQ)
     }
 
     fun onStartBackupClicked(view: View) {

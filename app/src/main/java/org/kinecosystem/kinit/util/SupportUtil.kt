@@ -12,22 +12,35 @@ import org.kinecosystem.kinit.repository.UserRepository
 
 object SupportUtil {
 
+    fun openEmailFeedback(context: Context, userRepository: UserRepository) {
+        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", context.resources.getString(R.string.feedback_email_address), null))
+        if (context.packageManager != null && emailIntent.resolveActivity(context.packageManager) != null) {
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, context.resources.getString(R.string.feedback_email_subject))
+            val message = context.resources.getString(R.string.feedback_email_body_template)
+            emailIntent.putExtra(Intent.EXTRA_TEXT, message)
+            context.startActivity(emailIntent)
+        } else {
+            showSupportDialog(context, userRepository.userId())
+        }
+    }
+
     fun openEmailSupport(context: Context, userRepository: UserRepository) {
         var versionName = ""
         try {
             versionName = context.packageManager
-                .getPackageInfo(context.packageName, 0).versionName
+                    .getPackageInfo(context.packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e("SupportUtil", "cant get version name " + e.message)
         }
 
         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-            "mailto", context.resources.getString(R.string.support_email_address), null))
+                "mailto", context.resources.getString(R.string.support_email_address), null))
         if (context.packageManager != null && emailIntent.resolveActivity(context.packageManager) != null) {
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, context.resources.getString(R.string.support_email_subject))
             val message = context.resources
-                .getString(R.string.support_email_body_template, userRepository.userId(),
-                    "android: " + DeviceUtils.deviceName(), versionName)
+                    .getString(R.string.support_email_body_template, userRepository.userId(),
+                            "android: " + DeviceUtils.deviceName(), versionName)
             emailIntent.putExtra(Intent.EXTRA_TEXT, message)
             context.startActivity(emailIntent)
         } else {

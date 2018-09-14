@@ -25,6 +25,7 @@ import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.TaskErrorFragment
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
+import org.kinecosystem.kinit.view.faq.FAQActivity
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
@@ -32,6 +33,7 @@ import org.kinecosystem.kinit.view.restore.*
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.FAQViewModel
 import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
 import org.kinecosystem.kinit.viewmodel.SplashViewModel
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
@@ -104,4 +106,6 @@ interface CoreComponent {
     fun inject(backupQuestionAnswerFragment: BackupQuestionAnswerFragment)
     fun inject(backupQRCodeFragment: BackupQRCodeFragment)
     fun inject(backupSummaryFragment: BackupSummaryFragment)
+    fun inject(faqViewModel: FAQViewModel)
+    fun inject(faqActivity: FAQActivity)
 }

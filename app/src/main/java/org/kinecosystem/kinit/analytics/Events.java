@@ -1,11 +1,12 @@
-package org.kinecosystem.kinit.analytics;//
+package org.kinecosystem.kinit.analytics;
 // Events.java
 //
 // Don't edit this file.
-// Generated at 2018-09-03 09:43:50 +0000 by Kik BI-Generator.
+// Generated at 2018-09-16 11:31:43 +0000 by Kik BI-Generator.
 //
 
 import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,7 +25,7 @@ public class Events {
         public static final String SPEND_COUNT = "spend_count";
         public static final String TOTAL_KIN_EARNED = "total_KIN_earned";
         public static final String TOTAL_KIN_SPENT = "total_KIN_spent";
-        public static final String TRANSACTION_COUNT = "transaction_count";
+        public static final String TRANSACTION_COUNT = "transaction_count"; 
     }
 
 
@@ -50,7 +51,6 @@ public class Events {
             private String taskType;
 
 
-
             public EarningTaskCompleted( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.creator = creator;
@@ -59,7 +59,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -80,7 +80,7 @@ public class Events {
                     properties.put("task_title", taskTitle);
                     properties.put("task_type", taskType);
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -109,7 +109,6 @@ public class Events {
             private String taskType;
 
 
-
             public EarningTaskStarted( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.creator = creator;
@@ -118,7 +117,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -139,7 +138,7 @@ public class Events {
                     properties.put("task_title", taskTitle);
                     properties.put("task_type", taskType);
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -160,12 +159,11 @@ public class Events {
             private String transactionType;
 
 
-
             public KINTransactionFailed( String failureReason, Float kinAmount, String transactionType) {
 
                 this.failureReason = failureReason;
                 this.kinAmount = kinAmount;
-                this.transactionType = transactionType;
+                this.transactionType = transactionType; 
             }
 
             @Override
@@ -182,7 +180,7 @@ public class Events {
                     properties.put("KIN_amount", kinAmount);
                     properties.put("transaction_type", transactionType);
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -203,12 +201,11 @@ public class Events {
             private String transactionType;
 
 
-
             public KINTransactionSucceeded( Float kinAmount, String transactionId, String transactionType) {
 
                 this.kinAmount = kinAmount;
                 this.transactionId = transactionId;
-                this.transactionType = transactionType;
+                this.transactionType = transactionType; 
             }
 
             @Override
@@ -225,7 +222,7 @@ public class Events {
                     properties.put("transaction_id", transactionId);
                     properties.put("transaction_type", transactionType);
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -252,7 +249,6 @@ public class Events {
             private String offerType;
 
 
-
             public SpendingOfferProvided( String brandName, Integer kinPrice, String offerCategory, String offerId, String offerName, String offerType) {
 
                 this.brandName = brandName;
@@ -260,7 +256,7 @@ public class Events {
                 this.offerCategory = offerCategory;
                 this.offerId = offerId;
                 this.offerName = offerName;
-                this.offerType = offerType;
+                this.offerType = offerType; 
             }
 
             @Override
@@ -280,7 +276,7 @@ public class Events {
                     properties.put("offer_name", offerName);
                     properties.put("offer_type", offerType);
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -307,7 +303,6 @@ public class Events {
             private String offerType;
 
 
-
             public SpendingOfferRequested( String brandName, Integer kinPrice, String offerCategory, String offerId, String offerName, String offerType) {
 
                 this.brandName = brandName;
@@ -315,7 +310,7 @@ public class Events {
                 this.offerCategory = offerCategory;
                 this.offerId = offerId;
                 this.offerName = offerName;
-                this.offerType = offerType;
+                this.offerType = offerType; 
             }
 
             @Override
@@ -335,7 +330,7 @@ public class Events {
                     properties.put("offer_name", offerName);
                     properties.put("offer_type", offerType);
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -350,8 +345,6 @@ public class Events {
         public static class SupportRequestSent implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "support_request_sent";
@@ -363,7 +356,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -378,8 +371,6 @@ public class Events {
         public static class UserRegistered implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "user_registered";
@@ -391,7 +382,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -406,8 +397,6 @@ public class Events {
         public static class WalletCreated implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "wallet_created";
@@ -419,7 +408,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -434,8 +423,6 @@ public class Events {
         public static class UserVerified implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "user_verified";
@@ -447,7 +434,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "business");
+                    properties.put("event_type", "business"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -462,11 +449,35 @@ public class Events {
         public static class WalletBackedUp implements Event {
 
 
+            @Override
+            public String getName() {
+                return "wallet_backed_up";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("event_type", "business"); 
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         user successfully restored his/her wallet. Event name: `wallet_restored`
+         */
+        public static class WalletRestored implements Event {
 
 
             @Override
             public String getName() {
-                return "wallet_backed_up";
+                return "wallet_restored";
             }
 
             @Override
@@ -485,16 +496,14 @@ public class Events {
         }
 
         /**
-         user successfully restored his/her wallet. Event name: `wallet_restored`
+         * user submits a feedback email. Event name: `feedback_sent`
          */
-        public static class WalletRestored implements Event {
-
-
+        public static class FeedbackSent implements Event {
 
 
             @Override
             public String getName() {
-                return "wallet_restored";
+                return "feedback_sent";
             }
 
             @Override
@@ -522,8 +531,6 @@ public class Events {
         public static class ViewSplashscreenPage implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "view_Splashscreen_page";
@@ -538,7 +545,7 @@ public class Events {
                     properties.put("item_name", "Splashscreen");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -555,10 +562,9 @@ public class Events {
             private String menuItemName;
 
 
-
             public ClickMenuItem( String menuItemName) {
 
-                this.menuItemName = menuItemName;
+                this.menuItemName = menuItemName; 
             }
 
             @Override
@@ -576,7 +582,7 @@ public class Events {
                     properties.put("item_name", "Menu");
                     properties.put("item_type", "item");
                     properties.put("action", "click");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -617,7 +623,6 @@ public class Events {
             private String taskTitle;
 
 
-
             public ClickAnswerButtonOnQuestionPage( String answerId, Integer answerOrder, String creator, Float estimatedTimeToComplete, Integer kinReward, Integer numberOfAnswers, Integer numberOfQuestions, String questionId, Integer questionOrder, String questionType, String taskCategory, String taskId, String taskTitle) {
 
                 this.answerId = answerId;
@@ -632,7 +637,7 @@ public class Events {
                 this.questionType = questionType;
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
-                this.taskTitle = taskTitle;
+                this.taskTitle = taskTitle; 
             }
 
             @Override
@@ -664,7 +669,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Question");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -701,7 +706,6 @@ public class Events {
             private String taskTitle;
 
 
-
             public ClickCloseButtonOnQuestionPage( String creator, Float estimatedTimeToComplete, Integer kinReward, Integer numberOfAnswers, Integer numberOfQuestions, String questionId, Integer questionOrder, String questionType, String taskCategory, String taskId, String taskTitle) {
 
                 this.creator = creator;
@@ -714,7 +718,7 @@ public class Events {
                 this.questionType = questionType;
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
-                this.taskTitle = taskTitle;
+                this.taskTitle = taskTitle; 
             }
 
             @Override
@@ -744,7 +748,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Question");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -773,7 +777,6 @@ public class Events {
             private String taskType;
 
 
-
             public ClickCloseButtonOnRewardPage( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.creator = creator;
@@ -782,7 +785,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -808,7 +811,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Reward");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -839,7 +842,6 @@ public class Events {
             private String taskType;
 
 
-
             public ClickStartButtonOnTaskPage( Boolean alreadyStarted, String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.alreadyStarted = alreadyStarted;
@@ -849,7 +851,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -876,7 +878,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Task");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -905,7 +907,6 @@ public class Events {
             private String taskType;
 
 
-
             public ViewKinProvidedImageOnRewardPage( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.creator = creator;
@@ -914,7 +915,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -940,7 +941,7 @@ public class Events {
                     properties.put("action", "view");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Reward");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -957,10 +958,9 @@ public class Events {
             private Integer timeToUnlock;
 
 
-
             public ViewLockedTaskPage( Integer timeToUnlock) {
 
-                this.timeToUnlock = timeToUnlock;
+                this.timeToUnlock = timeToUnlock; 
             }
 
             @Override
@@ -978,7 +978,7 @@ public class Events {
                     properties.put("item_name", "Locked_Task");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1013,7 +1013,6 @@ public class Events {
             private String taskTitle;
 
 
-
             public ViewQuestionPage( String creator, Float estimatedTimeToComplete, Integer kinReward, Integer numberOfQuestions, String questionId, Integer questionOrder, String questionType, String taskCategory, String taskId, String taskTitle) {
 
                 this.creator = creator;
@@ -1025,7 +1024,7 @@ public class Events {
                 this.questionType = questionType;
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
-                this.taskTitle = taskTitle;
+                this.taskTitle = taskTitle; 
             }
 
             @Override
@@ -1052,7 +1051,7 @@ public class Events {
                     properties.put("item_name", "Question");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1081,7 +1080,6 @@ public class Events {
             private String taskType;
 
 
-
             public ViewRewardPage( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.creator = creator;
@@ -1090,7 +1088,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -1114,7 +1112,7 @@ public class Events {
                     properties.put("item_name", "Reward");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1143,7 +1141,6 @@ public class Events {
             private String taskType;
 
 
-
             public ViewTaskEndPage( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.creator = creator;
@@ -1152,7 +1149,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -1176,7 +1173,7 @@ public class Events {
                     properties.put("item_name", "Task_End");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1205,7 +1202,6 @@ public class Events {
             private String taskType;
 
 
-
             public ViewTaskPage( String creator, Float estimatedTimeToComplete, Integer kinReward, String taskCategory, String taskId, String taskTitle, String taskType) {
 
                 this.creator = creator;
@@ -1214,7 +1210,7 @@ public class Events {
                 this.taskCategory = taskCategory;
                 this.taskId = taskId;
                 this.taskTitle = taskTitle;
-                this.taskType = taskType;
+                this.taskType = taskType; 
             }
 
             @Override
@@ -1238,7 +1234,7 @@ public class Events {
                     properties.put("item_name", "Task");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1269,7 +1265,6 @@ public class Events {
             private String offerType;
 
 
-
             public ClickOfferItemOnSpendPage( String brandName, Integer kinPrice, Integer numberOfOffers, String offerCategory, String offerId, String offerName, Integer offerOrder, String offerType) {
 
                 this.brandName = brandName;
@@ -1279,7 +1274,7 @@ public class Events {
                 this.offerId = offerId;
                 this.offerName = offerName;
                 this.offerOrder = offerOrder;
-                this.offerType = offerType;
+                this.offerType = offerType; 
             }
 
             @Override
@@ -1306,7 +1301,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Spend");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1333,7 +1328,6 @@ public class Events {
             private String offerType;
 
 
-
             public ClickShareButtonOnOfferPage( String brandName, Integer kinPrice, String offerCategory, String offerId, String offerName, String offerType) {
 
                 this.brandName = brandName;
@@ -1341,7 +1335,7 @@ public class Events {
                 this.offerCategory = offerCategory;
                 this.offerId = offerId;
                 this.offerName = offerName;
-                this.offerType = offerType;
+                this.offerType = offerType; 
             }
 
             @Override
@@ -1366,7 +1360,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Offer");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1393,7 +1387,6 @@ public class Events {
             private String offerType;
 
 
-
             public ViewCodeTextOnOfferPage( String brandName, Integer kinPrice, String offerCategory, String offerId, String offerName, String offerType) {
 
                 this.brandName = brandName;
@@ -1401,7 +1394,7 @@ public class Events {
                 this.offerCategory = offerCategory;
                 this.offerId = offerId;
                 this.offerName = offerName;
-                this.offerType = offerType;
+                this.offerType = offerType; 
             }
 
             @Override
@@ -1426,7 +1419,7 @@ public class Events {
                     properties.put("action", "view");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Offer");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1453,7 +1446,6 @@ public class Events {
             private String offerType;
 
 
-
             public ViewOfferPage( String brandName, Integer kinPrice, String offerCategory, String offerId, String offerName, String offerType) {
 
                 this.brandName = brandName;
@@ -1461,7 +1453,7 @@ public class Events {
                 this.offerCategory = offerCategory;
                 this.offerId = offerId;
                 this.offerName = offerName;
-                this.offerType = offerType;
+                this.offerType = offerType; 
             }
 
             @Override
@@ -1484,7 +1476,7 @@ public class Events {
                     properties.put("item_name", "Offer");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1501,10 +1493,9 @@ public class Events {
             private Integer numberOfOffers;
 
 
-
             public ViewSpendPage( Integer numberOfOffers) {
 
-                this.numberOfOffers = numberOfOffers;
+                this.numberOfOffers = numberOfOffers; 
             }
 
             @Override
@@ -1522,7 +1513,7 @@ public class Events {
                     properties.put("item_name", "Spend");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1535,8 +1526,6 @@ public class Events {
          user views the balance page  . Event name: `view_Balance_page`
          */
         public static class ViewBalancePage implements Event {
-
-
 
 
             @Override
@@ -1553,7 +1542,7 @@ public class Events {
                     properties.put("item_name", "Balance");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1566,8 +1555,6 @@ public class Events {
          user views the profile page . Event name: `view_Profile_page`
          */
         public static class ViewProfilePage implements Event {
-
-
 
 
             @Override
@@ -1584,7 +1571,7 @@ public class Events {
                     properties.put("item_name", "Profile");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1594,12 +1581,20 @@ public class Events {
         }
 
         /**
-         users clicks on support button (opens email). Event name: `click_Support_button`
+         users clicks on support button (opens email), on specific FAQ page. Event name: `click_Support_button`
          */
         public static class ClickSupportButton implements Event {
 
+            private String faqCategory;
+
+            private String faqTitle;
 
 
+            public ClickSupportButton(String faqCategory, String faqTitle) {
+
+                this.faqCategory = faqCategory;
+                this.faqTitle = faqTitle;
+            }
 
             @Override
             public String getName() {
@@ -1611,11 +1606,13 @@ public class Events {
                 JSONObject properties = new JSONObject();
                 try {
 
+                    properties.put("FAQ_category", faqCategory);
+                    properties.put("FAQ_title", faqTitle);
 
                     properties.put("item_name", "Support");
                     properties.put("item_type", "button");
                     properties.put("action", "click");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1634,11 +1631,10 @@ public class Events {
             private String pushText;
 
 
-
             public ClickEngagementPush( String pushId, String pushText) {
 
                 this.pushId = pushId;
-                this.pushText = pushText;
+                this.pushText = pushText; 
             }
 
             @Override
@@ -1657,7 +1653,7 @@ public class Events {
                     properties.put("item_name", "Engagement");
                     properties.put("item_type", "push");
                     properties.put("action", "click");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1670,8 +1666,6 @@ public class Events {
          for iOS only. user clicks the reminder button on locked task page to trigger the push notification approval popup. Event name: `click_Reminder_button_on_Locked_Task_page`
          */
         public static class ClickReminderButtonOnLockedTaskPage implements Event {
-
-
 
 
             @Override
@@ -1690,7 +1684,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Locked_Task");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1709,11 +1703,10 @@ public class Events {
             private String pushText;
 
 
-
             public ViewEngagementPush( String pushId, String pushText) {
 
                 this.pushId = pushId;
-                this.pushText = pushText;
+                this.pushText = pushText; 
             }
 
             @Override
@@ -1732,7 +1725,7 @@ public class Events {
                     properties.put("item_name", "Engagement");
                     properties.put("item_type", "push");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1749,10 +1742,9 @@ public class Events {
             private String errorType;
 
 
-
             public ViewErrorPage( String errorType) {
 
-                this.errorType = errorType;
+                this.errorType = errorType; 
             }
 
             @Override
@@ -1770,7 +1762,7 @@ public class Events {
                     properties.put("item_name", "Error");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1787,10 +1779,9 @@ public class Events {
             private String errorType;
 
 
-
             public ClickRetryButtonOnErrorPage( String errorType) {
 
-                this.errorType = errorType;
+                this.errorType = errorType; 
             }
 
             @Override
@@ -1810,7 +1801,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Error");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1827,10 +1818,9 @@ public class Events {
             private String errorType;
 
 
-
             public ClickCloseButtonOnErrorPage( String errorType) {
 
-                this.errorType = errorType;
+                this.errorType = errorType; 
             }
 
             @Override
@@ -1850,7 +1840,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Error");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1867,10 +1857,9 @@ public class Events {
             private String menuItemName;
 
 
-
             public ViewEmptyStatePage( String menuItemName) {
 
-                this.menuItemName = menuItemName;
+                this.menuItemName = menuItemName; 
             }
 
             @Override
@@ -1888,7 +1877,7 @@ public class Events {
                     properties.put("item_name", "Empty_State");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1905,10 +1894,9 @@ public class Events {
             private String errorType;
 
 
-
             public ClickContactLinkOnErrorPage( String errorType) {
 
-                this.errorType = errorType;
+                this.errorType = errorType; 
             }
 
             @Override
@@ -1928,7 +1916,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Error");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1945,10 +1933,9 @@ public class Events {
             private String errorType;
 
 
-
             public ViewErrorPopupOnOfferPage( String errorType) {
 
-                this.errorType = errorType;
+                this.errorType = errorType; 
             }
 
             @Override
@@ -1968,7 +1955,7 @@ public class Events {
                     properties.put("action", "view");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Offer");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -1985,10 +1972,9 @@ public class Events {
             private String errorType;
 
 
-
             public ClickOkButtonOnErrorPopup( String errorType) {
 
-                this.errorType = errorType;
+                this.errorType = errorType; 
             }
 
             @Override
@@ -2008,7 +1994,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Error");
-                    properties.put("parent_type", "popup");
+                    properties.put("parent_type", "popup"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2025,10 +2011,9 @@ public class Events {
             private Integer onboardingTutorialPage;
 
 
-
             public ClickStartButtonOnOnboardingPage( Integer onboardingTutorialPage) {
 
-                this.onboardingTutorialPage = onboardingTutorialPage;
+                this.onboardingTutorialPage = onboardingTutorialPage; 
             }
 
             @Override
@@ -2048,7 +2033,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Onboarding");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2065,10 +2050,9 @@ public class Events {
             private Integer onboardingTutorialPage;
 
 
-
             public ViewOnboardingPage( Integer onboardingTutorialPage) {
 
-                this.onboardingTutorialPage = onboardingTutorialPage;
+                this.onboardingTutorialPage = onboardingTutorialPage; 
             }
 
             @Override
@@ -2086,7 +2070,7 @@ public class Events {
                     properties.put("item_name", "Onboarding");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2099,8 +2083,6 @@ public class Events {
          user views the phone authentication page when phone number should be inserted. Event name: `view_Phone_Auth_page`
          */
         public static class ViewPhoneAuthPage implements Event {
-
-
 
 
             @Override
@@ -2117,7 +2099,7 @@ public class Events {
                     properties.put("item_name", "Phone_Auth");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2130,8 +2112,6 @@ public class Events {
          user click the button to continue to verification page. Event name: `click_Next_button_on_Phone_Auth_page`
          */
         public static class ClickNextButtonOnPhoneAuthPage implements Event {
-
-
 
 
             @Override
@@ -2150,7 +2130,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Phone_Auth");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2163,8 +2143,6 @@ public class Events {
          user views the verification page, where a verification code should be inserted. Event name: `view_Verification_page`
          */
         public static class ViewVerificationPage implements Event {
-
-
 
 
             @Override
@@ -2181,7 +2159,7 @@ public class Events {
                     properties.put("item_name", "Verification");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2194,8 +2172,6 @@ public class Events {
          user gets an error message when entering a wrong verification code. Event name: `view_Error_message_on_Verification_page`
          */
         public static class ViewErrorMessageOnVerificationPage implements Event {
-
-
 
 
             @Override
@@ -2214,7 +2190,7 @@ public class Events {
                     properties.put("action", "view");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Verification");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2227,8 +2203,6 @@ public class Events {
          user view the completion message after successfully completed onboarding. Event name: `view_Onboarding_Completed_page`
          */
         public static class ViewOnboardingCompletedPage implements Event {
-
-
 
 
             @Override
@@ -2245,7 +2219,7 @@ public class Events {
                     properties.put("item_name", "Onboarding_Completed");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2262,10 +2236,9 @@ public class Events {
             private Integer verificationCodeCount;
 
 
-
             public ClickNewCodeLinkOnVerificationPage( Integer verificationCodeCount) {
 
-                this.verificationCodeCount = verificationCodeCount;
+                this.verificationCodeCount = verificationCodeCount; 
             }
 
             @Override
@@ -2285,7 +2258,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Verification");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2298,8 +2271,6 @@ public class Events {
          existing user receives a popup message explaining the phone auth required. Event name: `view_Phone_Auth_popup`
          */
         public static class ViewPhoneAuthPopup implements Event {
-
-
 
 
             @Override
@@ -2316,7 +2287,7 @@ public class Events {
                     properties.put("item_name", "Phone_Auth");
                     properties.put("item_type", "popup");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2329,8 +2300,6 @@ public class Events {
          existing user clicks the button on the popup message to start phone auth flow. Event name: `click_Verify_button_on_Phone_Auth_popup`
          */
         public static class ClickVerifyButtonOnPhoneAuthPopup implements Event {
-
-
 
 
             @Override
@@ -2349,7 +2318,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Phone_Auth");
-                    properties.put("parent_type", "popup");
+                    properties.put("parent_type", "popup"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2362,8 +2331,6 @@ public class Events {
          user views the Send Kin page where he sets up the Kin amount he wants to send to a friend. Event name: `view_Send_Kin_page`
          */
         public static class ViewSendKinPage implements Event {
-
-
 
 
             @Override
@@ -2380,7 +2347,7 @@ public class Events {
                     properties.put("item_name", "Send_Kin");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2397,10 +2364,9 @@ public class Events {
             private Float kinAmount;
 
 
-
             public ClickSendButtonOnSendKinPage( Float kinAmount) {
 
-                this.kinAmount = kinAmount;
+                this.kinAmount = kinAmount; 
             }
 
             @Override
@@ -2420,7 +2386,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Send_Kin");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2437,10 +2403,9 @@ public class Events {
             private Float kinAmount;
 
 
-
             public ViewSuccessMessageOnSendKinPage( Float kinAmount) {
 
-                this.kinAmount = kinAmount;
+                this.kinAmount = kinAmount; 
             }
 
             @Override
@@ -2460,7 +2425,7 @@ public class Events {
                     properties.put("action", "view");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Send_Kin");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2477,10 +2442,9 @@ public class Events {
             private String errorType;
 
 
-
             public ViewErrorPopupOnSendKinPage( String errorType) {
 
-                this.errorType = errorType;
+                this.errorType = errorType; 
             }
 
             @Override
@@ -2500,7 +2464,7 @@ public class Events {
                     properties.put("action", "view");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Send_Kin");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2513,8 +2477,6 @@ public class Events {
          user views the Video page as part of a "tip" task . Event name: `view_Video_page`
          */
         public static class ViewVideoPage implements Event {
-
-
 
 
             @Override
@@ -2531,7 +2493,7 @@ public class Events {
                     properties.put("item_name", "Video");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2548,10 +2510,9 @@ public class Events {
             private String videoTitle;
 
 
-
             public ClickPlayButtonOnVideoPage( String videoTitle) {
 
-                this.videoTitle = videoTitle;
+                this.videoTitle = videoTitle; 
             }
 
             @Override
@@ -2571,7 +2532,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Video");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2584,8 +2545,6 @@ public class Events {
          user views the backup intro page. Event name: `view_Backup_Intro_page`
          */
         public static class ViewBackupIntroPage implements Event {
-
-
 
 
             @Override
@@ -2602,7 +2561,7 @@ public class Events {
                     properties.put("item_name", "Backup_Intro");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2615,8 +2574,6 @@ public class Events {
          user clicks the button on the backup intro page to start the backup flow. Event name: `click_Backup_button_on_Backup_Intro_page`
          */
         public static class ClickBackupButtonOnBackupIntroPage implements Event {
-
-
 
 
             @Override
@@ -2635,7 +2592,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Backup_Intro");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2652,10 +2609,9 @@ public class Events {
             private String backupFlowStep;
 
 
-
             public ViewBackupFlowPage( String backupFlowStep) {
 
-                this.backupFlowStep = backupFlowStep;
+                this.backupFlowStep = backupFlowStep; 
             }
 
             @Override
@@ -2673,7 +2629,7 @@ public class Events {
                     properties.put("item_name", "Backup_Flow");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2690,10 +2646,9 @@ public class Events {
             private String backupFlowStep;
 
 
-
             public ClickCompletedStepButtonOnBackupFlowPage( String backupFlowStep) {
 
-                this.backupFlowStep = backupFlowStep;
+                this.backupFlowStep = backupFlowStep; 
             }
 
             @Override
@@ -2713,7 +2668,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Backup_Flow");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2726,8 +2681,6 @@ public class Events {
          user views the completion message after successfully completed backup flow. Event name: `view_Backup_Completed_page`
          */
         public static class ViewBackupCompletedPage implements Event {
-
-
 
 
             @Override
@@ -2744,7 +2697,7 @@ public class Events {
                     properties.put("item_name", "Backup_Completed");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2761,10 +2714,9 @@ public class Events {
             private String backupNotificationType;
 
 
-
             public ViewBackupNotificationPopup( String backupNotificationType) {
 
-                this.backupNotificationType = backupNotificationType;
+                this.backupNotificationType = backupNotificationType; 
             }
 
             @Override
@@ -2782,7 +2734,7 @@ public class Events {
                     properties.put("item_name", "Backup_Notification");
                     properties.put("item_type", "popup");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2799,10 +2751,9 @@ public class Events {
             private String backupNotificationType;
 
 
-
             public ClickBackupButtonOnBackupNotificationPopup( String backupNotificationType) {
 
-                this.backupNotificationType = backupNotificationType;
+                this.backupNotificationType = backupNotificationType; 
             }
 
             @Override
@@ -2822,7 +2773,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Backup_Notification");
-                    properties.put("parent_type", "popup");
+                    properties.put("parent_type", "popup"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2835,8 +2786,6 @@ public class Events {
          existing user views welcome back page after completing phone verification. Event name: `view_Welcome_Back_page`
          */
         public static class ViewWelcomeBackPage implements Event {
-
-
 
 
             @Override
@@ -2853,7 +2802,7 @@ public class Events {
                     properties.put("item_name", "Welcome_Back");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2866,8 +2815,6 @@ public class Events {
          user chooses to restore wallet on welcome back page. Event name: `click_Restore_Wallet_button_on_Welcome_Back_page`
          */
         public static class ClickRestoreWalletButtonOnWelcomeBackPage implements Event {
-
-
 
 
             @Override
@@ -2886,7 +2833,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Welcome_Back");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2899,8 +2846,6 @@ public class Events {
          user chooses to create new wallet on welcome back page. Event name: `click_Create_New_Wallet_button_on_Welcome_Back_page`
          */
         public static class ClickCreateNewWalletButtonOnWelcomeBackPage implements Event {
-
-
 
 
             @Override
@@ -2919,7 +2864,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Welcome_Back");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2932,8 +2877,6 @@ public class Events {
          user views the scan page after staring the restore flow. Event name: `view_Scan_page`
          */
         public static class ViewScanPage implements Event {
-
-
 
 
             @Override
@@ -2950,7 +2893,7 @@ public class Events {
                     properties.put("item_name", "Scan");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2963,8 +2906,6 @@ public class Events {
          user clicks the scan button to start scanning the process of the QR code. Event name: `click_Scan_button_on_Scan_page`
          */
         public static class ClickScanButtonOnScanPage implements Event {
-
-
 
 
             @Override
@@ -2983,7 +2924,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Scan");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -2996,8 +2937,6 @@ public class Events {
          user views the security questions page as part of the restore flow. Event name: `view_Answer_Security_Questions_page`
          */
         public static class ViewAnswerSecurityQuestionsPage implements Event {
-
-
 
 
             @Override
@@ -3014,7 +2953,7 @@ public class Events {
                     properties.put("item_name", "Answer_Security_Questions");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3027,8 +2966,6 @@ public class Events {
          user confirms the answers entered for security questions as part of the restore flow. Event name: `click_Confirm_button_on_Answer_Security_Questions_page`
          */
         public static class ClickConfirmButtonOnAnswerSecurityQuestionsPage implements Event {
-
-
 
 
             @Override
@@ -3047,7 +2984,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Answer_Security_Questions");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3060,8 +2997,6 @@ public class Events {
          user views the completion message after successfully restoring the wallet. Event name: `view_Wallet_Restored_page`
          */
         public static class ViewWalletRestoredPage implements Event {
-
-
 
 
             @Override
@@ -3078,7 +3013,7 @@ public class Events {
                     properties.put("item_name", "Wallet_Restored");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3091,8 +3026,6 @@ public class Events {
          user views the creating wallet page (animation) when creating new wallet. Event name: `view_Creating_Wallet_page`
          */
         public static class ViewCreatingWalletPage implements Event {
-
-
 
 
             @Override
@@ -3109,7 +3042,7 @@ public class Events {
                     properties.put("item_name", "Creating_Wallet");
                     properties.put("item_type", "page");
                     properties.put("action", "view");
-                    properties.put("event_type", "analytics");
+                    properties.put("event_type", "analytics"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3126,10 +3059,9 @@ public class Events {
             private Boolean alreadyBackedUp;
 
 
-
             public ClickBackupButtonOnMorePage( Boolean alreadyBackedUp) {
 
-                this.alreadyBackedUp = alreadyBackedUp;
+                this.alreadyBackedUp = alreadyBackedUp; 
             }
 
             @Override
@@ -3149,6 +3081,152 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "More");
+                    properties.put("parent_type", "page"); 
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         * user views the FAQ main page (with all the categories). Event name: `view_FAQ_Main_page`
+         */
+        public static class ViewFaqMainPage implements Event {
+
+
+            @Override
+            public String getName() {
+                return "view_FAQ_Main_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("item_name", "FAQ_Main");
+                    properties.put("item_type", "page");
+                    properties.put("action", "view");
+                    properties.put("event_type", "analytics");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         * user views a FAQ specific page . Event name: `view_FAQ_page`
+         */
+        public static class ViewFaqPage implements Event {
+
+            private String faqCategory;
+
+            private String faqTitle;
+
+
+            public ViewFaqPage(String faqCategory, String faqTitle) {
+
+                this.faqCategory = faqCategory;
+                this.faqTitle = faqTitle;
+            }
+
+            @Override
+            public String getName() {
+                return "view_FAQ_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("FAQ_category", faqCategory);
+                    properties.put("FAQ_title", faqTitle);
+
+                    properties.put("item_name", "FAQ");
+                    properties.put("item_type", "page");
+                    properties.put("action", "view");
+                    properties.put("event_type", "analytics");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         * user clicks the feedback button on the More page. Event name: `click_Feedback_button`
+         */
+        public static class ClickFeedbackButton implements Event {
+
+
+            @Override
+            public String getName() {
+                return "click_Feedback_button";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("item_name", "Feedback");
+                    properties.put("item_type", "button");
+                    properties.put("action", "click");
+                    properties.put("event_type", "analytics");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         * user clicks the Yes/No buttons on FAQ page, to share if the page info was helpful or not. Event name: `click_Page_Helpful_button_on_FAQ_page`
+         */
+        public static class ClickPageHelpfulButtonOnFaqPage implements Event {
+
+            private String faqCategory;
+
+            private String faqTitle;
+
+            private Boolean helpful;
+
+
+            public ClickPageHelpfulButtonOnFaqPage(String faqCategory, String faqTitle, Boolean helpful) {
+
+                this.faqCategory = faqCategory;
+                this.faqTitle = faqTitle;
+                this.helpful = helpful;
+            }
+
+            @Override
+            public String getName() {
+                return "click_Page_Helpful_button_on_FAQ_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("FAQ_category", faqCategory);
+                    properties.put("FAQ_title", faqTitle);
+                    properties.put("Helpful", helpful);
+
+                    properties.put("item_name", "Page_Helpful");
+                    properties.put("item_type", "button");
+                    properties.put("action", "click");
+                    properties.put("event_type", "analytics");
+                    properties.put("parent_name", "FAQ");
                     properties.put("parent_type", "page");
                 } catch (JSONException e) {
                     Log.e("Events",
@@ -3176,15 +3254,14 @@ public class Events {
             private String offerType;
 
 
-
-            public ClickBuyButtonOnOfferPage( String brandName, Integer kinPrice, String offerCategory, String offerId, String offerName, String offerType) {
+            public ClickBuyButtonOnOfferPage(String brandName, Integer kinPrice, String offerCategory, String offerId, String offerName, String offerType) {
 
                 this.brandName = brandName;
                 this.kinPrice = kinPrice;
                 this.offerCategory = offerCategory;
                 this.offerId = offerId;
                 this.offerName = offerName;
-                this.offerType = offerType;
+                this.offerType = offerType; 
             }
 
             @Override
@@ -3209,7 +3286,7 @@ public class Events {
                     properties.put("action", "click");
                     properties.put("event_type", "analytics");
                     properties.put("parent_name", "Offer");
-                    properties.put("parent_type", "page");
+                    properties.put("parent_type", "page"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3230,10 +3307,9 @@ public class Events {
             private String failureReason;
 
 
-
             public BalanceUpdateFailed( String failureReason) {
 
-                this.failureReason = failureReason;
+                this.failureReason = failureReason; 
             }
 
             @Override
@@ -3248,7 +3324,7 @@ public class Events {
 
                     properties.put("failure_reason", failureReason);
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3265,10 +3341,9 @@ public class Events {
             private String failureReason;
 
 
-
             public StellarAccountCreationFailed( String failureReason) {
 
-                this.failureReason = failureReason;
+                this.failureReason = failureReason; 
             }
 
             @Override
@@ -3283,7 +3358,7 @@ public class Events {
 
                     properties.put("failure_reason", failureReason);
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3298,8 +3373,6 @@ public class Events {
         public static class StellarAccountCreationSucceeded implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "stellar_account_creation_succeeded";
@@ -3311,7 +3384,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3328,10 +3401,9 @@ public class Events {
             private String failureReason;
 
 
-
             public StellarKinTrustlineSetupFailed( String failureReason) {
 
-                this.failureReason = failureReason;
+                this.failureReason = failureReason; 
             }
 
             @Override
@@ -3346,7 +3418,7 @@ public class Events {
 
                     properties.put("failure_reason", failureReason);
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3361,8 +3433,6 @@ public class Events {
         public static class StellarKinTrustlineSetupSucceeded implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "stellar_kin_trustline_setup_succeeded";
@@ -3374,7 +3444,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3391,10 +3461,9 @@ public class Events {
             private String failureReason;
 
 
-
             public UserRegistrationFailed( String failureReason) {
 
-                this.failureReason = failureReason;
+                this.failureReason = failureReason; 
             }
 
             @Override
@@ -3409,7 +3478,7 @@ public class Events {
 
                     properties.put("failure_reason", failureReason);
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3424,8 +3493,6 @@ public class Events {
         public static class PhoneFormattingFailed implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "phone_formatting_failed";
@@ -3437,7 +3504,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3452,8 +3519,6 @@ public class Events {
         public static class AuthTokenReceived implements Event {
 
 
-
-
             @Override
             public String getName() {
                 return "auth_token_received";
@@ -3465,7 +3530,7 @@ public class Events {
                 try {
 
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -3482,10 +3547,9 @@ public class Events {
             private String failureReason;
 
 
-
             public AuthTokenAckFailed( String failureReason) {
 
-                this.failureReason = failureReason;
+                this.failureReason = failureReason; 
             }
 
             @Override
@@ -3500,7 +3564,7 @@ public class Events {
 
                     properties.put("failure_reason", failureReason);
 
-                    properties.put("event_type", "log");
+                    properties.put("event_type", "log"); 
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
