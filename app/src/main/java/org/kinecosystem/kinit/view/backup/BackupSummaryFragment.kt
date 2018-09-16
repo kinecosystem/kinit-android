@@ -31,7 +31,9 @@ class BackupSummaryFragment : BaseFragment() {
         next.setOnClickListener {
             activity?.let {
                 if (GeneralUtils.isConnected(it)) {
-                    (it as BackupActions).getBackUpModel().onNext()
+                    AlertManager.showAlert(it, R.string.remember_answers_warning_title, R.string.remember_answers_warning_desc, R.string.dialog_continue, {
+                        (it as BackupActions).getBackUpModel().onNext()
+                    })
                 } else {
                     AlertManager.showAlertNoIternetDismiss(it)
                 }

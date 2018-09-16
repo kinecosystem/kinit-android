@@ -5,16 +5,16 @@ import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.model.earn.startDateInMillis
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.server.OperationResultCallback
 import org.kinecosystem.kinit.server.TaskService
-import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.TimeUtils
 import org.kinecosystem.kinit.view.TabViewModel
@@ -153,7 +153,8 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
 
     fun nextAvailableDate(): String {
         val dateInMillis = taskRepository.task?.startDateInMillis() ?: 0
-        return SimpleDateFormat(AVAILABILITY_DATE_FORMAT).format(Date(dateInMillis))
+        val local = Locale.getDefault()
+        return SimpleDateFormat(AVAILABILITY_DATE_FORMAT, local).format(Date(dateInMillis))
     }
 
     override fun onScreenVisibleToUser() {

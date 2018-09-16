@@ -199,4 +199,7 @@
     <string name="restore_error_msg">It looks like your answers don’t match. Please contact support for assistance.</string>
     <string name="try_again">Try again</string>
     <string name="question_block_string">Q%d:</string>
+    <string name="remember_answers_warning_title">Notice!</string>
+    <string name="remember_answers_warning_desc">We recommend you write down your answers because you will be required to provide them when restoring your account.</string>
+    <string name="dialog_continue">I understand, continue</string>
 </resources>
