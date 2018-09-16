@@ -199,4 +199,7 @@
     <string name="restore_error_msg">It looks like your answers don’t match. Please contact support for assistance.</string>
     <string name="try_again">Try again</string>
     <string name="question_block_string">Q%d:</string>
+    <string name="remember_answers_warning_title">Notice!</string>
+    <string name="remember_answers_warning_desc">It is important to remember your answers. You will be required to provide exactly the same answers when restoring your account and will not be able to restore your account without them. The only way to reset your answers is by creating a new backup.</string>
+    <string name="dialog_continue">I understand, continue</string>
 </resources>
