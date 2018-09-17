@@ -153,7 +153,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
 
     fun nextAvailableDate(): String {
         val dateInMillis = taskRepository.task?.startDateInMillis() ?: 0
-        val local = Locale.getDefault()
+        val local = Locale.US
         return SimpleDateFormat(AVAILABILITY_DATE_FORMAT, local).format(Date(dateInMillis))
     }
 
