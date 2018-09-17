@@ -20,12 +20,14 @@ private const val PHONE_VERIFIED = "PHONE_VERIFIED"
 private const val FIRST_TIME_USER = "FIRST_TIME_USER"
 private const val P2P_MAX_KIN = "P2P_MAX_KIN"
 private const val P2P_MIN_KIN = "P2P_MIN_KIN"
+private const val FAQ_URL = "FAQ_URL"
 private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
 private const val P2P_ENABLED = "P2P_ENABLED"
 private const val BACKED_UP = "BACKED_UP"
 private const val AUTH_TOKEN = "authToken"
 private const val RESTORE_HINTS = "RESTORE_HINTS"
 private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
+private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
 
 
 
@@ -42,6 +44,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isRegistered: Boolean
         set(registered) = userCache.putBoolean(IS_REGISTERED_KEY, registered)
         get() = userCache.getBoolean(IS_REGISTERED_KEY, false)
+
+    var faqUrl: String
+        set(url) = userCache.putString(FAQ_URL, url)
+        get() = userCache.getString(FAQ_URL, FAQ_DEFAULT)
 
     var isPhoneVerified: Boolean
         set(phoneVerified) = userCache.putBoolean(PHONE_VERIFIED, phoneVerified)
