@@ -11,6 +11,7 @@ private const val QUESTIONNAIRE_ANSWERS_STORAGE = "kin.app.task.chosen.answers"
 private const val TASK_STORAGE = "kin.app.task"
 private const val TASK_KEY = "task"
 private const val TASK_STATE_KEY = "task_state"
+private const val SHOW_CAPTCHA_KEY = "show_captcha"
 
 class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String? = null) {
     var task: Task?
@@ -27,6 +28,14 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         get() {
             return this.taskCache.getInt(TASK_STATE_KEY, TaskState.IDLE)
         }
+    var shoulShowCaptcha: Boolean
+        set(shouldShow) {
+            taskCache.putBoolean(SHOW_CAPTCHA_KEY, shouldShow)
+        }
+        get () {
+            return taskCache.getBoolean(SHOW_CAPTCHA_KEY)
+        }
+
 
 
     init {

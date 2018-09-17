@@ -15,6 +15,7 @@ import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.navigation.Navigator.Destination
 import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.viewmodel.earn.QuizViewModel
 import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel
@@ -23,7 +24,10 @@ import javax.inject.Inject
 class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
 
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var taskRepo: TasksRepository
+    @Inject
+    lateinit var taskService: TaskService
+
     private lateinit var questionnaireModel: QuestionnaireViewModel
     private lateinit var nextFragmentCallback: Observable.OnPropertyChangedCallback
 
@@ -57,12 +61,12 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
         val binding: QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this,
-                R.layout.questionnaire_fragment_layout)
+            R.layout.questionnaire_fragment_layout)
 
-        if (questionnaireRepository.task == null)
+        if (taskRepo.task == null)
             finish()
 
-        questionnaireRepository.task?.let {
+        taskRepo.task?.let {
             questionnaireModel = if (it.isQuiz()) {
                 QuizViewModel(savedInstanceState != null)
             } else {
@@ -101,7 +105,7 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        questionnaireRepository.resetTaskState()
+        taskRepo.resetTaskState()
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out)
         questionnaireModel.onBackPressed()
     }
@@ -110,11 +114,11 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (fragment != null) {
             supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                    .replace(R.id.fragment_container, newFragment).commitNowAllowingStateLoss()
+                .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
+                .replace(R.id.fragment_container, newFragment).commitNowAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, newFragment)
-                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitNowAllowingStateLoss()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitNowAllowingStateLoss()
         }
     }
 }

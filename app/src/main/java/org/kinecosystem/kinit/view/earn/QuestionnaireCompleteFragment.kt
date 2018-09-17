@@ -15,14 +15,17 @@ import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireCompleteViewModel
 
 class QuestionnaireCompleteFragment : BaseFragment() {
 
-    private val model: QuestionnaireCompleteViewModel = QuestionnaireCompleteViewModel()
+    private var model: QuestionnaireCompleteViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding: QuestionnaireCompleteFragmentBinding = DataBindingUtil
                 .inflate(inflater, R.layout.questionnaire_complete_fragment,
                         container, false)
-        binding.model = model
+        context?.let {
+            model = QuestionnaireCompleteViewModel(it)
+            binding.model = model
+        }
         return binding.root
     }
 
@@ -63,7 +66,7 @@ class QuestionnaireCompleteFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        model.onResume()
+        model?.onResume()
         if (activity != null && activity is QuestionnaireActivity) {
             (activity as QuestionnaireActivity).updateNoToolBar()
         }
