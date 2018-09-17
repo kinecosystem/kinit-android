@@ -4,13 +4,17 @@ import android.webkit.JavascriptInterface
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.repository.UserRepository
 import javax.inject.Inject
 
 class FAQViewModel {
 
+    @Inject
+    lateinit var userRepository: UserRepository
+
     var listener: FAQActions? = null
     var interfaceName: String = "Kinit"
-    var url: String = "http://cdn.kinitapp.com/faq/"
+    var url: String = ""
 
 
     @Inject
@@ -25,6 +29,7 @@ class FAQViewModel {
 
     init {
         KinitApplication.coreComponent.inject(this)
+        url = userRepository.faqUrl
     }
 
     fun onHeaderButtonClicked() {

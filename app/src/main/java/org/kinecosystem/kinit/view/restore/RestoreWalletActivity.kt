@@ -185,7 +185,7 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
     }
 
     override fun contactSupport() {
-        SupportUtil.openEmailSupport(this, userRepository)
+        SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
     }
 }
 

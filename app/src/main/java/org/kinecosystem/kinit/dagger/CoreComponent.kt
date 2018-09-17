@@ -5,6 +5,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.firebase.KinInstanceIdService
 import org.kinecosystem.kinit.firebase.KinMessagingService
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.BottomTabNavigation
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.SplashActivity
@@ -108,4 +109,5 @@ interface CoreComponent {
     fun inject(backupSummaryFragment: BackupSummaryFragment)
     fun inject(faqViewModel: FAQViewModel)
     fun inject(faqActivity: FAQActivity)
+    fun inject(supportUtil: SupportUtil)
 }

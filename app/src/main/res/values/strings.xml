@@ -60,7 +60,9 @@
         \nPlatform:%2$s
         \nVersion:%3$s
         \n=====================\n</string>
+    <string name="feedback_email_body_template">We really appreciate your input. Please enter your feedback for Kinit %s here:</string>
     <string name="support_email_no_mail_app">Please send an email to support@kinitapp.com.\nThe email subject should be:\nKin Support Request.\nReference number %1$s"</string>
+    <string name="feedback_email_no_mail_app">Please send an email to feedback@kinitapp.com.\n</string>
     <string name="kin_currency">KIN</string>
     <string name="version">version %s</string>
     <string name="error_unable_to_create_wallet">We were unable to create a wallet for you</string>
@@ -203,7 +205,6 @@
     <string name="send_feedback_text">We can’t respond to feedbacks individually.\nIf you have a question or need help resolving a problem, you’ll find answers in our help center.</string>
     <string name="feedback_email_address">feedback@kinitapp.com</string>
     <string name="feedback_email_subject">Feedback</string>
-    <string name="feedback_email_body_template">TODO</string>
     <string name="help_center">Help Center</string>
     <string name="thank_you_for_feedback_text">Thank you for your feedback!</string>
 </resources>

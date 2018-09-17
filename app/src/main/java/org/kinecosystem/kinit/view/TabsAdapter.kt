@@ -139,12 +139,6 @@ class TabsAdapter(val context: Context) :
                 }
             }
         })
-
-        // TODO: Replace when bubble design available
-        binding.feedbackInfoIcon.setOnClickListener {
-            AlertManager.showAlert(context, R.string.send_feedback_title, R.string.send_feedback_text, R.string.dialog_ok, {})
-        }
-
         binding.model = model
         models[position] = binding.model
         return binding.root

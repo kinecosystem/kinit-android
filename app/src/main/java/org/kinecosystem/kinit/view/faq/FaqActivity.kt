@@ -52,7 +52,7 @@ class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
     }
 
     override fun contactSupport() {
-        SupportUtil.openEmailSupport(this, userRepository)
+        SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
     }
 
     override fun onBackPressed() {

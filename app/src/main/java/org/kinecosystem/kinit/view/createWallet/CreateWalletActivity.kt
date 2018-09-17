@@ -76,7 +76,7 @@ class CreateWalletActivity : SingleFragmentActivity(), CreateWalletActions, Crea
     }
 
     override fun contactSupport(userRepository: UserRepository) {
-        SupportUtil.openEmailSupport(this, userRepository)
+        SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
     }
 }
 

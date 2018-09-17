@@ -1,8 +1,6 @@
 package org.kinecosystem.kinit.view.phoneVerify;
 
 
-import static org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity.PHONE_AUTH_DATA_STORE;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -34,6 +32,8 @@ import org.kinecosystem.kinit.util.SupportUtil;
 import org.kinecosystem.kinit.view.BaseFragment;
 
 import javax.inject.Inject;
+
+import static org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity.PHONE_AUTH_DATA_STORE;
 
 public class CodeVerificationFragment extends BaseFragment {
 
@@ -232,7 +232,7 @@ public class CodeVerificationFragment extends BaseFragment {
     private void showContactSupport() {
         resend.setText(getResources().getString(R.string.contact_support) + " >");
         resend.setOnClickListener(resend -> {
-            SupportUtil.INSTANCE.openEmailSupport(getActivity(), userRepository);
+            SupportUtil.INSTANCE.openEmail(getActivity(), userRepository, SupportUtil.Type.SUPPORT);
         });
     }
 

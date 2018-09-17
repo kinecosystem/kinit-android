@@ -114,18 +114,6 @@
             app:layout_constraintTop_toBottomOf="@+id/helpcenter_view" />
 
         <ImageView
-            android:id="@+id/feedback_info_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="21dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="@+id/feedback_view"
-            app:layout_constraintEnd_toEndOf="@+id/lock_closed"
-            app:layout_constraintStart_toStartOf="@+id/lock_closed"
-            app:layout_constraintTop_toTopOf="@+id/feedback_view"
-            app:srcCompat="@drawable/info_icon" />
-
-        <ImageView
             android:id="@+id/feedback_icon"
             style="@style/feedbackIcon"
             android:layout_width="25dp"

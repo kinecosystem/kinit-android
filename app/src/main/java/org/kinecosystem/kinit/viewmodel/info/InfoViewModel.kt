@@ -4,12 +4,14 @@ import android.databinding.ObservableBoolean
 import android.view.View
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.TabViewModel
+import org.kinecosystem.kinit.view.customView.AlertManager
 import javax.inject.Inject
 
 class InfoViewModel(val navigator: Navigator) : TabViewModel {
@@ -40,7 +42,9 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
     }
 
     fun onSendFeedbackClicked(view: View) {
-        SupportUtil.openEmailFeedback(view.context, userRepository)
+        AlertManager.showAlert(view.context, R.string.send_feedback_title, R.string.send_feedback_text, R.string.dialog_ok, {
+            SupportUtil.openEmail(view.context, userRepository, SupportUtil.Type.FEEDBACK)
+        })
     }
 
     fun onHelpCenterClicked(view: View) {
