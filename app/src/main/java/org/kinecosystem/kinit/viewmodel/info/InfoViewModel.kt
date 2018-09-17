@@ -42,7 +42,7 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
     }
 
     fun onSendFeedbackClicked(view: View) {
-        AlertManager.showAlert(view.context, R.string.send_feedback_title, R.string.send_feedback_text, R.string.dialog_ok, {
+        AlertManager.showAlert(view.context, R.string.send_feedback_title, R.string.send_feedback_text, R.string.dialog_continue, {
             SupportUtil.openEmail(view.context, userRepository, SupportUtil.Type.FEEDBACK)
         })
     }
