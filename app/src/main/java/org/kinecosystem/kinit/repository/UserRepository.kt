@@ -27,7 +27,7 @@ private const val BACKED_UP = "BACKED_UP"
 private const val AUTH_TOKEN = "authToken"
 private const val RESTORE_HINTS = "RESTORE_HINTS"
 private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
-private const val FAQ_DEFAULT = "http://cdn.kinitapp.com/faq/index.html"
+private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
 
 
 
