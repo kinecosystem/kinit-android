@@ -41,7 +41,7 @@ class FAQViewModel {
     }
 
     @JavascriptInterface
-    fun pageLoaded(faqCategory: String?, faqTitle: String?) {
+    fun pageLoaded(faqCategory: String, faqTitle: String) {
         if (faqTitle == "FAQ")
             analytics.logEvent(Events.Analytics.ViewFaqMainPage())
         else
@@ -49,13 +49,13 @@ class FAQViewModel {
     }
 
     @JavascriptInterface
-    fun isPageHelpfulSelection(faqCategory: String?, faqTitle: String?, isHelpful: Boolean?) {
+    fun isPageHelpfulSelection(faqCategory: String, faqTitle: String, isHelpful: Boolean) {
         listener?.pageHelpfulClicked()
         analytics.logEvent(Events.Analytics.ClickPageHelpfulButtonOnFaqPage(faqCategory, faqTitle, isHelpful))
     }
 
     @JavascriptInterface
-    fun contactSupport(faqCategory: String?, faqTitle: String?) {
+    fun contactSupport(faqCategory: String, faqTitle: String) {
         listener?.contactSupport()
         analytics.logEvent(Events.Analytics.ClickSupportButton(faqCategory, faqTitle))
     }
