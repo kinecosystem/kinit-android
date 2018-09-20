@@ -23,7 +23,6 @@ class FAQViewModel {
     interface FAQActions {
         fun moveBack()
         fun moveHome()
-        fun pageHelpfulClicked()
         fun contactSupport()
     }
 
@@ -50,7 +49,6 @@ class FAQViewModel {
 
     @JavascriptInterface
     fun isPageHelpfulSelection(faqCategory: String, faqTitle: String, isHelpful: Boolean) {
-        listener?.pageHelpfulClicked()
         analytics.logEvent(Events.Analytics.ClickPageHelpfulButtonOnFaqPage(faqCategory, faqTitle, isHelpful))
     }
 
