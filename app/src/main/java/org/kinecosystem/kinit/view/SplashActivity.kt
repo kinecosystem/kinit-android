@@ -25,12 +25,12 @@ class SplashActivity : BaseActivity(), SplashViewModel.ISplashViewModel {
         super.onCreate(savedInstanceState)
         googlePlayServicesAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(applicationContext)
         setContentView(R.layout.splash_layout)
-        splashViewModel.listener = this
     }
 
     override fun onResume() {
         super.onResume()
         if (googlePlayServicesAvailable == ConnectionResult.SUCCESS) {
+            splashViewModel.listener = this
             splashViewModel.onResume()
         } else {
             GoogleApiAvailability
@@ -48,8 +48,13 @@ class SplashActivity : BaseActivity(), SplashViewModel.ISplashViewModel {
         finish()
     }
 
+    override fun onPause() {
+        super.onPause()
+        splashViewModel.listener = null
+    }
+
     override fun showBlackListDialog() {
-        val builder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
+        val builder = AlertDialog.Builder(this@SplashActivity, R.style.CustomAlertDialog)
         var alertDialog: AlertDialog? = null
         builder.setTitle(resources.getString(R.string.oh_no))
                 .setMessage(resources.getString(R.string.block_area_code_message))
