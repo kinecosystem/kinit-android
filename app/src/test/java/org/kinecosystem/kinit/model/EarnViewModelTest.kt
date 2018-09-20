@@ -202,7 +202,7 @@ private const val SAMPLE_QUIZ_TASK = """
         }
 """
 
-private const val SAMPLE_QUIZ_TASK_REWARD = 20
+private const val SAMPLE_QUIZ_TASK_REWARD = 25
 
 class EarnViewModelTest {
 
