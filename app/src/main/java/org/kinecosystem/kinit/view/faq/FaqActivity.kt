@@ -47,10 +47,6 @@ class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
         webfragment?.binding?.webview?.loadUrl(model.url)
     }
 
-    override fun pageHelpfulClicked() {
-        Toast.makeText(applicationContext, R.string.thank_you_for_feedback_text, Toast.LENGTH_LONG).show()
-    }
-
     override fun contactSupport() {
         SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
     }
