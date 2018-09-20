@@ -90,6 +90,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
                 (task.questions?.forEach { question ->
                     totalReward += (question.quiz_data?.reward ?: 0)
                 })
+                totalReward += task.kinReward ?: 0
                 totalReward.toString()
             } else task.kinReward?.toString())
             minToComplete.set(convertMinToCompleteToString(task.minToComplete))
