@@ -21,5 +21,7 @@ class TaskState {
         const val TRANSACTION_ERROR = 4
         // user received their Kin!
         const val TRANSACTION_COMPLETED = 6
+        // user is served a captcha
+        const val SHOWING_CAPTCHA = 10
     }
 }

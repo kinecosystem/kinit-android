@@ -23,10 +23,13 @@ class TaskService(context: Context, api: TasksApi,
 
     private val tasksApi: TasksApi = api
     private val applicationContext: Context = context.applicationContext
+    var lastSubmissionTime: Long = -1
+        private set
 
     fun submitQuestionnaireAnswers(
             userInfo: UserInfo,
             task: Task?,
+            token: String,
             chosenAnswers: List<ChosenAnswers>) {
 
         if (!GeneralUtils.isConnected(applicationContext)) {
@@ -47,7 +50,7 @@ class TaskService(context: Context, api: TasksApi,
         tasksRepo.taskState = TaskState.SUBMITTED
 
         val submitInfo = TasksApi.SubmitInfo(task.id.orEmpty(),
-                chosenAnswers, userInfo.publicAddress)
+                token, chosenAnswers, userInfo.publicAddress)
         submitQuestionnaireAnswers(submitInfo)
     }
 
@@ -79,8 +82,8 @@ class TaskService(context: Context, api: TasksApi,
                     Log.d("TaskService", "onResponse: ${response.body()}")
                     val taskResponse = response.body()
                     val taskList: List<Task> = taskResponse?.taskList.orEmpty()
-
                     var task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
+                    tasksRepo.shoulShowCaptcha = taskResponse?.showCaptcha ?: false
                     if (hasChanged(task)) {
                         tasksRepo.replaceTask(task, applicationContext)
                         callback?.onResult(true)
@@ -109,25 +112,26 @@ class TaskService(context: Context, api: TasksApi,
     }
 
     private fun submitQuestionnaireAnswers(submitInfo: TasksApi.SubmitInfo) {
+        lastSubmissionTime = System.currentTimeMillis()
         tasksApi.submitTaskResults(userRepo.userId(), submitInfo).enqueue(
                 object : Callback<TasksApi.TaskSubmitResponse> {
                     override fun onResponse(call: Call<TasksApi.TaskSubmitResponse>?,
                                             response: Response<TasksApi.TaskSubmitResponse>?) {
 
                         if (response != null && response.isSuccessful) {
-                            Log.d("TaskService", "onResponse: ${response.body()}")
+                            Log.d("TaskService", "submit onResponse: ${response.body()}")
                             tasksRepo.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
 
                             walletService.onEarnTransactionCompleted.set(false)
                             retrieveNextTask()
                         } else {
-                            Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
+                            Log.d("TaskService", "submit onResponse null or isSuccessful=false: $response")
                             tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
                         }
                     }
 
                     override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
-                        Log.d("TaskService", "onFailure called with throwable $t")
+                        Log.d("TaskService", "submit onFailure called with throwable $t")
                         tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
                     }
                 })
