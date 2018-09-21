@@ -119,19 +119,19 @@ class TaskService(context: Context, api: TasksApi,
                                             response: Response<TasksApi.TaskSubmitResponse>?) {
 
                         if (response != null && response.isSuccessful) {
-                            Log.d("TaskService", "onResponse: ${response.body()}")
+                            Log.d("TaskService", "submit onResponse: ${response.body()}")
                             tasksRepo.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
 
                             walletService.onEarnTransactionCompleted.set(false)
                             retrieveNextTask()
                         } else {
-                            Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
+                            Log.d("TaskService", "submit onResponse null or isSuccessful=false: $response")
                             tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
                         }
                     }
 
                     override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
-                        Log.d("TaskService", "onFailure called with throwable $t")
+                        Log.d("TaskService", "submit onFailure called with throwable $t")
                         tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
                     }
                 })

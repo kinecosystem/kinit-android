@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.viewmodel.earn
 
 
 import android.content.Context
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.safetynet.SafetyNet
 import com.google.android.gms.safetynet.SafetyNetApi
 import com.google.android.gms.tasks.OnCanceledListener
@@ -76,6 +77,7 @@ class QuestionnaireCompleteViewModel {
     }
 
     private fun showCaptcha(context: Context) {
+        analytics.logEvent(Events.Analytics.ViewCaptchaPopup())
         taskRepository.taskState = TaskState.SHOWING_CAPTCHA
         var executor = Executor { command -> scheduler.post(command) }
 
@@ -85,9 +87,14 @@ class QuestionnaireCompleteViewModel {
                     submitAnswers(token = captchaResponse?.tokenResult.orEmpty())
                 })
             .addOnFailureListener(executor, OnFailureListener { exception ->
+                val code = if (exception is ApiException) {
+                    exception.statusCode
+                } else -1
+                analytics.logEvent(Events.BILog.CaptchaFailed("$exception $code ${exception.message}"))
                 submitAnswers(token = "")
             })
             .addOnCanceledListener(executor, OnCanceledListener {
+                analytics.logEvent(Events.BILog.CaptchaFailed("Cancelled"))
                 submitAnswers(token = "")
             })
     }
