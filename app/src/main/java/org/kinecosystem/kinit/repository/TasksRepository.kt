@@ -89,9 +89,10 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     }
 
     fun isTaskAvailable(): Boolean {
-        if (task == null) return false
-        val taskDate: Long = task?.startDateInMillis() ?: System.currentTimeMillis()
-        return System.currentTimeMillis() >= taskDate
+        task?.startDateInMillis()?.let {
+            return System.currentTimeMillis() >= it
+        }
+        return false
     }
 
     fun clearChosenAnswers() {
