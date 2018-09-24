@@ -101,10 +101,11 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
                     val timeDiff = System.currentTimeMillis() - taskService.lastSubmissionTime
                     if (submitted || submitFailed) {
                         Log.d(TAG, "timeout reached with taskState= ${taskRepository.taskState}")
+                        onTimeoutCompleted()
                         timeoutCallback?.onSubmitError()
                     } else if (taskRepository.taskState == TaskState.SHOWING_CAPTCHA) {
                         Log.d(TAG,
-                            "waitForReward, state is SHOWING_CAPTCHA will wait some more. taskState= ${taskRepository.taskState}")
+                            "timeout reached however state is SHOWING_CAPTCHA will wait some more. taskState= ${taskRepository.taskState}")
                         waitForReward(REWARD_TIMEOUT)
                     } else if (timeDiff < REWARD_TIMEOUT) {
                         Log.d(TAG,
@@ -112,15 +113,19 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
                         // wait some more
                         waitForReward(REWARD_TIMEOUT - timeDiff + SMALL_DELAY)
                     } else {
+                        onTimeoutCompleted()
                         Log.d(TAG, "timeout reached transaction error")
                         timeoutCallback?.onTransactionTimeout()
                     }
-                    // update balance anyway in case kin has been received
-                    walletService.updateBalance()
-                    walletService.retrieveTransactions()
                 }
             },
             timeout)
+    }
+
+    private fun onTimeoutCompleted(){
+        // when timeout is reached, update balance anyway in case kin has been received
+        walletService.updateBalance()
+        walletService.retrieveTransactions()
     }
 
 }

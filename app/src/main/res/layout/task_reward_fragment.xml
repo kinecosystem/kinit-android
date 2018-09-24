@@ -105,10 +105,12 @@
             android:text="@string/your_new_balance"
             android:textColor="#ffffff"
             android:textSize="16sp"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balance_amount"/>
+            app:layout_constraintTop_toBottomOf="@+id/balance_amount"
+            app:visibilityOn="@{model.onTransactionComplete}"/>
 
         <TextView
             android:id="@+id/close_text"
