@@ -110,7 +110,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
             shouldShowTaskNotAvailableYet.set(false)
             backupAlertManager?.showNagAlertIfNeeded()
         } else {
-            val taskAvailable = isTaskAvailable()
+            val taskAvailable = taskRepository.isTaskAvailable()
             shouldShowTask.set(taskAvailable)
             shouldShowTaskNotAvailableYet.set(!taskAvailable)
             shouldShowNoTask.set(false)
@@ -134,10 +134,6 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
                 }
             }
         }
-    }
-
-    private fun isTaskAvailable(): Boolean {
-        return taskRepository.isTaskAvailable()
     }
 
     private fun isAvailableTomorrow(): Boolean {
