@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.viewmodel.earn
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
+import android.util.Log
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -25,17 +26,16 @@ import java.util.*
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
 class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
-                    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
-                    private val navigator: Navigator, private val backupAlertManager: BackupAlertManager?) :
-        TabViewModel {
+    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
+    private val navigator: Navigator, private val backupAlertManager: BackupAlertManager?) :
+    TabViewModel {
 
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
     var shouldShowNoTask = ObservableBoolean(false)
-    var isTaskStarted: ObservableBoolean
+
     var nextAvailableDate: ObservableField<String> = ObservableField("")
     var isAvailableTomorrow: ObservableBoolean = ObservableBoolean(false)
-    var balance: ObservableField<String>
     var authorName = ObservableField<String>()
     var authorImageUrl = ObservableField<String?>()
     var title = ObservableField<String?>()
@@ -44,11 +44,12 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     var minToComplete = ObservableField<String>()
     var isQuiz = ObservableBoolean(false)
 
+    var isTaskStarted: ObservableBoolean = taskRepository.isTaskStarted
+    var balance: ObservableField<String> = wallet.balance
+
     private var scheduledRunnable: Runnable? = null
 
     init {
-        balance = wallet.balance
-        isTaskStarted = taskRepository.isTaskStarted
         refresh()
     }
 
@@ -56,24 +57,24 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
         taskRepository.taskState = TaskState.IN_PROGRESS
         val task = taskRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
-                task?.provider?.name,
-                task?.minToComplete,
-                task?.kinReward,
-                task?.tagsString(),
-                task?.id,
-                task?.title,
-                task?.type)
+            task?.provider?.name,
+            task?.minToComplete,
+            task?.kinReward,
+            task?.tagsString(),
+            task?.id,
+            task?.title,
+            task?.type)
         analytics.logEvent(bEvent)
 
         val aEvent = Events.Analytics.ClickStartButtonOnTaskPage(
-                isTaskStarted.get(),
-                task?.provider?.name,
-                task?.minToComplete,
-                task?.kinReward,
-                task?.tagsString(),
-                task?.id,
-                task?.title,
-                task?.type)
+            isTaskStarted.get(),
+            task?.provider?.name,
+            task?.minToComplete,
+            task?.kinReward,
+            task?.tagsString(),
+            task?.id,
+            task?.title,
+            task?.type)
         analytics.logEvent(aEvent)
         navigator.navigateTo(Navigator.Destination.TASK)
     }
@@ -113,7 +114,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
             shouldShowTask.set(taskAvailable)
             shouldShowTaskNotAvailableYet.set(!taskAvailable)
             shouldShowNoTask.set(false)
-            if(!taskAvailable){
+            if (!taskAvailable) {
                 backupAlertManager?.showNagAlertIfNeeded()
             }
 
@@ -136,9 +137,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun isTaskAvailable(): Boolean {
-        val taskDate: Long = taskRepository.task?.startDateInMillis()
-                ?: scheduler.currentTimeMillis()
-        return scheduler.currentTimeMillis() >= taskDate
+        return taskRepository.isTaskAvailable()
     }
 
     private fun isAvailableTomorrow(): Boolean {
@@ -152,10 +151,11 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
         return (1 + ((startDate - millisAtNextMidnight) / DAY_IN_MILLIS)).toInt()
     }
 
-    fun nextAvailableDate(): String {
-        val dateInMillis = taskRepository.task?.startDateInMillis() ?: 0
-        val local = Locale.US
-        return SimpleDateFormat(AVAILABILITY_DATE_FORMAT, local).format(Date(dateInMillis))
+    private fun nextAvailableDate(): String {
+        taskRepository.task?.startDateInMillis()?.let {
+            return SimpleDateFormat(AVAILABILITY_DATE_FORMAT, Locale.US).format(Date(it))
+        }
+        return ""
     }
 
     override fun onScreenVisibleToUser() {
@@ -184,12 +184,12 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     private fun onEarnScreenVisible() {
         val task = taskRepository.task
         val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
-                task?.minToComplete,
-                task?.kinReward,
-                task?.tagsString(),
-                task?.id,
-                task?.title,
-                task?.type)
+            task?.minToComplete,
+            task?.kinReward,
+            task?.tagsString(),
+            task?.id,
+            task?.title,
+            task?.type)
         analytics.logEvent(event)
     }
 
@@ -206,10 +206,10 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun convertMinToCompleteToString(minToComplete: Float?): String =
-            when {
-                minToComplete == null -> "0"
-                (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
-                else -> minToComplete.toString()
-            }
+        when {
+            minToComplete == null -> "0"
+            (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
+            else -> minToComplete.toString()
+        }
 }
 

@@ -21,7 +21,7 @@ data class Task(
     @SerializedName("price")
     val kinReward: Int? = null,
     @SerializedName("start_date")
-    val startDateInSeconds: Long? = 0,
+    val startDateInSeconds: Long? = null,
     @SerializedName("min_to_complete")
     val minToComplete: Float? = null,
     @SerializedName("tags")
