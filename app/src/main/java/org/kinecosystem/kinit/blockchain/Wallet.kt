@@ -233,7 +233,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
     }
 
-    fun importBakedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
+    fun importBackedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
         return try {
             kinClient.importAccount(exportedStr, passphrase)
         } catch (cryptoException: CryptoException) {
