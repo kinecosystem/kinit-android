@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.repository
 
 import android.content.Context
 import android.databinding.ObservableBoolean
+import android.text.TextUtils
 import com.google.gson.Gson
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.*
@@ -36,8 +37,6 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
             return taskCache.getBoolean(SHOW_CAPTCHA_KEY)
         }
 
-
-
     init {
         task = getCachedTask(defaultTask)
         taskStorageName = QUESTIONNAIRE_ANSWERS_STORAGE
@@ -64,7 +63,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     }
 
     fun getChosenAnswersByQuestionId(questionId: String): List<String> = chosenAnswersCache.getStringList(questionId,
-        listOf())
+            listOf())
 
     fun getNumOfAnsweredQuestions(): Int {
         return getChosenAnswers().size
@@ -106,6 +105,11 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         this.task = task
         if (task != null) {
             taskCache.putString(TASK_KEY, Gson().toJson(task))
+            val url = task.postTaskActions?.first()?.iconUrl
+            if (!TextUtils.isEmpty(url)) {
+                ImageUtils.fetchImage(applicationContext, url)
+            }
+
             for (question: Question in task.questions.orEmpty()) {
                 if (question.hasImages()) {
                     ImageUtils.fetchImages(applicationContext, question.getImagesUrls())

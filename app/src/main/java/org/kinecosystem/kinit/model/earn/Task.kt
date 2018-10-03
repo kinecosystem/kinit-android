@@ -10,30 +10,32 @@ const val TASK_TYPE_TRUEX: String = "truex"
 
 
 data class Task(
-    @SerializedName("id")
-    val id: String? = null,
-    @SerializedName("memo")
-    val memo: String? = null,
-    @SerializedName("title")
-    val title: String? = null,
-    @SerializedName("desc")
-    val description: String? = null,
-    @SerializedName("price")
-    val kinReward: Int? = null,
-    @SerializedName("start_date")
-    val startDateInSeconds: Long? = null,
-    @SerializedName("min_to_complete")
-    val minToComplete: Float? = null,
-    @SerializedName("tags")
-    val tags: List<String>? = null,
-    @SerializedName("provider")
-    val provider: Provider? = null,
-    @SerializedName("type")
-    val type: String? = null,
-    @SerializedName("updated_at")
-    val lastUpdatedAt: Long? = null,
-    @SerializedName("items")
-    val questions: List<Question>? = null)
+        @SerializedName("id")
+        val id: String? = null,
+        @SerializedName("memo")
+        val memo: String? = null,
+        @SerializedName("title")
+        val title: String? = null,
+        @SerializedName("desc")
+        val description: String? = null,
+        @SerializedName("price")
+        val kinReward: Int? = null,
+        @SerializedName("start_date")
+        val startDateInSeconds: Long? = null,
+        @SerializedName("min_to_complete")
+        val minToComplete: Float? = null,
+        @SerializedName("tags")
+        val tags: List<String>? = null,
+        @SerializedName("post_task_actions")
+        val postTaskActions: List<PostTaskAction>? = null,
+        @SerializedName("provider")
+        val provider: Provider? = null,
+        @SerializedName("type")
+        val type: String? = null,
+        @SerializedName("updated_at")
+        val lastUpdatedAt: Long? = null,
+        @SerializedName("items")
+        val questions: List<Question>? = null)
 
 fun Task.isValid(): Boolean {
     if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() ||
@@ -53,6 +55,8 @@ fun Task.isValid(): Boolean {
 fun Task.isQuestionnaire(): Boolean = type.equals(TASK_TYPE_QUESTIONNAIRE)
 
 fun Task.isQuiz(): Boolean = type.equals(TASK_TYPE_QUIZ)
+
+fun Task.hasPostActions(): Boolean = postTaskActions != null && postTaskActions.isNotEmpty()
 
 fun Task.isTaskWebView(): Boolean = type.equals(TASK_TYPE_TRUEX)
 
