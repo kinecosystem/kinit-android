@@ -402,7 +402,7 @@ public class Events {
         }
 
         /**
-         Stellar wallet (account) successfully created for the user. Event name: `wallet_created`
+         Stellar walletService (account) successfully created for the user. Event name: `wallet_created`
          */
         public static class WalletCreated implements Event {
 
@@ -458,7 +458,7 @@ public class Events {
         }
 
         /**
-         user successfully completed the wallet backup process. Event name: `wallet_backed_up`
+         user successfully completed the walletService backup process. Event name: `wallet_backed_up`
          */
         public static class WalletBackedUp implements Event {
 
@@ -486,7 +486,7 @@ public class Events {
         }
 
         /**
-         user successfully restored his/her wallet. Event name: `wallet_restored`
+         user successfully restored his/her walletService. Event name: `wallet_restored`
          */
         public static class WalletRestored implements Event {
 
@@ -2903,7 +2903,7 @@ public class Events {
         }
 
         /**
-         user chooses to restore wallet on welcome back page. Event name: `click_Restore_Wallet_button_on_Welcome_Back_page`
+         user chooses to restore walletService on welcome back page. Event name: `click_Restore_Wallet_button_on_Welcome_Back_page`
          */
         public static class ClickRestoreWalletButtonOnWelcomeBackPage implements Event {
 
@@ -2936,7 +2936,7 @@ public class Events {
         }
 
         /**
-         user chooses to create new wallet on welcome back page. Event name: `click_Create_New_Wallet_button_on_Welcome_Back_page`
+         user chooses to create new walletService on welcome back page. Event name: `click_Create_New_Wallet_button_on_Welcome_Back_page`
          */
         public static class ClickCreateNewWalletButtonOnWelcomeBackPage implements Event {
 
@@ -3097,7 +3097,7 @@ public class Events {
         }
 
         /**
-         user views the completion message after successfully restoring the wallet. Event name: `view_Wallet_Restored_page`
+         user views the completion message after successfully restoring the walletService. Event name: `view_Wallet_Restored_page`
          */
         public static class ViewWalletRestoredPage implements Event {
 
@@ -3128,7 +3128,7 @@ public class Events {
         }
 
         /**
-         user views the creating wallet page (animation) when creating new wallet. Event name: `view_Creating_Wallet_page`
+         user views the creating walletService page (animation) when creating new walletService. Event name: `view_Creating_Wallet_page`
          */
         public static class ViewCreatingWalletPage implements Event {
 

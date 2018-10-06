@@ -1,18 +1,26 @@
-package org.kinecosystem.kinit.model
+package org.kinecosystem.kinit.viewmodel
 
 import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
 import android.text.format.DateUtils.HOUR_IN_MILLIS
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
-import org.kinecosystem.kinit.mock.MockComponentsProvider
+import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.blockchain.Wallet
+import org.kinecosystem.kinit.daggerTestCore.TestCoreComponent
+import org.kinecosystem.kinit.daggerTestCore.TestCoreComponentProvider
 import org.kinecosystem.kinit.mock.MockScheduler
-import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.util.Scheduler
+import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
-import org.mockito.Mockito
+import org.mockito.InjectMocks
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
+import javax.inject.Inject
 
 private const val SAMPLE_QUESTIONNAIRE_TASK = """
 {
@@ -206,67 +214,85 @@ private const val SAMPLE_QUIZ_TASK_REWARD = 25
 
 class EarnViewModelTest {
 
-    private val mockComponents = MockComponentsProvider()
-    private val mockNavigator: Navigator = Mockito.mock(Navigator::class.java)
-    private lateinit var earnViewModelToTest: EarnViewModel
+    @Inject
+    lateinit var scheduler: Scheduler
+    @Mock
+    lateinit var walletService: Wallet
+    @Mock
+    lateinit var tasksRepository: TasksRepository
+
+    @Mock
+    lateinit var backupAlertManager: BackupAlertManager
+
+    @InjectMocks
+    private lateinit var earnViewModel: EarnViewModel
+
+    private lateinit var coreComponent: TestCoreComponent
+
+    @Before
+    fun setup() {
+        MockitoAnnotations.initMocks(this)
+        coreComponent = TestCoreComponentProvider.instance.coreComponent
+        KinitApplication.coreComponent = coreComponent
+        coreComponent.inject(this)
+    }
 
     private fun setupTaskWithTime(timeInMillis: Long, task: String? = null) {
         val timeInSecs = timeInMillis / 1000
         val sampleTask = (task
                 ?: SAMPLE_QUESTIONNAIRE_TASK).replace("__START_DATE__", timeInSecs.toString())
-        mockComponents.tasksRepository = TasksRepository(mockComponents, sampleTask)
-        `when`(mockComponents.wallet.balance).thenReturn(ObservableField("1"))
-        earnViewModelToTest = EarnViewModel(mockComponents.tasksRepository, mockComponents.wallet,
-                mockComponents.taskService,
-                mockComponents.scheduler, mockComponents.analytics,
-                mockNavigator, mockComponents.backupAlertManager)
-        earnViewModelToTest.onScreenVisibleToUser()
+
+        tasksRepository = TasksRepository(TestCoreComponentProvider.instance.dataStoreProvider, sampleTask)
+        `when`(walletService.balance).thenReturn(ObservableField("1"))
+
+        earnViewModel = EarnViewModel(backupAlertManager)
+        earnViewModel.onScreenVisibleToUser()
     }
 
     @Test
     fun quizRewardCalculation() {
-        var time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
+        val time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
         setupTaskWithTime(time1hourBefore, SAMPLE_QUIZ_TASK)
-        val kinReward = earnViewModelToTest.kinReward.get()?.toInt()
+        val kinReward = earnViewModel.kinReward.get()?.toInt()
         assertTrue(kinReward == SAMPLE_QUIZ_TASK_REWARD)
     }
 
     @Test
     fun taskRewardCalculation() {
-        var time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
+        val time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
         setupTaskWithTime(time1hourBefore, SAMPLE_QUESTIONNAIRE_TASK)
-        val kinReward = earnViewModelToTest.kinReward.get()?.toInt()
-        assertTrue(kinReward == earnViewModelToTest.taskRepository.task?.kinReward)
+        val kinReward = earnViewModel.kinReward.get()?.toInt()
+        assertTrue(kinReward == earnViewModel.tasksRepository.task?.kinReward)
     }
 
     @Test
     fun taskNotAvailableWhenTaskTimeInOneHour() {
-        var timeIn1hour = System.currentTimeMillis() + HOUR_IN_MILLIS
+        val timeIn1hour = System.currentTimeMillis() + HOUR_IN_MILLIS
         setupTaskWithTime(timeIn1hour)
-        assertFalse(earnViewModelToTest.shouldShowTask.get())
+        assertFalse(earnViewModel.shouldShowTask.get())
     }
 
     @Test
     fun taskAvailableWhenTaskTimeBeforeOneHour() {
         var time1hourBefore = System.currentTimeMillis() - HOUR_IN_MILLIS
         setupTaskWithTime(time1hourBefore)
-        assertTrue(earnViewModelToTest.shouldShowTask.get())
+        assertTrue(earnViewModel.shouldShowTask.get())
     }
 
     @Test
     fun taskBecomesAvailableInAnHour() {
         var timeIn1hour = System.currentTimeMillis() + HOUR_IN_MILLIS
         setupTaskWithTime(timeIn1hour)
-        (mockComponents.scheduler as MockScheduler).setCurrentTime(timeIn1hour)
-        assertTrue(earnViewModelToTest.shouldShowTask.get())
+        (scheduler as MockScheduler).setCurrentTime(timeIn1hour)
+        assertTrue(earnViewModel.shouldShowTask.get())
     }
 
     @Test
     fun taskBecomesAvailableInADay() {
         var timeInAday = System.currentTimeMillis() + DAY_IN_MILLIS
         setupTaskWithTime(timeInAday)
-        (mockComponents.scheduler as MockScheduler).setCurrentTime(timeInAday)
-        assertTrue(earnViewModelToTest.shouldShowTask.get())
+        (scheduler as MockScheduler).setCurrentTime(timeInAday)
+        assertTrue(earnViewModel.shouldShowTask.get())
     }
 
     @Test
@@ -274,25 +300,25 @@ class EarnViewModelTest {
         var timeInAday = System.currentTimeMillis() + DAY_IN_MILLIS
         var timeIn2days = timeInAday + DAY_IN_MILLIS
         setupTaskWithTime(timeIn2days)
-        (mockComponents.scheduler as MockScheduler).setCurrentTime(timeInAday)
-        assertFalse(earnViewModelToTest.shouldShowTask.get())
+        (scheduler as MockScheduler).setCurrentTime(timeInAday)
+        assertFalse(earnViewModel.shouldShowTask.get())
     }
 
     @Test
     fun taskBecomesAvailableIn2Days() {
         val currentTime = System.currentTimeMillis()
-        val mockScheduler = mockComponents.scheduler
+        val mockScheduler = scheduler as MockScheduler
         mockScheduler.setCurrentTime(currentTime)
         val timeIn1day = currentTime + DAY_IN_MILLIS
         var timeIn2days = timeIn1day + DAY_IN_MILLIS
         setupTaskWithTime(timeIn2days)
-        System.out.println("Task available in " + earnViewModelToTest.nextAvailableDate.get())
-        assertFalse(earnViewModelToTest.isAvailableTomorrow.get())
+        System.out.println("Task available in " + earnViewModel.nextAvailableDate.get())
+        assertFalse(earnViewModel.isAvailableTomorrow.get())
         mockScheduler.setCurrentTime(timeIn1day)
-        assertFalse(earnViewModelToTest.shouldShowTask.get())
-        assertTrue(earnViewModelToTest.isAvailableTomorrow.get())
+        assertFalse(earnViewModel.shouldShowTask.get())
+        assertTrue(earnViewModel.isAvailableTomorrow.get())
         mockScheduler.setCurrentTime(timeIn2days)
-        assertTrue(earnViewModelToTest.shouldShowTask.get())
+        assertTrue(earnViewModel.shouldShowTask.get())
     }
 
 }

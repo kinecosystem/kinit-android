@@ -29,9 +29,6 @@ private const val RESTORE_HINTS = "RESTORE_HINTS"
 private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
 private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
 
-
-
-
 class UserRepository(dataStoreProvider: DataStoreProvider) {
     private val userCache: DataStore = dataStoreProvider.dataStore(USER_CACHE_NAME)
     var userInfo: UserInfo
@@ -100,8 +97,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         }
         get() {
             val hintsString = userCache.getString(RESTORE_HINTS, "")
-            val hintsList = if (hintsString.isBlank()) listOf() else hintsString.split(';')
-            return hintsList
+            return if (hintsString.isBlank()) listOf() else hintsString.split(';')
         }
 
     var backUpHints: List<BackupApi.BackUpQuestion> = listOf()

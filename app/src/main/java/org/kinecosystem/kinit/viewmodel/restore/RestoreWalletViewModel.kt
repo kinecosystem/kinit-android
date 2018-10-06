@@ -12,7 +12,6 @@ import org.kinecosystem.kinit.server.api.BackupApi
 import javax.inject.Inject
 
 class RestoreWalletViewModel {
-
     @Inject
     lateinit var onboardingService: OnboardingService
     @Inject
@@ -22,10 +21,10 @@ class RestoreWalletViewModel {
     @Inject
     lateinit var analytics: Analytics
 
-    private lateinit var qrCode: String
-    private var answers: Array<String>
-    private var passphrase: String = ""
-    private var step = 0
+    lateinit var qrCode: String
+    var answers: Array<String>
+    var passphrase: String = ""
+    var step = 0
     val answersSubmitted: ObservableBoolean = ObservableBoolean(false)
     val nextEnabled: ObservableBoolean = ObservableBoolean(false)
     var listener: RestoreWalletViewModelListener? = null
