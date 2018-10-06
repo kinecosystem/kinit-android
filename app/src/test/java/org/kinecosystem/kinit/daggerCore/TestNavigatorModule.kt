@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.daggerTestCore
+package org.kinecosystem.kinit.daggerCore
 
 import android.content.Context
 import org.kinecosystem.kinit.dagger.NavigatorModule

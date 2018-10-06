@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.mock
+package org.kinecosystem.kinit.mocks
 
 import org.kinecosystem.kinit.util.Scheduler
 

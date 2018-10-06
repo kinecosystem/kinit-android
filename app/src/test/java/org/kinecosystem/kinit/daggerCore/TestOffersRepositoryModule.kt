@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.daggerTestCore
+package org.kinecosystem.kinit.daggerCore
 
 import org.kinecosystem.kinit.dagger.OffersRepositoryModule
 import org.kinecosystem.kinit.repository.OffersRepository

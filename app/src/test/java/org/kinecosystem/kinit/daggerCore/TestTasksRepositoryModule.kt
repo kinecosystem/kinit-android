@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.daggerTestCore
+package org.kinecosystem.kinit.daggerCore
 
 import org.kinecosystem.kinit.dagger.TasksRepositoryModule
 import org.kinecosystem.kinit.repository.DataStoreProvider

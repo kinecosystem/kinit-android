@@ -1,9 +1,9 @@
-package org.kinecosystem.kinit.daggerTestCore
+package org.kinecosystem.kinit.daggerCore
 
 import android.content.Context
 import org.kinecosystem.kinit.dagger.ContextModule
 import org.kinecosystem.kinit.dagger.DataStoreProviderModule
-import org.kinecosystem.kinit.mock.MockDataStoreProviderProvider
+import org.kinecosystem.kinit.mocks.MockDataStoreProviderProvider
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.mockito.Mockito.mock
 

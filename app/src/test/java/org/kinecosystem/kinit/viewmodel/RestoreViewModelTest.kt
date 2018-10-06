@@ -5,7 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.daggerTestCore.TestCoreComponentProvider
+import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.viewmodel.restore.RestoreState
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel

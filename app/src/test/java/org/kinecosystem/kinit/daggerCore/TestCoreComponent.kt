@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.daggerTestCore
+package org.kinecosystem.kinit.daggerCore
 
 import dagger.Component
 import org.kinecosystem.kinit.dagger.*

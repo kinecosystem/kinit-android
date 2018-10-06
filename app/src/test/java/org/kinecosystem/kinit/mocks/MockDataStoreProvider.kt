@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.mock
+package org.kinecosystem.kinit.mocks
 
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider

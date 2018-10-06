@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.daggerTestCore.TestCoreComponentProvider
+import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
 import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.isValid
 import org.mockito.MockitoAnnotations

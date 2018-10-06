@@ -9,8 +9,8 @@ import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.daggerTestCore.TestCoreComponentProvider
-import org.kinecosystem.kinit.mock.MockScheduler
+import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
+import org.kinecosystem.kinit.mocks.MockScheduler
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager

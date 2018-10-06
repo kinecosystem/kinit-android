@@ -1,7 +1,7 @@
-package org.kinecosystem.kinit.daggerTestCore
+package org.kinecosystem.kinit.daggerCore
 
 import org.kinecosystem.kinit.dagger.SchedulerModule
-import org.kinecosystem.kinit.mock.MockScheduler
+import org.kinecosystem.kinit.mocks.MockScheduler
 import org.kinecosystem.kinit.util.Scheduler
 
 class TestSchedulerModule : SchedulerModule() {
