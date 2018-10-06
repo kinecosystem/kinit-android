@@ -9,14 +9,12 @@ import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.daggerTestCore.TestCoreComponent
 import org.kinecosystem.kinit.daggerTestCore.TestCoreComponentProvider
 import org.kinecosystem.kinit.mock.MockScheduler
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
@@ -211,30 +209,24 @@ private const val SAMPLE_QUIZ_TASK = """
 """
 
 private const val SAMPLE_QUIZ_TASK_REWARD = 25
-
 class EarnViewModelTest {
 
     @Inject
     lateinit var scheduler: Scheduler
-    @Mock
+    @Inject
     lateinit var walletService: Wallet
-    @Mock
-    lateinit var tasksRepository: TasksRepository
-
     @Mock
     lateinit var backupAlertManager: BackupAlertManager
 
-    @InjectMocks
     private lateinit var earnViewModel: EarnViewModel
-
-    private lateinit var coreComponent: TestCoreComponent
+    private lateinit var coreComponentProvider: TestCoreComponentProvider
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        coreComponent = TestCoreComponentProvider.instance.coreComponent
-        KinitApplication.coreComponent = coreComponent
-        coreComponent.inject(this)
+        coreComponentProvider = TestCoreComponentProvider()
+        KinitApplication.coreComponent = coreComponentProvider.coreComponent
+        coreComponentProvider.coreComponent.inject(this)
     }
 
     private fun setupTaskWithTime(timeInMillis: Long, task: String? = null) {
@@ -242,10 +234,10 @@ class EarnViewModelTest {
         val sampleTask = (task
                 ?: SAMPLE_QUESTIONNAIRE_TASK).replace("__START_DATE__", timeInSecs.toString())
 
-        tasksRepository = TasksRepository(TestCoreComponentProvider.instance.dataStoreProvider, sampleTask)
         `when`(walletService.balance).thenReturn(ObservableField("1"))
 
         earnViewModel = EarnViewModel(backupAlertManager)
+        earnViewModel.tasksRepository = TasksRepository(coreComponentProvider.dataStoreProvider, sampleTask)
         earnViewModel.onScreenVisibleToUser()
     }
 

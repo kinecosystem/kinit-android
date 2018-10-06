@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.viewmodel.earn
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -54,12 +55,15 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
     var minToComplete = ObservableField<String>()
     var isQuiz = ObservableBoolean(false)
 
-    var isTaskStarted: ObservableBoolean = tasksRepository.isTaskStarted
-    var balance: ObservableField<String> = walletService.balance
+    var balance: ObservableField<String>
+    var isTaskStarted: ObservableBoolean
 
     private var scheduledRunnable: Runnable? = null
 
     init {
+        KinitApplication.coreComponent.inject(this)
+        balance = walletService.balance
+        isTaskStarted = tasksRepository.isTaskStarted
         refresh()
     }
 

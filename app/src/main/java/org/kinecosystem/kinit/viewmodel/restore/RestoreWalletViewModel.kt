@@ -21,6 +21,7 @@ class RestoreWalletViewModel {
     @Inject
     lateinit var analytics: Analytics
 
+
     lateinit var qrCode: String
     var answers: Array<String>
     var passphrase: String = ""
