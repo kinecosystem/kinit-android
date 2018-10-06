@@ -6,10 +6,10 @@ import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler

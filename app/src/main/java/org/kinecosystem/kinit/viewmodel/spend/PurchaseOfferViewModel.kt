@@ -10,12 +10,12 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.model.spend.isP2p
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ERROR_NO_INTERNET
 import org.kinecosystem.kinit.server.ERROR_REDEEM_COUPON_FAILED
 import org.kinecosystem.kinit.server.OperationResultCallback
 import org.kinecosystem.kinit.server.ServicesProvider
-import org.kinecosystem.kinit.repository.TasksRepository
-import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActions
 import javax.inject.Inject
 

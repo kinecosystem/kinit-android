@@ -7,9 +7,9 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.server.ServicesProvider
-import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
