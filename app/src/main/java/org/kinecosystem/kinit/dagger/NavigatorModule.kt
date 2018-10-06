@@ -3,7 +3,6 @@ package org.kinecosystem.kinit.dagger
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.kinecosystem.kinit.annotations.DebugOpenClass
 import org.kinecosystem.kinit.navigation.Navigator
 import javax.inject.Singleton
 

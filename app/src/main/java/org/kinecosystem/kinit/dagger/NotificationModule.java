@@ -3,7 +3,6 @@ package org.kinecosystem.kinit.dagger;
 import android.content.Context;
 
 import org.kinecosystem.kinit.analytics.Analytics;
-import org.kinecosystem.kinit.annotations.DebugOpenClass;
 import org.kinecosystem.kinit.notification.NotificationPublisher;
 
 import javax.inject.Singleton;

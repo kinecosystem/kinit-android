@@ -4,7 +4,6 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.annotations.DebugOpenClass
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.OffersRepository

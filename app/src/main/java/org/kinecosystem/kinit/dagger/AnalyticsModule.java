@@ -1,7 +1,6 @@
 package org.kinecosystem.kinit.dagger;
 
 import org.kinecosystem.kinit.analytics.Analytics;
-import org.kinecosystem.kinit.annotations.DebugOpenClass;
 
 import javax.inject.Singleton;
 

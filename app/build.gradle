@@ -87,9 +87,9 @@ repositories {
 }
 
 dependencies {
-    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
+    androidTestImplementation 'com.android.support:support-annotations:27.1.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
-    testCompile "com.google.truth:truth:0.42"
+    testImplementation "com.google.truth:truth:0.42"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     kapt "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     kapt 'com.android.databinding:compiler:3.0.1'
@@ -131,8 +131,7 @@ dependencies {
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     kapt 'com.google.dagger:dagger-android-processor:2.15'
     kapt 'com.google.dagger:dagger-compiler:2.15'
-    compile 'com.google.dagger:dagger:2.15'
-    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    implementation 'com.google.dagger:dagger:2.15'
     implementation 'com.google.dagger:dagger-android-support:2.15'
     kaptTest 'com.google.dagger:dagger-compiler:2.15'
 }

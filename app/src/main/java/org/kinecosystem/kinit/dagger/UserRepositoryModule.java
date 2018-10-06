@@ -1,6 +1,5 @@
 package org.kinecosystem.kinit.dagger;
 
-import org.kinecosystem.kinit.annotations.DebugOpenClass;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
 import org.kinecosystem.kinit.repository.UserRepository;
 
