@@ -39,4 +39,24 @@ class RestoreViewModelTest {
         assertThat(restoreWalletViewModel.getState()).isEqualTo(RestoreState.Welcomeback)
         assertThat(restoreWalletViewModel.answers).asList().containsExactly("", "")
     }
+
+    @Test
+    fun nextEnabledFalse_When_setAnswer_shortInput() {
+        restoreWalletViewModel = RestoreWalletViewModel()
+        restoreWalletViewModel.setAnswer(0, "")
+        assertThat(restoreWalletViewModel.nextEnabled.get()).isEqualTo(false)
+        restoreWalletViewModel.setAnswer(0, "1234")
+        assertThat(restoreWalletViewModel.nextEnabled.get()).isEqualTo(false)
+        restoreWalletViewModel.setAnswer(0, "")
+        restoreWalletViewModel.setAnswer(1, "1234")
+        assertThat(restoreWalletViewModel.nextEnabled.get()).isEqualTo(false)
+    }
+
+    @Test
+    fun nextEnabledTrue_When_setAnswer_longInput() {
+        restoreWalletViewModel = RestoreWalletViewModel()
+        restoreWalletViewModel.setAnswer(0, "1234")
+        restoreWalletViewModel.setAnswer(1, "1234")
+        assertThat(restoreWalletViewModel.nextEnabled.get()).isEqualTo(true)
+    }
 }
