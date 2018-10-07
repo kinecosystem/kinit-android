@@ -21,6 +21,8 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     private val chosenAnswersCache: DataStore
     private val taskCache: DataStore = dataStoreProvider.dataStore(TASK_STORAGE)
     private val taskStorageName: String
+    var postTaskActions: List<PostTaskAction>? = null
+    private set
     var isTaskStarted: ObservableBoolean
     var taskState: Int
         set(state) {
@@ -42,6 +44,7 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         taskStorageName = QUESTIONNAIRE_ANSWERS_STORAGE
         chosenAnswersCache = dataStoreProvider.dataStore(taskStorageName)
         isTaskStarted = ObservableBoolean(taskState != TaskState.IDLE)
+        postTaskActions = task?.postTaskActions
     }
 
     fun resetTaskState() {
