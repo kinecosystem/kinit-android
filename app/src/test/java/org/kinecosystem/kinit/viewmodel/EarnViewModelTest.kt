@@ -1,6 +1,5 @@
 package org.kinecosystem.kinit.viewmodel
 
-import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
 import android.text.format.DateUtils.HOUR_IN_MILLIS
 import org.junit.Assert.assertFalse
@@ -8,15 +7,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
 import org.kinecosystem.kinit.mocks.MockScheduler
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 import javax.inject.Inject
 
@@ -213,10 +210,6 @@ class EarnViewModelTest {
 
     @Inject
     lateinit var scheduler: Scheduler
-    @Inject
-    lateinit var walletService: Wallet
-    @Mock
-    lateinit var backupAlertManager: BackupAlertManager
 
     private lateinit var earnViewModel: EarnViewModel
     private lateinit var coreComponentProvider: TestCoreComponentProvider
@@ -234,9 +227,7 @@ class EarnViewModelTest {
         val sampleTask = (task
                 ?: SAMPLE_QUESTIONNAIRE_TASK).replace("__START_DATE__", timeInSecs.toString())
 
-        `when`(walletService.balance).thenReturn(ObservableField("1"))
-
-        earnViewModel = EarnViewModel(backupAlertManager)
+        earnViewModel = EarnViewModel(mock(BackupAlertManager::class.java))
         earnViewModel.tasksRepository = TasksRepository(coreComponentProvider.dataStoreProvider, sampleTask)
         earnViewModel.onScreenVisibleToUser()
     }

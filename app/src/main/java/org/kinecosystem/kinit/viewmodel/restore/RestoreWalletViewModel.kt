@@ -36,7 +36,6 @@ class RestoreWalletViewModel {
     }
 
     interface RestoreWalletViewModelListener {
-        fun contactSupport()
         fun onError(msg: RestoreWalletActivityMessages?)
         fun onSuccess()
     }

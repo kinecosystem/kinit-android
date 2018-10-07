@@ -126,25 +126,25 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 })
     }
 
-    fun restoreAccount(address: String, callback: OperationCompletionCallback) {
+    fun restoreAccount(address: String, callback: OperationCompletionCallback?) {
         val call = appLaunchApi.restoreAccount(userRepo.userId(), OnboardingApi.AccountAddress(address))
         call.enqueue(
                 object : Callback<OnboardingApi.AccountAddressResponds> {
                     override fun onFailure(call: Call<OnboardingApi.AccountAddressResponds>, t: Throwable) {
-                        callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                        callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                     }
 
                     override fun onResponse(call: Call<OnboardingApi.AccountAddressResponds>, response: Response<OnboardingApi.AccountAddressResponds>) {
                         if (response.isSuccessful) {
                             if (response.body()?.userId.isNullOrEmpty()) {
-                                callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                             } else {
                                 userRepo.updateUserId(response.body()?.userId ?: "")
                                 taskService.retrieveNextTask()
-                                callback.onSuccess()
+                                callback?.onSuccess()
                             }
                         } else {
-                            callback.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                            callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                         }
                     }
                 }
