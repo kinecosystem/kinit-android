@@ -3,7 +3,6 @@ package org.kinecosystem.kinit.viewmodel.earn
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
-import android.util.Log
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -30,6 +29,11 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     private val navigator: Navigator, private val backupAlertManager: BackupAlertManager?) :
     TabViewModel {
 
+    interface OnTaskChangedListener {
+        fun onTaskChanged()
+    }
+
+    var listener: OnTaskChangedListener? = null
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
     var shouldShowNoTask = ObservableBoolean(false)
@@ -55,28 +59,46 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
 
     fun startTask() {
         taskRepository.taskState = TaskState.IN_PROGRESS
+        navigator.navigateTo(Navigator.Destination.TASK)
+
         val task = taskRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(bEvent)
 
         val aEvent = Events.Analytics.ClickStartButtonOnTaskPage(
-            isTaskStarted.get(),
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                isTaskStarted.get(),
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(aEvent)
-        navigator.navigateTo(Navigator.Destination.TASK)
+    }
+
+    fun retrieveTask() {
+        taskService.retrieveNextTask(object : OperationResultCallback<Boolean> {
+            override fun onResult(result: Boolean) {
+                if (result) {
+                    listener?.onTaskChanged()
+                    refresh()
+                } else {
+                    startTask()
+                }
+            }
+
+            override fun onError(errorCode: Int) = startTask()
+        })
+
+
     }
 
     private fun refresh() {
