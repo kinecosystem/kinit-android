@@ -101,7 +101,7 @@ class BackupAlertManager(val context: Context) {
     }
 
     private fun showPositiveBackupNag(@StringRes title: Int, @StringRes message: Int, eventParam:String) {
-        AlertManager.showPositiveAlert(context, title, message, R.string.back_up, {
+        AlertManager.showGeneralAlert(context, title, message, R.string.back_up, {
             navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
             analytics.logEvent(Events.Analytics.ClickBackupButtonOnBackupNotificationPopup(eventParam))
         }, R.string.cancel, {})

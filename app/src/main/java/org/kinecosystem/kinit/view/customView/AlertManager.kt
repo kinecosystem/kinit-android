@@ -1,8 +1,10 @@
 package org.kinecosystem.kinit.view.customView
 
 import android.content.Context
+import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import kotlinx.android.synthetic.main.possitive_dialog.view.*
@@ -97,10 +99,16 @@ class AlertManager {
             createAlert(context, title, message, positiveMessage, positiveAction, negativeMessage, negativeAction, dismiss, cancelable, type).show()
         }
 
-        fun showPositiveAlert(context: Context, title: String, message: String,
-                              positiveMessage: String, positiveAction: (() -> Unit),
-                              negativeMessage: String? = null, negativeAction: (() -> Unit)? = null,
-                              imageUrl: String? = null) {
+        fun showGeneralAlert(context: Context, @StringRes title: Int, @StringRes message: Int, @StringRes positiveMessage: Int, positiveAction: (() -> Unit),
+                             @StringRes negativeMessage: Int? = null, negativeAction: (() -> Unit)? = null, imageUrl: String? = null) {
+            val negativeMsg = if (negativeMessage != null) context.resources.getString(negativeMessage) else null
+            showGeneralAlert(context, context.resources.getString(title), context.resources.getString(message), context.resources.getString(positiveMessage), positiveAction, negativeMsg, negativeAction, imageUrl)
+        }
+
+        fun showGeneralAlert(context: Context, title: String, message: String,
+                             positiveMessage: String, positiveAction: (() -> Unit),
+                             negativeMessage: String? = null, negativeAction: (() -> Unit)? = null,
+                             imageUrl: String? = null, @DrawableRes imageRes: Int = R.drawable.backup_illus_popup) {
             val dialogView = LayoutInflater.from(context).inflate(R.layout.possitive_dialog, null)
             val alertDialog = AlertDialog.Builder(context).setView(dialogView).create()
             dialogView.title.text = title
@@ -116,59 +124,21 @@ class AlertManager {
             with(dialogView.negativeBtn) {
                 negativeMessage?.let {
                     this.text = it
-                    negativeAction?.let {
-                        this.setOnClickListener {
-                            negativeAction.invoke()
-                            alertDialog.dismiss()
-                        }
+                    this.setOnClickListener {
+                        negativeAction?.invoke()
+                        alertDialog.dismiss()
                     }
                 } ?: run {
                     visibility = View.GONE
                 }
             }
-            imageUrl?.let {
-                if (!it.isEmpty()) {
-                    ImageUtils.loadImageIntoView(context, it, dialogView.icon)
-                }
+
+            if (TextUtils.isEmpty(imageUrl)) {
+                dialogView.icon.setBackgroundResource(imageRes)
+            } else {
+                ImageUtils.loadImageIntoView(context, imageUrl, dialogView.icon)
             }
             alertDialog.show()
         }
-
-        fun showPositiveAlert(context: Context, @StringRes title: Int, @StringRes message: Int, @StringRes positiveMessage: Int, positiveAction: (() -> Unit),
-                              @StringRes negativeMessage: Int? = null, negativeAction: (() -> Unit)? = null, imageUrl: String? = null) {
-            val dialogView = LayoutInflater.from(context).inflate(R.layout.possitive_dialog, null)
-            val alertDialog = AlertDialog.Builder(context).setView(dialogView).create()
-            dialogView.title.text = context.resources.getString(title)
-            dialogView.message.text = context.resources.getString(message)
-            with(dialogView.positiveBtn) {
-                this.text = context.resources.getString(positiveMessage)
-                setOnClickListener {
-                    positiveAction.invoke()
-                    alertDialog.dismiss()
-                }
-            }
-
-            with(dialogView.negativeBtn) {
-                negativeMessage?.let {
-                    this.text = context.resources.getString(it)
-                    negativeAction?.let {
-                        this.setOnClickListener {
-                            negativeAction.invoke()
-                            alertDialog.dismiss()
-                        }
-                    }
-                } ?: run {
-                    visibility = View.GONE
-                }
-            }
-            imageUrl?.let {
-                if (!it.isEmpty()) {
-                    ImageUtils.loadImageIntoView(context, it, dialogView.icon)
-                }
-            }
-            alertDialog.show()
-        }
-
     }
-
 }

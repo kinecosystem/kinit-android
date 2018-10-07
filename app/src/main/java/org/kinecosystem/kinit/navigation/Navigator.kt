@@ -73,7 +73,7 @@ class Navigator(private val context: Context) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
     }
-    
+
     private fun navigateToActivity(intent: Intent, withSlideAnimation: Boolean = true) {
         context.startActivity(intent)
         if (withSlideAnimation && context is AppCompatActivity) {
