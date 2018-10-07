@@ -160,4 +160,5 @@ public class BindingUtils {
             view.setText("");
         }
     }
+
 }

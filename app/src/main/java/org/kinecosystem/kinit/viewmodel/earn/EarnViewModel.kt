@@ -7,7 +7,6 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.model.earn.startDateInMillis
@@ -68,27 +67,27 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
     }
 
     fun startTask() {
-        tasksRepository.taskState = TaskState.IN_PROGRESS
+        tasksRepository.onTaskStarted()
         val task = tasksRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(bEvent)
 
         val aEvent = Events.Analytics.ClickStartButtonOnTaskPage(
-            isTaskStarted.get(),
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                isTaskStarted.get(),
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(aEvent)
         navigator.navigateTo(Navigator.Destination.TASK)
     }
@@ -194,12 +193,12 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
     private fun onEarnScreenVisible() {
         val task = tasksRepository.task
         val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(event)
     }
 
@@ -216,10 +215,10 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
     }
 
     private fun convertMinToCompleteToString(minToComplete: Float?): String =
-        when {
-            minToComplete == null -> "0"
-            (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
-            else -> minToComplete.toString()
-        }
+            when {
+                minToComplete == null -> "0"
+                (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
+                else -> minToComplete.toString()
+            }
 }
 
