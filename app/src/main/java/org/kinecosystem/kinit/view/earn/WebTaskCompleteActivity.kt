@@ -3,9 +3,8 @@ package org.kinecosystem.kinit.view.earn
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
-import android.webkit.WebViewFragment
 import org.kinecosystem.kinit.view.SingleFragmentActivity
-import org.kinecosystem.kinit.view.earn.TaskErrorFragment.ERROR_TRANSACTION
+import org.kinecosystem.kinit.view.earn.TaskErrorFragment.Companion.ERROR_TRANSACTION
 
 class WebTaskCompleteActivity : SingleFragmentActivity(), WebTaskCompleteFragment.TaskCompleteListener,
     TransactionActions {
