@@ -21,7 +21,8 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     private val chosenAnswersCache: DataStore
     private val taskCache: DataStore = dataStoreProvider.dataStore(TASK_STORAGE)
     private val taskStorageName: String
-
+    var taskInProgress: Task? = null
+        private set
     var isTaskStarted: ObservableBoolean
     var taskState: Int
         set(state) {
@@ -122,6 +123,11 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
             taskCache.clear(TASK_KEY)
         }
         clearChosenAnswers()
+    }
+
+    fun onTaskStarted() {
+        taskState = TaskState.IN_PROGRESS
+        taskInProgress = task?.copy()
     }
 }
 

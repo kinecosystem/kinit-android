@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import org.kinecosystem.kinit.model.earn.Answer;
 import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
 import org.kinecosystem.kinit.view.customView.QuizAnswerView;
-import org.kinecosystem.kinit.view.customView.TransactionLayoutView;
 
 
 public class BindingUtils {
