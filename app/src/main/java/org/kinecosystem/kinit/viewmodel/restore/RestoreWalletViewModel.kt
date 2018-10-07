@@ -44,10 +44,10 @@ class RestoreWalletViewModel {
     fun onAnswersSubmit() {
         answersSubmitted.set(true)
         passphrase = answers.joinToString(separator = "") { it.trim() }
-        var restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase)
+        var restoredAccount = walletService.importBackedUpAccount(qrCode, passphrase)
         if (restoredAccount == null || restoredAccount.publicAddress == null) {
             passphrase = answers.joinToString(separator = "")
-            restoredAccount = walletService.importBakedUpAccount(qrCode, passphrase)
+            restoredAccount = walletService.importBackedUpAccount(qrCode, passphrase)
         }
         if (restoredAccount == null || restoredAccount.publicAddress == null) {
             answersSubmitted.set(false)
