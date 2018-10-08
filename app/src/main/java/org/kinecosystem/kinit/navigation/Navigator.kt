@@ -5,6 +5,8 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.model.earn.Category
+import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isTaskWebView
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.TasksRepository
@@ -12,6 +14,7 @@ import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
+import org.kinecosystem.kinit.view.earn.TaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
 import org.kinecosystem.kinit.view.faq.FAQActivity
@@ -47,17 +50,17 @@ class Navigator(private val context: Context) {
     }
 
     fun navigateTo(dest: Destination, index: Int = 0) {
-         when (dest) {
-             Destination.TASK -> navigateToTask()
-             Destination.PEER2PEER -> navigateToActivity(Peer2PeerActivity.getIntent(context))
-             Destination.COMPLETE_WEB_TASK -> navigateToActivity(WebTaskCompleteActivity.getIntent(context))
-             Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context))
-             Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context))
-             Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context))
-             Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context))
-             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context))
-             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context))
-             Destination.FAQ -> navigateToActivity(FAQActivity.getIntent(context))
+        when (dest) {
+            Destination.TASK -> navigateToTask()
+            Destination.PEER2PEER -> navigateToActivity(Peer2PeerActivity.getIntent(context))
+            Destination.COMPLETE_WEB_TASK -> navigateToActivity(WebTaskCompleteActivity.getIntent(context))
+            Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context))
+            Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context))
+            Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context))
+            Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context))
+            Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context))
+            Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context))
+            Destination.FAQ -> navigateToActivity(FAQActivity.getIntent(context))
         }
     }
 
@@ -77,6 +80,19 @@ class Navigator(private val context: Context) {
     private fun navigateToActivity(intent: Intent, withSlideAnimation: Boolean = true) {
         context.startActivity(intent)
         if (withSlideAnimation && context is AppCompatActivity) {
+            context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
+        }
+    }
+
+    fun navigateTo(category: Category) {
+        category.task?.let {
+            navigateTo(it)
+        }
+    }
+
+    private fun navigateTo(task: Task) {
+        context.startActivity(TaskActivity.getIntent(context))
+        if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
     }

@@ -5,6 +5,8 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.firebase.KinInstanceIdService
 import org.kinecosystem.kinit.firebase.KinMessagingService
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.CategoriesTasksRepository
+import org.kinecosystem.kinit.repository.TaskRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.BottomTabNavigation
 import org.kinecosystem.kinit.view.MainActivity
@@ -22,10 +24,7 @@ import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
 import org.kinecosystem.kinit.view.customView.SecurityQuestionAnswerView
 import org.kinecosystem.kinit.view.customView.TransactionLayoutView
-import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
-import org.kinecosystem.kinit.view.earn.TaskErrorFragment
-import org.kinecosystem.kinit.view.earn.WebTaskActivity
-import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
+import org.kinecosystem.kinit.view.earn.*
 import org.kinecosystem.kinit.view.faq.FAQActivity
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
@@ -110,4 +109,7 @@ interface CoreComponent {
     fun inject(faqViewModel: FAQViewModel)
     fun inject(faqActivity: FAQActivity)
     fun inject(supportUtil: SupportUtil)
+    fun inject(taskActivity: TaskActivity)
+    fun inject(taskRepository: TaskRepository)
+    fun inject(categoriesTasksRepository: CategoriesTasksRepository)
 }

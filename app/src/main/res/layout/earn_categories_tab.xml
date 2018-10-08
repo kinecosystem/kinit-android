@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <data>
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.earn.EarnCategoriesViewModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/balance"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/balance_height"
+            android:background="@color/status_bar_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/balance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical|start"
+            android:paddingLeft="30dp"
+            android:text="@{model.balance}"
+            android:textColor="@color/balance_text_color"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/balance"
+            app:layout_constraintTop_toTopOf="@id/balance"
+            tools:text="200" />
+
+        <TextView
+            android:id="@+id/kin_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif"
+            android:gravity="center|start"
+            android:paddingLeft="7dp"
+            android:text="KIN"
+            android:textColor="@color/balance_text_color"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/balance_text"
+            app:layout_constraintStart_toEndOf="@+id/balance_text"
+            app:layout_constraintTop_toTopOf="@+id/balance_text"
+            tools:text="KIN" />
+
+        <ImageView
+            android:id="@+id/kin_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="@+id/kin_currency"
+            app:layout_constraintStart_toEndOf="@+id/kin_currency"
+            app:layout_constraintTop_toTopOf="@+id/kin_currency"
+            app:srcCompat="@drawable/k_letter" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/categories"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#ff9955"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
+
+        <TextView
+            android:id="@+id/next_task_availability_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="58dp"
+            android:layout_marginEnd="32dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="5sp"
+            android:text="@{model.isAvailableTomorrow ? @string/next_task_available_tomorrow : @string/next_task_available_on(model.nextAvailableDate)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#1693f3"
+            android:textSize="22sp"
+            android:visibility="@{model.shouldShowTaskNotAvailableYet}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/balance"
+            tools:text="Next earning experience will be available tomorrow."
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/next_experience_image"
+            android:layout_width="194dp"
+            android:layout_height="171dp"
+            android:layout_marginTop="86dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/next_experience"
+            android:visibility="@{model.shouldShowTaskNotAvailableYet}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/next_task_availability_title"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/next_experience_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="48dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/next_task_subtitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
+            android:textColor="#d7dce9"
+            android:textSize="14sp"
+            android:visibility="@{model.shouldShowTaskNotAvailableYet}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/next_experience_image"
+            tools:text="We are currently growing your next task"
+            tools:visibility="gone" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/mid_horizontal_guide_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.62" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/bottom_horizontal_guide_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.82" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/center_guide_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="32dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="32dp" />
+
+        <ImageView
+            android:id="@+id/no_tasks_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/sowing_illustration"
+            android:visibility="@{model.shouldShowNoTask}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/no_tasks_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:text="@string/no_tasks_title"
+            android:textColor="#7884a5"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:visibility="@{model.shouldShowNoTask}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/no_tasks_image"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/no_tasks_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="48dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/no_tasks_subtitle"
+            android:textColor="#a4acc2"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:visibility="@{model.shouldShowNoTask}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/no_tasks_title"
+            tools:visibility="gone" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

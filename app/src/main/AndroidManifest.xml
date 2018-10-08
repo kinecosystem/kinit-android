@@ -35,6 +35,11 @@
             android:theme="@style/Questionnaire" />
 
         <activity
+            android:name=".view.earn.TaskActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Questionnaire" />
+
+        <activity
             android:name=".view.earn.WebTaskCompleteActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Questionnaire" />

@@ -14,6 +14,7 @@
     <dimen name="tab_text_size">10sp</dimen>
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="balance_height">56dp</dimen>
+    <dimen name="task_header_height">80dp</dimen>
     <dimen name="image_answer_corner">8dp</dimen>
     <dimen name="image_answer_sides_spacing">5dp</dimen>
     <dimen name="emojy_gap">16dp</dimen>

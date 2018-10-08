@@ -1,6 +1,7 @@
 package org.kinecosystem.kinit.server
 
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import com.google.gson.JsonElement
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -71,7 +72,11 @@ class TaskService(context: Context, api: TasksApi,
         })
     }
 
-    fun retrieveNextTask(callback: OperationResultCallback<Boolean>? = null) {
+    fun retrieveCategories(callback: OperationResultCallback<Boolean>? = null){
+        Handler().postDelayed({callback?.onResult(true)}, 3000)
+    }
+
+    fun retrieveNextTask(categoryId:String? = null, callback: OperationResultCallback<Boolean>? = null) {
 
         tasksApi.nextTasks(userRepo.userId()).enqueue(object : Callback<TasksApi.NextTasksResponse> {
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
