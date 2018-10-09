@@ -16,7 +16,6 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.dagger.CoreComponent
 import org.kinecosystem.kinit.model.earn.hasPostActions
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.navigation.Navigator.Destination
@@ -99,14 +98,14 @@ class TransactionLayoutView @JvmOverloads constructor(
     }
 
     private fun shouldShowActionDialog(): Boolean {
-        tasksRepository.task?.let {
+        tasksRepository.taskInProgress?.let {
             return !seenDialog && it.hasPostActions()
         }
         return false
     }
 
     private fun showActionDialog() {
-        tasksRepository.task?.let {
+        tasksRepository.taskInProgress?.let {
             val taskId = it.id
             with(it.postTaskActions.orEmpty().first()) {
                 AlertManager.showGeneralAlert(context, title, text, positiveText, {

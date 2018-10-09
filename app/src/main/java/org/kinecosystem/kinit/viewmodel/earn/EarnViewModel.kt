@@ -6,7 +6,6 @@ import android.text.format.DateUtils.DAY_IN_MILLIS
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.model.earn.startDateInMillis
@@ -25,9 +24,9 @@ import java.util.*
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
 class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
-    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
-    private val navigator: Navigator, private val backupAlertManager: BackupAlertManager?) :
-    TabViewModel {
+                    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
+                    private val navigator: Navigator, private val backupAlertManager: BackupAlertManager?) :
+        TabViewModel {
 
     interface OnTaskChangedListener {
         fun onTaskChanged()
@@ -58,9 +57,8 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     fun startTask() {
-        taskRepository.taskState = TaskState.IN_PROGRESS
         navigator.navigateTo(Navigator.Destination.TASK)
-
+        taskRepository.onTaskStarted()
         val task = taskRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
                 task?.provider?.name,
@@ -202,12 +200,12 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     private fun onEarnScreenVisible() {
         val task = taskRepository.task
         val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.tagsString(),
-            task?.id,
-            task?.title,
-            task?.type)
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
         analytics.logEvent(event)
     }
 
@@ -224,10 +222,10 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun convertMinToCompleteToString(minToComplete: Float?): String =
-        when {
-            minToComplete == null -> "0"
-            (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
-            else -> minToComplete.toString()
-        }
+            when {
+                minToComplete == null -> "0"
+                (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
+                else -> minToComplete.toString()
+            }
 }
 

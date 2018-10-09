@@ -21,6 +21,8 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
     private val chosenAnswersCache: DataStore
     private val taskCache: DataStore = dataStoreProvider.dataStore(TASK_STORAGE)
     private val taskStorageName: String
+    var taskInProgress: Task? = null
+        private set
     var isTaskStarted: ObservableBoolean
     var taskState: Int
         set(state) {
@@ -105,11 +107,13 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
         this.task = task
         if (task != null) {
             taskCache.putString(TASK_KEY, Gson().toJson(task))
-            val url = task.postTaskActions?.first()?.iconUrl
-            if (!TextUtils.isEmpty(url)) {
-                ImageUtils.fetchImage(applicationContext, url)
-            }
+            if (task.hasPostActions()) {
+                val url = task.postTaskActions?.first()?.iconUrl
 
+                if (!TextUtils.isEmpty(url)) {
+                    ImageUtils.fetchImage(applicationContext, url)
+                }
+            }
             for (question: Question in task.questions.orEmpty()) {
                 if (question.hasImages()) {
                     ImageUtils.fetchImages(applicationContext, question.getImagesUrls())
@@ -119,6 +123,11 @@ class TasksRepository(dataStoreProvider: DataStoreProvider, defaultTask: String?
             taskCache.clear(TASK_KEY)
         }
         clearChosenAnswers()
+    }
+
+    fun onTaskStarted() {
+        taskState = TaskState.IN_PROGRESS
+        taskInProgress = task?.copy()
     }
 }
 
