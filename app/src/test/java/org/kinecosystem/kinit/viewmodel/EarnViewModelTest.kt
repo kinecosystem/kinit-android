@@ -7,6 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.daggerCore.TestCoreComponent
 import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
 import org.kinecosystem.kinit.mocks.MockScheduler
 import org.kinecosystem.kinit.repository.TasksRepository
@@ -208,18 +209,17 @@ private const val SAMPLE_QUIZ_TASK = """
 private const val SAMPLE_QUIZ_TASK_REWARD = 25
 class EarnViewModelTest {
 
+
     @Inject
     lateinit var scheduler: Scheduler
 
     private lateinit var earnViewModel: EarnViewModel
-    private lateinit var coreComponentProvider: TestCoreComponentProvider
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        coreComponentProvider = TestCoreComponentProvider()
-        KinitApplication.coreComponent = coreComponentProvider.coreComponent
-        coreComponentProvider.coreComponent.inject(this)
+        KinitApplication.coreComponent = TestCoreComponentProvider().coreComponent
+        (KinitApplication.coreComponent as TestCoreComponent).inject(this)
     }
 
     private fun setupTaskWithTime(timeInMillis: Long, task: String? = null) {
@@ -228,7 +228,8 @@ class EarnViewModelTest {
                 ?: SAMPLE_QUESTIONNAIRE_TASK).replace("__START_DATE__", timeInSecs.toString())
 
         earnViewModel = EarnViewModel(mock(BackupAlertManager::class.java))
-        earnViewModel.tasksRepository = TasksRepository(coreComponentProvider.dataStoreProvider, sampleTask)
+        earnViewModel.tasksRepository = TasksRepository()
+        earnViewModel.tasksRepository.setTask(sampleTask)
         earnViewModel.onScreenVisibleToUser()
     }
 

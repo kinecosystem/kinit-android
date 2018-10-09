@@ -46,7 +46,7 @@ class RestoreViewModelTest {
     }
 
     @Test
-    fun nextEnabledFalse_When_setAnswer_shortInput() {
+    fun nextEnabled_False_When_setAnswer_shortInput() {
         restoreWalletViewModel.setAnswer(0, "")
         assertThat(restoreWalletViewModel.nextEnabled.get()).isFalse()
         restoreWalletViewModel.setAnswer(0, "1234")
@@ -57,7 +57,7 @@ class RestoreViewModelTest {
     }
 
     @Test
-    fun nextEnabledTrue_When_setAnswer_longInput() {
+    fun nextEnabled_True_When_setAnswer_longInput() {
         restoreWalletViewModel.setAnswer(0, "1234")
         restoreWalletViewModel.setAnswer(1, "1234")
         assertThat(restoreWalletViewModel.nextEnabled.get()).isTrue()

@@ -44,7 +44,8 @@ class TaskRepositoryTest {
         MockitoAnnotations.initMocks(this)
         coreComponentProvider = TestCoreComponentProvider()
         KinitApplication.coreComponent = coreComponentProvider.coreComponent
-        tasksRepository = TasksRepository(coreComponentProvider.dataStoreProvider, DEFAULT_TASK)
+        tasksRepository = TasksRepository()
+        tasksRepository.setTask(DEFAULT_TASK)
     }
 
     @Test
