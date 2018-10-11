@@ -5,7 +5,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class SplashViewModel {
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
-    lateinit var servicesProvider: ServicesProvider
+    lateinit var networkServices: NetworkServices
 
     val TAG: String = SplashViewModel::class.java.simpleName
 
@@ -40,7 +40,7 @@ class SplashViewModel {
     fun onResume() {
         analytics.logEvent(Events.Analytics.ViewSplashscreenPage())
         scheduler.scheduleOnMain({
-            if (servicesProvider.onBoardingService.isInBlackList) {
+            if (networkServices.onBoardingService.isInBlackList) {
                 listener?.showBlackListDialog()
             } else {
                 listener?.moveToNextScreen(getNextScreen())
@@ -55,7 +55,7 @@ class SplashViewModel {
         } else if (userRepository.isFirstTimeUser) {
             userRepository.isFirstTimeUser = false
             Navigator.Destination.TUTORIAL
-        } else if (!servicesProvider.walletService.ready.get()) {
+        } else if (!networkServices.walletService.ready.get()) {
             if (!userRepository.restoreHints.isEmpty())
                 Navigator.Destination.WALLET_RESTORE
             else

@@ -5,13 +5,12 @@ import com.crashlytics.android.Crashlytics
 import com.squareup.picasso.Picasso
 import io.fabric.sdk.android.Fabric
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.dagger.*
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.SharedPreferencesStore
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.server.NetworkServices
 import javax.inject.Inject
 
 
@@ -27,32 +26,32 @@ class KinitApplication : Application(), DataStoreProvider {
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
-    lateinit var servicesProvider: ServicesProvider
-    @Inject
-    lateinit var wallet: Wallet
+    lateinit var networkServices: NetworkServices
 
     override fun onCreate() {
         super.onCreate()
         Fabric.with(applicationContext, Crashlytics())
         coreComponent = DaggerCoreComponent.builder().contextModule(
                 ContextModule(applicationContext))
-                .dataStoreProviderModule(DataStoreProviderModule(this))
+                .dataStoreModule(DataStoreModule(this))
                 .userRepositoryModule(UserRepositoryModule())
+                .navigatorModule(NavigatorModule())
                 .tasksRepositoryModule(TasksRepositoryModule())
                 .offersRepositoryModule(OffersRepositoryModule())
+                .schedulerModule(SchedulerModule())
                 .analyticsModule(AnalyticsModule())
                 .notificationModule(NotificationModule())
-                .servicesProviderModule(ServicesProviderModule())
+                .servicesModule(ServicesModule())
                 .build()
 
         coreComponent.inject(this)
         analytics.init(this, userRepository.isFreshInstall)
         analytics.setUserId(userRepository.userId())
-        servicesProvider.onBoardingService.appLaunch()
-        servicesProvider.backupService.retrieveHints()
-        servicesProvider.offerService.retrieveOffers()
-        wallet.retrieveTransactions()
-        wallet.retrieveCoupons()
+        networkServices.onBoardingService.appLaunch()
+        networkServices.backupService.retrieveHints()
+        networkServices.offerService.retrieveOffers()
+        networkServices.walletService.retrieveTransactions()
+        networkServices.walletService.retrieveCoupons()
         userRepository.isFreshInstall = false
 
         val picasso = Picasso.Builder(this).build()

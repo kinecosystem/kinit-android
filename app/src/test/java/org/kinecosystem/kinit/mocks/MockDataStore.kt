@@ -1,8 +1,9 @@
-package org.kinecosystem.kinit.mock
+package org.kinecosystem.kinit.mocks
 
 import org.kinecosystem.kinit.repository.DataStore
 
 class MockDataStore : DataStore {
+
     private val store: HashMap<String, Object> = HashMap()
 
     override fun getBoolean(key: String): Boolean {
@@ -68,7 +69,6 @@ class MockDataStore : DataStore {
     override fun clearAll() {
         store.clear()
     }
-
 
     override fun getAll(): Map<String, *> {
         return store

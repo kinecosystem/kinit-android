@@ -4,6 +4,7 @@ apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-allopen'
 
 def propertiesFile = rootProject.file("app/kinit.properties")
 // Initialize a new Properties() object called keystoreProperties.
@@ -13,6 +14,10 @@ globalProperties.load(new FileInputStream(propertiesFile))
 def captchaSecret = globalProperties.getProperty("CaptchaApiSecret")
 if (captchaSecret == null) {
     captchaSecret = '"secret"'
+}
+
+allOpen {
+    annotation("org.kinecosystem.kinit.annotations.OpenClass")
 }
 
 android {
@@ -66,11 +71,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
-kapt {
-    generateStubs = true
-}
+
 androidExtensions {
     experimental = true
 }
@@ -82,6 +86,9 @@ repositories {
 }
 
 dependencies {
+    androidTestImplementation 'com.android.support:support-annotations:27.1.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    testImplementation "com.google.truth:truth:0.42"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     kapt "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     kapt 'com.android.databinding:compiler:3.0.1'
@@ -110,17 +117,22 @@ dependencies {
         transitive = true
     }
     implementation 'testfairy:testfairy-android-sdk:1.7.1@aar'
+    androidTestImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    kaptAndroidTest 'com.google.dagger:dagger-compiler:2.15'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.6.1'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'org.mockito:mockito-core:2.15.0'
+    androidTestImplementation "org.mockito:mockito-android:2.15.0"
     implementation 'com.google.firebase:firebase-auth:15.1.0'
-    implementation 'com.google.dagger:dagger-android:2.11'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     kapt 'com.google.dagger:dagger-android-processor:2.15'
     kapt 'com.google.dagger:dagger-compiler:2.15'
+    implementation 'com.google.dagger:dagger:2.15'
     implementation 'com.google.dagger:dagger-android-support:2.15'
+    kaptTest 'com.google.dagger:dagger-compiler:2.15'
 }
 
 apply plugin: 'com.google.gms.google-services'

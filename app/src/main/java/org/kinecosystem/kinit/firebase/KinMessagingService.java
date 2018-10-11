@@ -1,15 +1,13 @@
 package org.kinecosystem.kinit.firebase;
 
-import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
-
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import java.util.Map;
-import javax.inject.Inject;
+
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.BILog.AuthTokenAckFailed;
@@ -17,10 +15,16 @@ import org.kinecosystem.kinit.analytics.Events.BILog.AuthTokenReceived;
 import org.kinecosystem.kinit.model.Push;
 import org.kinecosystem.kinit.model.Push.AuthTokenMessage;
 import org.kinecosystem.kinit.model.Push.NotificationMessage;
-import org.kinecosystem.kinit.repository.UserRepository;
-import org.kinecosystem.kinit.server.ServicesProvider;
 import org.kinecosystem.kinit.notification.NotificationPublisher;
+import org.kinecosystem.kinit.repository.UserRepository;
+import org.kinecosystem.kinit.server.NetworkServices;
 import org.kinecosystem.kinit.util.Scheduler;
+
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import static org.kinecosystem.kinit.model.Push.TransactionCompleteMessage;
 
 
 public class KinMessagingService extends FirebaseMessagingService {
@@ -30,7 +34,7 @@ public class KinMessagingService extends FirebaseMessagingService {
     @Inject
     NotificationPublisher notificationPublisher;
     @Inject
-    ServicesProvider servicesProvider;
+    NetworkServices servicesProvider;
     @Inject
     UserRepository userRepository;
     @Inject
