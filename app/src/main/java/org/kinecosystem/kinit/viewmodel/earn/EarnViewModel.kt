@@ -47,6 +47,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     var minToComplete = ObservableField<String>()
     var isQuiz = ObservableBoolean(false)
 
+    var isTaskLoading = ObservableBoolean(false)
     var isTaskStarted: ObservableBoolean = taskRepository.isTaskStarted
     var balance: ObservableField<String> = wallet.balance
 
@@ -83,20 +84,25 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     fun retrieveTask() {
-        taskService.retrieveNextTask(object : OperationResultCallback<Boolean> {
-            override fun onResult(result: Boolean) {
-                if (result) {
-                    listener?.onTaskChanged()
-                    refresh()
-                } else {
-                    startTask()
+        if (!isTaskLoading.get()) {
+            isTaskLoading.set(true)
+            taskService.retrieveNextTask(object : OperationResultCallback<Boolean> {
+                override fun onResult(result: Boolean) {
+                    isTaskLoading.set(false)
+                    if (result) {
+                        listener?.onTaskChanged()
+                        refresh()
+                    } else {
+                        startTask()
+                    }
                 }
-            }
 
-            override fun onError(errorCode: Int) = startTask()
-        })
-
-
+                override fun onError(errorCode: Int) {
+                    startTask()
+                    isTaskLoading.set(false)
+                }
+            })
+        }
     }
 
     private fun refresh() {

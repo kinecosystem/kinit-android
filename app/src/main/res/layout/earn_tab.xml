@@ -153,16 +153,16 @@
             android:layout_marginBottom="34dp"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.03"
-            android:onClick="@{()->model.retrieveTask()}"
-            android:text="@{model.isTaskStarted ? @string/resume : @string/start_earn_kin}"
+            android:onClick="@{() -> model.retrieveTask()}"
+            android:text="@{model.isTaskLoading ? `` : (model.isTaskStarted ? @string/resume : @string/start_earn_kin)}"
             android:textSize="16sp"
-            android:visibility="@{model.getShouldShowTask}"
+            android:visibility="@{model.shouldShowTask}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bottom_horizontal_guide_line"
-            tools:text="@string/start_earn_kin"
+            tools:text=""
             tools:visibility="visible" />
         <ImageView
             android:id="@+id/amount_kin_icon"
@@ -409,6 +409,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/no_tasks_title"
             tools:visibility="gone"/>
+
+        <ProgressBar
+            android:id="@+id/task_loader"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:visibility="@{model.isTaskLoading}"
+            app:layout_constraintBottom_toBottomOf="@+id/start_task_btn"
+            app:layout_constraintEnd_toEndOf="@+id/start_task_btn"
+            app:layout_constraintStart_toStartOf="@+id/start_task_btn"
+            app:layout_constraintTop_toTopOf="@+id/start_task_btn" />
 
 
     </android.support.constraint.ConstraintLayout>
