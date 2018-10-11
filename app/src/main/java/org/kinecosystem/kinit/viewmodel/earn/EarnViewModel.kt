@@ -40,6 +40,11 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
     @Inject
     lateinit var navigator: Navigator
 
+    interface OnTaskChangedListener {
+        fun onTaskChanged()
+    }
+
+    var listener: OnTaskChangedListener? = null
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
     var shouldShowNoTask = ObservableBoolean(false)
@@ -56,6 +61,7 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
 
     var balance: ObservableField<String>
     var isTaskStarted: ObservableBoolean
+    var isTaskLoading = ObservableBoolean(false)
 
     private var scheduledRunnable: Runnable? = null
 
@@ -89,7 +95,28 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
                 task?.title,
                 task?.type)
         analytics.logEvent(aEvent)
-        navigator.navigateTo(Navigator.Destination.TASK)
+    }
+
+    fun retrieveTask() {
+        if (!isTaskLoading.get()) {
+            isTaskLoading.set(true)
+            taskService.retrieveNextTask(object : OperationResultCallback<Boolean> {
+                override fun onResult(result: Boolean) {
+                    isTaskLoading.set(false)
+                    if (result) {
+                        listener?.onTaskChanged()
+                        refresh()
+                    } else {
+                        startTask()
+                    }
+                }
+
+                override fun onError(errorCode: Int) {
+                    startTask()
+                    isTaskLoading.set(false)
+                }
+            })
+        }
     }
 
     private fun refresh() {
