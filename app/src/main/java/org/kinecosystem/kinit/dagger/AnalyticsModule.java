@@ -1,12 +1,13 @@
 package org.kinecosystem.kinit.dagger;
 
+import org.kinecosystem.kinit.analytics.Analytics;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
-import org.kinecosystem.kinit.analytics.Analytics;
-import org.kinecosystem.kinit.util.AndroidScheduler;
-import org.kinecosystem.kinit.util.Scheduler;
 
+@DebugOpenClass
 @Module
 public class AnalyticsModule {
 
@@ -15,11 +16,5 @@ public class AnalyticsModule {
     @Singleton
     public Analytics analytics() {
         return new Analytics();
-    }
-
-    @Provides
-    @Singleton
-    public Scheduler scheduler() {
-        return new AndroidScheduler();
     }
 }

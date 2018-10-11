@@ -5,6 +5,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.firebase.KinInstanceIdService
 import org.kinecosystem.kinit.firebase.KinMessagingService
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.BottomTabNavigation
 import org.kinecosystem.kinit.view.MainActivity
@@ -50,7 +51,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (NotificationModule::class), (DataStoreProviderModule::class), (ServicesProviderModule::class)])
+        modules = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class), (NavigatorModule::class)])
 interface CoreComponent {
 
     fun inject(balanceViewModel: BalanceViewModel)
@@ -110,4 +111,6 @@ interface CoreComponent {
     fun inject(faqViewModel: FAQViewModel)
     fun inject(faqActivity: FAQActivity)
     fun inject(supportUtil: SupportUtil)
+    fun inject(earnViewModel: EarnViewModel)
+    fun inject(tasksRepository: TasksRepository)
 }

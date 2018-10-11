@@ -16,9 +16,9 @@ import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickSendButtonOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPopupOnSendKinPage;
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewSendKinPage;
-import org.kinecosystem.kinit.server.OperationResultCallback;
-import org.kinecosystem.kinit.server.ServicesProvider;
 import org.kinecosystem.kinit.repository.UserRepository;
+import org.kinecosystem.kinit.server.NetworkServices;
+import org.kinecosystem.kinit.server.OperationResultCallback;
 import org.kinecosystem.kinit.util.Scheduler;
 import org.kinecosystem.kinit.view.spend.ContactData;
 import org.kinecosystem.kinit.view.spend.Peer2PeerActions;
@@ -49,7 +49,7 @@ public class Peer2PeerViewModel {
     @Inject
     Analytics analytics;
     @Inject
-    ServicesProvider servicesProvider;
+    NetworkServices servicesProvider;
     @Inject
     Scheduler scheduler;
     private String address;

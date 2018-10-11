@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.viewmodel.earn
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.text.format.DateUtils.DAY_IN_MILLIS
+import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -20,13 +21,24 @@ import org.kinecosystem.kinit.view.TabViewModel
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
-class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
-                    val taskService: TaskService, val scheduler: Scheduler, val analytics: Analytics,
-                    private val navigator: Navigator, private val backupAlertManager: BackupAlertManager?) :
-        TabViewModel {
+class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabViewModel {
+
+    @Inject
+    lateinit var tasksRepository: TasksRepository
+    @Inject
+    lateinit var walletService: Wallet
+    @Inject
+    lateinit var taskService: TaskService
+    @Inject
+    lateinit var scheduler: Scheduler
+    @Inject
+    lateinit var analytics: Analytics
+    @Inject
+    lateinit var navigator: Navigator
 
     interface OnTaskChangedListener {
         fun onTaskChanged()
@@ -47,20 +59,22 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     var minToComplete = ObservableField<String>()
     var isQuiz = ObservableBoolean(false)
 
+    var balance: ObservableField<String>
+    var isTaskStarted: ObservableBoolean
     var isTaskLoading = ObservableBoolean(false)
-    var isTaskStarted: ObservableBoolean = taskRepository.isTaskStarted
-    var balance: ObservableField<String> = wallet.balance
 
     private var scheduledRunnable: Runnable? = null
 
     init {
+        KinitApplication.coreComponent.inject(this)
+        balance = walletService.balance
+        isTaskStarted = tasksRepository.isTaskStarted
         refresh()
     }
 
     fun startTask() {
-        navigator.navigateTo(Navigator.Destination.TASK)
-        taskRepository.onTaskStarted()
-        val task = taskRepository.task
+        tasksRepository.onTaskStarted()
+        val task = tasksRepository.task
         val bEvent = Events.Business.EarningTaskStarted(
                 task?.provider?.name,
                 task?.minToComplete,
@@ -106,7 +120,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun refresh() {
-        taskRepository.task?.let { task ->
+        tasksRepository.task?.let { task ->
             isQuiz.set(task.isQuiz())
             authorName.set(task.provider?.name)
             authorImageUrl.set(task.provider?.imageUrl)
@@ -130,13 +144,13 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
             scheduler.cancel(scheduledRunnable)
         }
 
-        if (taskRepository.task == null) {
+        if (tasksRepository.task == null) {
             shouldShowNoTask.set(true)
             shouldShowTask.set(false)
             shouldShowTaskNotAvailableYet.set(false)
             backupAlertManager?.showNagAlertIfNeeded()
         } else {
-            val taskAvailable = taskRepository.isTaskAvailable()
+            val taskAvailable = tasksRepository.isTaskAvailable()
             shouldShowTask.set(taskAvailable)
             shouldShowTaskNotAvailableYet.set(!taskAvailable)
             shouldShowNoTask.set(false)
@@ -148,7 +162,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
                 nextAvailableDate.set(nextAvailableDate())
                 isAvailableTomorrow.set(isAvailableTomorrow())
                 if (isAvailableTomorrow.get()) {
-                    val diff = taskRepository.task?.startDateInMillis()!! - scheduler.currentTimeMillis()
+                    val diff = tasksRepository.task?.startDateInMillis()!! - scheduler.currentTimeMillis()
                     scheduledRunnable = Runnable {
                         shouldShowTask.set(true)
                         shouldShowTaskNotAvailableYet.set(false)
@@ -163,7 +177,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun isAvailableTomorrow(): Boolean {
-        return timeToUnlockInDays(taskRepository.task) == 1
+        return timeToUnlockInDays(tasksRepository.task) == 1
     }
 
     private fun timeToUnlockInDays(task: Task?): Int {
@@ -174,7 +188,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun nextAvailableDate(): String {
-        taskRepository.task?.startDateInMillis()?.let {
+        tasksRepository.task?.startDateInMillis()?.let {
             return SimpleDateFormat(AVAILABILITY_DATE_FORMAT, Locale.US).format(Date(it))
         }
         return ""
@@ -204,7 +218,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun onEarnScreenVisible() {
-        val task = taskRepository.task
+        val task = tasksRepository.task
         val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
@@ -216,7 +230,7 @@ class EarnViewModel(val taskRepository: TasksRepository, val wallet: Wallet,
     }
 
     private fun onLockedScreenVisible() {
-        val task = taskRepository.task
+        val task = tasksRepository.task
         val timeToUnlockInDays = timeToUnlockInDays(task)
 
         val event = Events.Analytics.ViewLockedTaskPage(timeToUnlockInDays)

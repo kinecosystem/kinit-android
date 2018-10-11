@@ -7,7 +7,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class CreateWalletViewModel {
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
-    lateinit var servicesProvider: ServicesProvider
+    lateinit var networkServices: NetworkServices
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
@@ -42,11 +42,11 @@ class CreateWalletViewModel {
 
     init {
         KinitApplication.coreComponent.inject(this)
-        walletReady = servicesProvider.walletService.ready
+        walletReady = networkServices.walletService.ready
     }
 
     fun initWallet() {
-        servicesProvider.walletService.initKinWallet()
+        networkServices.walletService.initKinWallet()
         listener?.onWalletCreating()
         scheduler.scheduleOnMain({
             checkReadyToMove()

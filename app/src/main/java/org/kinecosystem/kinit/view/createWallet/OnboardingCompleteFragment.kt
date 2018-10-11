@@ -13,6 +13,7 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
+import org.kinecosystem.kinit.view.restore.RestoreWalletActions
 import javax.inject.Inject
 
 class OnboardingCompleteFragment : BaseFragment() {
@@ -73,6 +74,9 @@ class OnboardingCompleteFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.logEvent(Events.Analytics.ViewOnboardingCompletedPage())
+        if (activity is RestoreWalletActions)
+            analytics.logEvent(Events.Analytics.ViewWalletRestoredPage())
+        else
+            analytics.logEvent(Events.Analytics.ViewOnboardingCompletedPage())
     }
 }

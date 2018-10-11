@@ -1,16 +1,18 @@
 package org.kinecosystem.kinit.dagger;
 
-import dagger.Module;
-import dagger.Provides;
-import javax.inject.Singleton;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+
 @Module
-public class DataStoreProviderModule {
+public class DataStoreModule {
 
     private DataStoreProvider dataStoreProvider;
 
-    public DataStoreProviderModule(DataStoreProvider dataStoreProvider) {
+    public DataStoreModule(DataStoreProvider dataStoreProvider) {
         this.dataStoreProvider = dataStoreProvider;
 
     }

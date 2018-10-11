@@ -8,11 +8,17 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.welcomeback_restore_wallet_fragment.*
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletActivityMessages
+import javax.inject.Inject
 
 class RestoreWalletWelcomebackFragment : BaseFragment() {
     private lateinit var actions: RestoreWalletActions
+
+    @Inject
+    lateinit var analytics: Analytics
 
     companion object {
         val TAG = RestoreWalletWelcomebackFragment::class.java.simpleName
@@ -44,9 +50,11 @@ class RestoreWalletWelcomebackFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         restore?.setOnClickListener {
+            analytics.logEvent(Events.Analytics.ClickRestoreWalletButtonOnWelcomeBackPage())
             actions.moveToNextScreen()
         }
         create_new_wallet?.setOnClickListener {
+            analytics.logEvent(Events.Analytics.ClickCreateNewWalletButtonOnWelcomeBackPage())
             actions.showDialog(RestoreWalletActivityMessages.CREATE_WALLET_WARNING)
         }
     }

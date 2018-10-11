@@ -251,6 +251,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         retrieveTransactions()
         retrieveCoupons()
         userRepo.isBackedup = true
+        analytics.logEvent(Events.Business.WalletRestored())
     }
 
     private fun createAccountSync(): Boolean {

@@ -96,7 +96,7 @@ class TabsAdapter(val context: Context) :
     private fun getEarnTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<EarnTabBinding>(LayoutInflater.from(parent.context),
                 R.layout.earn_tab, parent, false)
-        val model = EarnViewModel(tasksRepository, wallet, taskService, scheduler, analytics, Navigator(parent.context), BackupAlertManager(context))
+        val model = EarnViewModel(BackupAlertManager(context))
         binding.model = model
         models[position] = model
         model.listener = object : EarnViewModel.OnTaskChangedListener {

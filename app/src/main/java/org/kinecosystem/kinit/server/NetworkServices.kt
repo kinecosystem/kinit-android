@@ -30,7 +30,7 @@ interface OperationResultCallback<in T> {
     fun onError(errorCode: Int)
 }
 
-class ServicesProvider {
+class NetworkServices {
     val onBoardingService: OnboardingService
     val taskService: TaskService
     val walletService: Wallet
