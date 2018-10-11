@@ -7,7 +7,9 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
-import org.kinecosystem.kinit.model.earn.*
+import org.kinecosystem.kinit.model.earn.isQuiz
+import org.kinecosystem.kinit.model.earn.isTypeDualImage
+import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.earn.*
 import javax.inject.Inject
@@ -26,14 +28,12 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
     @Inject
     lateinit var analytics: Analytics
 
-    var task: Task?
     var questionnaireProgress: ObservableInt = ObservableInt()
     var nextFragment: ObservableField<Fragment> = ObservableField()
     var currentPageState: Int
 
     init {
         KinitApplication.coreComponent.inject(this)
-        task = taskRepository.task
         currentPageState =
                 when {
                     restoreState -> getPageFromState()
@@ -74,7 +74,7 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
     protected fun moveToNextPage(pageState: Int) {
         currentPageState = pageState
         questionnaireProgress.set(
-                ((taskRepository.getNumOfAnsweredQuestions().toDouble() / task?.questions!!.size) * 100).toInt())
+                ((taskRepository.getNumOfAnsweredQuestions().toDouble() / taskRepository.taskInProgress?.questions!!.size) * 100).toInt())
         nextFragment.set(getFragment())
     }
 
@@ -82,8 +82,8 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
         return when (currentPageState) {
             NEXT_QUESTION_PAGE -> {
                 when {
-                    task?.isQuiz()!! -> QuizFragment.newInstance(nextQuestionIndex())
-                    taskRepository.task?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!! -> QuestionDualImageFragment.newInstance(nextQuestionIndex())
+                    taskRepository.taskInProgress?.isQuiz()!! -> QuizFragment.newInstance(nextQuestionIndex())
+                    taskRepository.taskInProgress?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!! -> QuestionDualImageFragment.newInstance(nextQuestionIndex())
                     else -> QuestionFragment.newInstance(nextQuestionIndex())
                 }
             }
@@ -96,6 +96,7 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
     }
 
     fun onBackPressed() {
+        val task = taskRepository.taskInProgress
         val event: Events.Event
         if (taskRepository.isTaskComplete()) {
             event = Events.Analytics.ClickCloseButtonOnRewardPage(task?.provider?.name,

@@ -38,7 +38,7 @@ class WebTaskActivity : BaseSingleFragmentActivity() {
     }
 
     override fun getFragment(): Fragment {
-        return when (tasksRepository.task!!.type) {
+        return when (tasksRepository.taskInProgress!!.type) {
             "truex" -> WebTaskTruexFragment.getInstance()
             else -> WebTaskTruexFragment.getInstance()
         }

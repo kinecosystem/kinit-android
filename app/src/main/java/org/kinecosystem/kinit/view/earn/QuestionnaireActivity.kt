@@ -61,12 +61,9 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
         val binding: QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this,
-            R.layout.questionnaire_fragment_layout)
+                R.layout.questionnaire_fragment_layout)
 
-        if (taskRepo.task == null)
-            finish()
-
-        taskRepo.task?.let {
+        taskRepo.taskInProgress?.let {
             questionnaireModel = if (it.isQuiz()) {
                 QuizViewModel(savedInstanceState != null)
             } else {
@@ -88,6 +85,8 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
                 }
             }
             questionnaireModel.nextFragment.addOnPropertyChangedCallback(nextFragmentCallback)
+        } ?: run {
+            finish()
         }
     }
 
@@ -114,11 +113,11 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (fragment != null) {
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .replace(R.id.fragment_container, newFragment).commitNowAllowingStateLoss()
+                    .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
+                    .replace(R.id.fragment_container, newFragment).commitNowAllowingStateLoss()
         } else {
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, newFragment)
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitNowAllowingStateLoss()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitNowAllowingStateLoss()
         }
     }
 }

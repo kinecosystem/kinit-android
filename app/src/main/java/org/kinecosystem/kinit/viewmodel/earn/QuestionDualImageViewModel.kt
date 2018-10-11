@@ -45,7 +45,7 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        question = taskRepository.task?.questions?.get(questionIndex)
+        question = taskRepository.taskInProgress?.questions?.get(questionIndex)
         answers = question?.answers
         questionText = question?.text
         question?.answers?.forEach { answer ->
@@ -56,11 +56,11 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
     fun onAnswered(answer: Answer) {
         val answeredId = answer.id ?: ""
         question?.id?.let { taskRepository.setChosenAnswers(it, listOf(answeredId)) }
-        analytics.logEvent(answerEvent(taskRepository.task, answeredId))
+        analytics.logEvent(answerEvent(taskRepository.taskInProgress, answeredId))
     }
 
     fun onResume() {
-        val task = taskRepository.task
+        val task = taskRepository.taskInProgress
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,

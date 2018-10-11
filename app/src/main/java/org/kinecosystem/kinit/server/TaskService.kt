@@ -102,7 +102,6 @@ class TaskService(context: Context, api: TasksApi,
     }
 
     private fun hasChanged(task: Task?): Boolean {
-
         tasksRepo.task?.let {
             return task != tasksRepo.task
         }

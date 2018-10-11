@@ -38,7 +38,7 @@ class QuestionnaireCompleteViewModel {
     constructor(context: Context) {
         KinitApplication.coreComponent.inject(this)
 
-        val task = taskRepository.task
+        val task = taskRepository.taskInProgress
         val event = Events.Business.EarningTaskCompleted(task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,
@@ -56,7 +56,7 @@ class QuestionnaireCompleteViewModel {
     }
 
     fun onResume() {
-        val task = taskRepository.task
+        val task = taskRepository.taskInProgress
         val event = Events.Analytics.ViewTaskEndPage(
             task?.provider?.name,
             task?.minToComplete,
@@ -71,7 +71,7 @@ class QuestionnaireCompleteViewModel {
     private fun submitAnswers(token: String) {
         taskService.submitQuestionnaireAnswers(
             userRepository.userInfo,
-            taskRepository.task,
+            taskRepository.taskInProgress,
             token,
             taskRepository.getChosenAnswers())
     }

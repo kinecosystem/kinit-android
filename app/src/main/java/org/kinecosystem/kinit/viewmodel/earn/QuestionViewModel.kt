@@ -44,7 +44,7 @@ open class QuestionViewModel(private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        questionObj = questionnaireRepository.task?.questions?.get(questionIndex)
+        questionObj = questionnaireRepository.taskInProgress?.questions?.get(questionIndex)
         question = questionObj?.text
         answers = questionObj?.answers
 
@@ -79,10 +79,9 @@ open class QuestionViewModel(private var questionIndex: Int,
         val answerId = questionObj?.id ?: ""
         if (answerId.isNotBlank() and !questionAnswered and (chosenAnswersCount.get() > 0)) {
             questionAnswered = true
-            val task = questionnaireRepository.task
             questionnaireRepository.setChosenAnswers(answerId, chosenAnswers)
             questionnaireActions.next()
-            analytics.logEvent(answerEvent(task))
+            analytics.logEvent(answerEvent( questionnaireRepository.taskInProgress))
         }
     }
 
@@ -95,7 +94,7 @@ open class QuestionViewModel(private var questionIndex: Int,
                 answerId.isBlank() or questionId.isBlank() -> return false
                 questionAnswered and !isMultipleAnswers -> return false
                 !questionAnswered and !isMultipleAnswers -> {
-                    val task = questionnaireRepository.task
+                    val task = questionnaireRepository.taskInProgress
                     chosenAnswers.add(answerId)
                     chosenAnswersIndexes.add(questionObj?.answers?.indexOf(answer) ?: -1)
                     chosenAnswersCount.set(chosenAnswers.size)
@@ -129,7 +128,7 @@ open class QuestionViewModel(private var questionIndex: Int,
     }
 
     fun onResume() {
-        val task = questionnaireRepository.task
+        val task = questionnaireRepository.taskInProgress
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,

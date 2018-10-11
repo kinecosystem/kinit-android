@@ -22,7 +22,7 @@ class AnswerViewModel(questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        answer = questionnaireRepository.task?.questions?.get(questionIndex)?.quiz_data?.explanation
+        answer = questionnaireRepository.taskInProgress?.questions?.get(questionIndex)?.quiz_data?.explanation
     }
 
 

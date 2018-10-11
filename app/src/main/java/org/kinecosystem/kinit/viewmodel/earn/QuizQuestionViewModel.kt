@@ -49,7 +49,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
                     scheduler.scheduleOnMain({ showCorrect.set(true) }, delay_show_correct_answer)
 
                 }
-                analytics.logEvent(answerEvent(taskRepository.task))
+                analytics.logEvent(answerEvent(taskRepository.taskInProgress))
             }
         }
     }
@@ -57,7 +57,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        questionObj = taskRepository.task?.questions?.get(questionIndex)
+        questionObj = taskRepository.taskInProgress?.questions?.get(questionIndex)
         question = questionObj?.text
         answers = questionObj?.answers
         reward = questionObj?.quiz_data?.reward ?: 0
@@ -88,7 +88,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
     }
 
     fun onResume() {
-        val task = taskRepository.task
+        val task = taskRepository.taskInProgress
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
