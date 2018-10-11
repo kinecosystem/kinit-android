@@ -14,8 +14,8 @@ import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ERROR_NO_INTERNET
 import org.kinecosystem.kinit.server.ERROR_REDEEM_COUPON_FAILED
+import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.OperationResultCallback
-import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActions
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
-    lateinit var servicesProvider: ServicesProvider
+    lateinit var networkServices: NetworkServices
     @Inject
     lateinit var tasksRepository: TasksRepository
 
@@ -65,7 +65,7 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
         analytics.logEvent(
             Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
                 offer.title, offer.type))
-        if (!servicesProvider.isNetworkConnected()) {
+        if (!networkServices.isNetworkConnected()) {
             purchaseOfferActions?.showDialog(
                 R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
                 R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
@@ -87,12 +87,12 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
     private fun buy() {
         couponCode.set("")
         couponPurchaseCompleted.set(false)
-        servicesProvider.offerService.buyOffer(offer, object : OperationResultCallback<String> {
+        networkServices.offerService.buyOffer(offer, object : OperationResultCallback<String> {
             override fun onResult(result: String) {
                 couponCode.set(result)
                 couponPurchaseCompleted.set(true)
-                servicesProvider.walletService.retrieveTransactions()
-                servicesProvider.walletService.retrieveCoupons()
+                networkServices.walletService.retrieveTransactions()
+                networkServices.walletService.retrieveCoupons()
                 analytics.logEvent(
                     Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
                         offer.title, offer.type))
@@ -130,7 +130,7 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
             offerEnabled = numOfTasks >= userRepository.p2pMinTasks
         }
 
-        canBuy.set(servicesProvider.walletService.balanceInt >= offerPrice && offerEnabled)
+        canBuy.set(networkServices.walletService.balanceInt >= offerPrice && offerEnabled)
 
         analytics.logEvent(Events.Analytics.ViewOfferPage(offer.provider?.name,
             offer.price,

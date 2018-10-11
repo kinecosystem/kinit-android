@@ -10,7 +10,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.CouponRowLayoutBinding
 import org.kinecosystem.kinit.model.spend.Coupon
-import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.viewmodel.balance.CouponViewModel
 import javax.inject.Inject
 
@@ -19,11 +19,11 @@ class CouponsListAdapter(val context: Context)
     : RecyclerView.Adapter<CouponsListAdapter.ViewHolder>() {
 
     @Inject
-    lateinit var servicesProvider: ServicesProvider
+    lateinit var networkServices: NetworkServices
 
     private val updateCouponsCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            coupons = servicesProvider.walletService.coupons.get()
+            coupons = networkServices.walletService.coupons.get()
             notifyDataSetChanged()
         }
     }
@@ -35,17 +35,17 @@ class CouponsListAdapter(val context: Context)
 
     init {
         KinitApplication.coreComponent.inject(this)
-        coupons = servicesProvider.walletService.coupons.get()
+        coupons = networkServices.walletService.coupons.get()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        servicesProvider.walletService.coupons.addOnPropertyChangedCallback(updateCouponsCallback)
+        networkServices.walletService.coupons.addOnPropertyChangedCallback(updateCouponsCallback)
         super.onAttachedToRecyclerView(recyclerView)
         this.parent = recyclerView
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        servicesProvider.walletService.coupons.removeOnPropertyChangedCallback(updateCouponsCallback)
+        networkServices.walletService.coupons.removeOnPropertyChangedCallback(updateCouponsCallback)
         super.onDetachedFromRecyclerView(recyclerView)
     }
 
@@ -57,7 +57,7 @@ class CouponsListAdapter(val context: Context)
     }
 
     override fun getItemCount(): Int {
-        return servicesProvider.walletService.coupons.get().size
+        return networkServices.walletService.coupons.get().size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

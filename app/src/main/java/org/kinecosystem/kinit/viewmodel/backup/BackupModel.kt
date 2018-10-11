@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.api.BackupApi
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.util.isValidEmail
@@ -31,7 +31,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
     }
 
     @Inject
-    lateinit var servicesProvider: ServicesProvider
+    lateinit var networkServices: NetworkServices
 
     @Inject
     lateinit var wallet: Wallet
@@ -101,7 +101,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
     }
 
     fun retrieveHints() {
-        servicesProvider.backupService.retrieveHints()
+        networkServices.backupService.retrieveHints()
     }
 
     fun onNext() {
@@ -236,7 +236,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
     private fun sendEmailDataToServer() {
         emailAddress?.let { address ->
             encryptedAccountStr?.let { encryptedStr ->
-                servicesProvider.backupService.updateBackupDataTo(address, encryptedStr, object : Callback<BackupApi.StatusResponse> {
+                networkServices.backupService.updateBackupDataTo(address, encryptedStr, object : Callback<BackupApi.StatusResponse> {
                     override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
                         uiActions.showErrorAlert()
                     }
@@ -269,7 +269,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
         questionsAndAnswers.forEach {
             list.add(it.first.id)
         }
-        servicesProvider.backupService.updateHints(list, object : Callback<BackupApi.StatusResponse> {
+        networkServices.backupService.updateHints(list, object : Callback<BackupApi.StatusResponse> {
             override fun onFailure(call: Call<BackupApi.StatusResponse>?, t: Throwable?) {
                 uiActions.showErrorAlert()
             }

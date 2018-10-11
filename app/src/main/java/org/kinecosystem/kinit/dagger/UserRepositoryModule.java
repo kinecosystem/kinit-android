@@ -9,7 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @DebugOpenClass
-@Module(includes = DataStoreProviderModule.class)
+@Module(includes = DataStoreModule.class)
 public class UserRepositoryModule {
 
     @Provides

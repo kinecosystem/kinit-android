@@ -6,9 +6,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.daggerCore.TestCoreComponent
-import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
+import org.kinecosystem.kinit.daggerCore.TestUtils
 import org.kinecosystem.kinit.mocks.MockScheduler
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
@@ -218,8 +216,7 @@ class EarnViewModelTest {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        KinitApplication.coreComponent = TestCoreComponentProvider().coreComponent
-        (KinitApplication.coreComponent as TestCoreComponent).inject(this)
+        TestUtils.setupCoreComponent().inject(this)
     }
 
     private fun setupTaskWithTime(timeInMillis: Long, task: String? = null) {

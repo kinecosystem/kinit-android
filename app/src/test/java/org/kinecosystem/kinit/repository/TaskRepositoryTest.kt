@@ -3,8 +3,7 @@ package org.kinecosystem.kinit.repository
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
+import org.kinecosystem.kinit.daggerCore.TestUtils
 import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.isValid
 import org.mockito.MockitoAnnotations
@@ -36,14 +35,12 @@ private const val DEFAULT_TASK = """
 
 class TaskRepositoryTest {
 
-    private lateinit var coreComponentProvider: TestCoreComponentProvider
     private lateinit var tasksRepository: TasksRepository
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        coreComponentProvider = TestCoreComponentProvider()
-        KinitApplication.coreComponent = coreComponentProvider.coreComponent
+        TestUtils.setupCoreComponent()
         tasksRepository = TasksRepository()
         tasksRepository.setTask(DEFAULT_TASK)
     }

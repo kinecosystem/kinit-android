@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TransactionRowLayoutBinding
 import org.kinecosystem.kinit.model.KinTransaction
-import org.kinecosystem.kinit.server.ServicesProvider
+import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.viewmodel.balance.TransactionViewModel
 import javax.inject.Inject
 
@@ -19,12 +19,12 @@ class TransactionsListAdapter(val context: Context)
     : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>() {
 
     @Inject
-    lateinit var servicesProvider: ServicesProvider
+    lateinit var networkServices: NetworkServices
 
     var transactions: List<KinTransaction>
     private val updateTransactionsCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            transactions = servicesProvider.walletService.transactions.get()
+            transactions = networkServices.walletService.transactions.get()
             notifyDataSetChanged()
         }
     }
@@ -37,17 +37,17 @@ class TransactionsListAdapter(val context: Context)
 
     init {
         KinitApplication.coreComponent.inject(this)
-        transactions = servicesProvider.walletService.transactions.get()
+        transactions = networkServices.walletService.transactions.get()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         Log.d("####", "TransactionsListAdapter onAttachedToRecyclerView")
-        servicesProvider.walletService.transactions.addOnPropertyChangedCallback(updateTransactionsCallback)
+        networkServices.walletService.transactions.addOnPropertyChangedCallback(updateTransactionsCallback)
         super.onAttachedToRecyclerView(recyclerView)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        servicesProvider.walletService.transactions.removeOnPropertyChangedCallback(updateTransactionsCallback)
+        networkServices.walletService.transactions.removeOnPropertyChangedCallback(updateTransactionsCallback)
         super.onDetachedFromRecyclerView(recyclerView)
     }
 

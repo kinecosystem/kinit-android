@@ -9,26 +9,26 @@ import org.kinecosystem.kinit.repository.DataStoreProvider
 import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.OfferService
 import org.kinecosystem.kinit.server.OnboardingService
-import org.kinecosystem.kinit.server.ServicesProvider
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Singleton
 
 @DebugOpenClass
 @Module(
-        includes = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (DataStoreProviderModule::class)])
-class ServicesProviderModule {
+        includes = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (DataStoreModule::class)])
+class ServicesModule {
 
-    lateinit var serivce: ServicesProvider
+    lateinit var serivce: NetworkServices
     @Provides
     @Singleton
     fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider,
                          userRepository: UserRepository, tasksRepo: TasksRepository,
                          offersRepository: OffersRepository, analytics: Analytics,
-                         scheduler: Scheduler): ServicesProvider {
-        serivce = ServicesProvider(context, dataStoreProvider,
+                         scheduler: Scheduler): NetworkServices {
+        serivce = NetworkServices(context, dataStoreProvider,
                 userRepository, tasksRepo, offersRepository, analytics, scheduler)
         return serivce
     }

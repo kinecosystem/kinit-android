@@ -4,9 +4,8 @@ import com.google.common.truth.Truth.assertThat
 import kin.core.KinAccount
 import org.junit.Before
 import org.junit.Test
-import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.daggerCore.TestCoreComponentProvider
+import org.kinecosystem.kinit.daggerCore.TestUtils
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ERROR_APP_SERVER_FAILED_RESPONSE
 import org.kinecosystem.kinit.server.OnboardingService
@@ -32,15 +31,11 @@ class RestoreViewModelTest {
     lateinit var walletService: Wallet
 
     private lateinit var restoreWalletViewModel: RestoreWalletViewModel
-    private lateinit var coreComponentProvider: TestCoreComponentProvider
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        coreComponentProvider = TestCoreComponentProvider()
-        KinitApplication.coreComponent = coreComponentProvider.coreComponent
-        coreComponentProvider.coreComponent.inject(this)
-
+        TestUtils.setupCoreComponent().inject(this)
         `when`(userRepository.restoreHints).thenReturn(listOf("1", "2"))
         restoreWalletViewModel = RestoreWalletViewModel()
     }
