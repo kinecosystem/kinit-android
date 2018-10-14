@@ -30,6 +30,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/header_with_x_layout"
             app:layout_constraintStart_toStartOf="@+id/header_with_x_layout"
             app:layout_constraintTop_toTopOf="@+id/header_with_x_layout"
+            android:onClick="@{()-> model.onClose()}"
             app:srcCompat="@drawable/close"/>
         <org.kinecosystem.kinit.view.customView.QuestionnaireProgressBar
             android:id="@+id/questionnaire_progress_bar"

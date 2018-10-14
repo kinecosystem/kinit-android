@@ -1,12 +1,20 @@
 package org.kinecosystem.kinit.model.earn
 
+import android.content.Context
+import android.text.TextUtils
+import android.text.format.DateUtils.DAY_IN_MILLIS
 import com.google.gson.annotations.SerializedName
 import org.kinecosystem.kinit.model.Provider
 import org.kinecosystem.kinit.model.isValid
+import org.kinecosystem.kinit.util.ImageUtils
+import org.kinecosystem.kinit.util.TimeUtils
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val TASK_TYPE_QUESTIONNAIRE: String = "questionnaire"
 const val TASK_TYPE_QUIZ: String = "quiz"
 const val TASK_TYPE_TRUEX: String = "truex"
+private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
 
 data class Task(
@@ -24,6 +32,8 @@ data class Task(
         val startDateInSeconds: Long? = null,
         @SerializedName("min_to_complete")
         val minToComplete: Float? = null,
+        @SerializedName("cat_id")
+        val category_id: String? = null,
         @SerializedName("tags")
         val tags: List<String>? = null,
         @SerializedName("post_task_actions")
@@ -38,8 +48,8 @@ data class Task(
         val questions: List<Question>? = null)
 
 fun Task.isValid(): Boolean {
-    if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() ||
-        kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null || lastUpdatedAt == null) {
+    if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() || category_id.isNullOrBlank() ||
+            kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null || lastUpdatedAt == null) {
         return false
     }
     if (isQuiz()) {
@@ -64,6 +74,50 @@ fun Task.tagsString(): String? {
     return tags?.joinToString(", ")
 }
 
-fun Task.startDateInMillis(): Long? {
+private fun Task.startDateInMillis(): Long? {
     return startDateInSeconds?.times(1000)
 }
+
+fun Task.isAvailableNow(): Boolean {
+    startDateInMillis()?.let {
+        return System.currentTimeMillis() >= it
+    }
+    return false
+}
+
+fun Task.isAvailableTomorrow(): Boolean {
+    return timeToUnlockInDays() == 1
+}
+
+private fun  Task.timeToUnlockInDays(): Int {
+    val millisAtNextMidnight = TimeUtils.millisAtNextMidnight(System.currentTimeMillis())
+    val startDate = startDateInMillis() ?: System.currentTimeMillis()
+    return (1 + ((startDate - millisAtNextMidnight) / DAY_IN_MILLIS)).toInt()
+}
+
+fun Task.nextAvailableDate(): String {
+    startDateInMillis()?.let {
+        return SimpleDateFormat(AVAILABILITY_DATE_FORMAT, Locale.US).format(Date(it))
+    }
+    return ""
+}
+
+fun Task.preload(context: Context) {
+    if (hasPostActions()) {
+        val url = postTaskActions?.first()?.iconUrl
+
+        if (!TextUtils.isEmpty(url)) {
+            ImageUtils.fetchImage(context.applicationContext, url)
+        }
+    }
+    for (question: Question in questions.orEmpty()) {
+        if (question.hasImages()) {
+            ImageUtils.fetchImages(context.applicationContext, question.getImagesUrls())
+        }
+    }
+
+}
+
+
+
+
