@@ -82,7 +82,7 @@ class TaskService(context: Context, api: TasksApi,
                     Log.d("TaskService", "onResponse: ${response.body()}")
                     val taskResponse = response.body()
                     val taskList: List<Task> = taskResponse?.taskList.orEmpty()
-                    val task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
+                    var task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
                     tasksRepo.shoulShowCaptcha = taskResponse?.showCaptcha ?: false
                     if (hasChanged(task)) {
                         tasksRepo.replaceTask(task, applicationContext)
