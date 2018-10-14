@@ -24,6 +24,8 @@ data class Task(
         val startDateInSeconds: Long? = null,
         @SerializedName("min_to_complete")
         val minToComplete: Float? = null,
+        @SerializedName("cat_id")
+        val category_id: String? = null,
         @SerializedName("tags")
         val tags: List<String>? = null,
         @SerializedName("post_task_actions")
@@ -38,8 +40,8 @@ data class Task(
         val questions: List<Question>? = null)
 
 fun Task.isValid(): Boolean {
-    if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() ||
-        kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null || lastUpdatedAt == null) {
+    if (id.isNullOrBlank() || title.isNullOrBlank() || description.isNullOrBlank() || type.isNullOrBlank() || memo.isNullOrBlank() || category_id.isNullOrBlank() ||
+            kinReward == null || minToComplete == null || provider == null || questions == null || startDateInSeconds == null || lastUpdatedAt == null) {
         return false
     }
     if (isQuiz()) {

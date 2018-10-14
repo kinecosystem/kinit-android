@@ -46,6 +46,7 @@
     <color name="konfetti6">#ffe164</color>
     <color name="konfetti7">#82ffee</color>
     <color name="green_correct">#87e620</color>
+    <color name="grey_title">#5c6786</color>
     <color name="red_wrong">#fc624f</color>
     <color name="grey_settings_header">#f7f7f7</color>
     <color name="btn_stroke_grey">#d7dce9</color>

@@ -124,13 +124,10 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
 
     fun onResume() {
         val offerPrice = offer.price ?: Int.MAX_VALUE
-        val numOfTasks = tasksRepository.task?.id?.toInt() ?: Integer.MAX_VALUE
-        var offerEnabled = true
-        if (isP2p) {
-            offerEnabled = numOfTasks >= userRepository.p2pMinTasks
-        }
+        //val numOfTasks = tasksRepository.task?.id?.toInt() ?: Integer.MAX_VALUE
 
-        canBuy.set(networkServices.walletService.balanceInt >= offerPrice && offerEnabled)
+
+        canBuy.set(networkServices.walletService.balanceInt >= offerPrice)
 
         analytics.logEvent(Events.Analytics.ViewOfferPage(offer.provider?.name,
             offer.price,

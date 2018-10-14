@@ -47,12 +47,6 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         questionnaireModel.submissionError()
     }
 
-    companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, QuestionnaireActivity::class.java)
-        }
-    }
-
     fun updateNoToolBar() {
         findViewById<View>(R.id.header_with_x_layout).visibility = View.GONE
     }
@@ -119,6 +113,12 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         } else {
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, newFragment)
                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out).commitNowAllowingStateLoss()
+        }
+    }
+
+    companion object {
+        fun getIntent(context: Context, TaskId:String): Intent {
+            return Intent(context, QuestionnaireActivity::class.java)
         }
     }
 }

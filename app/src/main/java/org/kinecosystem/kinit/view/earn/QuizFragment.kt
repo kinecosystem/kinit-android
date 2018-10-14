@@ -27,11 +27,12 @@ class QuizFragment : BaseFragment() {
             onInvalidData()
         }
         val questionIndex = arguments!!.getInt(ARG_QUIZ_INDEX, INVALID_QUIZ_INDEX)
-        if (questionIndex == INVALID_QUIZ_INDEX) {
+        val taskId = arguments!!.getString(ARG_TASK_ID, INVALID_TASK_ID)
+        if (questionIndex == INVALID_QUIZ_INDEX || taskId.equals(INVALID_TASK_ID)) {
             onInvalidData()
         }
         val questionnaireActions = activity as QuestionnaireActions?
-        quizModel = QuizQuestionViewModel(questionIndex, questionnaireActions!!)
+        quizModel = QuizQuestionViewModel(taskId, questionIndex, questionnaireActions!!)
         binding.model = quizModel
         return binding.root
     }
@@ -49,12 +50,16 @@ class QuizFragment : BaseFragment() {
     companion object {
 
         const val ARG_QUIZ_INDEX = "QuizFragment_ARG_QUIZ_INDEX"
-        const val INVALID_QUIZ_INDEX = -1
-        val TAG:String = QuizFragment::class.java.simpleName
+        const val INVALID_TASK_ID = ""
 
-        fun newInstance(questionIndex: Int): QuizFragment {
+        const val ARG_TASK_ID = "QuizFragment_ARG_TASK_ID"
+        const val INVALID_QUIZ_INDEX = -1
+        val TAG: String = QuizFragment::class.java.simpleName
+
+        fun newInstance(taskId: String, questionIndex: Int): QuizFragment {
             val fragment = QuizFragment()
             val args = Bundle()
+            args.putString(ARG_TASK_ID, taskId)
             args.putInt(ARG_QUIZ_INDEX, questionIndex)
             fragment.arguments = args
             return fragment

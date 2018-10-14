@@ -21,7 +21,7 @@ const val EXTENDED_REWARD_TIMEOUT: Long = 40000
 const val SMALL_DELAY: Long = 2000
 const val TAG = "TaskRewardViewModel"
 
-class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = null) {
+class TaskRewardViewModel(taskId:String, private var timeoutCallback: TransactionTimeout? = null) {
 
     @Inject
     lateinit var scheduler: Scheduler

@@ -9,6 +9,7 @@ import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isValid
 import org.kinecosystem.kinit.model.user.UserInfo
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.TasksApi
@@ -18,7 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class TaskService(context: Context, api: TasksApi,
-                  val tasksRepo: TasksRepository,
+                  val tasksRepo: TasksRepository, private val categoriesRepository: CategoriesRepository,
                   private val userRepo: UserRepository, private val walletService: Wallet) {
 
     private val tasksApi: TasksApi = api
@@ -77,13 +78,15 @@ class TaskService(context: Context, api: TasksApi,
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
                                     response: Response<TasksApi.NextTasksResponse>?) {
 
-                if (response != null && response.isSuccessful &&
+                if (response != null && response.isSuccessful && response.body() != null &&
                         tasksRepo.taskState != TaskState.IN_PROGRESS && tasksRepo.taskState != TaskState.SUBMITTED) {
-                    Log.d("TaskService", "onResponse: ${response.body()}")
-                    val taskResponse = response.body()
-                    val taskList: List<Task> = taskResponse?.taskList.orEmpty()
+                    response.body()!!.tasksMap?.let {
+                        categoriesRepository.updateTasks(it)
+                    }
+                    val taskList: List<Task> = response.body()!!.tasksMap!!["0"].orEmpty()
                     var task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
-                    tasksRepo.shoulShowCaptcha = taskResponse?.showCaptcha ?: false
+                    //TODO
+                    //tasksRepo.shouldShowCaptcha = taskResponse?.showCaptcha ?: false
                     if (hasChanged(task)) {
                         tasksRepo.replaceTask(task, applicationContext)
                         callback?.onResult(true)
