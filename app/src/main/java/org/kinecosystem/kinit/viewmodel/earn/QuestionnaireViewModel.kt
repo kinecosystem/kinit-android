@@ -20,7 +20,7 @@ const val REWARD_PAGE = 2
 const val SUBMIT_ERROR_PAGE = 3
 const val TRANSACTION_ERROR_PAGE = 4
 
-open class QuestionnaireViewModel(restoreState: Boolean) :
+open class QuestionnaireViewModel(taskId:String, restoreState: Boolean) :
         QuestionnaireActions {
 
     @Inject

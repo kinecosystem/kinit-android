@@ -35,7 +35,7 @@ class QuestionnaireCompleteViewModel {
     lateinit var scheduler: Scheduler
 
 
-    constructor(context: Context) {
+    constructor(context: Context, taskId:String) {
         KinitApplication.coreComponent.inject(this)
 
         val task = taskRepository.taskInProgress

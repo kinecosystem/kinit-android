@@ -17,7 +17,7 @@ import org.kinecosystem.kinit.server.OperationResultCallback
 import org.kinecosystem.kinit.server.TaskService
 import javax.inject.Inject
 
-abstract class WebViewModel(val navigator: Navigator) {
+abstract class WebViewModel(taskId:String, val navigator: Navigator) {
     abstract var interfaceName: String
     abstract var url: String
     lateinit var webFragmentActions: WebFragmentActions
@@ -37,7 +37,8 @@ abstract class WebViewModel(val navigator: Navigator) {
     }
 
     fun startListenToPayment() {
-        wallet.listenToPayment(tasksRepository.taskInProgress?.memo!!)
+        //TODO fix to categories repo
+        wallet.listenToPayment(tasksRepository.task?.id, tasksRepository.task?.memo!!)
     }
 
     fun onComplete() {

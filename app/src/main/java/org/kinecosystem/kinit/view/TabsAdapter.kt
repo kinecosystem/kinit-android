@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.support.v4.view.PagerAdapter
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -13,19 +14,18 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.databinding.BalanceTabBinding
-import org.kinecosystem.kinit.databinding.EarnTabBinding
-import org.kinecosystem.kinit.databinding.InfoTabBinding
-import org.kinecosystem.kinit.databinding.SpendTabBinding
+import org.kinecosystem.kinit.databinding.*
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
+import org.kinecosystem.kinit.view.adapter.CategoryListAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
 import org.kinecosystem.kinit.view.customView.AlertManager
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
+import org.kinecosystem.kinit.viewmodel.earn.CategoriesViewModel
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
@@ -94,12 +94,13 @@ class TabsAdapter(val context: Context) :
     }
 
     private fun getEarnTab(parent: ViewGroup, position: Int): View {
-        val binding = DataBindingUtil.inflate<EarnTabBinding>(LayoutInflater.from(parent.context),
-                R.layout.earn_tab, parent, false)
-        val model = EarnViewModel(BackupAlertManager(context), Navigator(context))
+        val binding = DataBindingUtil.inflate<EarnCategoriesTabBinding>(LayoutInflater.from(parent.context),
+                R.layout.earn_categories_tab, parent, false)
+        val model = CategoriesViewModel(BackupAlertManager(context))
+        binding.categories.layoutManager = GridLayoutManager(parent.context, 2)
+        binding.categories.adapter = CategoryListAdapter(parent.context, model)
         binding.model = model
         models[position] = model
-
         return binding.root
     }
 

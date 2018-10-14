@@ -5,12 +5,14 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
+import org.kinecosystem.kinit.model.earn.Category
 import org.kinecosystem.kinit.model.earn.isTaskWebView
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
+import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
@@ -77,6 +79,13 @@ class Navigator(private val context: Context) {
     private fun navigateToActivity(intent: Intent, withSlideAnimation: Boolean = true) {
         context.startActivity(intent)
         if (withSlideAnimation && context is AppCompatActivity) {
+            context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
+        }
+    }
+
+    fun navigateTo(category: Category) {
+        context.startActivity(CategoryTaskActivity.getIntent(context, category.id))
+        if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
     }

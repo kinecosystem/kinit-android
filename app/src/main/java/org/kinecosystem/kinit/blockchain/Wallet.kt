@@ -14,9 +14,9 @@ import org.kinecosystem.kinit.model.KinTransaction
 import org.kinecosystem.kinit.model.Push
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.spend.Coupon
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.DataStore
 import org.kinecosystem.kinit.repository.DataStoreProvider
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ERROR_APP_SERVER_FAILED_RESPONSE
 import org.kinecosystem.kinit.server.ERROR_EMPTY_RESPONSE
@@ -45,7 +45,7 @@ private const val TAG = "Wallet"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
              val userRepo: UserRepository,
-             val tasksRepository: TasksRepository,
+             val categoriesRepository: CategoriesRepository,
              val analytics: Analytics,
              val onboardingApi: OnboardingApi,
              val walletApi: WalletApi,
@@ -74,11 +74,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         val issuer = if (type == Type.Main) KIN_ISSUER_MAIN else KIN_ISSUER_STAGE
 
         kinClient = KinClient(context, KinitServiceProvider(providerUrl, networkId, issuer))
-        if (kinClient.hasAccount()) {
-            account = kinClient.getAccount(kinClient.accountCount-1)
-        }
-        else {
-            account = kinClient.addAccount()
+        account = if (kinClient.hasAccount()) {
+            kinClient.getAccount(kinClient.accountCount - 1)
+        } else {
+            kinClient.addAccount()
         }
 
         userRepo.userInfo.publicAddress = account.publicAddress!!
@@ -320,36 +319,36 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 txHash, TRANSACTION_TYPE_EARN))
     }
 
-    fun listenToPayment(memo: String) {
-        paymentListener = account.blockchainEvents().addPaymentListener({
+    fun listenToPayment(taskId: String, memo: String) {
+        paymentListener = account.blockchainEvents().addPaymentListener {
             if (it?.memo().equals(memo)) {
-                updateBalanceForPayment(it)
+                updateBalanceForPayment(taskId, it)
                 paymentListener.remove()
             }
-        })
+        }
         scheduler.scheduleOnMain({
             if (!onEarnTransactionCompleted.get()) {
-                setTaskState(TaskState.TRANSACTION_ERROR)
+                setTaskState(taskId, TaskState.TRANSACTION_ERROR)
                 paymentListener.remove()
             }
         }, REWARD_TIMEOUT)
     }
 
-    private fun updateBalanceForPayment(payment: PaymentInfo? = null) {
+    private fun updateBalanceForPayment(taskId: String, payment: PaymentInfo? = null) {
         updateBalance(object : ResultCallback<Balance> {
             override fun onResult(balance: Balance) {
                 if (payment != null) {
                     onEarnTransactionCompleted.set(true)
-                    setTaskState(TaskState.TRANSACTION_COMPLETED)
+                    setTaskState(taskId, TaskState.TRANSACTION_COMPLETED)
                     retrieveTransactions()
                     logEarnTransactionCompleted(payment.amount().toInt(), payment.hash().id())
                 } else {
-                    setTaskState(TaskState.TRANSACTION_ERROR)
+                    setTaskState(taskId, TaskState.TRANSACTION_ERROR)
                 }
             }
 
             override fun onError(e: Exception) {
-                setTaskState(TaskState.TRANSACTION_ERROR)
+                setTaskState(taskId, TaskState.TRANSACTION_ERROR)
                 if (payment != null) {
                     logEarnTransactionCompleted(payment.amount().toInt(), payment.hash().id())
                 }
@@ -361,7 +360,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun onTransactionMessageReceived(transactionComplete: Push.TransactionCompleteMessage) {
 
         if (!isValid(transactionComplete)) {
-            setTaskState(TaskState.TRANSACTION_ERROR)
+            setTaskState(transactionComplete.taskId!!, TaskState.TRANSACTION_ERROR)
             return
         }
 
@@ -369,16 +368,16 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             override fun onResult(balance: Balance) {
                 if (transactionComplete.kin != null && transactionComplete.txHash != null) {
                     onEarnTransactionCompleted.set(true)
-                    setTaskState(TaskState.TRANSACTION_COMPLETED)
+                    setTaskState(transactionComplete.taskId!!, TaskState.TRANSACTION_COMPLETED)
                     retrieveTransactions()
                     logEarnTransactionCompleted(transactionComplete.kin, transactionComplete.txHash)
                 } else {
-                    setTaskState(TaskState.TRANSACTION_ERROR)
+                    setTaskState(transactionComplete.taskId!!, TaskState.TRANSACTION_ERROR)
                 }
             }
 
             override fun onError(e: Exception) {
-                setTaskState(TaskState.TRANSACTION_ERROR)
+                setTaskState(transactionComplete.taskId!!, TaskState.TRANSACTION_ERROR)
                 if (transactionComplete.kin != null && transactionComplete.txHash != null) {
                     logEarnTransactionCompleted(transactionComplete.kin, transactionComplete.txHash)
                 }
@@ -392,12 +391,13 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private fun isValid(transactionComplete: Push.TransactionCompleteMessage): Boolean {
         return transactionComplete.kin != null &&
                 transactionComplete.kin > 0 &&
+                transactionComplete.taskId != null &&
                 transactionComplete.userId != null &&
                 transactionComplete.userId == userRepo.userInfo.userId
     }
 
-    private fun setTaskState(state: Int) {
-        tasksRepository.taskState = state
+    private fun setTaskState(taskId: String, state: Int) {
+        categoriesRepository.updateTaskState(taskId, state)
     }
 
 }

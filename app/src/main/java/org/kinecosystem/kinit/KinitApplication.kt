@@ -49,6 +49,7 @@ class KinitApplication : Application(), DataStoreProvider {
         networkServices.onBoardingService.appLaunch()
         networkServices.backupService.retrieveHints()
         networkServices.offerService.retrieveOffers()
+        networkServices.categoriesService.retrieveCategories()
         networkServices.walletService.retrieveTransactions()
         networkServices.walletService.retrieveCoupons()
         userRepository.isFreshInstall = false

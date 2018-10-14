@@ -14,7 +14,7 @@ import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView.OnSelection
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
 
-class QuestionDualImageViewModel(private var questionIndex: Int,
+class QuestionDualImageViewModel(taskId:String, private var questionIndex: Int,
                                  private val questionnaireActions: QuestionnaireActions?) {
     @Inject
     lateinit var scheduler: Scheduler
