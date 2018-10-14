@@ -99,11 +99,6 @@ class TabsAdapter(val context: Context) :
         val model = EarnViewModel(BackupAlertManager(context))
         binding.model = model
         models[position] = model
-        model.listener = object : EarnViewModel.OnTaskChangedListener {
-            override fun onTaskChanged() {
-                AlertManager.showAlert(context, R.string.task_refreshed_title, R.string.task_refreshed_desc, R.string.dialog_ok, {})
-            }
-        }
 
         return binding.root
     }
