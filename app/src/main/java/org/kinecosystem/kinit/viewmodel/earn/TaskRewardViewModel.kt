@@ -46,7 +46,7 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
 
     init {
         KinitApplication.coreComponent.inject(this)
-        task = taskRepository.task
+        task = taskRepository.taskInProgress
         balance = walletService.balance
         Log.d(TAG, "init() taskState = ${taskRepository.taskState}")
         onTransactionComplete =

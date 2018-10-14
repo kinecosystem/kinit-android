@@ -62,7 +62,7 @@ class Navigator(private val context: Context) {
     }
 
     private fun navigateToTask() {
-        tasksRepository.task?.let {
+        tasksRepository.taskInProgress?.let {
             if (it.isTaskWebView()) {
                 context.startActivity(WebTaskActivity.getIntent(context))
             } else {

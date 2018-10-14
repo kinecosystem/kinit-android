@@ -32,7 +32,7 @@ abstract class WebViewModel(val navigator: Navigator) {
     }
 
     fun startListenToPayment() {
-        wallet.listenToPayment(tasksRepository.task?.memo!!)
+        wallet.listenToPayment(tasksRepository.taskInProgress?.memo!!)
     }
 
     fun onComplete() {

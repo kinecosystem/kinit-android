@@ -46,7 +46,7 @@ class TasksRepository {
     init {
         KinitApplication.coreComponent.inject(this)
         taskCache = dataStoreProvider.dataStore(TASK_STORAGE)
-        task = getCachedTask()
+        task = getCachedTask(TASK_KEY)
         taskStorageName = QUESTIONNAIRE_ANSWERS_STORAGE
         chosenAnswersCache = dataStoreProvider.dataStore(taskStorageName)
         isTaskStarted = ObservableBoolean(taskState != TaskState.IDLE)
@@ -63,8 +63,8 @@ class TasksRepository {
             TaskState.IDLE
     }
 
-    private fun getCachedTask(): Task? {
-        val cachedTask = taskCache.getString(TASK_KEY, "")
+    private fun getCachedTask(key: String): Task? {
+        val cachedTask = taskCache.getString(key, "")
         return Gson().fromJson(cachedTask, Task::class.java)
     }
 
@@ -116,7 +116,7 @@ class TasksRepository {
     fun replaceTask(task: Task?, applicationContext: Context) {
         this.task = task
         if (task != null) {
-            taskCache.putString(TASK_KEY, Gson().toJson(task))
+            storeTask(TASK_KEY, task)
             if (task.hasPostActions()) {
                 val url = task.postTaskActions?.first()?.iconUrl
 
@@ -135,9 +135,13 @@ class TasksRepository {
         clearChosenAnswers()
     }
 
+    private fun storeTask(key: String, task: Task?) {
+        taskCache.putString(key, Gson().toJson(task))
+    }
+
     fun onTaskStarted() {
-        taskState = TaskState.IN_PROGRESS
         taskInProgress = task?.copy()
+        taskState = TaskState.IN_PROGRESS
     }
 }
 
