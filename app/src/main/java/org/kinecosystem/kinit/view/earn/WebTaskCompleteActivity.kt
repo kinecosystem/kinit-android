@@ -24,6 +24,6 @@ class WebTaskCompleteActivity : SingleFragmentActivity(), WebTaskCompleteFragmen
 
 
     companion object {
-        fun getIntent(context: Context) = Intent(context, WebTaskCompleteActivity::class.java)
+        fun getIntent(context: Context, taskId:String) = Intent(context, WebTaskCompleteActivity::class.java)
     }
 }

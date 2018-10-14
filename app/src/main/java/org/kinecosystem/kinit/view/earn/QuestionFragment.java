@@ -18,19 +18,12 @@ import org.kinecosystem.kinit.viewmodel.earn.QuestionViewModel;
 
 
 public class QuestionFragment extends BaseFragment {
-
+    public static final String ARG_TASK_ID = "QuestionnaireFragment_ARG_TASK_ID";
+    public static final String INVALID_TASK_ID = "";
     public static final String ARG_QUESTION_INDEX = "QuestionnaireFragment_ARG_QUESTION_INDEX";
     public static final int INVALID_QUESTION_INDEX = -1;
     public static final String TAG = QuestionFragment.class.getSimpleName();
     private QuestionViewModel questionModel;
-
-    public static QuestionFragment newInstance(int questionIndex) {
-        QuestionFragment fragment = new QuestionFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_QUESTION_INDEX, questionIndex);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,5 +60,14 @@ public class QuestionFragment extends BaseFragment {
     private void onInvalidData() {
         Log.e(TAG, "Invalid data cant start QuestionFragment");
         getActivity().finish();
+    }
+
+    public static QuestionFragment newInstance(String taskId, int questionIndex) {
+        QuestionFragment fragment = new QuestionFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_QUESTION_INDEX, questionIndex);
+        args.putString(AnswerExplainedFragment.ARG_TASK_ID, taskId);
+        fragment.setArguments(args);
+        return fragment;
     }
 }

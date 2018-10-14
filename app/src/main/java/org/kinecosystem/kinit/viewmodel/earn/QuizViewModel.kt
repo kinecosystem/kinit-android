@@ -6,7 +6,7 @@ import org.kinecosystem.kinit.view.earn.*
 
 const val SHOW_ANSWER_PAGE = 100
 
-class QuizViewModel(restoreState: Boolean) : QuestionnaireViewModel(restoreState),
+class QuizViewModel(taskId:String, restoreState: Boolean) : QuestionnaireViewModel(taskId, restoreState),
         QuestionnaireActions {
 
 

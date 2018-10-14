@@ -42,15 +42,17 @@ class AnswerExplainedFragment : BaseFragment() {
     }
 
     companion object {
-
+        const val ARG_TASK_ID = "AnswerExplainedFragment_ARG_TASK_ID"
+        const val INVALID_TASK_ID = ""
         const val ARG_QUIZ_INDEX = "QuizFragment_ARG_QUIZ_INDEX"
         const val INVALID_QUIZ_INDEX = -1
         val TAG:String = AnswerExplainedFragment::class.java.simpleName
 
-        fun newInstance(questionIndex: Int): AnswerExplainedFragment {
+        fun newInstance(taskId:String, questionIndex: Int): AnswerExplainedFragment {
             val fragment = AnswerExplainedFragment()
             val args = Bundle()
             args.putInt(ARG_QUIZ_INDEX, questionIndex)
+            args.putString(ARG_TASK_ID, taskId)
             fragment.arguments = args
             return fragment
         }

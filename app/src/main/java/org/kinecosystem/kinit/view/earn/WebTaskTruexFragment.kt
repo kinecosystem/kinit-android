@@ -36,12 +36,6 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
         }
     }
 
-    companion object {
-        fun getInstance(): WebTaskTruexFragment {
-            return WebTaskTruexFragment()
-        }
-    }
-
     lateinit var trueXmodel: WebTaskTruexViewModel
     lateinit var binding: TaskWebLayoutBinding
 
@@ -101,5 +95,18 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
 
     override fun finish() {
         activity?.finish()
+    }
+
+    companion object {
+        const val ARG_QUIZ_INDEX = "QuizFragment_ARG_QUIZ_INDEX"
+        const val ARG_TASK_ID = "QuizFragment_ARG_TASK_ID"
+
+        fun getInstance(taskId:String): WebTaskTruexFragment {
+            val fragment = WebTaskTruexFragment()
+            val args = Bundle()
+            args.putString(AnswerExplainedFragment.ARG_TASK_ID, taskId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

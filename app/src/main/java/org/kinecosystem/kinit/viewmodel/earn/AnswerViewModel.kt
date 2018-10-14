@@ -7,7 +7,7 @@ import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
 
-class AnswerViewModel(questionIndex: Int,
+class AnswerViewModel(taskId:String, questionIndex: Int,
                       private val questionnaireActions: QuestionnaireActions) {
 
 

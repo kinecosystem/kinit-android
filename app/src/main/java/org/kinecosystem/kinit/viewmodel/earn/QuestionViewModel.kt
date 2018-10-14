@@ -14,7 +14,7 @@ import org.kinecosystem.kinit.view.adapter.AnswersListAdapter
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
 
-open class QuestionViewModel(private var questionIndex: Int,
+open class QuestionViewModel(taskId:String, private var questionIndex: Int,
     private val questionnaireActions: QuestionnaireActions) {
 
 

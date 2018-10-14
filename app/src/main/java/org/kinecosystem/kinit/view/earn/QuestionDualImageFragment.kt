@@ -44,15 +44,17 @@ class QuestionDualImageFragment : BaseFragment() {
     }
 
     companion object {
-
+        const val ARG_TASK_ID = "QuestionDualImageFragment_ARG_TASK_ID"
+        const val INVALID_TASK_ID = ""
         val ARG_QUESTION_INDEX = "QuestionnaireFragment_ARG_QUESTION_INDEX"
         val INVALID_QUESTION_INDEX = -1
         val TAG = QuestionDualImageFragment::class.java.simpleName
 
-        fun newInstance(questionIndex: Int): QuestionDualImageFragment {
+        fun newInstance(taskId:String, questionIndex: Int): QuestionDualImageFragment {
             val fragment = QuestionDualImageFragment()
             val args = Bundle()
             args.putInt(ARG_QUESTION_INDEX, questionIndex)
+            args.putString(AnswerExplainedFragment.ARG_TASK_ID, taskId)
             fragment.arguments = args
             return fragment
         }

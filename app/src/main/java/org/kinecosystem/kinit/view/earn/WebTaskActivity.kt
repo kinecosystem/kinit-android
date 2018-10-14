@@ -37,7 +37,7 @@ class WebTaskActivity : BaseSingleFragmentActivity() {
         KinitApplication.coreComponent.inject(this)
     }
 
-    override fun getFragment(): Fragment {
+    override fun getFragment(taskId:String): Fragment {
         return when (tasksRepository.task!!.type) {
             "truex" -> WebTaskTruexFragment.getInstance()
             else -> WebTaskTruexFragment.getInstance()

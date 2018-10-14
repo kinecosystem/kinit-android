@@ -112,16 +112,20 @@ class TaskErrorFragment : BaseFragment() {
 
     companion object {
 
+        const val ARG_TASK_ID = "TaskErrorFragment_ARG_TASK_ID"
+        const val INVALID_TASK_ID = ""
+
         val ARG_ERROR_TYPE = "Earn_error_type"
         val ERROR_SUBMIT = 10
         val ERROR_TRANSACTION = 20
 
         val TAG = TaskErrorFragment::class.java.simpleName
 
-        fun newInstance(error: Int): TaskErrorFragment {
+        fun newInstance(taskId:String, error: Int): TaskErrorFragment {
             val fragment = TaskErrorFragment()
             val args = Bundle()
             args.putInt(ARG_ERROR_TYPE, error)
+            args.putString(ARG_TASK_ID, taskId)
             fragment.arguments = args
             return fragment
         }

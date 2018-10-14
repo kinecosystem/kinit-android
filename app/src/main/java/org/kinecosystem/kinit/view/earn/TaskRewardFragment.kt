@@ -59,12 +59,6 @@ class TaskRewardFragment : BaseFragment(), TransactionTimeout {
         model?.onResume()
     }
 
-    companion object {
-        fun newInstance(): TaskRewardFragment {
-            return TaskRewardFragment()
-        }
-    }
-
     override fun onTransactionTimeout() {
         if (activity != null && activity is TransactionActions) {
             (activity as TransactionActions).transactionError()
@@ -74,6 +68,19 @@ class TaskRewardFragment : BaseFragment(), TransactionTimeout {
     override fun onSubmitError() {
         if (activity != null && activity is QuestionnaireActions) {
             (activity as QuestionnaireActions).submissionError()
+        }
+    }
+
+    companion object {
+        const val ARG_TASK_ID = "TaskRewardFragment_ARG_TASK_ID"
+        const val INVALID_TASK_ID = ""
+
+        fun newInstance(taskId:String): TaskRewardFragment {
+            val fragment = TaskRewardFragment()
+            val args = Bundle()
+            args.putString(AnswerExplainedFragment.ARG_TASK_ID, taskId)
+            fragment.arguments = args
+            return fragment
         }
     }
 

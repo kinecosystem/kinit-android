@@ -73,7 +73,10 @@ class QuestionnaireCompleteFragment : BaseFragment() {
     }
 
     companion object {
-        fun newInstance(): QuestionnaireCompleteFragment {
+        const val ARG_TASK_ID = "QuestionnaireCompleteFragment_ARG_TASK_ID"
+        const val INVALID_TASK_ID = ""
+
+        fun newInstance(taskId:String): QuestionnaireCompleteFragment {
             return QuestionnaireCompleteFragment()
         }
     }
