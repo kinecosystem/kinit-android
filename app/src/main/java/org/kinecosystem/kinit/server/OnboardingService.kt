@@ -23,7 +23,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         val userRepo: UserRepository,
                         val analytics: Analytics,
                         val taskService: TaskService,
-                        val wallet: Wallet) {
+                        val wallet: Wallet,
+                        val categoriesService: CategoriesService) {
 
     private val applicationContext: Context = context.applicationContext
     private var blackList = listOf<String>()
@@ -55,7 +56,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     override fun onResponse(call: Call<OnboardingApi.HintsResponse>,
                                             response: Response<OnboardingApi.HintsResponse>) {
                         if (response.isSuccessful) {
-                            taskService.retrieveNextTask()
+                            categoriesService.retrieveCategories()
+                            taskService.retrieveAllTasks()
                             userRepo.restoreHints = response.body()?.hints ?: listOf()
                             callback.onSuccess()
                         } else {
@@ -140,7 +142,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                             } else {
                                 userRepo.updateUserId(response.body()?.userId ?: "")
-                                taskService.retrieveNextTask()
+                                categoriesService.retrieveCategories()
+                                taskService.retrieveAllTasks()
                                 callback?.onSuccess()
                             }
                         } else {

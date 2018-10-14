@@ -7,6 +7,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.CategoriesService
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
@@ -24,11 +25,15 @@ class CreateWalletViewModel {
     lateinit var scheduler: Scheduler
     @Inject
     lateinit var taskService: TaskService
+    @Inject
+    lateinit var categoriesService: CategoriesService
+
 
 
     var callback: Observable.OnPropertyChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(p0: Observable?, p1: Int) {
-            taskService.retrieveNextTask()
+            categoriesService.retrieveCategories()
+            taskService.retrieveAllTasks()
             listener?.onWalletCreated()
         }
     }
@@ -61,7 +66,8 @@ class CreateWalletViewModel {
         scheduler.scheduleOnMain(
                 {
                     if (walletReady.get()) {
-                        taskService.retrieveNextTask()
+                        categoriesService.retrieveCategories()
+                        taskService.retrieveAllTasks()
                         listener?.onWalletCreated()
                     } else {
                         listener?.onCreateWalletError()
@@ -73,7 +79,8 @@ class CreateWalletViewModel {
 
     private fun checkReadyToMove() {
         if (walletReady.get()) {
-            taskService.retrieveNextTask()
+            categoriesService.retrieveCategories()
+            taskService.retrieveAllTasks()
             listener?.onWalletCreated()
         } else {
             walletReady.addOnPropertyChangedCallback(callback)

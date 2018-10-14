@@ -1,68 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.earn.EarnViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.earn.CategoryTaskViewModel" />
     </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <View
-            android:id="@+id/balance"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/balance_height"
-            android:background="@color/status_bar_color"
+            android:id="@+id/header"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:background="@{model.bgColor}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
+            tools:background="@color/blue" />
 
-        <TextView
-            android:id="@+id/balance_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical|start"
-            android:paddingLeft="30dp"
-            android:text="@{model.balance}"
-            android:textColor="@color/balance_text_color"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/balance"
-            app:layout_constraintTop_toTopOf="@id/balance"
-            tools:text="200"/>
-
-        <TextView
-            android:id="@+id/kin_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="sans-serif"
-            android:gravity="center|start"
-            android:paddingLeft="7dp"
-            android:text="KIN"
-            android:textColor="@color/balance_text_color"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/balance_text"
-            app:layout_constraintStart_toEndOf="@+id/balance_text"
-            app:layout_constraintTop_toTopOf="@+id/balance_text"
-            tools:text="KIN"/>
         <ImageView
-            android:id="@+id/kin_icon"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="@+id/kin_currency"
-            app:layout_constraintStart_toEndOf="@+id/kin_currency"
-            app:layout_constraintTop_toTopOf="@+id/kin_currency"
-            app:srcCompat="@drawable/k_letter"/>
+            android:onClick="@{()->model.onBackPressed()}"
+            android:paddingLeft="9dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/arrow_back" />
+
+        <ImageView
+            android:id="@+id/header_image"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:scaleType="centerInside"
+            app:imageUrl="@{model.headerImage}"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_container"
+            app:layout_constraintEnd_toEndOf="@+id/header"
+            app:layout_constraintTop_toTopOf="@+id/header"
+            app:srcCompat="@drawable/task_tomorrow" />
+
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.09"
+            android:text="@{model.headerTitle}"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@+id/header"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Trivia" />
+
+        <ImageView
+            android:id="@+id/activities_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="8dp"
+            android:visibility="@{model.taskCountVisibility}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_title"
+            app:srcCompat="@drawable/multiple_tasks" />
+
+        <TextView
+            android:id="@+id/tasks_counts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.05"
+            android:text="@{@string/activities_count(model.tasksCount)}"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:visibility="@{model.taskCountVisibility}"
+            app:layout_constraintBottom_toBottomOf="@+id/activities_icon"
+            app:layout_constraintStart_toEndOf="@+id/activities_icon"
+            app:layout_constraintTop_toTopOf="@+id/activities_icon"
+            tools:text="2 activities" />
+
+
+
 
         <ImageView
             android:id="@+id/author_image"
@@ -72,12 +107,12 @@
             android:maxHeight="@dimen/author_image_size_height"
             android:scaleType="centerInside"
             android:src="@drawable/place_holder_rounded_rec_grey"
-            android:visibility="@{model.getShouldShowTask}"
+            android:visibility="@{model.shouldShowTask}"
             app:imageUrl="@{model.authorImageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balance"
+            app:layout_constraintTop_toBottomOf="@+id/header"
             tools:src="@mipmap/ic_launcher_app"
             tools:visibility="visible"/>
         <TextView
@@ -92,7 +127,7 @@
             android:text="@{@string/by_author(model.authorName)}"
             android:textColor="#d2d7e1"
             android:textSize="14sp"
-            android:visibility="@{model.getShouldShowTask}"
+            android:visibility="@{model.shouldShowTask}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -133,8 +168,7 @@
             android:text="@{model.description}"
             android:textColor="#7884a5"
             android:textSize="16sp"
-            android:textStyle="normal"
-            android:visibility="@{model.getShouldShowTask}"
+            android:visibility="@{model.shouldShowTask}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -287,7 +321,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/balance"
+            app:layout_constraintTop_toBottomOf="@id/header"
             tools:text="Next earning experience will be available tomorrow."
             tools:visibility="gone"/>
 
@@ -297,7 +331,7 @@
             android:layout_height="171dp"
             android:layout_marginTop="86dp"
             android:scaleType="centerInside"
-            android:src="@drawable/next_experience"
+            android:src="@drawable/task_tomorrow"
             android:visibility="@{model.shouldShowTaskNotAvailableYet}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -364,12 +398,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:scaleType="centerInside"
-            android:src="@drawable/sowing_illustration"
+            android:src="@drawable/no_tasks_available"
             android:visibility="@{model.shouldShowNoTask}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balance"
+            app:layout_constraintTop_toBottomOf="@+id/header"
             tools:visibility="gone"/>
         <TextView
             android:id="@+id/no_tasks_title"

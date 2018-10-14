@@ -19,7 +19,7 @@
             android:layout_height="122dp"
             android:layout_marginTop="50dp"
             android:scaleType="centerInside"
-            android:src="@drawable/wallet_illustration"
+            android:src="@drawable/wallet_create_failed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,24 +42,25 @@
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/create_wallet_error_image"/>
+
         <TextView
             android:id="@+id/create_wallet_error_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="83dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="9dp"
-            android:layout_marginEnd="83dp"
+            android:layout_marginEnd="24dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3sp"
-            android:text="@string/error_please_check_your_internet_connection"
+            android:text="@string/error_create_wallet"
             android:textColor="@color/gray"
             android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/create_wallet_error_title"/>
+            app:layout_constraintTop_toBottomOf="@id/create_wallet_error_title" />
         <TextView
             android:id="@+id/create_wallet_error_retry_button"
             style="@style/Button.Hollow"

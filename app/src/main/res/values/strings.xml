@@ -68,7 +68,7 @@
     <string name="kin_currency">KIN</string>
     <string name="version">version %s</string>
     <string name="error_unable_to_create_wallet">We were unable to create a wallet for you</string>
-    <string name="error_please_check_your_internet_connection">Please check your internet connection &amp; restart the app.</string>
+    <string name="error_create_wallet">Please restart the app to try again.</string>
     <string name="retry">Retry</string>
     <string name="contact_support">contact support</string>
     <string name="question_gray_text">Check all that apply</string>
@@ -212,4 +212,6 @@
     <string name="feedback_email_subject">Feedback</string>
     <string name="help_center">Help Center</string>
     <string name="thank_you_for_feedback_text">Thank you for your feedback!</string>
+    <string name="activities_count">%d Activities</string>
+
 </resources>
