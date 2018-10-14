@@ -2,7 +2,7 @@ package org.kinecosystem.kinit.viewmodel.earn
 
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class AnswerViewModel(questionIndex: Int,
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -22,7 +22,7 @@ class AnswerViewModel(questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        answer = questionnaireRepository.taskInProgress?.questions?.get(questionIndex)?.quiz_data?.explanation
+        answer = categoriesRepository.currentTaskInProgress?.questions?.get(questionIndex)?.quiz_data?.explanation
     }
 
 

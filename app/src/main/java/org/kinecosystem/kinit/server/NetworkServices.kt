@@ -6,10 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.repository.DataStoreProvider
-import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.TasksRepository
-import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.repository.*
 import org.kinecosystem.kinit.server.api.*
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.Scheduler
@@ -33,6 +30,7 @@ interface OperationResultCallback<in T> {
 class NetworkServices {
     val onBoardingService: OnboardingService
     val taskService: TaskService
+    val categoriesService: CategoriesService
     val walletService: Wallet
     val offerService: OfferService
     val backupService: BackupService
@@ -40,7 +38,7 @@ class NetworkServices {
     private val applicationContext: Context
 
     constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
-                tasksRepo: TasksRepository, offerRepo: OffersRepository,
+                tasksRepo: TasksRepository, offerRepo: OffersRepository, categoryRepository: CategoriesRepository,
                 analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
@@ -61,15 +59,15 @@ class NetworkServices {
         val walletApi = retrofit.create<WalletApi>(WalletApi::class.java)
 
 
-        walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, tasksRepo, analytics,
+        walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, categoryRepository, analytics,
                 onboardingApi, walletApi, scheduler)
         taskService = TaskService(applicationContext,
-                retrofit.create<TasksApi>(TasksApi::class.java),
-                tasksRepo, userRepo, walletService)
+                retrofit.create<TasksApi>(TasksApi::class.java), categoryRepository, userRepo, walletService)
+        categoriesService = CategoriesService(applicationContext, retrofit.create(CategoriesApi::class.java), userRepo, categoryRepository)
         onBoardingService = OnboardingService(applicationContext,
                 retrofit.create<OnboardingApi>(OnboardingApi::class.java),
                 retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
-                userRepo, analytics, taskService, walletService)
+                userRepo, analytics, taskService, walletService, categoriesService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
                 userRepo, offerRepo, analytics, walletService, scheduler)
         backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))

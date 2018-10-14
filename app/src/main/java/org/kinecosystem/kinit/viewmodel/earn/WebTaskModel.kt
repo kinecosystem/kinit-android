@@ -7,12 +7,9 @@ import android.webkit.JavascriptInterface
 import com.google.gson.JsonElement
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.server.OperationResultCallback
 import org.kinecosystem.kinit.server.TaskService
 import javax.inject.Inject
@@ -23,9 +20,7 @@ abstract class WebViewModel(val navigator: Navigator) {
     lateinit var webFragmentActions: WebFragmentActions
 
     @Inject
-    lateinit var analytics: Analytics
-    @Inject
-    lateinit var tasksRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var wallet: Wallet
     @Inject
@@ -37,20 +32,15 @@ abstract class WebViewModel(val navigator: Navigator) {
     }
 
     fun startListenToPayment() {
-        wallet.listenToPayment(tasksRepository.taskInProgress?.memo!!)
+        categoriesRepository.currentTaskInProgress?.let {
+            wallet.listenToPayment(it.id!!, it.memo!!)
+        }
     }
 
     fun onComplete() {
-        val task = tasksRepository.taskInProgress
-        val event = Events.Business.EarningTaskCompleted(task?.provider?.name,
-                task?.minToComplete,
-                task?.kinReward,
-                task?.tagsString(),
-                task?.id,
-                task?.title,
-                task?.type)
-        analytics.logEvent(event)
-        taskService.retrieveNextTask()
+        categoriesRepository.currentTaskRepo?.task?.category_id?.let {
+            taskService.retrieveNextTask(it)
+        }
         navigator.navigateTo(Navigator.Destination.COMPLETE_WEB_TASK)
         if (webFragmentActions != null) {
             webFragmentActions.finish()
@@ -107,7 +97,7 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
                 val networkUserId = json?.asJsonObject?.get(USER_NET_ID_ELEMENT)
                 if (networkUserId != null) {
                     javascript.set(
-                        "updateTruexActivityData('$networkUserId', '${json.toString()}', '$TRUEX_HASH');")
+                            "updateTruexActivityData('$networkUserId', '${json.toString()}', '$TRUEX_HASH');")
                     loading.set(false)
                     //loading javascript done by binding
                 }
