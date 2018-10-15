@@ -54,6 +54,8 @@
     <string name="warning_info_transaction">We have received your results but something got stuck along the way.   Please press “close” and check your balance in a few hours. If no change has ocurred, contact support.</string>
     <string name="support_email_address">support@kinitapp.com</string>
     <string name="support_email_subject">Kin Support Request</string>
+    <string name="up_to_date">Up to date</string>
+    <string name="update_now"><u>Update now</u></string>
     <string name="support_email_body_template">\n=====================\n
         The following information will help us provide better support:
         \nUser id:%1$s

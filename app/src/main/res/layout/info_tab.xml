@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,19 +16,37 @@
 
         <TextView
             android:id="@+id/version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="8dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="5sp"
             android:text="@{model.version}"
-            android:textColor="#a4acc2"
+            android:textColor="@color/gray"
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Version 1.2" />
+
+        <TextView
+            android:id="@+id/update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="5sp"
+            android:onClick="@{model::openUpdate}"
+            android:padding="16dp"
+            android:text="@{model.userRepository.isUpdateAvailable ? @string/up_to_date : @string/update_now}"
+            android:textColor="@{model.userRepository.isUpdateAvailable ? @color/gray : @color/red_wrong}"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            tools:text="@string/update_now"
+            tools:textColor="@color/red_wrong" />
 
         <TextView
             android:id="@+id/security_header"
@@ -96,8 +115,8 @@
         <ImageView
             android:id="@+id/helpcenter_icon"
             style="@style/feedbackIcon"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/helpcenter_view"
             app:layout_constraintEnd_toStartOf="@+id/icon_guide"
             app:layout_constraintStart_toStartOf="parent"
@@ -118,8 +137,8 @@
             style="@style/feedbackIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/feedback_view"
             app:layout_constraintEnd_toStartOf="@+id/icon_guide"
             app:layout_constraintStart_toStartOf="parent"

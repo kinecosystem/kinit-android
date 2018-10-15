@@ -219,6 +219,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         userRepo.p2pMaxKin = config?.p2p_max_kin ?: 0
         userRepo.p2pMinKin = config?.p2p_min_kin ?: 0
         userRepo.p2pMinTasks = config?.p2p_min_tasks ?: 0
+        userRepo.isUpdateAvailable = config?.is_update_available ?: false
+        userRepo.forceUpdate = config?.force_update ?: false
         config?.faq_url?.let { userRepo.faqUrl = it }
     }
 

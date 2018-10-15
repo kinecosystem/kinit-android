@@ -24,6 +24,8 @@ interface OnboardingApi {
     data class Config(@SerializedName("auth_token_enabled") val auth_token_enabled: Boolean,
                       @SerializedName("p2p_enabled") val p2p_enabled: Boolean,
                       @SerializedName("p2p_max_kin") val p2p_max_kin: Int,
+                      @SerializedName("is_update_available") val is_update_available: Boolean,
+                      @SerializedName("force_update") val force_update: Boolean,
                       @SerializedName("p2p_min_kin") val p2p_min_kin: Int,
                       @SerializedName("backup_nag") val backupNagEnabled: Boolean,
                       @SerializedName("p2p_min_tasks") val p2p_min_tasks: Int,

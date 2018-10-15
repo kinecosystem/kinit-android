@@ -29,8 +29,8 @@
             android:id="@+id/balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif-medium"
             android:text="@{model.balance}"
             android:textColor="#ffffff"
@@ -48,8 +48,8 @@
             android:id="@+id/balance_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:letterSpacing="0.01"
@@ -115,8 +115,8 @@
                 android:id="@+id/recent_activity_tab_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="16sp" />
 
@@ -124,8 +124,8 @@
                 android:id="@+id/my_vouchers_tab_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="16sp" />
         </android.support.design.widget.TabLayout>
@@ -167,7 +167,7 @@
                     android:gravity="center"
                     android:lineSpacingExtra="3sp"
                     android:text="@string/no_transactions_text"
-                    android:textColor="#a4acc2"
+                    android:textColor="@color/gray"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:visibility="@{!model.hasTransactions ? View.VISIBLE : View.GONE}" />
@@ -206,7 +206,7 @@
                     android:gravity="center"
                     android:lineSpacingExtra="3sp"
                     android:text="@string/no_coupons_text"
-                    android:textColor="#a4acc2"
+                    android:textColor="@color/gray"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:visibility="@{!model.hasCoupons ? View.VISIBLE : View.GONE}"

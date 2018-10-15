@@ -15,7 +15,6 @@ private const val USER_CACHE_NAME = "kin.app.user"
 private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
 private const val BACKUP_NAG_ALERT_ENABLED = "BACKUP_NAG_ALERT_ENABLED"
-
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
 private const val FIRST_TIME_USER = "FIRST_TIME_USER"
 private const val P2P_MAX_KIN = "P2P_MAX_KIN"
@@ -28,6 +27,10 @@ private const val AUTH_TOKEN = "authToken"
 private const val RESTORE_HINTS = "RESTORE_HINTS"
 private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
 private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
+private const val FORCE_UPDATE = "FORCE_UPDATE"
+private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
+
+
 
 class UserRepository(dataStoreProvider: DataStoreProvider) {
     private val userCache: DataStore = dataStoreProvider.dataStore(USER_CACHE_NAME)
@@ -45,6 +48,14 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var faqUrl: String
         set(url) = userCache.putString(FAQ_URL, url)
         get() = userCache.getString(FAQ_URL, FAQ_DEFAULT)
+
+    var isUpdateAvailable: Boolean
+        set(value) = userCache.putBoolean(IS_UPDATE_AVAILABLE, value)
+        get() = userCache.getBoolean(IS_UPDATE_AVAILABLE, false)
+
+    var forceUpdate: Boolean
+        set(value) = userCache.putBoolean(FORCE_UPDATE, value)
+        get() = userCache.getBoolean(FORCE_UPDATE, false)
 
     var isPhoneVerified: Boolean
         set(phoneVerified) = userCache.putBoolean(PHONE_VERIFIED, phoneVerified)

@@ -108,16 +108,18 @@ class AlertManager {
         fun showGeneralAlert(context: Context, title: String, message: String,
                              positiveMessage: String, positiveAction: (() -> Unit),
                              negativeMessage: String? = null, negativeAction: (() -> Unit)? = null,
-                             imageUrl: String? = null, @DrawableRes imageRes: Int = R.drawable.backup_illus_popup) {
+                             imageUrl: String? = null, @DrawableRes imageRes: Int = R.drawable.backup_illus_popup, cancelable: Boolean? = true) {
             val dialogView = LayoutInflater.from(context).inflate(R.layout.possitive_dialog, null)
-            val alertDialog = AlertDialog.Builder(context).setView(dialogView).create()
+            val alertDialog = AlertDialog.Builder(context).setCancelable(cancelable
+                    ?: true).setView(dialogView).create()
             dialogView.title.text = title
             dialogView.message.text = message
             with(dialogView.positiveBtn) {
                 this.text = positiveMessage
                 setOnClickListener {
                     positiveAction.invoke()
-                    alertDialog.dismiss()
+                    if (cancelable != false)
+                        alertDialog.dismiss()
                 }
             }
 
@@ -134,7 +136,7 @@ class AlertManager {
             }
 
             if (TextUtils.isEmpty(imageUrl)) {
-                dialogView.icon.setBackgroundResource(imageRes)
+                dialogView.icon.setImageResource(imageRes)
             } else {
                 ImageUtils.loadImageIntoView(context, imageUrl, dialogView.icon)
             }

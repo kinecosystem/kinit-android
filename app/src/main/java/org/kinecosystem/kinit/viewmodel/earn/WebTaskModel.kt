@@ -7,11 +7,14 @@ import android.webkit.JavascriptInterface
 import com.google.gson.JsonElement
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.blockchain.Wallet
+import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.server.OperationResultCallback
 import org.kinecosystem.kinit.server.TaskService
-import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.repository.TasksRepository
 import javax.inject.Inject
 
 abstract class WebViewModel(val navigator: Navigator) {
@@ -19,6 +22,8 @@ abstract class WebViewModel(val navigator: Navigator) {
     abstract var url: String
     lateinit var webFragmentActions: WebFragmentActions
 
+    @Inject
+    lateinit var analytics: Analytics
     @Inject
     lateinit var tasksRepository: TasksRepository
     @Inject
@@ -36,6 +41,15 @@ abstract class WebViewModel(val navigator: Navigator) {
     }
 
     fun onComplete() {
+        val task = tasksRepository.taskInProgress
+        val event = Events.Business.EarningTaskCompleted(task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                task?.tagsString(),
+                task?.id,
+                task?.title,
+                task?.type)
+        analytics.logEvent(event)
         taskService.retrieveNextTask()
         navigator.navigateTo(Navigator.Destination.COMPLETE_WEB_TASK)
         if (webFragmentActions != null) {

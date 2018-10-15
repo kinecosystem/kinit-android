@@ -2,7 +2,6 @@ package org.kinecosystem.kinit.view.earn
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
 import org.kinecosystem.kinit.KinitApplication
@@ -20,11 +19,6 @@ class WebTaskActivity : BaseSingleFragmentActivity() {
         val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
         decorView.systemUiVisibility = uiOptions
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
 
     companion object {
         fun getIntent(context: Context) = Intent(context, WebTaskActivity::class.java)

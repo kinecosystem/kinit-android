@@ -8,6 +8,7 @@
     <color name="bottom_navigation_background">#FFF</color>
     <color name="tab_font_color_selected">#047cfc</color>
     <color name="fab_font_color">#7884a5</color>
+    <color name="gray">#a4acc2</color>
     <color name="balance_text_color">#FFF</color>
     <color name="question_text_color">#047cfc</color>
     <color name="white">#FFF</color>

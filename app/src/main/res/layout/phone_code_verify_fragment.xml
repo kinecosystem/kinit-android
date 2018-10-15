@@ -17,7 +17,6 @@
         />
     <TextView
         android:id="@+id/title"
-        android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
@@ -25,6 +24,7 @@
         android:text="@string/verification_sms"
         android:textColor="#047cfc"
         android:textSize="22sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/back"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/back"/>
@@ -36,7 +36,6 @@
         app:layout_constraintGuide_begin="40dp"/>
     <TextView
         android:id="@+id/subtitle"
-        android:textStyle="normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -45,6 +44,7 @@
         android:text="@string/verification_code_subtitle"
         android:textColor="#7884a5"
         android:textSize="16sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/title"/>
@@ -63,7 +63,6 @@
 
     <TextView
         android:id="@+id/next"
-        android:textStyle="normal"
         android:layout_width="0dp"
         android:layout_height="@dimen/auth_phone_next_height"
         android:layout_marginBottom="8dp"
@@ -73,6 +72,7 @@
         android:text="@string/next"
         android:textColor="@drawable/auth_next_font_color"
         android:textSize="18sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -97,7 +97,6 @@
         app:layout_constraintGuide_end="40dp"/>
     <TextView
         android:id="@+id/counter"
-        android:textStyle="normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -105,14 +104,14 @@
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"
         android:text="@string/code_sms_counter_subtitle"
-        android:textColor="#a4acc2"
+        android:textColor="@color/gray"
         android:textSize="14sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/input5"/>
     <TextView
         android:id="@+id/resend"
-        android:textStyle="normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -122,6 +121,7 @@
         android:text="@string/send_new_code"
         android:textColor="#047cfc"
         android:textSize="14sp"
+        android:textStyle="normal"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -148,7 +148,6 @@
 
     <TextView
         android:id="@+id/input0"
-        android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -159,6 +158,7 @@
         android:text="0"
         android:textColor="#7884a5"
         android:textSize="20sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/input1"
         app:layout_constraintEnd_toStartOf="@+id/input1"
         app:layout_constraintHorizontal_bias="0.5"
@@ -178,19 +178,19 @@
         app:layout_constraintTop_toBottomOf="@+id/input0"/>
     <TextView
         android:id="@+id/input1"
-        android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:clickable="false"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:maxEms="1"
         android:minEms="1"
-        android:clickable="false"
-
         android:text="0"
+
         android:textColor="#7884a5"
         android:textSize="20sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/input2"
         app:layout_constraintEnd_toStartOf="@+id/input2"
         app:layout_constraintHorizontal_bias="0.5"
@@ -210,19 +210,19 @@
         app:layout_constraintTop_toBottomOf="@+id/input1"/>
     <TextView
         android:id="@+id/input2"
-        android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:clickable="false"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:maxEms="1"
         android:minEms="1"
-        android:clickable="false"
-
         android:text="0"
+
         android:textColor="#7884a5"
         android:textSize="20sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/input3"
         app:layout_constraintEnd_toStartOf="@+id/input3"
         app:layout_constraintHorizontal_bias="0.5"
@@ -242,19 +242,19 @@
         app:layout_constraintTop_toBottomOf="@+id/input2"/>
     <TextView
         android:id="@+id/input3"
-        android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:clickable="false"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:maxEms="1"
-        android:clickable="false"
-
         android:minEms="1"
+
         android:text="0"
         android:textColor="#7884a5"
         android:textSize="20sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/input4"
         app:layout_constraintEnd_toStartOf="@+id/input4"
         app:layout_constraintHorizontal_bias="0.5"
@@ -274,19 +274,19 @@
         app:layout_constraintTop_toBottomOf="@+id/input3"/>
     <TextView
         android:id="@+id/input4"
-        android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:clickable="false"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:maxEms="1"
-        android:clickable="false"
-
         android:minEms="1"
+
         android:text="0"
         android:textColor="#7884a5"
         android:textSize="20sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/input5"
         app:layout_constraintEnd_toStartOf="@+id/input5"
         app:layout_constraintHorizontal_bias="0.5"
@@ -306,20 +306,20 @@
         app:layout_constraintTop_toBottomOf="@+id/input4"/>
     <TextView
         android:id="@+id/input5"
-        android:textStyle="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginTop="36dp"
+        android:layout_weight="1"
+        android:clickable="false"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:maxEms="1"
-        android:clickable="false"
-
         android:minEms="1"
+
         android:text="0"
         android:textColor="#7884a5"
         android:textSize="20sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/input4"

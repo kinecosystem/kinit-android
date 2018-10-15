@@ -1,6 +1,8 @@
 package org.kinecosystem.kinit.viewmodel.info
 
+import android.content.Intent
 import android.databinding.ObservableBoolean
+import android.net.Uri
 import android.view.View
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
@@ -13,6 +15,7 @@ import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.TabViewModel
 import org.kinecosystem.kinit.view.customView.AlertManager
 import javax.inject.Inject
+
 
 class InfoViewModel(val navigator: Navigator) : TabViewModel {
 
@@ -31,10 +34,21 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
         isBackedUp.set(userRepository.isBackedup)
     }
 
-    var version: String = if (BuildConfig.DEBUG) {
+    var version: String = "Version " + if (BuildConfig.DEBUG) {
         "${BuildConfig.VERSION_NAME} ${BuildConfig.BUILD_TYPE}"
     } else {
         BuildConfig.VERSION_NAME
+    }
+
+    fun openUpdate(view: View?) {
+        view?.context?.let { context ->
+            val appPackageName = context.packageName
+            try {
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+            } catch (e: android.content.ActivityNotFoundException) {
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+            }
+        }
     }
 
     fun onShowingCreateNewBackupAlert(){

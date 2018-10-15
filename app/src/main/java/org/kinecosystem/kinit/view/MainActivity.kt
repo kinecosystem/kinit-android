@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.view
 import android.app.AlertDialog.Builder
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +23,7 @@ import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.BottomTabNavigation.PageSelectionListener
+import org.kinecosystem.kinit.view.customView.AlertManager
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), PageSelectionListener {
@@ -56,6 +58,17 @@ class MainActivity : BaseActivity(), PageSelectionListener {
         super.onCreate(savedInstanceState)
         val selectedTabIndex = savedInstanceState?.getInt(SELECTED_TAB_INDEX_KEY, 0) ?: 0
         setContentView(R.layout.main_activity)
+
+        if (userRepository.forceUpdate) {
+            AlertManager.showGeneralAlert(context = this, title = "New version available", message = "Update to the newest version to keep the kin rolling in", positiveMessage = "Update Now", positiveAction = {
+                val appPackageName = packageName
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+                } catch (e: android.content.ActivityNotFoundException) {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+                }
+            }, imageRes = R.drawable.newversion_illus_popup, cancelable = false)
+        }
 
         navigation.selectedTabIndex = selectedTabIndex
         view_pager.adapter = TabsAdapter(this)
