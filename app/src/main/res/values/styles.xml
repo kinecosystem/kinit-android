@@ -65,6 +65,10 @@
         <item name="colorAccent">@color/grey</item>
     </style>
 
+    <style name="AppTheme.Blue">
+        <item name="colorAccent">@color/blue</item>
+    </style>
+
     <style name="settingHeader" parent="android:Widget.TextView">
         <item name="android:background">@color/grey_settings_header</item>
         <item name="android:fontFamily">sans-serif</item>

@@ -62,5 +62,15 @@
             app:layout_constraintStart_toEndOf="@+id/back"
             app:layout_constraintTop_toTopOf="@+id/view" />
 
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:theme="@style/AppTheme.Blue"
+            android:visibility="@{model.loading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/webview" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>

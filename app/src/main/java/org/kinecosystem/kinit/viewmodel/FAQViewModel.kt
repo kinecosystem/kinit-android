@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.viewmodel
 
+import android.databinding.ObservableBoolean
 import android.webkit.JavascriptInterface
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
@@ -12,6 +13,8 @@ class FAQViewModel {
     @Inject
     lateinit var userRepository: UserRepository
 
+
+    val loading: ObservableBoolean = ObservableBoolean(true)
     var listener: FAQActions? = null
     var interfaceName: String = "Kinit"
     var url: String = ""
