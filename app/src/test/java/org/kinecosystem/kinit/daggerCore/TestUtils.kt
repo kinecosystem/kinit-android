@@ -15,7 +15,6 @@ class TestUtils {
                     ContextModule(mock(Context::class.java)))
                     .dataStoreModule(DataStoreModule(MockDataStoreProvider()))
                     .schedulerModule(TestSchedulerModule())
-                    .navigatorModule(TestNavigatorModule())
                     .userRepositoryModule(TestUserRepositoryModule())
                     .tasksRepositoryModule(TestTasksRepositoryModule())
                     .offersRepositoryModule(TestOffersRepositoryModule())

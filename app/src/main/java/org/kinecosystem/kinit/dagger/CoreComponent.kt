@@ -51,7 +51,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-        modules = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class), (NavigatorModule::class)])
+        modules = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class)])
 interface CoreComponent {
 
     fun inject(balanceViewModel: BalanceViewModel)

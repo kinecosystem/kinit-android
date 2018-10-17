@@ -18,7 +18,7 @@
             android:id="@+id/version"
             android:layout_width="0dp"
             android:layout_height="15dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="17dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"

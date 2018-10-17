@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.viewmodel
 
+import android.content.Context
 import android.text.format.DateUtils.DAY_IN_MILLIS
 import android.text.format.DateUtils.HOUR_IN_MILLIS
 import org.junit.Assert.assertFalse
@@ -8,10 +9,12 @@ import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.daggerCore.TestUtils
 import org.kinecosystem.kinit.mocks.MockScheduler
+import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 import javax.inject.Inject
@@ -224,7 +227,7 @@ class EarnViewModelTest {
         val sampleTask = (task
                 ?: SAMPLE_QUESTIONNAIRE_TASK).replace("__START_DATE__", timeInSecs.toString())
 
-        earnViewModel = EarnViewModel(mock(BackupAlertManager::class.java))
+        earnViewModel = EarnViewModel(mock(BackupAlertManager::class.java), Navigator(Mockito.mock(Context::class.java)))
         earnViewModel.tasksRepository = TasksRepository()
         earnViewModel.tasksRepository.setTask(sampleTask)
         earnViewModel.onScreenVisibleToUser()
