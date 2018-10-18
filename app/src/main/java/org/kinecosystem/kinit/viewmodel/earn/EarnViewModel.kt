@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 private const val AVAILABILITY_DATE_FORMAT = "MMM dd"
 
-class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabViewModel {
+class EarnViewModel(private val backupAlertManager: BackupAlertManager?, private val navigator: Navigator) : TabViewModel {
 
     @Inject
     lateinit var tasksRepository: TasksRepository
@@ -37,8 +37,6 @@ class EarnViewModel(private val backupAlertManager: BackupAlertManager?) : TabVi
     lateinit var scheduler: Scheduler
     @Inject
     lateinit var analytics: Analytics
-    @Inject
-    lateinit var navigator: Navigator
 
     var shouldShowTask = ObservableBoolean()
     var shouldShowTaskNotAvailableYet = ObservableBoolean()
