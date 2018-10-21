@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.view.earn
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
@@ -8,8 +9,10 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TaskWebLayoutBinding
@@ -63,6 +66,7 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
         binding.webview.saveState(outState)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
@@ -76,8 +80,8 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
             }
         }
 
-        //DEBUG
-        //WebView.setWebContentsDebuggingEnabled(true)
+        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
+        binding.webview.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         binding.webview.settings.javaScriptEnabled = true
         binding.webview.settings.setSupportMultipleWindows(true)
         binding.webview.settings.javaScriptCanOpenWindowsAutomatically = true
@@ -86,16 +90,15 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
     }
 
     override fun showErrorDialog() {
-        //TODO update correct text
         if (activity != null) {
             val builder = AlertDialog.Builder(activity!!, R.style.CustomAlertDialog)
             tasksRepository.resetTaskState()
             builder.setTitle(R.string.general_problem_title).setMessage(
-                    R.string.general_problem_body).setPositiveButton(R.string.dialog_ok, { dialogInterface, i ->
+                    R.string.general_problem_body).setPositiveButton(R.string.dialog_ok) { dialogInterface, _ ->
                 dialogInterface.dismiss()
                 trueXmodel.navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
                 finish()
-            }).setCancelable(false).create().show()
+            }.setCancelable(false).create().show()
         }
     }
 
