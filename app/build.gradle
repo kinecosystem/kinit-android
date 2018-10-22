@@ -34,8 +34,8 @@ android {
         applicationId "org.kinecosystem.kinit"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 22
-        versionName "1.2.9"
+        versionCode 23
+        versionName "1.3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         dataBinding {
