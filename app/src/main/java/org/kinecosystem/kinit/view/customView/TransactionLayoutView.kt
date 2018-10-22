@@ -19,9 +19,11 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.earn.hasPostActions
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.navigation.Navigator.Destination
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseActivity
+import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import javax.inject.Inject
 
 
@@ -40,12 +42,13 @@ class TransactionLayoutView @JvmOverloads constructor(
     }
 
     @Inject
-    lateinit var tasksRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
 
     @Inject
     lateinit var analytics: Analytics
 
     private var seenDialog = false
+    private var backupAlertManager = BackupAlertManager(context)
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -56,7 +59,7 @@ class TransactionLayoutView @JvmOverloads constructor(
         val transactionAnim = findViewById<LottieAnimationView>(R.id.transaction_anim)
         val transactionTitle = findViewById<View>(R.id.transaction_title)
         transactionImage.clearAnimation()
-        tasksRepository.resetTaskState()
+        categoriesRepository.currentTaskRepo?.resetTaskState()
         val animationDrawable = background as AnimationDrawable
         animationDrawable.setEnterFadeDuration(3000)
         animationDrawable.setExitFadeDuration(1500)
@@ -74,17 +77,17 @@ class TransactionLayoutView @JvmOverloads constructor(
         confetti.scaleY = 0f
         confetti.visibility = View.VISIBLE
         close.animate().alpha(1f).setDuration(500L).setStartDelay(1850L + TransactionTextView.ANIM_DURATION).interpolator = AccelerateDecelerateInterpolator()
-        close.setOnClickListener { view ->
+        close.setOnClickListener {
             if (context != null) {
-                if (shouldShowActionDialog()) {
-                    showActionDialog()
-                } else {
-                    val activity = context as BaseActivity
-                    val navigator = Navigator(activity)
-                    navigator.navigateTo(Destination.MAIN_SCREEN)
-                    activity.overridePendingTransition(
-                            R.anim.fade_in, R.anim.fade_out)
-                    activity.finish()
+                when {
+                    shouldShowActionDialog() -> showActionDialog()
+                    backupAlertManager.shouldShowAlert() -> backupAlertManager.showAlert()
+                    else -> {
+                        val navigator = Navigator(context)
+                        navigator.navigateToCategory(categoriesRepository.currentTaskInProgress?.category_id!!, true)
+                        val activity = context as BaseActivity
+                        activity.finish()
+                    }
                 }
             }
         }
@@ -98,14 +101,14 @@ class TransactionLayoutView @JvmOverloads constructor(
     }
 
     private fun shouldShowActionDialog(): Boolean {
-        tasksRepository.taskInProgress?.let {
+        categoriesRepository.currentTaskInProgress?.let {
             return !seenDialog && it.hasPostActions()
         }
         return false
     }
 
     private fun showActionDialog() {
-        tasksRepository.taskInProgress?.let {
+        categoriesRepository.currentTaskInProgress?.let {
             val taskId = it.id
             with(it.postTaskActions.orEmpty().first()) {
                 AlertManager.showGeneralAlert(context, title, text, positiveText, {

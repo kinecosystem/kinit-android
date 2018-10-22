@@ -11,16 +11,17 @@ import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.server.OperationResultCallback
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import javax.inject.Inject
 
-abstract class WebViewModel(taskId:String, val navigator: Navigator) {
+abstract class WebViewModel(val navigator: Navigator) {
     abstract var interfaceName: String
     abstract var url: String
     lateinit var webFragmentActions: WebFragmentActions
 
     @Inject
-    lateinit var tasksRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
+
     @Inject
     lateinit var wallet: Wallet
     @Inject
@@ -32,12 +33,15 @@ abstract class WebViewModel(taskId:String, val navigator: Navigator) {
     }
 
     fun startListenToPayment() {
-        //TODO fix to categories repo
-        wallet.listenToPayment(tasksRepository.task?.id, tasksRepository.task?.memo!!)
+        categoriesRepository.currentTaskInProgress?.let {
+            wallet.listenToPayment(it.id!!, it.memo!!)
+        }
     }
 
     fun onComplete() {
-        taskService.retrieveNextTask()
+        categoriesRepository.currentTaskRepo?.task?.category_id?.let {
+            taskService.retrieveNextTask(it)
+        }
         navigator.navigateTo(Navigator.Destination.COMPLETE_WEB_TASK)
         if (webFragmentActions != null) {
             webFragmentActions.finish()
@@ -94,7 +98,7 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
                 val networkUserId = json?.asJsonObject?.get(USER_NET_ID_ELEMENT)
                 if (networkUserId != null) {
                     javascript.set(
-                        "updateTruexActivityData('$networkUserId', '${json.toString()}', '$TRUEX_HASH');")
+                            "updateTruexActivityData('$networkUserId', '${json.toString()}', '$TRUEX_HASH');")
                     loading.set(false)
                     //loading javascript done by binding
                 }

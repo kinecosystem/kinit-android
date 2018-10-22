@@ -8,18 +8,19 @@ import org.kinecosystem.kinit.model.earn.Answer
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView.OnSelectionListener
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
 
-class QuestionDualImageViewModel(taskId:String, private var questionIndex: Int,
+class QuestionDualImageViewModel(private var questionIndex: Int,
                                  private val questionnaireActions: QuestionnaireActions?) {
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var taskRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -45,7 +46,7 @@ class QuestionDualImageViewModel(taskId:String, private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        question = taskRepository.task?.questions?.get(questionIndex)
+        question = categoriesRepository.currentTaskInProgress?.questions?.get(questionIndex)
         answers = question?.answers
         questionText = question?.text
         question?.answers?.forEach { answer ->
@@ -55,12 +56,12 @@ class QuestionDualImageViewModel(taskId:String, private var questionIndex: Int,
 
     fun onAnswered(answer: Answer) {
         val answeredId = answer.id ?: ""
-        question?.id?.let { taskRepository.setChosenAnswers(it, listOf(answeredId)) }
-        analytics.logEvent(answerEvent(taskRepository.task, answeredId))
+        question?.id?.let { categoriesRepository.currentTaskRepo?.setChosenAnswers(it, listOf(answeredId)) }
+        analytics.logEvent(answerEvent(categoriesRepository.currentTaskInProgress, answeredId))
     }
 
     fun onResume() {
-        val task = taskRepository.task
+        val task = categoriesRepository.currentTaskInProgress
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,

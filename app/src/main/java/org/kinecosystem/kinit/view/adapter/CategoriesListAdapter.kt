@@ -40,7 +40,11 @@ class CategoryListAdapter(private val context: Context, private val model: Categ
     }
 
     fun refresh() {
-        categories = categoriesRepository.categories.get()
+        categories = if (categoriesRepository.categories.get() != null) {
+            categoriesRepository.categories.get()
+        } else {
+            listOf()
+        }
         notifyDataSetChanged()
     }
 
@@ -79,7 +83,10 @@ class CategoryListAdapter(private val context: Context, private val model: Categ
 
         fun bind(category: Category) {
             category.uiData?.let {
-                ImageUtils.loadImageIntoView(context, it.imageUrl, imageView)
+                if (it.imageUrl != imageView.tag) {
+                    ImageUtils.loadImageIntoView(context, it.imageUrl, imageView)
+                    imageView.tag = it.imageUrl
+                }
             }
             if (!category.isEnabled()) {
                 val matrix = ColorMatrix()

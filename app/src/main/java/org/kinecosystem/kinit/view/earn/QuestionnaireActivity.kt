@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.Observable
+import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.MenuItem
@@ -13,38 +14,45 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.QuestionnaireFragmentLayoutBinding
 import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.navigation.Navigator.Destination
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.view.BaseActivity
-import org.kinecosystem.kinit.viewmodel.earn.QuizViewModel
 import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel
+import org.kinecosystem.kinit.viewmodel.earn.QuizViewModel
 import javax.inject.Inject
 
 class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
 
     @Inject
-    lateinit var taskRepo: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var taskService: TaskService
 
-    private lateinit var questionnaireModel: QuestionnaireViewModel
+    private lateinit var model: QuestionnaireViewModel
     private lateinit var nextFragmentCallback: Observable.OnPropertyChangedCallback
 
+    private val listener = object : Observable.OnPropertyChangedCallback() {
+        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+            if ((sender as ObservableBoolean).get()) {
+                finish()
+            }
+        }
+    }
+
     override fun next() {
-        questionnaireModel.next()
+        model.next()
     }
 
     override fun submissionAnimComplete() {
-        questionnaireModel.submissionAnimComplete()
+        model.submissionAnimComplete()
     }
 
     override fun transactionError() {
-        questionnaireModel.transactionError()
+        model.transactionError()
     }
 
     override fun submissionError() {
-        questionnaireModel.submissionError()
+        model.submissionError()
     }
 
     fun updateNoToolBar() {
@@ -57,37 +65,40 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         val binding: QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this,
             R.layout.questionnaire_fragment_layout)
 
-        if (taskRepo.task == null)
+        if (categoriesRepository.currentTaskInProgress == null)
             finish()
 
-        taskRepo.task?.let {
-            questionnaireModel = if (it.isQuiz()) {
-                QuizViewModel(savedInstanceState != null)
+        categoriesRepository.currentTaskRepo?.task?.let {
+            model = if (it.isQuiz()) {
+                QuizViewModel(savedInstanceState != null, Navigator(this))
             } else {
-                QuestionnaireViewModel(savedInstanceState != null)
+                QuestionnaireViewModel(savedInstanceState != null, Navigator(this))
             }
-            binding.model = questionnaireModel
+            binding.model = model
 
-            findViewById<View>(R.id.header_x_btn).setOnClickListener { view ->
-                val navigator = Navigator(this@QuestionnaireActivity)
-                navigator.navigateTo(Destination.MAIN_SCREEN)
-                onBackPressed()
-                finish()
-            }
-
-            updateFragment(questionnaireModel.nextFragment.get())
+            updateFragment(model.nextFragment.get())
             nextFragmentCallback = object : Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(p0: Observable?, p1: Int) {
-                    updateFragment(questionnaireModel.nextFragment.get())
+                    updateFragment(model.nextFragment.get())
                 }
             }
-            questionnaireModel.nextFragment.addOnPropertyChangedCallback(nextFragmentCallback)
+            model.nextFragment.addOnPropertyChangedCallback(nextFragmentCallback)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        model.shouldFinishActivity.addOnPropertyChangedCallback(listener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        model.shouldFinishActivity.removeOnPropertyChangedCallback(listener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        questionnaireModel.nextFragment.removeOnPropertyChangedCallback(nextFragmentCallback)
+        model.nextFragment.removeOnPropertyChangedCallback(nextFragmentCallback)
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
@@ -95,13 +106,6 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
             onBackPressed()
         }
         return super.onOptionsItemSelected(menuItem)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        taskRepo.resetTaskState()
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out)
-        questionnaireModel.onBackPressed()
     }
 
     private fun updateFragment(newFragment: Fragment) {
@@ -117,7 +121,7 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
     }
 
     companion object {
-        fun getIntent(context: Context, TaskId:String): Intent {
+        fun getIntent(context: Context): Intent {
             return Intent(context, QuestionnaireActivity::class.java)
         }
     }

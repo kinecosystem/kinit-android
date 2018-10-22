@@ -14,6 +14,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TaskWebLayoutBinding
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.earn.WebFragmentActions
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
     @Inject
-    lateinit var tasksRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
 
     override fun openBrowser(url: String) {
         context?.let {
@@ -89,13 +90,12 @@ class WebTaskTruexFragment : BaseFragment(), WebFragmentActions {
         //TODO update correct text
         if (activity != null) {
             val builder = AlertDialog.Builder(activity!!, R.style.CustomAlertDialog)
-            tasksRepository.resetTaskState()
+            categoriesRepository.currentTaskRepo?.resetTaskState()
             builder.setTitle(R.string.general_problem_title).setMessage(
-                    R.string.general_problem_body).setPositiveButton(R.string.dialog_ok, { dialogInterface, i ->
+                    R.string.general_problem_body).setPositiveButton(R.string.dialog_ok) { dialogInterface, _ ->
                 dialogInterface.dismiss()
-                trueXmodel.navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
                 finish()
-            }).setCancelable(false).create().show()
+            }.setCancelable(false).create().show()
         }
     }
 

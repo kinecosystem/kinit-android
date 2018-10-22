@@ -62,9 +62,8 @@ class NetworkServices {
         walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, categoryRepository, analytics,
                 onboardingApi, walletApi, scheduler)
         taskService = TaskService(applicationContext,
-                retrofit.create<TasksApi>(TasksApi::class.java),
-                tasksRepo, categoryRepository, userRepo, walletService)
-        categoriesService = CategoriesService(retrofit.create(CategoriesApi::class.java), userRepo, categoryRepository)
+                retrofit.create<TasksApi>(TasksApi::class.java), categoryRepository, userRepo, walletService)
+        categoriesService = CategoriesService(applicationContext, retrofit.create(CategoriesApi::class.java), userRepo, categoryRepository)
         onBoardingService = OnboardingService(applicationContext,
                 retrofit.create<OnboardingApi>(OnboardingApi::class.java),
                 retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),

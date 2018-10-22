@@ -322,7 +322,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/balance"
+            app:layout_constraintTop_toBottomOf="@id/header"
             tools:text="Next earning experience will be available tomorrow."
             tools:visibility="gone"/>
 
@@ -404,7 +404,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balance"
+            app:layout_constraintTop_toBottomOf="@+id/header"
             tools:visibility="gone"/>
         <TextView
             android:id="@+id/no_tasks_title"

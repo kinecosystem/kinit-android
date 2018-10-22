@@ -1,15 +1,19 @@
 package org.kinecosystem.kinit.model.earn
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Parcelable
+import android.text.TextUtils
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import org.kinecosystem.kinit.util.ImageUtils
 
 data class Category(
         @SerializedName("id") val id: String,
         @SerializedName("available_tasks_count") var availableTasksCount: Int = 0,
         @SerializedName("title") val title: String?,
-        @SerializedName("ui_data") val uiData: UiData?)
+        @SerializedName("ui_data") val uiData: UiData?) {
+}
 
 
 @Parcelize
@@ -46,3 +50,11 @@ fun Category.getBgColor(): Int {
     return Color.WHITE
 }
 
+fun Category.preload(context: Context) {
+    uiData?.imageUrl?.let {
+        ImageUtils.fetchImage(context.applicationContext, it)
+    }
+    uiData?.headerImageUrl?.let {
+        ImageUtils.fetchImage(context.applicationContext, it)
+    }
+}

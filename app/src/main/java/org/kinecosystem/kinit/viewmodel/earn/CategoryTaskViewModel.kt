@@ -8,25 +8,25 @@ import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.model.earn.Category
-import org.kinecosystem.kinit.model.earn.Task
-import org.kinecosystem.kinit.model.earn.isQuiz
-import org.kinecosystem.kinit.model.earn.tagsString
+import org.kinecosystem.kinit.model.earn.*
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.CategoriesRepository
+import org.kinecosystem.kinit.server.OperationResultCallback
+import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Inject
 
-class CategoryTaskViewModel(private val category: Category) {
+class CategoryTaskViewModel(private val navigator: Navigator, private val category: Category) {
 
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
     lateinit var analytics: Analytics
     @Inject
-    lateinit var navigator: Navigator
-    @Inject
     lateinit var categoriesRepository: CategoriesRepository
+
+    @Inject
+    lateinit var taskService: TaskService
 
     var headerTitle = ObservableField<String>()
     var headerImage = ObservableField<String>()
@@ -34,7 +34,7 @@ class CategoryTaskViewModel(private val category: Category) {
     var tasksCount = ObservableInt()
     var taskCountVisibility = ObservableBoolean(false)
     var shouldShowTask = ObservableBoolean(true)
-    var shouldShowTaskNotAvailableYet = ObservableBoolean()
+    var shouldShowTaskNotAvailableYet = ObservableBoolean(false)
     var shouldShowNoTask = ObservableBoolean(false)
 
     var nextAvailableDate: ObservableField<String> = ObservableField("")
@@ -47,22 +47,52 @@ class CategoryTaskViewModel(private val category: Category) {
     var minToComplete = ObservableField<String>()
     var isQuiz = ObservableBoolean(false)
     var isTaskStarted = ObservableBoolean(false)
-    val task: Task?
+    var availableTasksCount = ObservableInt()
+    var shouldFinishActivity = ObservableBoolean(false)
+    private var task: Task?
 
 
     private var scheduledRunnable: Runnable? = null
 
     init {
         KinitApplication.coreComponent.inject(this)
-        // isTaskStarted = tasksRepository.isTaskStarted
-        task = categoriesRepository.getTask(category)?.task
+        task = categoriesRepository.getTask(category.id)
+        availableTasksCount = categoriesRepository.currentAvailableTasks
         Log.d("###", "### got task $task")
         bindCategoryData()
         bindTaskData()
     }
 
+    private fun bindTaskData() {
+        task = categoriesRepository.getTask(category.id)
+        task?.let {
+            shouldShowNoTask.set(false)
+            shouldShowTaskNotAvailableYet.set(false)
+            shouldShowTaskNotAvailableYet.set(false)
+            when {
+                it.isAvailableNow() -> {
+                    shouldShowTask.set(true)
+                    bindAvailableTaskData()
+                }
+                it.isAvailableTomorrow() -> {
+                    shouldShowTask.set(false)
+                    shouldShowTaskNotAvailableYet.set(true)
+                    isAvailableTomorrow.set(true)
+                }
+                else -> {
+                    shouldShowTask.set(false)
+                    shouldShowTaskNotAvailableYet.set(true)
+                    nextAvailableDate.set(it.nextAvailableDate())
+                }
+            }
+        } ?: run {
+            shouldShowNoTask.set(true)
+            shouldShowTask.set(false)
+        }
+    }
+
     fun startTask() {
-        //tasksRepository.onTaskStarted()
+        categoriesRepository.onTaskStarted()
         val bEvent = Events.Business.EarningTaskStarted(
                 task?.provider?.name,
                 task?.minToComplete,
@@ -83,25 +113,29 @@ class CategoryTaskViewModel(private val category: Category) {
                 task?.title,
                 task?.type)
         analytics.logEvent(aEvent)
-        navigator.navigateTo(Navigator.Destination.TASK)
+        navigator.navigateToTask(category.id)
+        shouldFinishActivity.set(true)
     }
 
-    private fun bindTaskData() {
+    private fun bindAvailableTaskData() {
+        categoriesRepository.currentTaskRepo?.let {
+            isTaskStarted = it.isTaskStarted
+        }
         task?.let {
-            isQuiz.set(task.isQuiz())
-            authorName.set(task.provider?.name)
-            authorImageUrl.set(task.provider?.imageUrl)
-            title.set(task.title)
-            description.set(task.description)
-            kinReward.set(if (task.isQuiz()) {
+            isQuiz.set(it.isQuiz())
+            authorName.set(it.provider?.name)
+            authorImageUrl.set(it.provider?.imageUrl)
+            title.set(it.title)
+            description.set(it.description)
+            kinReward.set(if (it.isQuiz()) {
                 var totalReward = 0
-                (task.questions?.forEach { question ->
+                (it.questions?.forEach { question ->
                     totalReward += (question.quiz_data?.reward ?: 0)
                 })
-                totalReward += task.kinReward ?: 0
+                totalReward += it.kinReward ?: 0
                 totalReward.toString()
-            } else task.kinReward?.toString())
-            minToComplete.set(convertMinToCompleteToString(task.minToComplete))
+            } else it.kinReward?.toString())
+            minToComplete.set(convertMinToCompleteToString(it.minToComplete))
         }
     }
 
@@ -114,23 +148,38 @@ class CategoryTaskViewModel(private val category: Category) {
 
     private fun bindCategoryData() {
         headerTitle.set(category.title)
+        bgColor.set(category.getBgColor())
         category.uiData?.let {
             headerImage.set(it.headerImageUrl)
-            it.color?.let {
-                val color = Color.parseColor(it)
-                bgColor.set(color)
-            }
         }
         updateTaskCount()
     }
 
     fun onBackPressed() {
-        navigator.navigateTo(Navigator.Destination.MAIN_SCREEN)
+        navigator.navigateTo(Navigator.Destination.MAIN_SCREEN, true, true)
     }
 
     private fun updateTaskCount() {
-        taskCountVisibility.set(category.availableTasksCount > 1)
-        tasksCount.set(category.availableTasksCount)
+        taskCountVisibility.set(availableTasksCount.get() > 1)
+        tasksCount.set(availableTasksCount.get())
+    }
+
+    fun onResume() {
+        requestTask()
+    }
+
+    private fun requestTask() {
+        taskService.retrieveNextTask(category.id, object : OperationResultCallback<Boolean> {
+            override fun onResult(result: Boolean) {
+                updateTaskCount()
+                bindTaskData()
+            }
+
+            override fun onError(errorCode: Int) {
+                Log.e("###", "### error loading task")
+            }
+
+        })
     }
 
 }
