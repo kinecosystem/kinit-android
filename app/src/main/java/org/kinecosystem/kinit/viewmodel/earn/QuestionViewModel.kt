@@ -8,20 +8,21 @@ import org.kinecosystem.kinit.model.earn.Answer
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.AnswersListAdapter
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
 
-open class QuestionViewModel(taskId:String, private var questionIndex: Int,
+open class QuestionViewModel(private var questionIndex: Int,
     private val questionnaireActions: QuestionnaireActions) {
 
 
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -44,7 +45,11 @@ open class QuestionViewModel(taskId:String, private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
+<<<<<<< HEAD
         questionObj = questionnaireRepository.taskInProgress?.questions?.get(questionIndex)
+=======
+        questionObj = categoriesRepository.currentTaskInProgress?.questions?.get(questionIndex)
+>>>>>>> taskcategories
         question = questionObj?.text
         answers = questionObj?.answers
 
@@ -79,9 +84,15 @@ open class QuestionViewModel(taskId:String, private var questionIndex: Int,
         val answerId = questionObj?.id ?: ""
         if (answerId.isNotBlank() and !questionAnswered and (chosenAnswersCount.get() > 0)) {
             questionAnswered = true
+<<<<<<< HEAD
             questionnaireRepository.setChosenAnswers(answerId, chosenAnswers)
             questionnaireActions.next()
             analytics.logEvent(answerEvent( questionnaireRepository.taskInProgress))
+=======
+            categoriesRepository.currentTaskRepo?.setChosenAnswers(answerId, chosenAnswers)
+            questionnaireActions.next()
+            analytics.logEvent(answerEvent(categoriesRepository.currentTaskInProgress))
+>>>>>>> taskcategories
         }
     }
 
@@ -94,15 +105,18 @@ open class QuestionViewModel(taskId:String, private var questionIndex: Int,
                 answerId.isBlank() or questionId.isBlank() -> return false
                 questionAnswered and !isMultipleAnswers -> return false
                 !questionAnswered and !isMultipleAnswers -> {
+<<<<<<< HEAD
                     val task = questionnaireRepository.taskInProgress
+=======
+>>>>>>> taskcategories
                     chosenAnswers.add(answerId)
                     chosenAnswersIndexes.add(questionObj?.answers?.indexOf(answer) ?: -1)
                     chosenAnswersCount.set(chosenAnswers.size)
-                    questionnaireRepository.setChosenAnswers(questionId, chosenAnswers)
+                    categoriesRepository.currentTaskRepo?.setChosenAnswers(questionId, chosenAnswers)
                     scheduler.scheduleOnMain({
                         questionnaireActions.next()
                     }, 200)
-                    analytics.logEvent(answerEvent(task))
+                    analytics.logEvent(answerEvent(categoriesRepository.currentTaskInProgress))
                     questionAnswered = true
                     return true
                 }
@@ -128,7 +142,11 @@ open class QuestionViewModel(taskId:String, private var questionIndex: Int,
     }
 
     fun onResume() {
+<<<<<<< HEAD
         val task = questionnaireRepository.taskInProgress
+=======
+        val task = categoriesRepository.currentTaskInProgress
+>>>>>>> taskcategories
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
             task?.minToComplete,
             task?.kinReward,

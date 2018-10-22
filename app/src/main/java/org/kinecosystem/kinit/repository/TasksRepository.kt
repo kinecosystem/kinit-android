@@ -17,10 +17,9 @@ private const val TASK_STATE_KEY = "task_state"
 private const val SHOW_CAPTCHA_KEY = "show_captcha"
 
 class TasksRepository {
-    @Inject
-    lateinit var dataStoreProvider: DataStoreProvider
-
-
+//    @Inject
+//    lateinit var dataStoreProvider: DataStoreProvider
+//
 //    var task: Task?
 //    private var chosenAnswers: ArrayList<ChosenAnswers> = ArrayList()
 //    private val chosenAnswersCache: DataStore
@@ -36,7 +35,7 @@ class TasksRepository {
 //        get() {
 //            return this.taskCache.getInt(TASK_STATE_KEY, TaskState.IDLE)
 //        }
-//    var shoulShowCaptcha: Boolean
+//    var shouldShowCaptcha: Boolean
 //        set(shouldShow) {
 //            taskCache.putBoolean(SHOW_CAPTCHA_KEY, shouldShow)
 //        }

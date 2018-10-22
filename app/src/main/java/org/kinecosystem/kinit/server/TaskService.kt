@@ -8,9 +8,9 @@ import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.ChosenAnswers
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.isValid
+import org.kinecosystem.kinit.model.earn.preload
 import org.kinecosystem.kinit.model.user.UserInfo
 import org.kinecosystem.kinit.repository.CategoriesRepository
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.TasksApi
 import org.kinecosystem.kinit.util.GeneralUtils
@@ -19,7 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class TaskService(context: Context, api: TasksApi,
-                  val tasksRepo: TasksRepository, private val categoriesRepository: CategoriesRepository,
+                  private val categoriesRepository: CategoriesRepository,
                   private val userRepo: UserRepository, private val walletService: Wallet) {
 
     private val tasksApi: TasksApi = api
@@ -34,21 +34,21 @@ class TaskService(context: Context, api: TasksApi,
             chosenAnswers: List<ChosenAnswers>) {
 
         if (!GeneralUtils.isConnected(applicationContext)) {
-            tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
+            categoriesRepository.currentTaskRepo?.taskState = TaskState.SUBMIT_ERROR_RETRY
             return
         }
 
         if (userInfo.publicAddress.isBlank()) {
-            tasksRepo.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
+            categoriesRepository.currentTaskRepo?.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
             return
         }
 
         if (task == null || !task.isValid()) {
-            tasksRepo.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
+            categoriesRepository.currentTaskRepo?.taskState = TaskState.SUBMIT_ERROR_NO_RETRY
             return
         }
 
-        tasksRepo.taskState = TaskState.SUBMITTED
+        categoriesRepository.currentTaskRepo?.taskState = TaskState.SUBMITTED
 
         val submitInfo = TasksApi.SubmitInfo(task.id.orEmpty(),
                 token, chosenAnswers, userInfo.publicAddress)
@@ -63,7 +63,7 @@ class TaskService(context: Context, api: TasksApi,
 
             override fun onResponse(call: Call<TasksApi.TrueXResponse>?, response: Response<TasksApi.TrueXResponse>?) {
                 if (response != null && response.isSuccessful && response.body()?.status.equals("ok")) {
-                    callback.onResult(response?.body()?.activity)
+                    callback.onResult(response.body()?.activity)
                 } else {
                     callback.onError(1)
                     Log.e("###", "### getTrueX return not successful response")
@@ -72,28 +72,26 @@ class TaskService(context: Context, api: TasksApi,
         })
     }
 
-    fun retrieveNextTask(callback: OperationResultCallback<Boolean>? = null) {
-
+    fun retrieveAllTasks(callback: OperationResultCallback<Boolean>? = null) {
         tasksApi.nextTasks(userRepo.userId()).enqueue(object : Callback<TasksApi.NextTasksResponse> {
             override fun onResponse(call: Call<TasksApi.NextTasksResponse>?,
                                     response: Response<TasksApi.NextTasksResponse>?) {
 
-                if (response != null && response.isSuccessful && response.body() != null &&
-                        tasksRepo.taskState != TaskState.IN_PROGRESS && tasksRepo.taskState != TaskState.SUBMITTED) {
-                    response.body()!!.tasksMap?.let {
-                        categoriesRepository.updateTasks(it)
+                if (response != null && response.isSuccessful) {
+                    response.body()?.let {
+                        it.tasksMap.let {
+                            categoriesRepository.updateTasks(it)
+                            //load task images
+                            for (entry in it) {
+                                for (task in entry.value) {
+                                    task.preload(applicationContext)
+                                }
+                            }
+                        }
+                        categoriesRepository.shouldShowCaptcha = it.showCaptcha
+                    } ?: run {
+                        callback?.onError(ERROR_EMPTY_RESPONSE)
                     }
-                    val taskList: List<Task> = response.body()!!.tasksMap!!["0"].orEmpty()
-                    var task: Task? = if (taskList.isNotEmpty() && taskList[0].isValid()) taskList[0] else null
-                    //TODO
-                    //tasksRepo.shouldShowCaptcha = taskResponse?.showCaptcha ?: false
-                    if (hasChanged(task)) {
-                        tasksRepo.replaceTask(task, applicationContext)
-                        callback?.onResult(true)
-                    } else callback?.onResult(false)
-                } else {
-                    Log.d("TaskService", "onResponse null or isSuccessful=false: $response")
-                    callback?.onError(ERROR_EMPTY_RESPONSE)
                 }
             }
 
@@ -104,13 +102,30 @@ class TaskService(context: Context, api: TasksApi,
         })
     }
 
-    private fun hasChanged(task: Task?): Boolean {
-        tasksRepo.task?.let {
-            return task != tasksRepo.task
-        }
+    fun retrieveNextTask(categoryId: String, callback: OperationResultCallback<Boolean>? = null) {
 
-        // previous task was null
-        return task != null
+        tasksApi.nextCategoryTasks(userRepo.userId(), categoryId).enqueue(object : Callback<TasksApi.NextCategoryTasksResponse> {
+            override fun onResponse(call: Call<TasksApi.NextCategoryTasksResponse>?,
+                                    response: Response<TasksApi.NextCategoryTasksResponse>?) {
+                if (response != null && response.isSuccessful) {
+                    response.body()?.let {
+                        categoriesRepository.updateNextTask(categoryId, it.tasks.firstOrNull())
+                        //preload images
+                        it.tasks.firstOrNull()?.preload(applicationContext)
+                        categoriesRepository.updateAvailableTasksCount(categoryId, it.availableTasksCount)
+                        categoriesRepository.shouldShowCaptcha = it.showCaptcha
+                        callback?.onResult(true)
+                    } ?: run {
+                        callback?.onError(ERROR_EMPTY_RESPONSE)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<TasksApi.NextCategoryTasksResponse>?, t: Throwable?) {
+                Log.d("TaskService", "onFailure called with throwable $t")
+                callback?.onError(0)
+            }
+        })
     }
 
     private fun submitQuestionnaireAnswers(submitInfo: TasksApi.SubmitInfo) {
@@ -122,19 +137,27 @@ class TaskService(context: Context, api: TasksApi,
 
                         if (response != null && response.isSuccessful) {
                             Log.d("TaskService", "submit onResponse: ${response.body()}")
-                            tasksRepo.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
+                            categoriesRepository.currentTaskRepo?.taskState = TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD
 
                             walletService.onEarnTransactionCompleted.set(false)
-                            retrieveNextTask()
+                            retrieveNextTask(categoriesRepository.currentTaskInProgress?.category_id!!, object : OperationResultCallback<Boolean> {
+                                override fun onResult(result: Boolean) {
+                                    categoriesRepository.currentTaskRepo?.clearChosenAnswers()
+                                }
+
+                                override fun onError(errorCode: Int) {
+                                }
+
+                            })
                         } else {
                             Log.d("TaskService", "submit onResponse null or isSuccessful=false: $response")
-                            tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
+                            categoriesRepository.currentTaskRepo?.taskState = TaskState.SUBMIT_ERROR_RETRY
                         }
                     }
 
                     override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
                         Log.d("TaskService", "submit onFailure called with throwable $t")
-                        tasksRepo.taskState = TaskState.SUBMIT_ERROR_RETRY
+                        categoriesRepository.currentTaskRepo?.taskState = TaskState.SUBMIT_ERROR_RETRY
                     }
                 })
     }

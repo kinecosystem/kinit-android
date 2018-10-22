@@ -27,10 +27,18 @@ interface TasksApi {
             @Body submitInfo: SubmitInfo): Call<TaskSubmitResponse>
 
     data class NextTasksResponse(@SerializedName("tasks") val tasksMap: Map<String, List<Task>>,
-                                 @SerializedName("tz") val declaredTimeZone: String)
+                                 @SerializedName("show_captcha") val showCaptcha: Boolean = false,
+                                 @SerializedName("tz") val declaredTimeZone: String = "")
+
+    data class NextCategoryTasksResponse(@SerializedName("tasks") val tasks: List<Task>,
+                                         @SerializedName("available_tasks_count") val availableTasksCount: Int = 0,
+                                         @SerializedName("show_captcha") val showCaptcha: Boolean = false)
 
     @GET("/user/tasks")
     fun nextTasks(@Header(USER_HEADER_KEY) userId: String): Call<NextTasksResponse>
+
+    @GET("/user/category/{id}/tasks")
+    fun nextCategoryTasks(@Header(USER_HEADER_KEY) userId: String, @Path("id") categoryId: String): Call<NextCategoryTasksResponse>
 
 
     @GET("/truex/activity")

@@ -57,7 +57,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                             response: Response<OnboardingApi.HintsResponse>) {
                         if (response.isSuccessful) {
                             categoriesService.retrieveCategories()
-                            taskService.retrieveNextTask()
+                            taskService.retrieveAllTasks()
                             userRepo.restoreHints = response.body()?.hints ?: listOf()
                             callback.onSuccess()
                         } else {
@@ -143,7 +143,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                             } else {
                                 userRepo.updateUserId(response.body()?.userId ?: "")
                                 categoriesService.retrieveCategories()
-                                taskService.retrieveNextTask()
+                                taskService.retrieveAllTasks()
                                 callback?.onSuccess()
                             }
                         } else {

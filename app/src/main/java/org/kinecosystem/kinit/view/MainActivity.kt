@@ -20,6 +20,7 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickMenuItem
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.BottomTabNavigation.PageSelectionListener
@@ -51,7 +52,7 @@ class MainActivity : BaseActivity(), PageSelectionListener {
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
-    lateinit var taskRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
@@ -85,7 +86,7 @@ class MainActivity : BaseActivity(), PageSelectionListener {
     }
 
     private fun shouldShowPreEarnAnimation(): Boolean {
-        return taskRepository.isTaskAvailable() && !taskRepository.isTaskStarted.get()
+        return categoriesRepository.hasAnyTaskAvailable()
     }
 
     private fun showPreEarnAnimation() {

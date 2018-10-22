@@ -33,7 +33,7 @@ class CreateWalletViewModel {
     var callback: Observable.OnPropertyChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(p0: Observable?, p1: Int) {
             categoriesService.retrieveCategories()
-            taskService.retrieveNextTask()
+            taskService.retrieveAllTasks()
             listener?.onWalletCreated()
         }
     }
@@ -67,7 +67,7 @@ class CreateWalletViewModel {
                 {
                     if (walletReady.get()) {
                         categoriesService.retrieveCategories()
-                        taskService.retrieveNextTask()
+                        taskService.retrieveAllTasks()
                         listener?.onWalletCreated()
                     } else {
                         listener?.onCreateWalletError()
@@ -80,7 +80,7 @@ class CreateWalletViewModel {
     private fun checkReadyToMove() {
         if (walletReady.get()) {
             categoriesService.retrieveCategories()
-            taskService.retrieveNextTask()
+            taskService.retrieveAllTasks()
             listener?.onWalletCreated()
         } else {
             walletReady.addOnPropertyChangedCallback(callback)
