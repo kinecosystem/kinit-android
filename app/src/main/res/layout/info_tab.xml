@@ -41,7 +41,7 @@
             android:onClick="@{model::openUpdate}"
             android:padding="16dp"
             android:text="@{model.userRepository.isUpdateAvailable ? @string/update_now : @string/up_to_date}"
-            android:textColor="@{model.userRepository.isUpdateAvailable ? @color/gray : @color/red_wrong}"
+            android:textColor="@{model.userRepository.isUpdateAvailable ?  @color/red_wrong : @color/gray}"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
