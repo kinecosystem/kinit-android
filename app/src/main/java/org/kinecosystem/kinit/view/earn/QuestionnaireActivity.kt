@@ -64,19 +64,12 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         super.onCreate(savedInstanceState)
         val binding: QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this,
                 R.layout.questionnaire_fragment_layout)
-
-<<<<<<< HEAD
-        taskRepo.taskInProgress?.let {
-            questionnaireModel = if (it.isQuiz()) {
-                QuizViewModel(savedInstanceState != null)
-=======
         if (categoriesRepository.currentTaskInProgress == null)
             finish()
 
         categoriesRepository.currentTaskRepo?.task?.let {
             model = if (it.isQuiz()) {
                 QuizViewModel(savedInstanceState != null, Navigator(this))
->>>>>>> taskcategories
             } else {
                 QuestionnaireViewModel(savedInstanceState != null, Navigator(this))
             }
@@ -88,13 +81,7 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
                     updateFragment(model.nextFragment.get())
                 }
             }
-<<<<<<< HEAD
-            questionnaireModel.nextFragment.addOnPropertyChangedCallback(nextFragmentCallback)
-        } ?: run {
-            finish()
-=======
             model.nextFragment.addOnPropertyChangedCallback(nextFragmentCallback)
->>>>>>> taskcategories
         }
     }
 
