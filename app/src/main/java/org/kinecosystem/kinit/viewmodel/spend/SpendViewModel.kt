@@ -27,12 +27,16 @@ class SpendViewModel(private val navigator: Navigator) :
     var hasOffers = ObservableBoolean(false)
     var showNoOffer = ObservableBoolean(false)
     var hasNetwork = ObservableBoolean(false)
+    lateinit var hasErrors:ObservableBoolean
+
+
 
 
     init {
         KinitApplication.coreComponent.inject(this)
         balance = networkServices.walletService.balance
         hasNetwork = ObservableBoolean(networkServices.isNetworkConnected())
+        hasErrors = offersRepository.hasErrors
         refresh()
     }
 
@@ -42,14 +46,17 @@ class SpendViewModel(private val navigator: Navigator) :
 
     private fun refresh() {
         if (networkServices.isNetworkConnected()) {
-            hasNetwork.set(true)
-            hasOffers.set(!offersRepository.isEmpty())
-            showNoOffer.set(!hasOffers.get())
-            balance.set(networkServices.walletService.balance.get().toString())
+            if(!hasErrors.get()) {
+                hasNetwork.set(true)
+                hasOffers.set(!offersRepository.isEmpty())
+                showNoOffer.set(!hasOffers.get())
+                balance.set(networkServices.walletService.balance.get().toString())
+            }
         } else {
             hasNetwork.set(false)
             hasOffers.set(false)
             showNoOffer.set(false)
+            hasErrors.set(false)
         }
     }
 
@@ -57,9 +64,12 @@ class SpendViewModel(private val navigator: Navigator) :
         if (hasNetwork.get()) {
             networkServices.offerService.retrieveOffers(object : OperationCompletionCallback {
                 override fun onError(errorCode: Int) {
+                    refresh()
+                    hasErrors.set(true)
                 }
 
                 override fun onSuccess() {
+                    hasErrors.set(false)
                     refresh()
                 }
             })

@@ -1,11 +1,14 @@
 package org.kinecosystem.kinit.repository
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import org.kinecosystem.kinit.model.spend.Offer
 
 class OffersRepository {
     var offers: ObservableField<List<Offer>> = ObservableField(ArrayList())
         private set
+
+    var hasErrors = ObservableBoolean(false)
 
     fun offer(index: Int): Offer {
         return offers.get()[index]

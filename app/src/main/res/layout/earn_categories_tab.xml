@@ -127,6 +127,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/delimiter" />
 
+        <include
+            android:id="@+id/general_error"
+            layout="@layout/error_general_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{model.hasErrors}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
+
+        <android.support.constraint.Group
+            android:id="@+id/server_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{!model.hasErrors}"
+            app:constraint_referenced_ids="categories,delimiter,title,subtitle" />
+
 
     </android.support.constraint.ConstraintLayout>
 </layout>

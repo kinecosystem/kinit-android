@@ -8,10 +8,10 @@
             name="model"
             type="org.kinecosystem.kinit.viewmodel.spend.SpendViewModel"/>
     </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <View
             android:id="@+id/spend_balance"
@@ -19,8 +19,7 @@
             android:layout_height="@dimen/balance_height"
             android:background="@color/status_bar_color"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/spend_balance_text"
@@ -36,7 +35,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/spend_balance"
             app:layout_constraintTop_toTopOf="@id/spend_balance"
-            tools:text="200"/>
+            tools:text="200" />
 
         <TextView
             android:id="@+id/spend_kin_currency"
@@ -52,7 +51,8 @@
             app:layout_constraintBottom_toBottomOf="@id/spend_balance"
             app:layout_constraintStart_toEndOf="@id/spend_balance_text"
             app:layout_constraintTop_toTopOf="@id/spend_balance"
-            tools:text="KIN"/>
+            tools:text="KIN" />
+
         <ImageView
             android:id="@+id/kin_icon"
             android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/spend_kin_currency"
             app:layout_constraintStart_toEndOf="@+id/spend_kin_currency"
             app:layout_constraintTop_toTopOf="@+id/spend_kin_currency"
-            app:srcCompat="@drawable/k_letter"/>
+            app:srcCompat="@drawable/k_letter" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/offers_list"
@@ -73,7 +73,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spend_balance"/>
+            app:layout_constraintTop_toBottomOf="@id/spend_balance" />
 
         <ImageView
             android:id="@+id/no_offers_image"
@@ -86,7 +86,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spend_balance"/>
+            app:layout_constraintTop_toBottomOf="@+id/spend_balance" />
+
         <TextView
             android:id="@+id/no_offers_title"
             android:layout_width="wrap_content"
@@ -102,7 +103,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/no_offers_image"/>
+            app:layout_constraintTop_toBottomOf="@+id/no_offers_image" />
+
         <TextView
             android:id="@+id/no_offers_subtitle"
             android:layout_width="0dp"
@@ -121,7 +123,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/no_offers_title"/>
+            app:layout_constraintTop_toBottomOf="@+id/no_offers_title" />
 
         <LinearLayout
             android:id="@+id/no_internet_layout"
@@ -142,8 +144,7 @@
                 android:layout_height="174dp"
                 android:layout_marginTop="50dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/no_internet_illustration"
-                />
+                android:src="@drawable/no_internet_illustration" />
 
             <TextView
                 android:id="@+id/no_internet_title"
@@ -155,8 +156,7 @@
                 android:text="@string/no_internet_title"
                 android:textColor="#7884a5"
                 android:textSize="16sp"
-                android:textStyle="normal"
-                />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/no_internet_subtitle"
@@ -169,9 +169,20 @@
                 android:text="@string/no_internet_subtitle"
                 android:textColor="@color/gray"
                 android:textSize="14sp"
-                android:textStyle="normal"
-                />
+                android:textStyle="normal" />
         </LinearLayout>
+
+        <include
+            android:id="@+id/general_error"
+            layout="@layout/error_general_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{model.hasErrors}"
+            app:layout_constraintBottom_toBottomOf="@+id/offers_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/no_internet_layout" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

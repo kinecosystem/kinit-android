@@ -19,19 +19,18 @@ class CategoriesService(private val context: Context, private val api: Categorie
             override fun onResponse(call: Call<CategoriesApi.CategoriesResponse>, response: Response<CategoriesApi.CategoriesResponse>) {
                 if (response != null && response.isSuccessful && response.body() != null) {
                     response.body()?.let {
+                        categoryRepository.hasErrors.set(false)
                         categoryRepository.updateCategories(it.categories)
                         //preload images
                         for(category in it.categories){
                             category.preload(context.applicationContext)
                         }
                         categoryRepository.updateHeader(it.headerMessage)
-                        Log.d("####", "#### list cat" + it.categories)
-                        Log.d("####", "#### list message" + it.headerMessage)
                         callback?.onSuccess()
-
                     }
                 } else {
                     callback?.onError(0)
+                    categoryRepository.hasErrors.set(true)
                     Log.d("####", "#### list no  cat")
 
                 }

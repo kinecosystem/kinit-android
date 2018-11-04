@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.repository
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.text.TextUtils
@@ -25,6 +26,7 @@ class CategoriesRepository {
 
     var categories: ObservableField<List<Category>> = ObservableField(ArrayList())
     private var headerMessage: HeaderMessage? = null
+    var hasErrors = ObservableBoolean(false)
     var headerTitle = ObservableField<String>()
     var headerSubtitle = ObservableField<String>()
     private var categoriesCache: DataStore

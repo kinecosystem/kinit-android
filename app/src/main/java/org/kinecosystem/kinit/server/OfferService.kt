@@ -42,6 +42,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                 response: Response<OffersApi.OffersResponse>?) {
 
                 if (response != null && response.isSuccessful) {
+                    repository.hasErrors.set(false)
                     Log.d("OffersService", "onResponse: ${response.body()}")
                     repository.updateOffers(response.body()?.offerList)
                     callback?.onSuccess()
@@ -53,6 +54,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
 
             override fun onFailure(call: Call<OffersApi.OffersResponse>?, t: Throwable?) {
                 Log.d("TaskService", "onFailure called with throwable $t")
+                repository.hasErrors.set(true)
                 callback?.onError(ERROR_NO_INTERNET)
             }
         })

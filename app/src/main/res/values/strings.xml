@@ -213,5 +213,7 @@
     <string name="help_center">Help Center</string>
     <string name="thank_you_for_feedback_text">Thank you for your feedback!</string>
     <string name="activities_count">%d Activities</string>
+    <string name="title_general_error">Oh… Something isn’t working</string>
+    <string name="subtitle_general_error">An unknown error occurred. Please close the app and try again later.</string>
 
 </resources>

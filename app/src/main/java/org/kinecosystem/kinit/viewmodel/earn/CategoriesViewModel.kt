@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.viewmodel.earn
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
@@ -31,6 +32,7 @@ class CategoriesViewModel(private val navigator: Navigator) : TabViewModel {
     var title: ObservableField<String>
     var subtitle: ObservableField<String>
     var balance: ObservableField<String>
+    var hasErrors = ObservableBoolean(false)
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -40,6 +42,7 @@ class CategoriesViewModel(private val navigator: Navigator) : TabViewModel {
         categoriesRepository.onCategorySelected()
         title = categoriesRepository.headerTitle
         subtitle = categoriesRepository.headerSubtitle
+        hasErrors = categoriesRepository.hasErrors
     }
 
     override fun onScreenVisibleToUser() {
