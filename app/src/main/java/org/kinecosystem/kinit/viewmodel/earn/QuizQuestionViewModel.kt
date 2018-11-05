@@ -7,7 +7,6 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.earn.Answer
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
-import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
@@ -75,7 +74,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
                 questionObj?.id,
                 questionIndex,
                 questionObj?.type,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title)
     }
@@ -96,7 +95,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
                 questionObj?.id,
                 questionIndex,
                 questionObj?.type,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title)
         analytics.logEvent(event)

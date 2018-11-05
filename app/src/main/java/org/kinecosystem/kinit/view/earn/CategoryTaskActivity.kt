@@ -13,6 +13,7 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.CategoryTaskLayoutBinding
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.CategoriesRepository
+import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.viewmodel.earn.CategoryTaskViewModel
 import javax.inject.Inject
@@ -41,7 +42,7 @@ class CategoryTaskActivity : BaseActivity() {
         category?.let {
             model = CategoryTaskViewModel(navigator, it)
             binding.model = model
-            updateStatusBar(it.uiData?.color)
+            GeneralUtils.updateStatusBarColor(this, it.uiData?.color)
         } ?: run {
             finish()
         }
@@ -57,13 +58,6 @@ class CategoryTaskActivity : BaseActivity() {
         super.onPause()
         model.shouldFinishActivity.removeOnPropertyChangedCallback(listener)
     }
-
-    private fun updateStatusBar(color: String?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.parseColor(color)
-        }
-    }
-
 
     companion object {
 

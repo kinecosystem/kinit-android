@@ -1,9 +1,7 @@
 package org.kinecosystem.kinit.viewmodel.earn
 
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.repository.CategoriesRepository
-import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
 
@@ -12,11 +10,7 @@ class AnswerViewModel(questionIndex: Int,
 
 
     @Inject
-    lateinit var scheduler: Scheduler
-    @Inject
     lateinit var categoriesRepository: CategoriesRepository
-    @Inject
-    lateinit var analytics: Analytics
 
     var answer: String? = ""
 

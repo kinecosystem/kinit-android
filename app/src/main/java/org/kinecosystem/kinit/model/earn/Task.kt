@@ -70,28 +70,24 @@ fun Task.hasPostActions(): Boolean = postTaskActions != null && postTaskActions.
 
 fun Task.isTaskWebView(): Boolean = type.equals(TASK_TYPE_TRUEX)
 
-fun Task.tagsString(): String? {
-    return tags?.joinToString(", ")
-}
-
-private fun Task.startDateInMillis(): Long? {
+fun Task.startDateInMillis(): Long? {
     return startDateInSeconds?.times(1000)
 }
 
-fun Task.isAvailableNow(): Boolean {
+fun Task.isAvailableNow(currentTimeInMillis: Long): Boolean {
     startDateInMillis()?.let {
-        return System.currentTimeMillis() >= it
+        return currentTimeInMillis >= it
     }
     return false
 }
 
-fun Task.isAvailableTomorrow(): Boolean {
-    return timeToUnlockInDays() == 1
+fun Task.isAvailableTomorrow(currentTimeInMillis: Long): Boolean {
+    return timeToUnlockInDays(currentTimeInMillis) == 1
 }
 
-private fun  Task.timeToUnlockInDays(): Int {
-    val millisAtNextMidnight = TimeUtils.millisAtNextMidnight(System.currentTimeMillis())
-    val startDate = startDateInMillis() ?: System.currentTimeMillis()
+private fun Task.timeToUnlockInDays(currentTimeInMillis: Long): Int {
+    val millisAtNextMidnight = TimeUtils.millisAtNextMidnight(currentTimeInMillis)
+    val startDate = startDateInMillis() ?: currentTimeInMillis
     return (1 + ((startDate - millisAtNextMidnight) / DAY_IN_MILLIS)).toInt()
 }
 

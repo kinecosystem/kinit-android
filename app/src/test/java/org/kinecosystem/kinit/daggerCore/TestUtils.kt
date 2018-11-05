@@ -16,7 +16,6 @@ class TestUtils {
                     .dataStoreModule(DataStoreModule(MockDataStoreProvider()))
                     .schedulerModule(TestSchedulerModule())
                     .userRepositoryModule(TestUserRepositoryModule())
-                    .tasksRepositoryModule(TestTasksRepositoryModule())
                     .offersRepositoryModule(TestOffersRepositoryModule())
                     .analyticsModule(TestAnalyticsModule())
                     .notificationModule(TestNotificationModule())

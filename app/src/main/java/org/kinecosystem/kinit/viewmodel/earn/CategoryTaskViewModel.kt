@@ -3,7 +3,7 @@ package org.kinecosystem.kinit.viewmodel.earn
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import android.graphics.Color
+import android.text.format.DateUtils.DAY_IN_MILLIS
 import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
@@ -14,6 +14,7 @@ import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.server.OperationResultCallback
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
+import org.kinecosystem.kinit.util.TimeUtils
 import javax.inject.Inject
 
 class CategoryTaskViewModel(private val navigator: Navigator, private val category: Category) {
@@ -30,7 +31,7 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
 
     var headerTitle = ObservableField<String>()
     var headerImage = ObservableField<String>()
-    var bgColor = ObservableInt(Color.BLUE)
+    var bgColor = ObservableField<String>("#047cfc")
     var tasksCount = ObservableInt()
     var taskCountVisibility = ObservableBoolean(false)
     var shouldShowTask = ObservableBoolean(true)
@@ -52,7 +53,9 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
     private var task: Task?
 
 
-    private var scheduledRunnable: Runnable? = null
+    private var scheduledRunnable: Runnable = Runnable {
+        onResume()
+    }
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -60,34 +63,41 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
         availableTasksCount = categoriesRepository.currentAvailableTasks
         Log.d("###", "### got task $task")
         bindCategoryData()
-        bindTaskData()
+        refresh()
     }
 
-    private fun bindTaskData() {
+    fun refreshTaskData() {
+        scheduler.cancel(scheduledRunnable)
         task = categoriesRepository.getTask(category.id)
+        Log.d("####", "#### ${task?.startDateInSeconds} ${scheduler.currentTimeMillis()}")
         task?.let {
             shouldShowNoTask.set(false)
             shouldShowTaskNotAvailableYet.set(false)
-            shouldShowTaskNotAvailableYet.set(false)
             when {
-                it.isAvailableNow() -> {
+                it.isAvailableNow(scheduler.currentTimeMillis()) -> {
                     shouldShowTask.set(true)
                     bindAvailableTaskData()
                 }
-                it.isAvailableTomorrow() -> {
+                it.isAvailableTomorrow(scheduler.currentTimeMillis()) -> {
                     shouldShowTask.set(false)
                     shouldShowTaskNotAvailableYet.set(true)
                     isAvailableTomorrow.set(true)
+                    val diff = it.startDateInMillis()?.minus(scheduler.currentTimeMillis())
+                    diff?.let {
+                        scheduler.scheduleOnMain(scheduledRunnable, it)
+                    }
                 }
                 else -> {
                     shouldShowTask.set(false)
                     shouldShowTaskNotAvailableYet.set(true)
                     nextAvailableDate.set(it.nextAvailableDate())
+                    scheduler.scheduleOnMain(scheduledRunnable, DAY_IN_MILLIS)
                 }
             }
         } ?: run {
             shouldShowNoTask.set(true)
             shouldShowTask.set(false)
+            scheduler.scheduleOnMain(scheduledRunnable, DAY_IN_MILLIS)
         }
     }
 
@@ -97,7 +107,7 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
                 task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
-                task?.tagsString(),
+                category.title,
                 task?.id,
                 task?.title,
                 task?.type)
@@ -108,7 +118,7 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
                 task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
-                task?.tagsString(),
+                category.title,
                 task?.id,
                 task?.title,
                 task?.type)
@@ -139,16 +149,9 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
         }
     }
 
-    private fun convertMinToCompleteToString(minToComplete: Float?): String =
-            when {
-                minToComplete == null -> "0"
-                (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
-                else -> minToComplete.toString()
-            }
-
     private fun bindCategoryData() {
         headerTitle.set(category.title)
-        bgColor.set(category.getBgColor())
+        bgColor.set(category.uiData?.color)
         category.uiData?.let {
             headerImage.set(it.headerImageUrl)
         }
@@ -165,14 +168,24 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
     }
 
     fun onResume() {
+        refresh()
+        when {
+            shouldShowTask.get() -> onEarnScreenVisible()
+            shouldShowNoTask.get() -> onNoTasksAvailableVisible()
+            else -> onLockedScreenVisible()
+        }
         requestTask()
+    }
+
+    fun refresh() {
+        updateTaskCount()
+        refreshTaskData()
     }
 
     private fun requestTask() {
         taskService.retrieveNextTask(category.id, object : OperationResultCallback<Boolean> {
             override fun onResult(result: Boolean) {
-                updateTaskCount()
-                bindTaskData()
+                refresh()
             }
 
             override fun onError(errorCode: Int) {
@@ -180,6 +193,42 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
             }
 
         })
+    }
+
+
+    private fun convertMinToCompleteToString(minToComplete: Float?): String =
+            when {
+                minToComplete == null -> "0"
+                (minToComplete * 10).toInt() % 10 == 0 -> minToComplete.toInt().toString()
+                else -> minToComplete.toString()
+            }
+
+    private fun onEarnScreenVisible() {
+        val event = Events.Analytics.ViewTaskPage(task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                category.title,
+                task?.id,
+                task?.title,
+                task?.type)
+        analytics.logEvent(event)
+    }
+
+    private fun onLockedScreenVisible() {
+        val timeToUnlockInDays = timeToUnlockInDays(task)
+        val event = Events.Analytics.ViewLockedTaskPage(timeToUnlockInDays)
+        analytics.logEvent(event)
+    }
+
+    private fun onNoTasksAvailableVisible() {
+        analytics.logEvent(Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN, category.title))
+    }
+
+    private fun timeToUnlockInDays(task: Task?): Int {
+        val millisAtNextMidnight = TimeUtils.millisAtNextMidnight(scheduler.currentTimeMillis())
+        val startDate = task?.startDateInMillis() ?: scheduler.currentTimeMillis()
+
+        return (1 + ((startDate - millisAtNextMidnight) / DAY_IN_MILLIS)).toInt()
     }
 
 }

@@ -1,22 +1,17 @@
 package org.kinecosystem.kinit.repository
 
-import android.content.Context
 import android.databinding.ObservableBoolean
-import android.text.TextUtils
-import com.google.gson.Gson
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.model.TaskState
-import org.kinecosystem.kinit.model.earn.*
-import org.kinecosystem.kinit.util.ImageUtils
+import org.kinecosystem.kinit.model.earn.ChosenAnswers
+import org.kinecosystem.kinit.model.earn.Task
 import javax.inject.Inject
 
 private const val QUESTIONNAIRE_ANSWERS_STORAGE = "kin.app.task.chosen.answers"
 private const val TASK_STORAGE = "kin.app.task"
-private const val TASK_KEY = "task"
 private const val TASK_STATE_KEY = "task_state"
-private const val SHOW_CAPTCHA_KEY = "show_captcha"
 
-class TasksRepo(categoryId:String, var task: Task?) {
+class TasksRepo(categoryId: String, var task: Task?) {
     @Inject
     lateinit var dataStoreProvider: DataStoreProvider
     private var chosenAnswers: ArrayList<ChosenAnswers> = ArrayList()
@@ -39,10 +34,6 @@ class TasksRepo(categoryId:String, var task: Task?) {
         chosenAnswersCache = dataStoreProvider.dataStore(QUESTIONNAIRE_ANSWERS_STORAGE + categoryId)
         isTaskStarted = ObservableBoolean(taskState != TaskState.IDLE)
     }
-
-//    fun setTask(task: String) {
-//        this.task = Gson().fromJson(task, Task::class.java)
-//    }
 
     fun resetTaskState() {
         taskState = if (getChosenAnswers().size > 0)
@@ -92,6 +83,13 @@ class TasksRepo(categoryId:String, var task: Task?) {
     fun onTaskStarted() {
         taskState = TaskState.IN_PROGRESS
         taskInProgress = task?.copy()
+    }
+
+    fun updateTestTask(startDateInSeconds: Long) {
+        task = task?.copy(startDateInSeconds = startDateInSeconds)
+        if (taskInProgress?.id == task?.id) {
+            taskInProgress = task?.copy()
+        }
     }
 }
 

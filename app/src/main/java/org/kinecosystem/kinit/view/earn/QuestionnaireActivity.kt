@@ -16,6 +16,7 @@ import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.server.TaskService
+import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel
 import org.kinecosystem.kinit.viewmodel.earn.QuizViewModel
@@ -64,6 +65,7 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
         super.onCreate(savedInstanceState)
         val binding: QuestionnaireFragmentLayoutBinding = DataBindingUtil.setContentView(this,
                 R.layout.questionnaire_fragment_layout)
+        
 
         if (categoriesRepository.currentTaskInProgress == null)
             finish()
@@ -75,6 +77,13 @@ class QuestionnaireActivity : BaseActivity(), QuestionnaireActions {
                 QuestionnaireViewModel(savedInstanceState != null, Navigator(this))
             }
             binding.model = model
+
+            it.category_id?.let { it ->
+                val category = categoriesRepository.getCategory(it)
+                category?.uiData?.color?.let {
+                    GeneralUtils.updateStatusBarColor(this, it)
+                }
+            }
 
             updateFragment(model.nextFragment.get())
             nextFragmentCallback = object : Observable.OnPropertyChangedCallback() {

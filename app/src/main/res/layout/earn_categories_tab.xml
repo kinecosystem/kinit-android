@@ -78,6 +78,7 @@
             android:textColor="@color/grey_title"
             android:textSize="16sp"
             android:textStyle="normal"
+            android:visibility="@{model.showData}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/balance"
@@ -96,6 +97,7 @@
             android:textColor="@color/grey"
             android:textSize="14sp"
             android:textStyle="normal"
+            android:visibility="@{model.showData}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +111,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="17dp"
+            android:visibility="@{model.showData}"
             android:background="@color/grey_dark_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -120,6 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
+            android:visibility="@{model.showData}"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -127,6 +131,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/delimiter" />
 
+        <include
+            android:id="@+id/general_error"
+            layout="@layout/error_general_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{model.hasErrors}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
+
+        <include
+            android:id="@+id/no_internet_error"
+            layout="@layout/error_no_internet_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{!model.hasNetwork}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -72,13 +72,12 @@ class TaskErrorFragment : BaseFragment() {
     }
 
     private fun reportViewEvent(errorType: Int) {
-        val event: Event
-        event = if (errorType == ERROR_TRANSACTION) {
-            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_REWARD)
+        val event: Event = if (errorType == ERROR_TRANSACTION) {
+            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_REWARD, "error transaction")
         } else { // ERROR_SUBMIT
-            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_TASK_SUBMISSION)
+            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_TASK_SUBMISSION, "error submit")
         }
-        analytics?.logEvent(event)
+        analytics.logEvent(event)
     }
 
     private fun reportClickOnCloseEvent(errorType: Int) {

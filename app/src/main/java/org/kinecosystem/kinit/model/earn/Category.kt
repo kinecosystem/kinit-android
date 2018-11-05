@@ -1,9 +1,7 @@
 package org.kinecosystem.kinit.model.earn
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Parcelable
-import android.text.TextUtils
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import org.kinecosystem.kinit.util.ImageUtils
@@ -40,15 +38,6 @@ fun UiData.isValid(): Boolean {
 }
 
 fun Category.isEnabled(): Boolean = availableTasksCount > 0
-
-fun Category.getBgColor(): Int {
-    uiData?.let {
-        it.color?.let {
-            return Color.parseColor(it)
-        }
-    }
-    return Color.WHITE
-}
 
 fun Category.preload(context: Context) {
     uiData?.imageUrl?.let {

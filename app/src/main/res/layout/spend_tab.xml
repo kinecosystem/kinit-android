@@ -14,7 +14,7 @@
         >
 
         <View
-            android:id="@+id/spend_balance"
+            android:id="@+id/balance"
             android:layout_width="match_parent"
             android:layout_height="@dimen/balance_height"
             android:background="@color/status_bar_color"
@@ -34,8 +34,8 @@
             android:textColor="@color/balance_text_color"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/spend_balance"
-            app:layout_constraintTop_toTopOf="@id/spend_balance"
+            app:layout_constraintBottom_toBottomOf="@id/balance"
+            app:layout_constraintTop_toTopOf="@id/balance"
             tools:text="200"/>
 
         <TextView
@@ -49,9 +49,9 @@
             android:text="KIN"
             android:textColor="@color/balance_text_color"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/spend_balance"
+            app:layout_constraintBottom_toBottomOf="@id/balance"
             app:layout_constraintStart_toEndOf="@id/spend_balance_text"
-            app:layout_constraintTop_toTopOf="@id/spend_balance"
+            app:layout_constraintTop_toTopOf="@id/balance"
             tools:text="KIN"/>
         <ImageView
             android:id="@+id/kin_icon"
@@ -69,109 +69,37 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            android:visibility="@{model.hasOffers}"
+            android:visibility="@{model.showData}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spend_balance"/>
+            app:layout_constraintTop_toBottomOf="@id/balance"/>
 
-        <ImageView
-            android:id="@+id/no_offers_image"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/general_error"
+            layout="@layout/error_general_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/spend_illustration"
-            android:visibility="@{model.showNoOffer}"
+            android:visibility="@{model.hasErrors}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spend_balance"/>
-        <TextView
-            android:id="@+id/no_offers_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
-            android:text="@string/no_offers_title"
-            android:textColor="#7884a5"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            android:visibility="@{model.showNoOffer}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/no_offers_image"/>
-        <TextView
-            android:id="@+id/no_offers_subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="48dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="3sp"
-            android:text="@string/no_offers_subtitle"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:visibility="@{model.showNoOffer}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/no_offers_title"/>
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
 
-        <LinearLayout
-            android:id="@+id/no_internet_layout"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/no_internet_error"
+            layout="@layout/error_no_internet_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
             android:visibility="@{!model.hasNetwork}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spend_balance">
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
 
-            <ImageView
-                android:id="@+id/no_internet_image"
-                android:layout_width="wrap_content"
-                android:layout_height="174dp"
-                android:layout_marginTop="50dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/no_internet_illustration"
-                />
 
-            <TextView
-                android:id="@+id/no_internet_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="@string/no_internet_title"
-                android:textColor="#7884a5"
-                android:textSize="16sp"
-                android:textStyle="normal"
-                />
-
-            <TextView
-                android:id="@+id/no_internet_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:lineSpacingExtra="3sp"
-                android:text="@string/no_internet_subtitle"
-                android:textColor="@color/gray"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                />
-        </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

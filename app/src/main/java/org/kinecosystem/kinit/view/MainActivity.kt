@@ -21,7 +21,6 @@ import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickMenuItem
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.CategoriesRepository
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.BottomTabNavigation.PageSelectionListener
 import org.kinecosystem.kinit.view.customView.AlertManager

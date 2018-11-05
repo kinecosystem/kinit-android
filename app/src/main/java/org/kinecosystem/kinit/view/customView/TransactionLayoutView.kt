@@ -18,9 +18,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.earn.hasPostActions
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.navigation.Navigator.Destination
 import org.kinecosystem.kinit.repository.CategoriesRepository
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager

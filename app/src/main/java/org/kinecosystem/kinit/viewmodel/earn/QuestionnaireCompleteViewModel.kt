@@ -14,7 +14,6 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.ChosenAnswers
-import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.TaskService
@@ -43,7 +42,7 @@ class QuestionnaireCompleteViewModel {
         val event = Events.Business.EarningTaskCompleted(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title,
                 task?.type)
@@ -62,7 +61,7 @@ class QuestionnaireCompleteViewModel {
                 task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title,
                 task?.type)

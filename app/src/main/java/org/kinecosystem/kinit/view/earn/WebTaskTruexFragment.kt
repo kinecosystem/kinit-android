@@ -18,7 +18,6 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TaskWebLayoutBinding
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.CategoriesRepository
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.earn.WebFragmentActions
 import org.kinecosystem.kinit.viewmodel.earn.WebTaskTruexViewModel
