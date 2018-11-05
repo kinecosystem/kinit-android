@@ -9,7 +9,6 @@ import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
 import org.kinecosystem.kinit.model.earn.tagsString
 import org.kinecosystem.kinit.repository.CategoriesRepository
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.AnswersListAdapter
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions

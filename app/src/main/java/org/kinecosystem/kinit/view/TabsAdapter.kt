@@ -19,14 +19,12 @@ import org.kinecosystem.kinit.databinding.EarnCategoriesTabBinding
 import org.kinecosystem.kinit.databinding.InfoTabBinding
 import org.kinecosystem.kinit.databinding.SpendTabBinding
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.CategoryListAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
 import org.kinecosystem.kinit.view.customView.AlertManager
-import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.CategoriesViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
@@ -50,8 +48,6 @@ class TabsAdapter(val context: Context) :
 
     @Inject
     lateinit var analytics: Analytics
-    @Inject
-    lateinit var tasksRepository: TasksRepository
     @Inject
     lateinit var scheduler: Scheduler
     @Inject

@@ -40,10 +40,6 @@ class TasksRepo(categoryId:String, var task: Task?) {
         isTaskStarted = ObservableBoolean(taskState != TaskState.IDLE)
     }
 
-//    fun setTask(task: String) {
-//        this.task = Gson().fromJson(task, Task::class.java)
-//    }
-
     fun resetTaskState() {
         taskState = if (getChosenAnswers().size > 0)
             TaskState.TASK_START_ANSWERED

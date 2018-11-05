@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.viewmodel.earn
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.graphics.Color
 import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
@@ -34,6 +35,7 @@ open class QuestionnaireViewModel(restoreState: Boolean, val navigator: Navigato
     var nextFragment: ObservableField<Fragment> = ObservableField()
     var currentPageState: Int
     val shouldFinishActivity = ObservableBoolean(false)
+    val categoryColor = ObservableField<Int>(Color.parseColor("#047cfc"))
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -43,6 +45,13 @@ open class QuestionnaireViewModel(restoreState: Boolean, val navigator: Navigato
                     !categoriesRepository.isCurrentTaskComplete() -> NEXT_QUESTION_PAGE
                     else -> QUESTIONNAIRE_COMPLETE_PAGE
                 }
+        categoriesRepository.currentTaskRepo?.task?.category_id?.let {
+            val category = categoriesRepository.getCategory(it)
+            category?.uiData?.color?.let {
+                categoryColor.set(Color.parseColor(it))
+            }
+        }
+
         moveToNextPage(currentPageState)
     }
 
@@ -74,7 +83,7 @@ open class QuestionnaireViewModel(restoreState: Boolean, val navigator: Navigato
         return categoriesRepository.getCurrentTaskAnsweredQuestionsCount() - 1
     }
 
-    fun onClose(){
+    fun onClose() {
         navigator.navigateToCategory(categoriesRepository.currentTaskInProgress?.category_id!!, true)
         shouldFinishActivity.set(true)
         categoriesRepository.currentTaskRepo?.resetTaskState()

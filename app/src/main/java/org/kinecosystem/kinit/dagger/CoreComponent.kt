@@ -7,7 +7,6 @@ import org.kinecosystem.kinit.firebase.KinMessagingService
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.TasksRepo
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.BottomTabNavigation
 import org.kinecosystem.kinit.view.MainActivity
@@ -26,7 +25,10 @@ import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
 import org.kinecosystem.kinit.view.customView.SecurityQuestionAnswerView
 import org.kinecosystem.kinit.view.customView.TransactionLayoutView
-import org.kinecosystem.kinit.view.earn.*
+import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
+import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
+import org.kinecosystem.kinit.view.earn.TaskErrorFragment
+import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
 import org.kinecosystem.kinit.view.faq.FAQActivity
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
@@ -51,7 +53,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-        modules = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class)])
+        modules = [(ContextModule::class), (UserRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class)])
 interface CoreComponent {
 
     fun inject(balanceViewModel: BalanceViewModel)
@@ -110,7 +112,6 @@ interface CoreComponent {
     fun inject(faqViewModel: FAQViewModel)
     fun inject(faqActivity: FAQActivity)
     fun inject(supportUtil: SupportUtil)
-    fun inject(tasksRepository: TasksRepository)
     fun inject(categoryRepository: CategoriesRepository)
     fun inject(categoriesViewModel: CategoriesViewModel)
     fun inject(categoryListAdapter: CategoryListAdapter)

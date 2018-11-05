@@ -9,6 +9,9 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.model.earn.Category
 import org.kinecosystem.kinit.model.earn.HeaderMessage
 import org.kinecosystem.kinit.model.earn.Task
+import org.kinecosystem.kinit.model.earn.preload
+import org.kinecosystem.kinit.server.api.CategoriesApi
+import org.kinecosystem.kinit.server.api.TasksApi
 import javax.inject.Inject
 
 private const val CATEGORIES_STORAGE = "kin.app.categories"
@@ -57,6 +60,15 @@ class CategoriesRepository {
         categoriesCache.putString(CATEGORIES_KEY, Gson().toJson(newCategories))
     }
 
+    fun updateTestData(categoriesData:String, tasksData:String) {
+        val categoriesResponse = Gson().fromJson(categoriesData, CategoriesApi.CategoriesResponse::class.java)
+        updateCategories(categoriesResponse.categories)
+        updateHeader(categoriesResponse.headerMessage)
+
+        val taskResponse = Gson().fromJson(tasksData, TasksApi.NextTasksResponse::class.java)
+        updateTasks(taskResponse.tasksMap)
+    }
+
     fun updateHeader(headerMsg: HeaderMessage?) {
         this.headerMessage = headerMsg
         headerMessage?.let {
@@ -74,10 +86,10 @@ class CategoriesRepository {
     fun updateTasks(updatedTasks: Map<String, List<Task>>) {
         for ((catId, tasksList) in updatedTasks) {
             if (tasks[catId] == null) {
-                Log.d("###", "#### updateTasks null new repo $catId")
+                //Log.d("###", "#### updateTasks null new repo $catId")
                 tasks[catId] = TasksRepo(catId, tasksList.firstOrNull())
             } else {
-                Log.d("###", "#### update tasksk   $catId  ${tasks[catId]}")
+                //Log.d("###", "#### update tasksk   $catId  ${tasks[catId]}")
                 tasks[catId]?.task = tasksList.firstOrNull()
                 // val repos = tasks[catId]
             }
@@ -136,7 +148,6 @@ class CategoriesRepository {
         currentCategoryId = category?.id
         currentTaskRepo = getTaskRepo()
         category?.availableTasksCount?.let { currentAvailableTasks.set(it) }
-        Log.d("#####", "#### cat id $currentCategoryId  task repo $currentTaskRepo task in progress $currentTaskInProgress")
     }
 
     fun getCurrentTaskAnsweredQuestionsCount(): Int {

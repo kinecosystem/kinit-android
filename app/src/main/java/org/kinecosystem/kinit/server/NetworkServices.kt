@@ -38,7 +38,7 @@ class NetworkServices {
     private val applicationContext: Context
 
     constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
-                tasksRepo: TasksRepository, offerRepo: OffersRepository, categoryRepository: CategoriesRepository,
+                offerRepo: OffersRepository, categoryRepository: CategoriesRepository,
                 analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
