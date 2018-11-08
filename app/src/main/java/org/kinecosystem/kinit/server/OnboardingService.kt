@@ -51,7 +51,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         }
 
         phoneAuthenticationApi.updatePhoneAuthToken(userRepo.userId(),
-                PhoneAuthenticationApi.AuthInfo(token)).enqueue(
+                PhoneAuthenticationApi.AuthInfo(token, userRepo.jws)).enqueue(
                 object : Callback<OnboardingApi.HintsResponse> {
                     override fun onResponse(call: Call<OnboardingApi.HintsResponse>,
                                             response: Response<OnboardingApi.HintsResponse>) {

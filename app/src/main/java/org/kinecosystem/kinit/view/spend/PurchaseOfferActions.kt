@@ -1,5 +1,7 @@
 package org.kinecosystem.kinit.view.spend
 
+import org.kinecosystem.ClientValidator
+
 interface PurchaseOfferActions {
 
     fun animateBuy()
@@ -11,4 +13,6 @@ interface PurchaseOfferActions {
     fun showDialog(resTitle: Int, resMessage: Int, resAction: Int, shouldFinish: Boolean, logErrorType: String? = null)
 
     fun shareCode(code: String)
+
+    fun getValidateClient(): ClientValidator
 }

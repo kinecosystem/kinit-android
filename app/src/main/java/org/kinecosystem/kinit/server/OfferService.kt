@@ -19,7 +19,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.SocketTimeoutException
-import java.util.*
 
 const val ERROR_TRANSACTION_FAILED = 100
 const val ERROR_REDEEM_COUPON_FAILED = 101
@@ -93,7 +92,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                 val response: Response<OffersApi.BookOfferResponse>
                 try {
                     response = offersApi.bookOffer(userRepo.userId(),
-                        OffersApi.OfferInfo(offer.id!!)).execute()
+                            OffersApi.OfferInfo(offer.id!!, userRepo.jws)).execute()
                 } catch (e: SocketTimeoutException) {
                     callbackWithError(ERROR_NO_INTERNET)
                     return
@@ -177,6 +176,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
         scheduler.executeOnBackground(object : Runnable {
             override fun run() {
                 try {
+
                     val transactionId = wallet.payForOrder(toAddress, amount, P2P_ORDER_ID)
                     wallet.updateBalanceSync()
                     if (transactionId != null && !transactionId.id().isEmpty()) {

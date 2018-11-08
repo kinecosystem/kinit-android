@@ -18,6 +18,7 @@ import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPopupOnSendKin
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewSendKinPage;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.server.NetworkServices;
+import org.kinecosystem.kinit.server.OperationCompletionCallback;
 import org.kinecosystem.kinit.server.OperationResultCallback;
 import org.kinecosystem.kinit.util.Scheduler;
 import org.kinecosystem.kinit.view.spend.ContactData;
@@ -54,18 +55,18 @@ public class Peer2PeerViewModel {
     Scheduler scheduler;
     private String address;
     private Peer2PeerActions actions;
-    private ObservableField<Boolean> hasValidAddress = new ObservableField<Boolean>(false) {
-        @Override
-        public void set(Boolean value) {
-            super.set(value);
-            sendEnabled.set(value && positiveAmount.get());
-        }
-    };
     private ObservableField<Boolean> positiveAmount = new ObservableField<Boolean>(false) {
         @Override
         public void set(Boolean value) {
             super.set(value);
             sendEnabled.set(value && hasValidAddress.get());
+        }
+    };
+    private ObservableField<Boolean> hasValidAddress = new ObservableField<Boolean>(false) {
+        @Override
+        public void set(Boolean value) {
+            super.set(value);
+            sendEnabled.set(value && positiveAmount.get());
         }
     };
     public TextWatcher textWatcher = new TextWatcher() {
@@ -187,43 +188,59 @@ public class Peer2PeerViewModel {
 
     public void onSend(View view) {
         analytics.logEvent(new ClickSendButtonOnSendKinPage((float) amount.get()));
-        if (isValidAmount()) {
-            sendingTransaction.set(true);
-            isClickable.set(false);
-            if (actions != null) {
-                actions.onStartTransaction();
-            }
-            servicesProvider.getOfferService()
-                    .p2pTransfer(address, amount.get(), new OperationResultCallback<String>() {
-                        @Override
-                        public void onResult(String transactionId) {
-                            isClickable.set(true);
-                            sendingTransaction.set(false);
-                            transactionComplete.set(true);
-                            if (actions != null) {
-                                actions.onTransactionComplete();
-                                scheduler.scheduleOnMain(() -> {
-                                    if (actions != null) {
-                                        actions.closeScreen();
-                                    }
-                                }, COMPLETE_TRANSACTION_SCREEN_TIMEOUT);
-                            }
-                        }
-
-                        @Override
-                        public void onError(int errorCode) {
-                            isClickable.set(true);
-                            if (actions != null) {
-                                if (errorCode == ERROR_TRANSACTION_FAILED) {
-                                    actions.showDialog(R.string.p2p_server_problem_title, R.string.general_problem_body,
-                                            R.string.dialog_back_to_list, true);
+        servicesProvider.getClientValidationService().validateClient(userRepository.getJws(), new OperationCompletionCallback() {
+            @Override
+            public void onSuccess() {
+                if (isValidAmount()) {
+                    sendingTransaction.set(true);
+                    isClickable.set(false);
+                    if (actions != null) {
+                        actions.onStartTransaction();
+                    }
+                    servicesProvider.getOfferService()
+                            .p2pTransfer(address, amount.get(), new OperationResultCallback<String>() {
+                                @Override
+                                public void onResult(String transactionId) {
+                                    isClickable.set(true);
                                     sendingTransaction.set(false);
-                                    transactionComplete.set(false);
+                                    transactionComplete.set(true);
+                                    if (actions != null) {
+                                        actions.onTransactionComplete();
+                                        scheduler.scheduleOnMain(() -> {
+                                            if (actions != null) {
+                                                actions.closeScreen();
+                                            }
+                                        }, COMPLETE_TRANSACTION_SCREEN_TIMEOUT);
+                                    }
                                 }
-                            }
-                        }
-                    });
-        }
+
+                                @Override
+                                public void onError(int errorCode) {
+                                    isClickable.set(true);
+                                    if (actions != null) {
+                                        if (errorCode == ERROR_TRANSACTION_FAILED) {
+                                            actions.showDialog(R.string.p2p_server_problem_title, R.string.general_problem_body,
+                                                    R.string.dialog_back_to_list, true);
+                                            sendingTransaction.set(false);
+                                            transactionComplete.set(false);
+                                        }
+                                    }
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                isClickable.set(true);
+                if (actions != null) {
+                    actions.showDialog(R.string.p2p_server_problem_title, R.string.general_problem_body,
+                            R.string.dialog_back_to_list, true);
+                    sendingTransaction.set(false);
+                    transactionComplete.set(false);
+                }
+            }
+        });
     }
 
     private void logEventPopUp(String type) {
