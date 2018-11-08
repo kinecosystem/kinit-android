@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
+import org.jetbrains.annotations.NotNull;
+import org.kinecosystem.ClientValidator;
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.databinding.SpendDetailLayoutBinding;
@@ -156,5 +158,11 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
                 }
             }
         });
+    }
+
+    @NotNull
+    @Override
+    public ClientValidator getValidateClient() {
+        return new ClientValidator(getActivity());
     }
 }

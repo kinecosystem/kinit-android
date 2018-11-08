@@ -6,7 +6,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.repository.*
+import org.kinecosystem.kinit.repository.CategoriesRepository
+import org.kinecosystem.kinit.repository.DataStoreProvider
+import org.kinecosystem.kinit.repository.OffersRepository
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.*
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.Scheduler
@@ -34,6 +37,7 @@ class NetworkServices {
     val walletService: Wallet
     val offerService: OfferService
     val backupService: BackupService
+    val clientValidationService: ClientValidationService
 
     private val applicationContext: Context
 
@@ -71,6 +75,7 @@ class NetworkServices {
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
                 userRepo, offerRepo, analytics, walletService, scheduler)
         backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))
+        clientValidationService = ClientValidationService(userRepo, retrofit.create<ClientValidationApi>(ClientValidationApi::class.java))
     }
 
     fun isNetworkConnected(): Boolean {

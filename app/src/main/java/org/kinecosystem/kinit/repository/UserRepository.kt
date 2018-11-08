@@ -29,6 +29,7 @@ private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-polic
 private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
 private const val FORCE_UPDATE = "FORCE_UPDATE"
 private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
+private const val JWS = "JWS"
 
 
 
@@ -44,6 +45,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isRegistered: Boolean
         set(registered) = userCache.putBoolean(IS_REGISTERED_KEY, registered)
         get() = userCache.getBoolean(IS_REGISTERED_KEY, false)
+
+    var jws: String
+        set(jws) = userCache.putString(JWS, jws)
+        get() = userCache.getString(JWS, "")
 
     var faqUrl: String
         set(url) = userCache.putString(FAQ_URL, url)
