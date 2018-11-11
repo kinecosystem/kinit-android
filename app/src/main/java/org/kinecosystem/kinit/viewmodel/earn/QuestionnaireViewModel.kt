@@ -1,7 +1,9 @@
 package org.kinecosystem.kinit.viewmodel.earn
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.graphics.Color
 import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
@@ -9,8 +11,8 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.TaskState
 import org.kinecosystem.kinit.model.earn.isQuiz
 import org.kinecosystem.kinit.model.earn.isTypeDualImage
-import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.view.earn.*
 import javax.inject.Inject
 
@@ -20,32 +22,41 @@ const val REWARD_PAGE = 2
 const val SUBMIT_ERROR_PAGE = 3
 const val TRANSACTION_ERROR_PAGE = 4
 
-open class QuestionnaireViewModel(restoreState: Boolean) :
+open class QuestionnaireViewModel(restoreState: Boolean, val navigator: Navigator) :
         QuestionnaireActions {
 
     @Inject
-    lateinit var taskRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var analytics: Analytics
 
     var questionnaireProgress: ObservableInt = ObservableInt()
     var nextFragment: ObservableField<Fragment> = ObservableField()
     var currentPageState: Int
+    val shouldFinishActivity = ObservableBoolean(false)
+    val categoryColor = ObservableField<Int>(Color.parseColor("#047cfc"))
 
     init {
         KinitApplication.coreComponent.inject(this)
         currentPageState =
                 when {
                     restoreState -> getPageFromState()
-                    !taskRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
+                    !categoriesRepository.isCurrentTaskComplete() -> NEXT_QUESTION_PAGE
                     else -> QUESTIONNAIRE_COMPLETE_PAGE
                 }
+        categoriesRepository.currentTaskRepo?.task?.category_id?.let {
+            val category = categoriesRepository.getCategory(it)
+            category?.uiData?.color?.let {
+                categoryColor.set(Color.parseColor(it))
+            }
+        }
+
         moveToNextPage(currentPageState)
     }
 
     override fun next() {
         moveToNextPage(
-                if (!taskRepository.isTaskComplete()) {
+                if (!categoriesRepository.isCurrentTaskComplete()) {
                     NEXT_QUESTION_PAGE
                 } else QUESTIONNAIRE_COMPLETE_PAGE
         )
@@ -64,26 +75,34 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
     }
 
     protected fun nextQuestionIndex(): Int {
-        return taskRepository.getNumOfAnsweredQuestions()
+        return categoriesRepository.getCurrentTaskAnsweredQuestionsCount()
     }
 
     protected fun questionIndex(): Int {
-        return taskRepository.getNumOfAnsweredQuestions() - 1
+        return categoriesRepository.getCurrentTaskAnsweredQuestionsCount() - 1
+    }
+
+    fun onClose() {
+        navigator.navigateToCategory(categoriesRepository.currentTaskInProgress?.category_id!!, true)
+        shouldFinishActivity.set(true)
+        categoriesRepository.currentTaskRepo?.resetTaskState()
+        onCloseEvent()
     }
 
     protected fun moveToNextPage(pageState: Int) {
         currentPageState = pageState
         questionnaireProgress.set(
-                ((taskRepository.getNumOfAnsweredQuestions().toDouble() / taskRepository.taskInProgress?.questions!!.size) * 100).toInt())
+                ((categoriesRepository.getCurrentTaskAnsweredQuestionsCount().toDouble() / categoriesRepository.currentTaskRepo?.taskInProgress?.questions!!.size) * 100).toInt())
         nextFragment.set(getFragment())
     }
 
     open fun getFragment(): Fragment {
+        val task = categoriesRepository.currentTaskRepo?.taskInProgress
         return when (currentPageState) {
             NEXT_QUESTION_PAGE -> {
                 when {
-                    taskRepository.taskInProgress?.isQuiz()!! -> QuizFragment.newInstance(nextQuestionIndex())
-                    taskRepository.taskInProgress?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!! -> QuestionDualImageFragment.newInstance(nextQuestionIndex())
+                    task?.isQuiz()!! -> QuizFragment.newInstance(nextQuestionIndex())
+                    task?.questions?.get(nextQuestionIndex())?.isTypeDualImage()!! -> QuestionDualImageFragment.newInstance(nextQuestionIndex())
                     else -> QuestionFragment.newInstance(nextQuestionIndex())
                 }
             }
@@ -95,14 +114,15 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
         }
     }
 
-    fun onBackPressed() {
-        val task = taskRepository.taskInProgress
+
+    private fun onCloseEvent() {
         val event: Events.Event
-        if (taskRepository.isTaskComplete()) {
+        val task = categoriesRepository.currentTaskInProgress
+        if (categoriesRepository.isCurrentTaskComplete()) {
             event = Events.Analytics.ClickCloseButtonOnRewardPage(task?.provider?.name,
                     task?.minToComplete,
                     task?.kinReward,
-                    task?.tagsString(),
+                    categoriesRepository.currentCategoryTitle,
                     task?.id,
                     task?.title,
                     task?.type)
@@ -116,7 +136,7 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
                     question?.id,
                     nextQuestionIndex() + 1,
                     question?.type,
-                    task?.tagsString(),
+                    categoriesRepository.currentCategoryTitle,
                     task?.id,
                     task?.title)
         }
@@ -126,14 +146,14 @@ open class QuestionnaireViewModel(restoreState: Boolean) :
 
     protected fun getPageFromState(): Int {
         return when {
-            taskRepository.taskState == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD -> REWARD_PAGE
-            taskRepository.taskState == TaskState.TRANSACTION_COMPLETED -> REWARD_PAGE
-            taskRepository.taskState == TaskState.TRANSACTION_ERROR -> TRANSACTION_ERROR_PAGE
-            taskRepository.taskState == TaskState.SUBMIT_ERROR_RETRY -> QUESTIONNAIRE_COMPLETE_PAGE
-            taskRepository.taskState == TaskState.SUBMIT_ERROR_NO_RETRY -> SUBMIT_ERROR_PAGE
-            taskRepository.taskState == TaskState.SUBMITTED -> SUBMIT_ERROR_PAGE
+            categoriesRepository.getCurrentTaskState() == TaskState.SUBMITTED_SUCCESS_WAIT_FOR_REWARD -> REWARD_PAGE
+            categoriesRepository.getCurrentTaskState() == TaskState.TRANSACTION_COMPLETED -> REWARD_PAGE
+            categoriesRepository.getCurrentTaskState() == TaskState.TRANSACTION_ERROR -> TRANSACTION_ERROR_PAGE
+            categoriesRepository.getCurrentTaskState() == TaskState.SUBMIT_ERROR_RETRY -> QUESTIONNAIRE_COMPLETE_PAGE
+            categoriesRepository.getCurrentTaskState() == TaskState.SUBMIT_ERROR_NO_RETRY -> SUBMIT_ERROR_PAGE
+            categoriesRepository.getCurrentTaskState() == TaskState.SUBMITTED -> SUBMIT_ERROR_PAGE
             else -> {
-                if (!taskRepository.isTaskComplete())
+                if (!categoriesRepository.isCurrentTaskComplete())
                     NEXT_QUESTION_PAGE
                 else QUESTIONNAIRE_COMPLETE_PAGE
             }

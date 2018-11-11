@@ -40,13 +40,15 @@ class BackupAlertManager(val context: Context) {
         dataStore = dataStoreProvider.dataStore(DATA_STORE_NAG_ALARM_SEEN)
     }
 
-    fun showNagAlertIfNeeded() {
+    fun shouldShowAlert(): Boolean {
         if (userRepository.isBackupNagAlertEnabled && !userRepository.isBackedup) {
-            val type = getAlertType()
-            if (type != BackupAlertType.None) {
-                show(type)
-            }
+            return getAlertType() != BackupAlertType.None
         }
+        return false
+    }
+
+    fun showAlert() {
+        show(getAlertType())
     }
 
     private fun getAlertType(): BackupAlertType {
@@ -87,20 +89,20 @@ class BackupAlertManager(val context: Context) {
                 showPositiveBackupNag(R.string.back_up_your_kin, R.string.backup_message_phone_lost, "Day 1")
             }
             BackupAlertType.BackupNagWeek -> {
-                showPositiveBackupNag(R.string.your_kin_is_really_rolling_in, R.string.backup_message_safe,"Day 7")
+                showPositiveBackupNag(R.string.your_kin_is_really_rolling_in, R.string.backup_message_safe, "Day 7")
             }
             BackupAlertType.BackupNag2Weeks -> {
                 showPositiveBackupNag(R.string.we_care_about_your_kin, R.string.backup_message_easy, "Day 14")
             }
             BackupAlertType.BackupNagMonth -> {
-                showPositiveBackupNag(R.string.knock_knock, R.string.backup_message_today,"Day 30")
+                showPositiveBackupNag(R.string.knock_knock, R.string.backup_message_today, "Day 30")
             }
         }
         dataStore.putBoolean(alertType.name, true)
         dataStore.putLong(LAST_SEEN_NAG_ALARM, System.currentTimeMillis())
     }
 
-    private fun showPositiveBackupNag(@StringRes title: Int, @StringRes message: Int, eventParam:String) {
+    private fun showPositiveBackupNag(@StringRes title: Int, @StringRes message: Int, eventParam: String) {
         AlertManager.showGeneralAlert(context, title, message, R.string.back_up, {
             navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
             analytics.logEvent(Events.Analytics.ClickBackupButtonOnBackupNotificationPopup(eventParam))

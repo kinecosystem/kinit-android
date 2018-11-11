@@ -7,21 +7,20 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.earn.Answer
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
-import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.AnswersListAdapter
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
 import javax.inject.Inject
 
 open class QuestionViewModel(private var questionIndex: Int,
-    private val questionnaireActions: QuestionnaireActions) {
+                             private val questionnaireActions: QuestionnaireActions) {
 
 
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var questionnaireRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -44,7 +43,7 @@ open class QuestionViewModel(private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        questionObj = questionnaireRepository.taskInProgress?.questions?.get(questionIndex)
+        questionObj = categoriesRepository.currentTaskInProgress?.questions?.get(questionIndex)
         question = questionObj?.text
         answers = questionObj?.answers
 
@@ -60,28 +59,28 @@ open class QuestionViewModel(private var questionIndex: Int,
 
     private fun answerEvent(task: Task?): Events.Event? {
         return Events.Analytics.ClickAnswerButtonOnQuestionPage(
-            if (chosenAnswers.size == 1) chosenAnswers[0] else chosenAnswers.toString(),
-            if (chosenAnswers.size == 1) chosenAnswersIndexes[0] else -1,
-            task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            questionObj?.answers?.count(),
-            task?.questions?.count(),
-            questionObj?.id,
-            questionIndex,
-            questionObj?.type,
-            task?.tagsString(),
-            task?.id,
-            task?.title)
+                if (chosenAnswers.size == 1) chosenAnswers[0] else chosenAnswers.toString(),
+                if (chosenAnswers.size == 1) chosenAnswersIndexes[0] else -1,
+                task?.provider?.name,
+                task?.minToComplete,
+                task?.kinReward,
+                questionObj?.answers?.count(),
+                task?.questions?.count(),
+                questionObj?.id,
+                questionIndex,
+                questionObj?.type,
+                categoriesRepository.currentCategoryTitle,
+                task?.id,
+                task?.title)
     }
 
     fun onNext() {
         val answerId = questionObj?.id ?: ""
         if (answerId.isNotBlank() and !questionAnswered and (chosenAnswersCount.get() > 0)) {
             questionAnswered = true
-            questionnaireRepository.setChosenAnswers(answerId, chosenAnswers)
+            categoriesRepository.currentTaskRepo?.setChosenAnswers(answerId, chosenAnswers)
             questionnaireActions.next()
-            analytics.logEvent(answerEvent( questionnaireRepository.taskInProgress))
+            analytics.logEvent(answerEvent(categoriesRepository.currentTaskInProgress))
         }
     }
 
@@ -94,15 +93,14 @@ open class QuestionViewModel(private var questionIndex: Int,
                 answerId.isBlank() or questionId.isBlank() -> return false
                 questionAnswered and !isMultipleAnswers -> return false
                 !questionAnswered and !isMultipleAnswers -> {
-                    val task = questionnaireRepository.taskInProgress
                     chosenAnswers.add(answerId)
                     chosenAnswersIndexes.add(questionObj?.answers?.indexOf(answer) ?: -1)
                     chosenAnswersCount.set(chosenAnswers.size)
-                    questionnaireRepository.setChosenAnswers(questionId, chosenAnswers)
+                    categoriesRepository.currentTaskRepo?.setChosenAnswers(questionId, chosenAnswers)
                     scheduler.scheduleOnMain({
                         questionnaireActions.next()
                     }, 200)
-                    analytics.logEvent(answerEvent(task))
+                    analytics.logEvent(answerEvent(categoriesRepository.currentTaskInProgress))
                     questionAnswered = true
                     return true
                 }
@@ -128,17 +126,17 @@ open class QuestionViewModel(private var questionIndex: Int,
     }
 
     fun onResume() {
-        val task = questionnaireRepository.taskInProgress
+        val task = categoriesRepository.currentTaskInProgress
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
-            task?.minToComplete,
-            task?.kinReward,
-            task?.questions?.count(),
-            questionObj?.id,
-            questionIndex,
-            questionObj?.type,
-            task?.tagsString(),
-            task?.id,
-            task?.title)
+                task?.minToComplete,
+                task?.kinReward,
+                task?.questions?.count(),
+                questionObj?.id,
+                questionIndex,
+                questionObj?.type,
+                categoriesRepository.currentCategoryTitle,
+                task?.id,
+                task?.title)
         analytics.logEvent(event)
     }
 }

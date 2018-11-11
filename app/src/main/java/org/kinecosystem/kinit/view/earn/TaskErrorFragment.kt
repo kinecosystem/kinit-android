@@ -13,7 +13,8 @@ import org.kinecosystem.kinit.analytics.Events.Analytics.ClickCloseButtonOnError
 import org.kinecosystem.kinit.analytics.Events.Analytics.ViewErrorPage
 import org.kinecosystem.kinit.analytics.Events.Event
 import org.kinecosystem.kinit.model.earn.hasPostActions
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.view.BaseFragment
@@ -25,7 +26,7 @@ class TaskErrorFragment : BaseFragment() {
     @Inject
     lateinit var analytics: Analytics
     @Inject
-    lateinit var taskRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     private var seenDialog = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,11 +45,15 @@ class TaskErrorFragment : BaseFragment() {
         view.findViewById<View>(R.id.close).setOnClickListener { view1 ->
             reportClickOnCloseEvent(errorType)
             val activity = activity as BaseActivity?
-            taskRepository?.resetTaskState()
+            categoriesRepository.currentTaskRepo?.resetTaskState()
             if (shouldShowActionDialog(errorType)) {
                 showActionDialog()
             } else {
-                activity?.finish()
+                context?.let {
+                    val navigator = Navigator(it)
+                    navigator.navigateToCategory(categoriesRepository.currentTaskInProgress?.category_id!!, true)
+                    activity?.finish()
+                }
             }
         }
         return view
@@ -67,13 +72,12 @@ class TaskErrorFragment : BaseFragment() {
     }
 
     private fun reportViewEvent(errorType: Int) {
-        val event: Event
-        event = if (errorType == ERROR_TRANSACTION) {
-            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_REWARD)
+        val event: Event = if (errorType == ERROR_TRANSACTION) {
+            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_REWARD, "error transaction")
         } else { // ERROR_SUBMIT
-            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_TASK_SUBMISSION)
+            ViewErrorPage(Analytics.VIEW_ERROR_TYPE_TASK_SUBMISSION, "error submit")
         }
-        analytics?.logEvent(event)
+        analytics.logEvent(event)
     }
 
     private fun reportClickOnCloseEvent(errorType: Int) {
@@ -87,12 +91,12 @@ class TaskErrorFragment : BaseFragment() {
     }
 
     private fun shouldShowActionDialog(errorType: Int): Boolean {
-        val hasActions = taskRepository.taskInProgress?.hasPostActions()
+        val hasActions = categoriesRepository.currentTaskInProgress?.hasPostActions()
         return errorType == ERROR_TRANSACTION && !seenDialog && hasActions == true
     }
 
     private fun showActionDialog() {
-        taskRepository.taskInProgress?.let {
+        categoriesRepository.currentTaskInProgress?.let {
             val taskId = it.id
             with(it.postTaskActions.orEmpty().first()) {
                 if (context != null) {

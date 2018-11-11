@@ -17,9 +17,7 @@ class MockScheduler : Scheduler {
     }
 
     override fun post(runnable: Runnable?) {
-        if (runnable != null) {
-            runnable.run()
-        }
+        runnable?.run()
     }
 
     override fun scheduleOnMain(theRunnable: Runnable?, timeMilliSec: Long) {

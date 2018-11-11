@@ -1,12 +1,12 @@
 package org.kinecosystem.kinit.viewmodel.earn
 
 import android.support.v4.app.Fragment
-import org.kinecosystem.kinit.model.TaskState
+import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.earn.*
 
 const val SHOW_ANSWER_PAGE = 100
 
-class QuizViewModel(restoreState: Boolean) : QuestionnaireViewModel(restoreState),
+class QuizViewModel(restoreState: Boolean, navigator: Navigator) : QuestionnaireViewModel(restoreState, navigator),
         QuestionnaireActions {
 
 
@@ -16,7 +16,7 @@ class QuizViewModel(restoreState: Boolean) : QuestionnaireViewModel(restoreState
         currentPageState =
                 when {
                     restoreState -> getPageFromState()
-                    !taskRepository.isTaskComplete() -> NEXT_QUESTION_PAGE
+                    !categoriesRepository.isCurrentTaskComplete() -> NEXT_QUESTION_PAGE
                     else -> QUESTIONNAIRE_COMPLETE_PAGE
                 }
         moveToNextPage(currentPageState)
@@ -26,7 +26,7 @@ class QuizViewModel(restoreState: Boolean) : QuestionnaireViewModel(restoreState
         moveToNextPage(
                 if (showAnswer) {
                     SHOW_ANSWER_PAGE
-                } else if (!taskRepository.isTaskComplete()) {
+                } else if (!categoriesRepository.isCurrentTaskComplete()) {
                     NEXT_QUESTION_PAGE
                 } else QUESTIONNAIRE_COMPLETE_PAGE
         )

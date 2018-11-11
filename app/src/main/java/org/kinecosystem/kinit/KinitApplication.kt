@@ -35,7 +35,6 @@ class KinitApplication : Application(), DataStoreProvider {
                 ContextModule(applicationContext))
                 .dataStoreModule(DataStoreModule(this))
                 .userRepositoryModule(UserRepositoryModule())
-                .tasksRepositoryModule(TasksRepositoryModule())
                 .offersRepositoryModule(OffersRepositoryModule())
                 .schedulerModule(SchedulerModule())
                 .analyticsModule(AnalyticsModule())
@@ -49,6 +48,8 @@ class KinitApplication : Application(), DataStoreProvider {
         networkServices.onBoardingService.appLaunch()
         networkServices.backupService.retrieveHints()
         networkServices.offerService.retrieveOffers()
+        networkServices.categoriesService.retrieveCategories()
+        networkServices.taskService.retrieveAllTasks()
         networkServices.walletService.retrieveTransactions()
         networkServices.walletService.retrieveCoupons()
         userRepository.isFreshInstall = false

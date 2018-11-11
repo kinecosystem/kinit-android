@@ -1,6 +1,7 @@
 package org.kinecosystem.kinit.util;
 
 import android.databinding.BindingAdapter;
+import android.graphics.Color;
 import android.support.constraint.Guideline;
 import android.text.TextWatcher;
 import android.view.View;
@@ -60,6 +61,13 @@ public class BindingUtils {
     public static void setVisibility(View view, Boolean visible) {
         if (view != null) {
             view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    @BindingAdapter("android:background")
+    public static void setBgColor(View view, String color) {
+        if (view != null && color != null) {
+            view.setBackgroundColor(Color.parseColor(color));
         }
     }
 

@@ -7,8 +7,7 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.earn.Answer
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
-import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
@@ -22,7 +21,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var taskRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -44,12 +43,12 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
             clickable.set(false)
             answer?.let {
                 chosenAnswers.add(it.id!!)
-                taskRepository.setChosenAnswers(questionObj?.id!!, chosenAnswers)
+                categoriesRepository.currentTaskRepo?.setChosenAnswers(questionObj?.id!!, chosenAnswers)
                 if (!isCorrect(it)) {
                     scheduler.scheduleOnMain({ showCorrect.set(true) }, delay_show_correct_answer)
 
                 }
-                analytics.logEvent(answerEvent(taskRepository.taskInProgress))
+                analytics.logEvent(answerEvent(categoriesRepository.currentTaskInProgress))
             }
         }
     }
@@ -57,7 +56,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        questionObj = taskRepository.taskInProgress?.questions?.get(questionIndex)
+        questionObj = categoriesRepository.currentTaskInProgress?.questions?.get(questionIndex)
         question = questionObj?.text
         answers = questionObj?.answers
         reward = questionObj?.quiz_data?.reward ?: 0
@@ -75,7 +74,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
                 questionObj?.id,
                 questionIndex,
                 questionObj?.type,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title)
     }
@@ -88,7 +87,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
     }
 
     fun onResume() {
-        val task = taskRepository.taskInProgress
+        val task = categoriesRepository.currentTaskInProgress
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
@@ -96,7 +95,7 @@ open class QuizQuestionViewModel(private var questionIndex: Int,
                 questionObj?.id,
                 questionIndex,
                 questionObj?.type,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title)
         analytics.logEvent(event)

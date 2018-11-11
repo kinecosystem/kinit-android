@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.earn.CategoriesViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/balance"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/balance_height"
+            android:background="@color/status_bar_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/balance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical|start"
+            android:paddingLeft="30dp"
+            android:text="@{model.balance}"
+            android:textColor="@color/balance_text_color"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/balance"
+            app:layout_constraintTop_toTopOf="@id/balance"
+            tools:text="200" />
+
+        <TextView
+            android:id="@+id/kin_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif"
+            android:gravity="center|start"
+            android:paddingLeft="7dp"
+            android:text="KIN"
+            android:textColor="@color/balance_text_color"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/balance_text"
+            app:layout_constraintStart_toEndOf="@+id/balance_text"
+            app:layout_constraintTop_toTopOf="@+id/balance_text"
+            tools:text="KIN" />
+
+        <ImageView
+            android:id="@+id/kin_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="@+id/kin_currency"
+            app:layout_constraintStart_toEndOf="@+id/kin_currency"
+            app:layout_constraintTop_toTopOf="@+id/kin_currency"
+            app:srcCompat="@drawable/k_letter" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="28dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@{model.title}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/grey_title"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:visibility="@{model.showData}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance"
+            tools:text="some title" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="28dp"
+            android:fontFamily="sans-serif"
+            android:text="@{model.subtitle}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:visibility="@{model.showData}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="some description" />
+
+        <View
+            android:id="@+id/delimiter"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="17dp"
+            android:visibility="@{model.showData}"
+            android:background="@color/grey_dark_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitle" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/categories"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:visibility="@{model.showData}"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/delimiter" />
+
+        <include
+            android:id="@+id/general_error"
+            layout="@layout/error_general_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{model.hasErrors}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
+
+        <include
+            android:id="@+id/no_internet_error"
+            layout="@layout/error_no_internet_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{!model.hasNetwork}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

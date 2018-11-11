@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.support.v4.view.PagerAdapter
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -14,19 +15,18 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.databinding.BalanceTabBinding
-import org.kinecosystem.kinit.databinding.EarnTabBinding
+import org.kinecosystem.kinit.databinding.EarnCategoriesTabBinding
 import org.kinecosystem.kinit.databinding.InfoTabBinding
 import org.kinecosystem.kinit.databinding.SpendTabBinding
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.repository.TasksRepository
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
+import org.kinecosystem.kinit.view.adapter.CategoryListAdapter
 import org.kinecosystem.kinit.view.adapter.OfferListAdapter
 import org.kinecosystem.kinit.view.customView.AlertManager
-import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
-import org.kinecosystem.kinit.viewmodel.earn.EarnViewModel
+import org.kinecosystem.kinit.viewmodel.earn.CategoriesViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
 import javax.inject.Inject
@@ -48,8 +48,6 @@ class TabsAdapter(val context: Context) :
 
     @Inject
     lateinit var analytics: Analytics
-    @Inject
-    lateinit var tasksRepository: TasksRepository
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
@@ -94,38 +92,39 @@ class TabsAdapter(val context: Context) :
     }
 
     private fun getEarnTab(parent: ViewGroup, position: Int): View {
-        val binding = DataBindingUtil.inflate<EarnTabBinding>(LayoutInflater.from(parent.context),
-                R.layout.earn_tab, parent, false)
-        val model = EarnViewModel(BackupAlertManager(context), Navigator(context))
+        val binding = DataBindingUtil.inflate<EarnCategoriesTabBinding>(LayoutInflater.from(context),
+                R.layout.earn_categories_tab, parent, false)
+        val model = CategoriesViewModel(Navigator(context))
+        binding.categories.layoutManager = GridLayoutManager(context, 2)
+        binding.categories.adapter = CategoryListAdapter(context, model)
         binding.model = model
         models[position] = model
-
         return binding.root
     }
 
     private fun getSpendTab(parent: ViewGroup, position: Int): View {
-        val binding = DataBindingUtil.inflate<SpendTabBinding>(LayoutInflater.from(parent.context),
+        val binding = DataBindingUtil.inflate<SpendTabBinding>(LayoutInflater.from(context),
                 R.layout.spend_tab, parent, false)
-        val spendingModel = SpendViewModel(Navigator(parent.context))
+        val spendingModel = SpendViewModel(Navigator(context))
         binding.model = spendingModel
-        binding.offersList.layoutManager = LinearLayoutManager(parent.context)
-        binding.offersList.adapter = OfferListAdapter(parent.context, spendingModel)
+        binding.offersList.layoutManager = LinearLayoutManager(context)
+        binding.offersList.adapter = OfferListAdapter(context, spendingModel)
         models[position] = binding.model
         return binding.root
     }
 
     private fun getBalanceTab(parent: ViewGroup, position: Int): View {
-        val binding = DataBindingUtil.inflate<BalanceTabBinding>(LayoutInflater.from(parent.context),
+        val binding = DataBindingUtil.inflate<BalanceTabBinding>(LayoutInflater.from(context),
                 R.layout.balance_tab, parent, false)
         binding.model = BalanceViewModel()
-        binding.tabsContent.adapter = BalancePagerViewsAdapter(parent.context, binding)
+        binding.tabsContent.adapter = BalancePagerViewsAdapter(context, binding)
         binding.balanceNavTabs.setupWithViewPager(binding.tabsContent)
         models[position] = binding.model
         return binding.root
     }
 
     private fun getInfoTab(parent: ViewGroup, position: Int): View {
-        val binding = DataBindingUtil.inflate<InfoTabBinding>(LayoutInflater.from(parent.context),
+        val binding = DataBindingUtil.inflate<InfoTabBinding>(LayoutInflater.from(context),
                 R.layout.info_tab, parent, false)
         val navigator = Navigator(context)
         var model = InfoViewModel(navigator)

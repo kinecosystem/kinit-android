@@ -47,10 +47,9 @@ class QuizFragment : BaseFragment() {
     }
 
     companion object {
-
         const val ARG_QUIZ_INDEX = "QuizFragment_ARG_QUIZ_INDEX"
         const val INVALID_QUIZ_INDEX = -1
-        val TAG:String = QuizFragment::class.java.simpleName
+        val TAG: String = QuizFragment::class.java.simpleName
 
         fun newInstance(questionIndex: Int): QuizFragment {
             val fragment = QuizFragment()

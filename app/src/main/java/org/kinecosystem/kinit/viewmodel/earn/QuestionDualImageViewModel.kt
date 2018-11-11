@@ -7,8 +7,7 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.earn.Answer
 import org.kinecosystem.kinit.model.earn.Question
 import org.kinecosystem.kinit.model.earn.Task
-import org.kinecosystem.kinit.model.earn.tagsString
-import org.kinecosystem.kinit.repository.TasksRepository
+import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView.OnSelectionListener
 import org.kinecosystem.kinit.view.earn.QuestionnaireActions
@@ -19,7 +18,7 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
     @Inject
     lateinit var scheduler: Scheduler
     @Inject
-    lateinit var taskRepository: TasksRepository
+    lateinit var categoriesRepository: CategoriesRepository
     @Inject
     lateinit var analytics: Analytics
 
@@ -45,7 +44,7 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
 
     init {
         KinitApplication.coreComponent.inject(this)
-        question = taskRepository.taskInProgress?.questions?.get(questionIndex)
+        question = categoriesRepository.currentTaskInProgress?.questions?.get(questionIndex)
         answers = question?.answers
         questionText = question?.text
         question?.answers?.forEach { answer ->
@@ -55,12 +54,12 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
 
     fun onAnswered(answer: Answer) {
         val answeredId = answer.id ?: ""
-        question?.id?.let { taskRepository.setChosenAnswers(it, listOf(answeredId)) }
-        analytics.logEvent(answerEvent(taskRepository.taskInProgress, answeredId))
+        question?.id?.let { categoriesRepository.currentTaskRepo?.setChosenAnswers(it, listOf(answeredId)) }
+        analytics.logEvent(answerEvent(categoriesRepository.currentTaskInProgress, answeredId))
     }
 
     fun onResume() {
-        val task = taskRepository.taskInProgress
+        val task = categoriesRepository.currentTaskInProgress
         val event = Events.Analytics.ViewQuestionPage(task?.provider?.name,
                 task?.minToComplete,
                 task?.kinReward,
@@ -68,7 +67,7 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
                 question?.id,
                 questionIndex,
                 question?.type,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title)
         analytics.logEvent(event)
@@ -86,7 +85,7 @@ class QuestionDualImageViewModel(private var questionIndex: Int,
                 question?.id,
                 questionIndex,
                 question?.type,
-                task?.tagsString(),
+                categoriesRepository.currentCategoryTitle,
                 task?.id,
                 task?.title)
     }

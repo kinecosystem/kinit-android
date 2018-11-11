@@ -5,31 +5,25 @@ import dagger.Module
 import dagger.Provides
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.repository.DataStoreProvider
-import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.TasksRepository
-import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.server.NetworkServices
-import org.kinecosystem.kinit.server.OfferService
-import org.kinecosystem.kinit.server.OnboardingService
-import org.kinecosystem.kinit.server.TaskService
+import org.kinecosystem.kinit.repository.*
+import org.kinecosystem.kinit.server.*
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Singleton
 
 @DebugOpenClass
 @Module(
-        includes = [(ContextModule::class), (UserRepositoryModule::class), (TasksRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (DataStoreModule::class)])
+        includes = [(ContextModule::class), (UserRepositoryModule::class), (CategoriesRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (DataStoreModule::class)])
 class ServicesModule {
 
     lateinit var serivce: NetworkServices
     @Provides
     @Singleton
     fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider,
-                         userRepository: UserRepository, tasksRepo: TasksRepository,
-                         offersRepository: OffersRepository, analytics: Analytics,
+                         userRepository: UserRepository,
+                         offersRepository: OffersRepository, categoryRepository:CategoriesRepository, analytics: Analytics,
                          scheduler: Scheduler): NetworkServices {
         serivce = NetworkServices(context, dataStoreProvider,
-                userRepository, tasksRepo, offersRepository, analytics, scheduler)
+                userRepository, offersRepository, categoryRepository , analytics, scheduler)
         return serivce
     }
 
@@ -47,8 +41,14 @@ class ServicesModule {
 
     @Provides
     @Singleton
-    fun taskSerivce(): TaskService {
+    fun taskService(): TaskService {
         return serivce.taskService
+    }
+
+    @Provides
+    @Singleton
+    fun categoriesService(): CategoriesService {
+        return serivce.categoriesService
     }
 
     @Provides

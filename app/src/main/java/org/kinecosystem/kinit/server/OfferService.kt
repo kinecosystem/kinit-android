@@ -19,6 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.SocketTimeoutException
+import java.util.*
 
 const val ERROR_TRANSACTION_FAILED = 100
 const val ERROR_REDEEM_COUPON_FAILED = 101
@@ -40,7 +41,6 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
         offersApi.offers(userRepo.userId()).enqueue(object : Callback<OffersApi.OffersResponse> {
             override fun onResponse(call: Call<OffersApi.OffersResponse>?,
                 response: Response<OffersApi.OffersResponse>?) {
-
                 if (response != null && response.isSuccessful) {
                     Log.d("OffersService", "onResponse: ${response.body()}")
                     repository.updateOffers(response.body()?.offerList)
