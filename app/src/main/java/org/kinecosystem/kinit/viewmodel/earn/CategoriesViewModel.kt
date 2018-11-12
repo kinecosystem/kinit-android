@@ -13,6 +13,7 @@ import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.server.CategoriesService
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.OperationCompletionCallback
+import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
@@ -24,6 +25,8 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
     lateinit var walletService: Wallet
     @Inject
     lateinit var categoriesService: CategoriesService
+    @Inject
+    lateinit var taskService: TaskService
     @Inject
     lateinit var networkServices: NetworkServices
     @Inject
@@ -77,6 +80,9 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
         if (networkServices.isNetworkConnected()) {
             categoriesService.retrieveCategories(object : OperationCompletionCallback {
                 override fun onSuccess() {
+                    if (!categoriesRepository.hasAnyTask()) {
+                        taskService.retrieveAllTasks()
+                    }
                     hasErrors.set(false)
                     showData.set(true)
                 }
