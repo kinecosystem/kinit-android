@@ -71,15 +71,16 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
         task = categoriesRepository.getTask(category.id)
         Log.d("####", "#### ${task?.startDateInSeconds} ${scheduler.currentTimeMillis()}")
         task?.let {
-            shouldShowNoTask.set(false)
-            shouldShowTaskNotAvailableYet.set(false)
             when {
                 it.isAvailableNow(scheduler.currentTimeMillis()) -> {
                     shouldShowTask.set(true)
+                    shouldShowNoTask.set(false)
+                    shouldShowTaskNotAvailableYet.set(false)
                     bindAvailableTaskData()
                 }
                 it.isAvailableTomorrow(scheduler.currentTimeMillis()) -> {
                     shouldShowTask.set(false)
+                    shouldShowNoTask.set(false)
                     shouldShowTaskNotAvailableYet.set(true)
                     isAvailableTomorrow.set(true)
                     val diff = it.startDateInMillis()?.minus(scheduler.currentTimeMillis())
@@ -88,6 +89,7 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
                     }
                 }
                 else -> {
+                    shouldShowNoTask.set(false)
                     shouldShowTask.set(false)
                     shouldShowTaskNotAvailableYet.set(true)
                     nextAvailableDate.set(it.nextAvailableDate())
