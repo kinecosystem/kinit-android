@@ -32,8 +32,8 @@ class CategoriesRepository {
     var headerSubtitle = ObservableField<String>()
     private var categoriesCache: DataStore
     private var generalCache: DataStore
-    var currentCategoryTitle:String = ""
-    private set
+    var currentCategoryTitle: String = ""
+        private set
 
     private var tasks: MutableMap<String, TasksRepo> = mutableMapOf()
     var currentTaskInProgress: Task? = null
@@ -63,7 +63,7 @@ class CategoriesRepository {
         categoriesCache.putString(CATEGORIES_KEY, Gson().toJson(newCategories))
     }
 
-    fun updateTestData(categoriesData:String, tasksData:String) {
+    fun updateTestData(categoriesData: String, tasksData: String) {
         val categoriesResponse = Gson().fromJson(categoriesData, CategoriesApi.CategoriesResponse::class.java)
         updateCategories(categoriesResponse.categories)
         updateHeader(categoriesResponse.headerMessage)
@@ -97,6 +97,15 @@ class CategoriesRepository {
                 // val repos = tasks[catId]
             }
         }
+    }
+
+    fun hasAnyTask(): Boolean {
+        for ((_, taskRepo) in tasks) {
+            if (taskRepo.task != null) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun getTaskRepo(): TasksRepo? {
