@@ -38,6 +38,7 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
     val hasErrors = ObservableBoolean(false)
     val hasNetwork = ObservableBoolean(true)
     val showData = ObservableBoolean(true)
+    val isLoading = ObservableBoolean(false)
 
 
     init {
@@ -60,6 +61,9 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
     }
 
     override fun onScreenVisibleToUser() {
+        if(this.categoriesRepository.categories.get().isEmpty()){
+            isLoading.set(true)
+        }
         if (networkServices.isNetworkConnected()) {
             hasNetwork.set(true)
             loadData()
@@ -76,6 +80,10 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
         analytics.logEvent(Events.Analytics.ClickCategoryButtonOnTaskCategoriesPage(category.title))
     }
 
+    fun onDataLoaded() {
+        isLoading.set(false)
+    }
+    
     private fun loadData() {
         if (networkServices.isNetworkConnected()) {
             categoriesService.retrieveCategories(object : OperationCompletionCallback {
@@ -95,6 +103,8 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
             })
         }
     }
+
+
 
 }
 

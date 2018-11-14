@@ -19,7 +19,7 @@ class OfferListAdapter(private val context: Context, private val model: SpendVie
 
 
     private var offers: List<Offer> = model.offers()
-    val propertyChangeCallBack = object : Observable.OnPropertyChangedCallback() {
+    private val propertyChangeCallBack = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
             refresh()
         }
@@ -27,6 +27,7 @@ class OfferListAdapter(private val context: Context, private val model: SpendVie
 
     fun refresh() {
         offers = model.offers()
+        model.onDataLoaded()
         notifyDataSetChanged()
     }
 

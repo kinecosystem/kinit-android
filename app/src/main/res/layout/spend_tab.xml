@@ -64,6 +64,17 @@
             app:layout_constraintTop_toTopOf="@+id/spend_kin_currency"
             app:srcCompat="@drawable/k_letter"/>
 
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="300dp"
+            android:theme="@style/AppTheme.Blue"
+            android:visibility="@{model.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/balance" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/offers_list"
             android:layout_width="0dp"
