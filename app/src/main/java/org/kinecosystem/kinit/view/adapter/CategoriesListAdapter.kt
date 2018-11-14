@@ -83,10 +83,7 @@ class CategoryListAdapter(private val context: Context, private val model: Categ
 
         fun bind(category: Category) {
             category.uiData?.let {
-                if (it.imageUrl != imageView.tag) {
                     ImageUtils.loadImageIntoView(context, it.imageUrl, imageView)
-                    imageView.tag = it.imageUrl
-                }
             }
             if (!category.isEnabled()) {
                 val matrix = ColorMatrix()

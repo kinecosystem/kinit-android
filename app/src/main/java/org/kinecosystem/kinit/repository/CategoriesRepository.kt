@@ -4,7 +4,6 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.model.earn.Category
 import org.kinecosystem.kinit.model.earn.HeaderMessage
@@ -14,11 +13,7 @@ import org.kinecosystem.kinit.server.api.TasksApi
 import java.util.*
 import javax.inject.Inject
 
-private const val CATEGORIES_STORAGE = "kin.app.categories"
 private const val GENERAL_STORAGE = "kin.app.general"
-
-private const val CATEGORIES_KEY = "categories"
-private const val HEADER_MESSAGE_KEY = "headerMessage"
 private const val SHOW_CAPTCHA = "kin.app.SHOW_CAPTCHA"
 
 
@@ -30,7 +25,6 @@ class CategoriesRepository {
     private var headerMessage: HeaderMessage? = null
     var headerTitle = ObservableField<String>()
     var headerSubtitle = ObservableField<String>()
-    private var categoriesCache: DataStore
     private var generalCache: DataStore
     var currentCategoryTitle: String = ""
         private set
@@ -53,14 +47,11 @@ class CategoriesRepository {
 
     init {
         KinitApplication.coreComponent.inject(this)
-        categoriesCache = dataStoreProvider.dataStore(CATEGORIES_STORAGE)
         generalCache = dataStoreProvider.dataStore(GENERAL_STORAGE)
-        updateFromCache()
     }
 
     fun updateCategories(newCategories: List<Category>?) {
         this.categories.set(newCategories)
-        categoriesCache.putString(CATEGORIES_KEY, Gson().toJson(newCategories))
     }
 
     fun updateTestData(categoriesData: String, tasksData: String) {
@@ -78,12 +69,6 @@ class CategoriesRepository {
             headerTitle.set(it.title)
             headerSubtitle.set(it.subtitle)
         }
-        categoriesCache.putString(HEADER_MESSAGE_KEY, Gson().toJson(headerMsg))
-    }
-
-    private fun updateFromCache() {
-        updateCategories(Gson().fromJson(categoriesCache.getString(CATEGORIES_KEY, ""), object : TypeToken<List<Category>>() {}.type))
-        updateHeader(Gson().fromJson(categoriesCache.getString(HEADER_MESSAGE_KEY, ""), HeaderMessage::class.java))
     }
 
     fun updateTasks(updatedTasks: Map<String, List<Task>>) {
