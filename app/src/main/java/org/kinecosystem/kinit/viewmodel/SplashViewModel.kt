@@ -39,13 +39,27 @@ class SplashViewModel {
 
     fun onResume() {
         analytics.logEvent(Events.Analytics.ViewSplashscreenPage())
+        scheduleWait()
+    }
+
+    private fun scheduleWait(){
         scheduler.scheduleOnMain({
-            if (networkServices.onBoardingService.isInBlackList) {
-                listener?.showBlackListDialog()
+            onTimeout()
+        }, SPLASH_DURATION)
+    }
+
+    private fun onTimeout() {
+        if (networkServices.onBoardingService.isInBlackList) {
+            listener?.showBlackListDialog()
+        } else {
+            if (!userRepository.isRegistered) {
+                //try to re register again
+                networkServices.onBoardingService.appLaunch()
+                scheduleWait()
             } else {
                 listener?.moveToNextScreen(getNextScreen())
             }
-        }, SPLASH_DURATION)
+        }
     }
 
     private fun getNextScreen(): Navigator.Destination {

@@ -8,7 +8,7 @@ import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.daggerCore.TestUtils
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ERROR_APP_SERVER_FAILED_RESPONSE
-import org.kinecosystem.kinit.server.OnboardingService
+import org.kinecosystem.kinit.server.OnBoardingService
 import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletActivityMessages
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
@@ -26,7 +26,7 @@ class RestoreViewModelTest {
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
-    lateinit var onboardingService: OnboardingService
+    lateinit var onboardingService: OnBoardingService
     @Inject
     lateinit var walletService: Wallet
 

@@ -6,14 +6,14 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.server.OnboardingService
+import org.kinecosystem.kinit.server.OnBoardingService
 import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.server.api.BackupApi
 import javax.inject.Inject
 
 class RestoreWalletViewModel {
     @Inject
-    lateinit var onboardingService: OnboardingService
+    lateinit var onboardingService: OnBoardingService
     @Inject
     lateinit var walletService: Wallet
     @Inject
