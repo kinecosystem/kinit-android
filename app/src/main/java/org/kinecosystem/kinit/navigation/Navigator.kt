@@ -8,6 +8,7 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.model.earn.isTaskWebView
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.CategoriesRepository
+import org.kinecosystem.kinit.view.RegisterErrorActivity
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
@@ -26,7 +27,7 @@ import javax.inject.Inject
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ
+        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER
     }
 
     @Inject
@@ -63,6 +64,7 @@ class Navigator(private val context: Context) {
     fun navigateTo(dest: Destination, withSlideAnim: Boolean, reverseAnim: Boolean) {
         when (dest) {
             Destination.PEER2PEER -> navigateToActivity(Peer2PeerActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.ERROR_REGISTER -> navigateToActivity(RegisterErrorActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.COMPLETE_WEB_TASK -> navigateToActivity(WebTaskCompleteActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context), withSlideAnim, reverseAnim)
