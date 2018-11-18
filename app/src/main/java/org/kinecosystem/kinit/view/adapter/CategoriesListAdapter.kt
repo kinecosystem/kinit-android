@@ -45,6 +45,7 @@ class CategoryListAdapter(private val context: Context, private val model: Categ
         } else {
             listOf()
         }
+        model.onDataLoaded()
         notifyDataSetChanged()
     }
 

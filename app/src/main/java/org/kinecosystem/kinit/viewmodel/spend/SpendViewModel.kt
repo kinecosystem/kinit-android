@@ -25,9 +25,10 @@ class SpendViewModel(private val navigator: Navigator) :
 
     var balance: ObservableField<String>
 
-    var hasErrors = ObservableBoolean(false)
-    var hasNetwork = ObservableBoolean(true)
+    val hasErrors = ObservableBoolean(false)
+    val hasNetwork = ObservableBoolean(true)
     val showData = ObservableBoolean(true)
+    val isLoading = ObservableBoolean(false)
 
 
     init {
@@ -39,6 +40,10 @@ class SpendViewModel(private val navigator: Navigator) :
 
     fun offers(): List<Offer> {
         return offersRepository.offers.get()
+    }
+
+    fun onDataLoaded(){
+        isLoading.set(false)
     }
 
     private fun bindData() {
@@ -56,11 +61,13 @@ class SpendViewModel(private val navigator: Navigator) :
         if (hasNetwork.get()) {
             networkServices.offerService.retrieveOffers(object : OperationCompletionCallback {
                 override fun onError(errorCode: Int) {
+                    isLoading.set(false)
                     showData.set(false)
                     hasErrors.set(true)
                 }
 
                 override fun onSuccess() {
+                    isLoading.set(false)
                     hasErrors.set(false)
                     showData.set(true)
                     bindData()
@@ -70,6 +77,9 @@ class SpendViewModel(private val navigator: Navigator) :
     }
 
     override fun onScreenVisibleToUser() {
+        if(offersRepository.isEmpty()){
+            isLoading.set(true)
+        }
         bindData()
         checkForUpdates()
         val event: Events.Event =

@@ -19,7 +19,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.SocketTimeoutException
-import java.util.*
 
 const val ERROR_TRANSACTION_FAILED = 100
 const val ERROR_REDEEM_COUPON_FAILED = 101
@@ -28,7 +27,7 @@ private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
 private const val P2P_ORDER_ID = "1-kit-p2p"
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userRepo: UserRepository,
-    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
+                   val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
 
     val applicationContext: Context = context.applicationContext
 
@@ -40,7 +39,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
 
         offersApi.offers(userRepo.userId()).enqueue(object : Callback<OffersApi.OffersResponse> {
             override fun onResponse(call: Call<OffersApi.OffersResponse>?,
-                response: Response<OffersApi.OffersResponse>?) {
+                                    response: Response<OffersApi.OffersResponse>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d("OffersService", "onResponse: ${response.body()}")
                     repository.updateOffers(response.body()?.offerList)
@@ -86,14 +85,14 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
             override fun run() {
 
                 analytics.logEvent(
-                    Events.Business.SpendingOfferRequested(offer.provider?.name,
-                        offer.price, offer.domain, offer.id,
-                        offer.title, offer.type))
+                        Events.Business.SpendingOfferRequested(offer.provider?.name,
+                                offer.price, offer.domain, offer.id,
+                                offer.title, offer.type))
 
                 val response: Response<OffersApi.BookOfferResponse>
                 try {
                     response = offersApi.bookOffer(userRepo.userId(),
-                        OffersApi.OfferInfo(offer.id!!)).execute()
+                            OffersApi.OfferInfo(offer.id!!)).execute()
                 } catch (e: SocketTimeoutException) {
                     callbackWithError(ERROR_NO_INTERNET)
                     return
@@ -118,13 +117,13 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
 
                 try {
                     val transactionId = wallet.payForOrder(offer.address!!, offer.price!!,
-                        bookOfferResponse?.orderId!!)
+                            bookOfferResponse?.orderId!!)
 
                     wallet.updateBalanceSync()
                     wallet.logSpendTransactionCompleted(offer.price, transactionId.id())
 
                     val response2 = offersApi.redeemOffer(userRepo.userId(),
-                        OffersApi.PaymentReceipt(transactionId.id())).execute()
+                            OffersApi.PaymentReceipt(transactionId.id())).execute()
 
                     if (!response2.isSuccessful || response2.body() == null) {
                         callbackWithError(ERROR_REDEEM_COUPON_FAILED)
@@ -143,18 +142,18 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                     scheduler.post {
                         callback.onResult(couponCode)
                         analytics.logEvent(
-                            Events.Business.SpendingOfferProvided(offer.provider?.name,
-                                offer.price, offer.domain,
-                                offer.id, offer.title, offer.type))
+                                Events.Business.SpendingOfferProvided(offer.provider?.name,
+                                        offer.price, offer.domain,
+                                        offer.id, offer.title, offer.type))
                     }
                     Log.d("OfferService", "The coupon is: $couponCode")
 
                 } catch (e: OperationFailedException) {
                     callbackWithError(ERROR_TRANSACTION_FAILED)
                     analytics.logEvent(
-                        Events.Business.KINTransactionFailed(
-                            "Spend failed. Exception $e with message ${e.message}",
-                            offer.price?.toFloat(), Analytics.TRANSACTION_TYPE_SPEND))
+                            Events.Business.KINTransactionFailed(
+                                    "Spend failed. Exception $e with message ${e.message}",
+                                    offer.price?.toFloat(), Analytics.TRANSACTION_TYPE_SPEND))
                 } catch (e: Exception) {
                     callbackWithError(ERROR_TRANSACTION_FAILED)
                 }
@@ -186,7 +185,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                         wallet.logP2pTransactionCompleted(amount, transactionId.id())
                         //update to the server the transactionId
                         offersApi.sendTransactionInfo(userRepo.userId(),
-                            OffersApi.TransactionInfo(transactionId.id(), toAddress, amount)).execute()
+                                OffersApi.TransactionInfo(transactionId.id(), toAddress, amount)).execute()
                         wallet.retrieveTransactions()
                     }
                 } catch (e: OperationFailedException) {
@@ -194,13 +193,13 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                         callbackWithError(ERROR_TRANSACTION_FAILED)
                     })
                     analytics.logEvent(
-                        Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
+                            Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
                 } catch (e: Exception) {
                     scheduler.post({
                         callbackWithError(ERROR_UPDATE_TRANSACTION_TO_SERVER)
                     })
                     analytics.logEvent(
-                        Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
+                            Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
                 }
             }
 
