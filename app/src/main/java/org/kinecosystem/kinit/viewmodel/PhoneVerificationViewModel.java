@@ -113,6 +113,7 @@ public class PhoneVerificationViewModel {
         }
     }
 
+
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity, task -> {
@@ -120,21 +121,26 @@ public class PhoneVerificationViewModel {
                     FirebaseUser user = task.getResult().getUser();
                     user.getIdToken(true).addOnCompleteListener(tokenRequest -> {
                         if (tokenRequest.isComplete() && verificationCallback != null) {
-                            ClientValidator validator = ((PhoneVerifyActivity) activity).getValidateClient();
+                            ClientValidator validator = ((PhoneVerifyActivity) activity).getClientValidator();
                             servicesProvider.getClientValidationService().getNonce(new OperationResultCallback<String>() {
                                 @Override
                                 public void onResult(String result) {
                                     validator.validateClient(result, new ClientValidator.OnValidationResult() {
                                         @Override
-                                        public void isValid(@NotNull String jws) {
-                                            servicesProvider.getOnBoardingService()
-                                                    .sendAuthentication(tokenRequest.getResult().getToken(),
-                                                            verificationCallback);
+                                        public void isValid(@NotNull String clientValidationJws) {
+                                            handleValidationResult(clientValidationJws);
                                         }
 
                                         @Override
                                         public void isInvalid(@NotNull String advice) {
-                                            verificationCallback.onError(PHONE_VERIF_ERROR_VERIFICATION_FAILED);
+                                            Log.e("ClientValidator", "Client Validation failed: " + advice);
+                                            handleValidationResult(null);
+                                        }
+
+                                        private void handleValidationResult(String clientValidationJws) {
+                                            servicesProvider.getOnBoardingService()
+                                                    .sendAuthentication(clientValidationJws, tokenRequest.getResult().getToken(),
+                                                            verificationCallback);
                                         }
                                     });
                                 }

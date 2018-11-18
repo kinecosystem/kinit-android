@@ -162,7 +162,7 @@ public class PurchaseOfferFragment extends BaseFragment implements PurchaseOffer
 
     @NotNull
     @Override
-    public ClientValidator getValidateClient() {
+    public ClientValidator getClientValidator() {
         return new ClientValidator(getActivity());
     }
 }

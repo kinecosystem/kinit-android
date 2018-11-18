@@ -74,3 +74,4 @@ secrets\.tar\.gz
 app/kinit\.properties
 projectFilesBackup1/.idea/workspace.xml
 
+kinit-client-validation-android-module/

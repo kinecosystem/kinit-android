@@ -10,5 +10,5 @@ public interface PhoneVerificationUIActions {
 
     void onBackPressed(int fromPage);
 
-    ClientValidator getValidateClient();
+    ClientValidator getClientValidator();
 }

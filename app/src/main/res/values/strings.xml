@@ -213,5 +213,5 @@
     <string name="activities_count">%d Activities</string>
     <string name="title_general_error">Oh… Something isn’t working</string>
     <string name="subtitle_general_error">An unknown error occurred. Please close the app and try again later.</string>
-
+    <string name="error_register">We were unable to create a profile for you</string>
 </resources>

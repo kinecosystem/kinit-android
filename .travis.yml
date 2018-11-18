@@ -2,11 +2,14 @@ language: android
 jdk: oraclejdk8
 sudo: false
 before_install:
-- openssl aes-256-cbc -K $encrypted_ddf95e72faa9_key -iv $encrypted_ddf95e72faa9_iv
-  -in secrets.tar.gz.enc -out secrets.tar.gz -d
-- tar -xvf secrets.tar.gz
+- openssl aes-256-cbc -K $encrypted_c965011e0982_key -iv $encrypted_c965011e0982_iv
+  -in secrets.tar.enc -out secrets.tar -d
+- tar -xvf secrets.tar
 - mv "app/google-services-release.json" "app/src/release/google-services.json"
 - mv "app/google-services-debug.json" "app/src/debug/google-services.json"
+- ssh-agent bash -c 'ssh-add ./app/kinit-secret; git clone git@github.com:kinecosystem/kinit-client-validation-android-module.git
+  ../validation-android-module;'
+- cp -a ../validation-android-module/kinit-client-validation-android-module/ ./kinit-client-validation-android-module
 - yes | sdkmanager "platforms;android-27"
 before_cache:
 - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -22,6 +25,7 @@ env:
   global:
   - ANDROID_API_LEVEL=27
   - EMULATOR_API_LEVEL=16
+  - secure: jcH9QzvFvPPSSSqLAS3fNjtfBNiJk4S+8KZ05TVh2tPy5vGvCijwlFSi2ImIT2MK8uNYA3R2cMQhwtKETunOk8cDeDI+hRk9Vsiw3mR1+ZDwE1ey5G4rsyfERBtmOK3VvQB0Cq7KWGquHozIKnlPT5D6qc45zg13wqR+IbfAQcntdILmXP1cG5F0RL2T3dF9YzA8dzF42h4U5CUepwLx1mKZC8XB0b4gN9cqsF9fFE731DlfOm8jfrtlwxryonpMy8kiJeQNlGCTq8yFQIkHxdmmQVdJ6e85fvSNnzVtOPC5FCgTFbYRD4Asri+j/E/8VF/9UoJtOAhW1W8UNMuqY81ONsAYfkRRxYO4UkS8LHDcUJ2EnA5lE/ApxZ+XGl7F1qczJgSv8w2pWnB9AnBTmJRZ9tUyu6cA2dX8aOaeUsQfWizoHXskHkvp9Ct8SjwO8oRr8R9v4J1JzbD7vDwMRfGUJI4EZhJetRd2VutSQmXZa6DPq9zNPWsA/xJllOihRO6xUmOkcsmcHDW9K+9HrENEVLTeSDvEJ4EOuO9hAcPTvPkEpdMB5scQJx2W7EOEbjI3WSqf3Of9Ed9v5YxfiwM03/4wv/H/zCi+BVeBYtAfAjZKxGN7dP2Mej2n+MxttTYhRSFtOUhmMYaUNtBAYIsxelNxALEmiXJsUvGq0o8=
 android:
   components:
   - tools

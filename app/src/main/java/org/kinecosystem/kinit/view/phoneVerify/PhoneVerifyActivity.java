@@ -129,7 +129,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
 
     @NotNull
     @Override
-    public ClientValidator getValidateClient() {
+    public ClientValidator getClientValidator() {
         return new ClientValidator(this);
     }
 }

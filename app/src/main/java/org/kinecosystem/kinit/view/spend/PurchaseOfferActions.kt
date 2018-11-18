@@ -14,5 +14,5 @@ interface PurchaseOfferActions {
 
     fun shareCode(code: String)
 
-    fun getValidateClient(): ClientValidator
+    fun getClientValidator(): ClientValidator
 }

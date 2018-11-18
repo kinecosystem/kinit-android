@@ -9,6 +9,7 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
+import org.kinecosystem.kinit.model.spend.hasEnoughKinToBuy
 import org.kinecosystem.kinit.model.spend.isP2p
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
@@ -41,7 +42,9 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
     val couponCode = ObservableField("")
     val couponPurchaseCompleted = ObservableBoolean(false)
     var purchaseOfferActions: PurchaseOfferActions? = null
-    var canBuy: ObservableBoolean = ObservableBoolean(false)
+    val canBuy: ObservableBoolean = ObservableBoolean(false)
+    val cantBuyWarning = ObservableBoolean(false)
+    val cantBuyWarningText = ObservableField<String>("")
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -54,11 +57,10 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
         isP2p = offer.isP2p()
     }
 
-
     fun onShareButtonClicked(view: View) {
         analytics.logEvent(
-            Events.Analytics.ClickShareButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                offer.title, offer.type))
+                Events.Analytics.ClickShareButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                        offer.title, offer.type))
         purchaseOfferActions?.shareCode(couponCode.get())
     }
 
@@ -66,27 +68,25 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
         if (!isP2p) purchaseOfferActions?.animateBuy()
 
         analytics.logEvent(
-            Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                offer.title, offer.type))
+                Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                        offer.title, offer.type))
         if (!networkServices.isNetworkConnected()) {
             purchaseOfferActions?.showDialog(
-                R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
-                R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
+                    R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
+                    R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
             return
         }
 
 
-        val validationClient = purchaseOfferActions?.getValidateClient()
+        val validationClient = purchaseOfferActions?.getClientValidator()
         val onValidationCallback = object : ClientValidator.OnValidationResult {
             // proceed if valid
-            override fun isValid(jws: String) {
-                // store jws for future use
-                userRepository.jws = jws
+            override fun isValid(clientValidationJws: String) {
                 scheduler.post {
                     if (isP2p) {
                         navigator.navigateTo(Navigator.Destination.PEER2PEER)
                     } else {
-                        buy()
+                        buy(clientValidationJws)
                     }
                 }
             }
@@ -123,18 +123,18 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
         purchaseOfferActions?.closeScreen()
     }
 
-    private fun buy() {
+    private fun buy(clientValidationJws: String?) {
         couponCode.set("")
         couponPurchaseCompleted.set(false)
-        networkServices.offerService.buyOffer(offer, object : OperationResultCallback<String> {
+        networkServices.offerService.buyOffer(clientValidationJws, offer, object : OperationResultCallback<String> {
             override fun onResult(result: String) {
                 couponCode.set(result)
                 couponPurchaseCompleted.set(true)
                 networkServices.walletService.retrieveTransactions()
                 networkServices.walletService.retrieveCoupons()
                 analytics.logEvent(
-                    Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
-                        offer.title, offer.type))
+                        Events.Analytics.ViewCodeTextOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
+                                offer.title, offer.type))
             }
 
             override fun onError(errorCode: Int) {
@@ -143,18 +143,18 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
                     ERROR_NO_INTERNET -> {
                         logErrorType = Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION
                         purchaseOfferActions?.showDialog(R.string.dialog_no_internet_title,
-                            R.string.dialog_no_internet_message, R.string.dialog_ok, false, logErrorType)
+                                R.string.dialog_no_internet_message, R.string.dialog_ok, false, logErrorType)
                     }
                     ERROR_REDEEM_COUPON_FAILED -> {
                         logErrorType = Analytics.VIEW_ERROR_TYPE_CODE_NOT_PROVIDED
                         purchaseOfferActions?.showDialog(
-                            R.string.dialog_coupon_redeem_failed_title, R.string.dialog_coupon_redeem_failed_message,
-                            R.string.dialog_back_to_list, true, logErrorType)
+                                R.string.dialog_coupon_redeem_failed_title, R.string.dialog_coupon_redeem_failed_message,
+                                R.string.dialog_back_to_list, true, logErrorType)
                     }
                     else -> { // ERROR_NO_GOOD_LEFT, ERROR_TRANSACTION_FAILED
                         logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
                         purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
-                            R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
+                                R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
                     }
                 }
             }
@@ -162,15 +162,15 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
     }
 
     fun onResume() {
-        val offerPrice = offer.price ?: Int.MAX_VALUE
-
-        canBuy.set(networkServices.walletService.balanceInt >= offerPrice)
+        cantBuyWarning.set(shouldShowNotEnoughKinToBuyWarning())
+        cantBuyWarningText.set(offer.cantBuyReason)
+        canBuy.set(hasEnoughTotalBalance() && offer.hasEnoughKinToBuy())
 
         analytics.logEvent(Events.Analytics.ViewOfferPage(offer.provider?.name,
-            offer.price,
-            offer.domain,
-            offer.id,
-            offer.title, offer.type))
+                offer.price,
+                offer.domain,
+                offer.id,
+                offer.title, offer.type))
         if (isP2p) {
             purchaseOfferActions?.updateBuyButtonWidth()
         }
@@ -182,6 +182,12 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
 
     fun logCloseErrorPopupClicked(errorType: String) {
         analytics.logEvent(Events.Analytics.ClickOkButtonOnErrorPopup(errorType))
+    }
+
+    private fun shouldShowNotEnoughKinToBuyWarning() = hasEnoughTotalBalance() && !offer.hasEnoughKinToBuy()
+
+    private fun hasEnoughTotalBalance(): Boolean {
+        return networkServices.walletService.balanceInt >= offer.price ?: Int.MAX_VALUE
     }
 
 }

@@ -17,7 +17,7 @@ interface OffersApi {
     fun offers(@Header(USER_HEADER_KEY) userId: String): Call<OffersResponse>
 
     // book an offer
-    data class OfferInfo(@SerializedName("id") val id: String, @SerializedName("token") val token: String)
+    data class OfferInfo(@SerializedName("id") val id: String, @SerializedName("token") val token: String?)
 
     data class BookOfferResponse(@SerializedName("status") val status: String, @SerializedName(
         "reason") val reason: String, @SerializedName(
