@@ -20,7 +20,7 @@ import retrofit2.Response
 
 class TaskService(context: Context, api: TasksApi,
                   private val categoriesRepository: CategoriesRepository,
-                  private val userRepo: UserRepository, private val walletService: Wallet) {
+                  private val userRepo: UserRepository, private val walletService: Wallet, private val categoriesService: CategoriesService) {
 
     private val tasksApi: TasksApi = api
     private val applicationContext: Context = context.applicationContext
@@ -144,6 +144,7 @@ class TaskService(context: Context, api: TasksApi,
                             retrieveNextTask(categoriesRepository.currentTaskInProgress?.category_id!!, object : OperationResultCallback<Boolean> {
                                 override fun onResult(result: Boolean) {
                                     currentTaskRepo?.clearChosenAnswers()
+                                    categoriesService.retrieveCategories()
                                 }
 
                                 override fun onError(errorCode: Int) {
