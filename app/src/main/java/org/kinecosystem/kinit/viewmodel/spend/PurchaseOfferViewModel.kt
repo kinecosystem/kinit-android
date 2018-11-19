@@ -77,32 +77,30 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
             return
         }
 
-
-        val validationClient = purchaseOfferActions?.getClientValidator()
-        val onValidationCallback = object : ClientValidator.OnValidationResult {
-            // proceed if valid
-            override fun isValid(clientValidationJws: String) {
-                scheduler.post {
-                    if (isP2p) {
-                        navigator.navigateTo(Navigator.Destination.PEER2PEER)
-                    } else {
-                        buy(clientValidationJws)
-                    }
-                }
-            }
-
-            override fun isInvalid(advice: String) {
-                val logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
-                purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
-                        R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
-            }
-        }
-
+        // first get a nonce
         networkServices.clientValidationService.getNonce(object : OperationResultCallback<String> {
             override fun onResult(result: String) {
-                validationClient?.validateClient(result, onValidationCallback)
+                // send nonce to validation module
+                purchaseOfferActions?.getClientValidator()?.validateClient(result, object : ClientValidator.OperationResultCallback {
+                    // handle jws validation result
+                    override fun onResult(clientValidationJws: String?) {
+                        scheduler.post {
+                            when {
+                                clientValidationJws.isNullOrBlank() -> {
+                                    val logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
+                                    purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
+                                            R.string.dialog_no_good_left_message,
+                                            R.string.dialog_back_to_list, true, logErrorType)
+                                }
+                                isP2p -> navigator.navigateTo(Navigator.Destination.PEER2PEER)
+                                else -> buy(clientValidationJws)
+                            }
+                        }
+                    }
+                })
             }
 
+            // getting nonce failed
             override fun onError(errorCode: Int) {
                 if (!networkServices.isNetworkConnected()) {
                     purchaseOfferActions?.showDialog(

@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-import org.jetbrains.annotations.NotNull;
 import org.kinecosystem.ClientValidator;
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.navigation.Navigator;
@@ -113,7 +112,6 @@ public class PhoneVerificationViewModel {
         }
     }
 
-
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity, task -> {
@@ -121,28 +119,15 @@ public class PhoneVerificationViewModel {
                     FirebaseUser user = task.getResult().getUser();
                     user.getIdToken(true).addOnCompleteListener(tokenRequest -> {
                         if (tokenRequest.isComplete() && verificationCallback != null) {
-                            ClientValidator validator = ((PhoneVerifyActivity) activity).getClientValidator();
+                            // if firebase token ok, get a nonce for client validation
                             servicesProvider.getClientValidationService().getNonce(new OperationResultCallback<String>() {
                                 @Override
                                 public void onResult(String result) {
-                                    validator.validateClient(result, new ClientValidator.OnValidationResult() {
-                                        @Override
-                                        public void isValid(@NotNull String clientValidationJws) {
-                                            handleValidationResult(clientValidationJws);
-                                        }
-
-                                        @Override
-                                        public void isInvalid(@NotNull String advice) {
-                                            Log.e("ClientValidator", "Client Validation failed: " + advice);
-                                            handleValidationResult(null);
-                                        }
-
-                                        private void handleValidationResult(String clientValidationJws) {
-                                            servicesProvider.getOnBoardingService()
-                                                    .sendAuthentication(clientValidationJws, tokenRequest.getResult().getToken(),
-                                                            verificationCallback);
-                                        }
-                                    });
+                                    // use the nonce for validation and proceed with phone auth
+                                    ClientValidator validator = ((PhoneVerifyActivity) activity).getClientValidator();
+                                    validator.validateClient(result, clientValidationJws -> servicesProvider.getOnBoardingService()
+                                            .sendAuthentication(clientValidationJws, tokenRequest.getResult().getToken(),
+                                                    verificationCallback));
                                 }
 
                                 @Override

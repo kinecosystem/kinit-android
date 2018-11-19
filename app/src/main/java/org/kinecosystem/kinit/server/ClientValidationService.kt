@@ -8,26 +8,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 const val GET_NONCE_FAILED = 0
-const val VALIDATION_FAILED = 1
 const val SERVER_ERROR = 2
 
 class ClientValidationService(private val userRepo: UserRepository, val server: ClientValidationApi){
-
-    fun validateClient(token: String, callback: OperationCompletionCallback) {
-        server.validateToken(userRepo.userId(), token).enqueue(object : Callback<ClientValidationApi.ValidationStatus> {
-            override fun onFailure(call: Call<ClientValidationApi.ValidationStatus>, t: Throwable) {
-                callback.onError(SERVER_ERROR)
-            }
-
-            override fun onResponse(call: Call<ClientValidationApi.ValidationStatus>, response: Response<ClientValidationApi.ValidationStatus>) {
-                if (response.isSuccessful && response.body()?.status == "true") {
-                    callback.onSuccess()
-                } else {
-                    callback.onError(VALIDATION_FAILED)
-                }
-            }
-        })
-    }
 
     fun getNonce(callback: OperationResultCallback<String>?) {
         server.getNonce(userRepo.userId()).enqueue(object : Callback<ClientValidationApi.ValidationNonceResponse> {
