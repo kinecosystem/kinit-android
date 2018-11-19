@@ -29,6 +29,8 @@ private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-polic
 private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
 private const val FORCE_UPDATE = "FORCE_UPDATE"
 private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
+private const val SEEN_NEW_SPEND_POLICY = "SEEN_NEW_SPEND_POLICY"
+
 
 
 
@@ -116,6 +118,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isBackupNagAlertEnabled: Boolean
         set(enabled) = userCache.putBoolean(BACKUP_NAG_ALERT_ENABLED, enabled)
         get() = userCache.getBoolean(BACKUP_NAG_ALERT_ENABLED, false)
+
+    var seenNewSPendPolicy: Boolean
+        set(seen) = userCache.putBoolean(SEEN_NEW_SPEND_POLICY, seen)
+        get() = userCache.getBoolean(SEEN_NEW_SPEND_POLICY, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")
