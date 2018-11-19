@@ -75,9 +75,11 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
     }
 
     fun onItemClicked(category: Category, position: Int) {
-        categoriesRepository.onCategorySelected(category)
-        navigator.navigateToCategory(category.id)
-        analytics.logEvent(Events.Analytics.ClickCategoryButtonOnTaskCategoriesPage(category.title))
+        //categoriesRepository.onCategorySelected(category)
+       // navigator.navigateToCategory(category.id)
+        //analytics.logEvent(Events.Analytics.ClickCategoryButtonOnTaskCategoriesPage(category.title))
+
+        navigator.navigateToTransfer()
     }
 
     fun onDataLoaded() {

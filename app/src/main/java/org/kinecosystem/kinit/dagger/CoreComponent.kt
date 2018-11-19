@@ -35,6 +35,7 @@ import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.*
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
+import org.kinecosystem.kinit.view.transfer.TransferLauncherActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
 import org.kinecosystem.kinit.viewmodel.FAQViewModel
@@ -118,4 +119,5 @@ interface CoreComponent {
     fun inject(categoryTaskActivity: CategoryTaskActivity)
     fun inject(categoryTaskViewModel: CategoryTaskViewModel)
     fun inject(tasksRepo: TasksRepo)
+    fun inject(transferLauncherActivity: TransferLauncherActivity)
 }

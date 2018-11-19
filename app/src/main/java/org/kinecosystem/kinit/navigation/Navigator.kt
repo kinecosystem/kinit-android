@@ -21,6 +21,7 @@ import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.RestoreWalletActivity
 import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
+import org.kinecosystem.kinit.view.transfer.TransferLauncherActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import javax.inject.Inject
 
@@ -59,6 +60,10 @@ class Navigator(private val context: Context) {
         if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
+    }
+
+    fun navigateToTransfer() {
+        context.startActivity(TransferLauncherActivity.getIntent(context))
     }
 
     fun navigateTo(dest: Destination, withSlideAnim: Boolean, reverseAnim: Boolean) {

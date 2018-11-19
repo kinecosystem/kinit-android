@@ -12,7 +12,7 @@
     </data>
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/answer_text"
+        android:id="@+id/info_text"
         style="@style/Button.Answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

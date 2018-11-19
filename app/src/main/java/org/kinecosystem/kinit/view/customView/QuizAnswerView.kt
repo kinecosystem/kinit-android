@@ -52,7 +52,7 @@ class QuizAnswerView : ConstraintLayout {
 
     var answer: Answer? = null
         set(value) {
-            answer_text.text = value?.text
+            info_text.text = value?.text
             answer_feedback.text = value?.text
             field = value
         }

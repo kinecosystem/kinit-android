@@ -22,12 +22,12 @@
         android:textSize="16sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toTopOf="@+id/answer"
-        app:layout_constraintEnd_toEndOf="@+id/answer_text"
+        app:layout_constraintEnd_toEndOf="@+id/info_text"
         tools:text="+4 KIN" />
 
 
     <TextView
-        android:id="@+id/answer_text"
+        android:id="@+id/info_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
