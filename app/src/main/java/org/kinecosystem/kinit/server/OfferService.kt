@@ -74,7 +74,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
         })
     }
 
-    fun buyOffer(offer: Offer, callback: OperationResultCallback<String>) {
+    fun buyOffer(clientValidationJws: String?, offer: Offer, callback: OperationResultCallback<String>) {
 
         if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
@@ -92,7 +92,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                 val response: Response<OffersApi.BookOfferResponse>
                 try {
                     response = offersApi.bookOffer(userRepo.userId(),
-                            OffersApi.OfferInfo(offer.id!!)).execute()
+                            OffersApi.OfferInfo(offer.id!!, clientValidationJws)).execute()
                 } catch (e: SocketTimeoutException) {
                     callbackWithError(ERROR_NO_INTERNET)
                     return
@@ -176,6 +176,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
         scheduler.executeOnBackground(object : Runnable {
             override fun run() {
                 try {
+
                     val transactionId = wallet.payForOrder(toAddress, amount, P2P_ORDER_ID)
                     wallet.updateBalanceSync()
                     if (transactionId != null && !transactionId.id().isEmpty()) {

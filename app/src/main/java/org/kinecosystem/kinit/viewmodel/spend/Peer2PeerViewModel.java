@@ -54,18 +54,18 @@ public class Peer2PeerViewModel {
     Scheduler scheduler;
     private String address;
     private Peer2PeerActions actions;
-    private ObservableField<Boolean> hasValidAddress = new ObservableField<Boolean>(false) {
-        @Override
-        public void set(Boolean value) {
-            super.set(value);
-            sendEnabled.set(value && positiveAmount.get());
-        }
-    };
     private ObservableField<Boolean> positiveAmount = new ObservableField<Boolean>(false) {
         @Override
         public void set(Boolean value) {
             super.set(value);
             sendEnabled.set(value && hasValidAddress.get());
+        }
+    };
+    private ObservableField<Boolean> hasValidAddress = new ObservableField<Boolean>(false) {
+        @Override
+        public void set(Boolean value) {
+            super.set(value);
+            sendEnabled.set(value && positiveAmount.get());
         }
     };
     public TextWatcher textWatcher = new TextWatcher() {

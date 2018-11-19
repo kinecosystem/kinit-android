@@ -11,11 +11,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import org.kinecosystem.ClientValidator;
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.navigation.Navigator;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.server.NetworkServices;
 import org.kinecosystem.kinit.server.OperationCompletionCallback;
+import org.kinecosystem.kinit.server.OperationResultCallback;
+import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -116,9 +119,22 @@ public class PhoneVerificationViewModel {
                     FirebaseUser user = task.getResult().getUser();
                     user.getIdToken(true).addOnCompleteListener(tokenRequest -> {
                         if (tokenRequest.isComplete() && verificationCallback != null) {
-                            servicesProvider.getOnBoardingService()
-                                .sendAuthentication(tokenRequest.getResult().getToken(),
-                                    verificationCallback);
+                            // if firebase token ok, get a nonce for client validation
+                            servicesProvider.getClientValidationService().getNonce(new OperationResultCallback<String>() {
+                                @Override
+                                public void onResult(String result) {
+                                    // use the nonce for validation and proceed with phone auth
+                                    ClientValidator validator = ((PhoneVerifyActivity) activity).getClientValidator();
+                                    validator.validateClient(result, clientValidationJws -> servicesProvider.getOnBoardingService()
+                                            .sendAuthentication(clientValidationJws, tokenRequest.getResult().getToken(),
+                                                    verificationCallback));
+                                }
+
+                                @Override
+                                public void onError(int errorCode) {
+                                    verificationCallback.onError(PHONE_VERIF_ERROR_OTHER);
+                                }
+                            });
                         } else {
                             verificationCallback.onError(PHONE_VERIF_ERROR_CANT_GET_FIREBASE_AUTH_TOKEN);
                         }

@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.viewmodel.spend
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.view.View
+import org.kinecosystem.ClientValidator
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
@@ -16,11 +17,14 @@ import org.kinecosystem.kinit.server.ERROR_NO_INTERNET
 import org.kinecosystem.kinit.server.ERROR_REDEEM_COUPON_FAILED
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.OperationResultCallback
+import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActions
 import javax.inject.Inject
 
 class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer) {
 
+    @Inject
+    lateinit var scheduler: Scheduler
     @Inject
     lateinit var analytics: Analytics
     @Inject
@@ -61,6 +65,8 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
     }
 
     fun onBuyButtonClicked(view: View) {
+        if (!isP2p) purchaseOfferActions?.animateBuy()
+
         analytics.logEvent(
                 Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
                         offer.title, offer.type))
@@ -70,12 +76,44 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
                     R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
             return
         }
-        if (isP2p) {
-            navigator.navigateTo(Navigator.Destination.PEER2PEER)
-        } else {
-            purchaseOfferActions?.animateBuy()
-            buy()
-        }
+
+        // first get a nonce
+        networkServices.clientValidationService.getNonce(object : OperationResultCallback<String> {
+            override fun onResult(result: String) {
+                // send nonce to validation module
+                purchaseOfferActions?.getClientValidator()?.validateClient(result, object : ClientValidator.OperationResultCallback {
+                    // handle jws validation result
+                    override fun onResult(clientValidationJws: String?) {
+                        scheduler.post {
+                            when {
+                                clientValidationJws.isNullOrBlank() -> {
+                                    val logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
+                                    purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
+                                            R.string.dialog_no_good_left_message,
+                                            R.string.dialog_back_to_list, true, logErrorType)
+                                }
+                                isP2p -> navigator.navigateTo(Navigator.Destination.PEER2PEER)
+                                else -> buy(clientValidationJws)
+                            }
+                        }
+                    }
+                })
+            }
+
+            // getting nonce failed
+            override fun onError(errorCode: Int) {
+                if (!networkServices.isNetworkConnected()) {
+                    purchaseOfferActions?.showDialog(
+                            R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
+                            R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
+                    return
+                } else {
+                    val logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
+                    purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
+                            R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
+                }
+            }
+        })
     }
 
     fun onCloseButtonClicked(view: View?) {
@@ -83,10 +121,10 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
         purchaseOfferActions?.closeScreen()
     }
 
-    private fun buy() {
+    private fun buy(clientValidationJws: String?) {
         couponCode.set("")
         couponPurchaseCompleted.set(false)
-        networkServices.offerService.buyOffer(offer, object : OperationResultCallback<String> {
+        networkServices.offerService.buyOffer(clientValidationJws, offer, object : OperationResultCallback<String> {
             override fun onResult(result: String) {
                 couponCode.set(result)
                 couponPurchaseCompleted.set(true)

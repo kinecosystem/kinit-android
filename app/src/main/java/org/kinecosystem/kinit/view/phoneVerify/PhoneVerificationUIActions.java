@@ -1,5 +1,7 @@
 package org.kinecosystem.kinit.view.phoneVerify;
 
+import org.kinecosystem.ClientValidator;
+
 public interface PhoneVerificationUIActions {
 
     void onSendPhone(String phoneNumber);
@@ -7,4 +9,6 @@ public interface PhoneVerificationUIActions {
     void onSendCode(String code);
 
     void onBackPressed(int fromPage);
+
+    ClientValidator getClientValidator();
 }

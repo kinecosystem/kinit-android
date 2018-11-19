@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.jetbrains.annotations.NotNull;
+import org.kinecosystem.ClientValidator;
 import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
@@ -123,5 +125,11 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
                     .replace(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
                     .commit();
         }
+    }
+
+    @NotNull
+    @Override
+    public ClientValidator getClientValidator() {
+        return new ClientValidator(this);
     }
 }
