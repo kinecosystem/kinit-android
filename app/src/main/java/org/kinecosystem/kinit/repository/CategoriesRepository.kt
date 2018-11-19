@@ -51,7 +51,9 @@ class CategoriesRepository {
     }
 
     fun updateCategories(newCategories: List<Category>?) {
-        this.categories.set(newCategories)
+        newCategories?.let {
+            this.categories.set(newCategories)
+        }
     }
 
     fun updateTestData(categoriesData: String, tasksData: String) {
@@ -119,7 +121,7 @@ class CategoriesRepository {
 
     fun getCategory(categoryId: String): Category? {
         for (category in categories.get()) {
-            if (categoryId.equals(category.id)) {
+            if (categoryId == category.id) {
                 return category
             }
         }
@@ -157,12 +159,8 @@ class CategoriesRepository {
 
     fun onTaskStarted() {
         currentTaskRepo?.onTaskStarted()
-        currentTaskInProgress = if (currentTaskRepo != null) {
-            currentTaskRepo?.taskInProgress
-        } else {
-            null
-        }
-        Log.d("#####", "#### cat id $currentCategoryId  task repo $currentTaskRepo task in progress $currentTaskInProgress")
+        currentTaskInProgress = currentTaskRepo?.taskInProgress
+        Log.d("#####", "#### onTaskStarted cat id $currentCategoryId  task repo $currentTaskRepo task in progress $currentTaskInProgress")
     }
 
     fun hasAnyTaskAvailable(): Boolean {

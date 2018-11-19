@@ -63,6 +63,7 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
     override fun onScreenVisibleToUser() {
         if(this.categoriesRepository.categories.get().isEmpty()){
             isLoading.set(true)
+            showData.set(false)
         }
         if (networkServices.isNetworkConnected()) {
             hasNetwork.set(true)
