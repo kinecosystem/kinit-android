@@ -99,16 +99,20 @@ class AlertManager {
             createAlert(context, title, message, positiveMessage, positiveAction, negativeMessage, negativeAction, dismiss, cancelable, type).show()
         }
 
-        fun showGeneralAlert(context: Context, @StringRes title: Int, @StringRes message: Int, @StringRes positiveMessage: Int, positiveAction: (() -> Unit),
-                             @StringRes negativeMessage: Int? = null, negativeAction: (() -> Unit)? = null, imageUrl: String? = null) {
+        fun showGeneralAlert(context: Context, @StringRes title: Int?, @StringRes message: Int, @StringRes positiveMessage: Int, positiveAction: (() -> Unit),
+                             @StringRes negativeMessage: Int? = null, negativeAction: (() -> Unit)? = null, imageUrl: String? = null, @DrawableRes imageRes: Int? = null) {
             val negativeMsg = if (negativeMessage != null) context.resources.getString(negativeMessage) else null
-            showGeneralAlert(context, context.resources.getString(title), context.resources.getString(message), context.resources.getString(positiveMessage), positiveAction, negativeMsg, negativeAction, imageUrl)
+            var titleStr = ""
+            title?.let {
+                titleStr = context.resources.getString(it)
+            }
+            showGeneralAlert(context, titleStr, context.resources.getString(message), context.resources.getString(positiveMessage), positiveAction, negativeMsg, negativeAction, imageUrl, imageRes)
         }
 
         fun showGeneralAlert(context: Context, title: String, message: String,
                              positiveMessage: String, positiveAction: (() -> Unit),
                              negativeMessage: String? = null, negativeAction: (() -> Unit)? = null,
-                             imageUrl: String? = null, @DrawableRes imageRes: Int = R.drawable.backup_illus_popup, cancelable: Boolean? = true) {
+                             imageUrl: String? = null, @DrawableRes imageRes: Int? = R.drawable.backup_illus_popup, cancelable: Boolean? = true) {
             val dialogView = LayoutInflater.from(context).inflate(R.layout.possitive_dialog, null)
             val alertDialog = AlertDialog.Builder(context).setCancelable(cancelable
                     ?: true).setView(dialogView).create()
@@ -136,7 +140,9 @@ class AlertManager {
             }
 
             if (TextUtils.isEmpty(imageUrl)) {
-                dialogView.icon.setImageResource(imageRes)
+                imageRes?.let {
+                    dialogView.icon.setImageResource(it)
+                }
             } else {
                 ImageUtils.loadImageIntoView(context, imageUrl, dialogView.icon)
             }

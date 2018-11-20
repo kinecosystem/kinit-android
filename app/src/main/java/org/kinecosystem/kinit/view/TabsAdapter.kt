@@ -110,6 +110,13 @@ class TabsAdapter(val context: Context) :
         binding.offersList.layoutManager = LinearLayoutManager(context)
         binding.offersList.adapter = OfferListAdapter(context, spendingModel)
         models[position] = binding.model
+        spendingModel.showNewOfferPolicyAlert.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if (sender is ObservableBoolean && sender.get()) {
+                    AlertManager.showGeneralAlert(context, null, R.string.spend_policy_title, R.string.i_understand, {}, null, null, null, R.drawable.new_purchase_illust)
+                }
+            }
+        })
         return binding.root
     }
 

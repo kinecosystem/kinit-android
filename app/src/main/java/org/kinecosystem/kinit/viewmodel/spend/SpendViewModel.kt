@@ -8,6 +8,7 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.OffersRepository
+import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.view.TabViewModel
@@ -22,6 +23,8 @@ class SpendViewModel(private val navigator: Navigator) :
     lateinit var analytics: Analytics
     @Inject
     lateinit var networkServices: NetworkServices
+    @Inject
+    lateinit var userRepository: UserRepository
 
     var balance: ObservableField<String>
 
@@ -29,7 +32,7 @@ class SpendViewModel(private val navigator: Navigator) :
     val hasNetwork = ObservableBoolean(true)
     val showData = ObservableBoolean(true)
     val isLoading = ObservableBoolean(false)
-
+    var showNewOfferPolicyAlert = ObservableBoolean(false)
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -82,6 +85,10 @@ class SpendViewModel(private val navigator: Navigator) :
         }
         bindData()
         checkForUpdates()
+        if(!userRepository.seenNewSPendPolicy) {
+            showNewOfferPolicyAlert.set(true)
+            userRepository.seenNewSPendPolicy = true
+        }
         val event: Events.Event =
                 if (!hasNetwork.get()) {
                     Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION, "no internet")
