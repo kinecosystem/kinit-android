@@ -83,7 +83,11 @@ public class PhoneSendFragment extends BaseFragment {
             prefixValid = false;
 
         }
-        next.setOnClickListener(view1 -> onSendPhone());
+        next.setEnabled(true);
+        next.setOnClickListener(view1 -> {
+            onSendPhone();
+            next.setEnabled(false);
+        });
         prefix.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

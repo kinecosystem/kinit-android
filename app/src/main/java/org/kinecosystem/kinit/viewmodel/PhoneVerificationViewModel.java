@@ -101,6 +101,10 @@ public class PhoneVerificationViewModel {
         return false;
     }
 
+    public void callRegister(OperationCompletionCallback callback){
+        servicesProvider.getOnBoardingService().callRegister(callback);
+    }
+
     public void verifyPhoneNumberWithCode(String code) {
         if (!verificationId.isEmpty()) {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);

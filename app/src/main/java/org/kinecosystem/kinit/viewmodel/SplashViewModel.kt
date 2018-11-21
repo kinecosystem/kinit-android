@@ -49,9 +49,7 @@ class SplashViewModel {
     }
 
     private fun getNextScreen(): Navigator.Destination {
-        return if (!userRepository.isRegistered) {
-            Navigator.Destination.ERROR_REGISTER
-        } else if (userRepository.isPhoneVerificationEnabled && !userRepository.isPhoneVerified) {
+        return if (userRepository.isPhoneVerificationEnabled && !userRepository.isPhoneVerified) {
             userRepository.isFirstTimeUser = false
             Navigator.Destination.TUTORIAL
         } else if (userRepository.isFirstTimeUser) {
