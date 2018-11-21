@@ -52,7 +52,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
 
             override fun onFailure(call: Call<OffersApi.OffersResponse>?, t: Throwable?) {
                 Log.d("TaskService", "onFailure called with throwable $t")
-                callback?.onError(ERROR_NO_INTERNET)
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
         })
     }

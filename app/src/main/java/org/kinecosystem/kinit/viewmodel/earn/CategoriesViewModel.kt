@@ -61,7 +61,7 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
     }
 
     override fun onScreenVisibleToUser() {
-        if(this.categoriesRepository.categories.get().isEmpty()){
+        if (this.categoriesRepository.categories.get().isEmpty()) {
             isLoading.set(true)
             showData.set(false)
         }
@@ -84,7 +84,7 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
     fun onDataLoaded() {
         isLoading.set(false)
     }
-    
+
     private fun loadData() {
         if (networkServices.isNetworkConnected()) {
             categoriesService.retrieveCategories(object : OperationCompletionCallback {
@@ -99,12 +99,12 @@ open class CategoriesViewModel(private val navigator: Navigator) : TabViewModel 
                 override fun onError(errorCode: Int) {
                     showData.set(false)
                     hasErrors.set(true)
+                    Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_GENERIC, Analytics.SERVER_ERROR_RESPONSE)
                 }
 
             })
         }
     }
-
 
 
 }
