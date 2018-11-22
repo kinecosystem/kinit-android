@@ -112,7 +112,7 @@ class AlertManager {
         fun showGeneralAlert(context: Context, title: String, message: String,
                              positiveMessage: String, positiveAction: (() -> Unit),
                              negativeMessage: String? = null, negativeAction: (() -> Unit)? = null,
-                             imageUrl: String? = null, @DrawableRes imageRes: Int? = R.drawable.backup_illus_popup, cancelable: Boolean? = true) {
+                             imageUrl: String? = null, @DrawableRes imageRes: Int? = null, cancelable: Boolean? = true) {
             val dialogView = LayoutInflater.from(context).inflate(R.layout.possitive_dialog, null)
             val alertDialog = AlertDialog.Builder(context).setCancelable(cancelable
                     ?: true).setView(dialogView).create()

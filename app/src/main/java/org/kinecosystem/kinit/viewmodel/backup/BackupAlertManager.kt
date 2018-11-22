@@ -106,7 +106,7 @@ class BackupAlertManager(val context: Context) {
         AlertManager.showGeneralAlert(context, title, message, R.string.back_up, {
             navigator.navigateTo(Navigator.Destination.WALLET_BACKUP)
             analytics.logEvent(Events.Analytics.ClickBackupButtonOnBackupNotificationPopup(eventParam))
-        }, R.string.cancel, {})
+        }, R.string.cancel, {}, null, R.drawable.backup_illus_popup)
         analytics.logEvent(Events.Analytics.ViewBackupNotificationPopup(eventParam))
     }
 }
