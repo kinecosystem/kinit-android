@@ -40,7 +40,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     }
 
     fun registerOnDemand() {
-        callRegister(BuildConfig.VERSION_NAME)
+        callRegister()
     }
 
     fun sendAuthentication(clientValidationJws: String?, phoneAuthToken: String, callback: OperationCompletionCallback) {
@@ -159,7 +159,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
             override fun onFailure(call: Call<OnboardingApi.BlackListAreaCode>, t: Throwable) {
                 blackList = listOf()
                 if (!userRepo.isRegistered) {
-                    callRegister(BuildConfig.VERSION_NAME)
+                    callRegister()
                 }
             }
 
@@ -169,7 +169,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         blackList = it
                         isInBlackList = blackList.contains(DeviceUtils.getLocalDialPrefix(applicationContext))
                         if (!isInBlackList && !userRepo.isRegistered) {
-                            callRegister(BuildConfig.VERSION_NAME)
+                            callRegister()
                         }
                     }
                 }
@@ -177,7 +177,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         })
     }
 
-    private fun callRegister(appVersion: String) {
+    fun callRegister(callback: OperationCompletionCallback? = null) {
         val userId: String = userRepo.userId()
         val timeZoneWithoutGMT = DeviceUtils.timeZone()
         DeviceUtils.timeZoneDebugging(analytics)
@@ -186,7 +186,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 deviceModel = DeviceUtils.deviceName(),
                 timeZone = timeZoneWithoutGMT,
                 deviceId = DeviceUtils.deviceId(applicationContext),
-                appVersion = appVersion,
+                appVersion = BuildConfig.VERSION_NAME,
                 screenWidth = displayMetrics.widthPixels,
                 screenHeight = displayMetrics.heightPixels,
                 density = displayMetrics.densityDpi,
@@ -200,15 +200,18 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     updateToken()
                     analytics.logEvent(UserRegistered())
                     userRepo.isRegistered = true
+                    callback?.onSuccess()
                 } else {
                     Log.d("OnboardingService", "### register onResponse NOT SUCCESSFULL OR null: $response")
                     analytics.logEvent(Events.BILog.UserRegistrationFailed("response: $response"))
+                    callback?.onError(0)
                 }
             }
 
             override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
                 Log.d("OnboardingService", "### register onFailure called with throwable $t")
                 analytics.logEvent(Events.BILog.UserRegistrationFailed("onFailure with throwable $t"))
+                callback?.onError(0)
             }
         })
     }

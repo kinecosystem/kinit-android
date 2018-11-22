@@ -36,7 +36,8 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
     private PhoneVerificationViewModel model;
     private boolean hasPreviousScreen;
     private int sendPhoneCount = 0;
-
+    private int registerTriesCount = 0;
+    private  Navigator navigator;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, PhoneVerifyActivity.class);
@@ -46,6 +47,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
     protected void onCreate(Bundle savedInstanceState) {
         KinitApplication.coreComponent.inject(this);
         super.onCreate(savedInstanceState);
+        navigator = new Navigator(this);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         setContentView(R.layout.phone_veriy_activity);
         hasPreviousScreen = getIntent().getBooleanExtra(HAS_PREVIOUS, false);
@@ -82,13 +84,32 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
 
     @Override
     public void onSendPhone(String phoneNumber) {
-        sendPhoneCount++;
-        if (model.startPhoneNumberVerification(phoneNumber)) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, CodeVerificationFragment.newInstance(phoneNumber, sendPhoneCount >= MAX_SEND_PHONE_COUNT), FRAGMENT_CODE_TAG)
-                    .commit();
+        if (userRepository.isRegistered()) {
+            sendPhoneCount++;
+            if (model.startPhoneNumberVerification(phoneNumber)) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, CodeVerificationFragment.newInstance(phoneNumber, sendPhoneCount >= MAX_SEND_PHONE_COUNT), FRAGMENT_CODE_TAG)
+                        .commit();
+            } else {
+                showBlackListDialog();
+            }
         } else {
-            showBlackListDialog();
+            model.callRegister(new OperationCompletionCallback() {
+                @Override
+                public void onSuccess() {
+                    onSendPhone(phoneNumber);
+                }
+
+                @Override
+                public void onError(int errorCode) {
+                    if (registerTriesCount == 3) {
+                        navigator.navigateTo(Navigator.Destination.ERROR_REGISTER);
+                        finish();
+                    }
+                    registerTriesCount++;
+                    onSendPhone(phoneNumber);
+                }
+            });
         }
     }
 
@@ -117,7 +138,6 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
     @Override
     public void onBackPressed(int fromPage) {
         if (fromPage == 0) {
-            Navigator navigator = new Navigator(PhoneVerifyActivity.this);
             navigator.navigateTo(Navigator.Destination.TUTORIAL);
             PhoneVerifyActivity.this.finish();
         } else if (fromPage == 1) {
