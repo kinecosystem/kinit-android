@@ -30,12 +30,12 @@ class CategoriesService(private val context: Context, private val api: Categorie
 
                     }
                 } else {
-                    callback?.onError(0)
+                    callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                 }
             }
 
             override fun onFailure(call: Call<CategoriesApi.CategoriesResponse>, t: Throwable) {
-                callback?.onError(-1)
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
 
         })

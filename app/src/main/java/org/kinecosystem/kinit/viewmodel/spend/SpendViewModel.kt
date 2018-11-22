@@ -9,6 +9,8 @@ import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.OffersRepository
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.server.ERROR_APP_SERVER_FAILED_RESPONSE
+import org.kinecosystem.kinit.server.ERROR_EMPTY_RESPONSE
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.view.TabViewModel
@@ -45,7 +47,7 @@ class SpendViewModel(private val navigator: Navigator) :
         return offersRepository.offers.get()
     }
 
-    fun onDataLoaded(){
+    fun onDataLoaded() {
         isLoading.set(false)
     }
 
@@ -67,6 +69,12 @@ class SpendViewModel(private val navigator: Navigator) :
                     isLoading.set(false)
                     showData.set(false)
                     hasErrors.set(true)
+                    val reason = when (errorCode) {
+                        ERROR_APP_SERVER_FAILED_RESPONSE -> Analytics.SERVER_ERROR_RESPONSE
+                        ERROR_EMPTY_RESPONSE -> Analytics.SERVER_EMPTY_RESPONSE
+                        else -> Analytics.SERVER_ERROR_RESPONSE
+                    }
+                    Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_GENERIC, reason)
                 }
 
                 override fun onSuccess() {
@@ -80,12 +88,12 @@ class SpendViewModel(private val navigator: Navigator) :
     }
 
     override fun onScreenVisibleToUser() {
-        if(offersRepository.isEmpty()){
+        if (offersRepository.isEmpty()) {
             isLoading.set(true)
         }
         bindData()
         checkForUpdates()
-        if(!userRepository.seenNewSPendPolicy) {
+        if (!userRepository.seenNewSPendPolicy) {
             showNewOfferPolicyAlert.set(true)
             userRepository.seenNewSPendPolicy = true
         }
