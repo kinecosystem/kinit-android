@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
+import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -22,16 +23,17 @@ import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.CategoryListAdapter
-import org.kinecosystem.kinit.view.adapter.SpendPagerViewsAdapter
+import org.kinecosystem.kinit.view.adapter.SpendPagerFragmentsAdapter
 import org.kinecosystem.kinit.view.customView.AlertManager
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.CategoriesViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
-import org.kinecosystem.kinit.viewmodel.spend.SpendTabViewModel
+import org.kinecosystem.kinit.viewmodel.spend.SpendTabsViewModel
+import org.kinecosystem.kinit.viewmodel.spend.TabStateListener
 import javax.inject.Inject
 
 
-class TabsAdapter(val context: Context) :
+class TabsAdapter(val context: Context,private val supportFragmentManager: FragmentManager) :
         PagerAdapter() {
 
     private var models = arrayOfNulls<TabViewModel?>(NUMBER_OF_TABS)
@@ -104,21 +106,23 @@ class TabsAdapter(val context: Context) :
     private fun getSpendTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<SpendTabBinding>(LayoutInflater.from(context),
                 R.layout.spend_tab, parent, false)
-
-
-
-        binding.model = SpendTabViewModel(Navigator(context))
-        binding.viewPager.adapter = SpendPagerViewsAdapter(context, binding)
+        val adapter = SpendPagerFragmentsAdapter(context, supportFragmentManager)
+        binding.model = SpendTabsViewModel(object: TabStateListener{
+            override fun getCurrentTabIndex(): Int {
+                return binding.viewPager.currentItem
+            }
+        })
+        binding.viewPager.adapter = adapter
         binding.spendNavTabs.setupWithViewPager(binding.viewPager)
         models[position] = binding.model
         return binding.root
 
 
-//        val spendingModel = SpendViewModel(Navigator(context))
+//        val spendingModel = OffersViewModel(Navigator(context))
 //
 //
 //
-//
+//TODO show alert
 //        binding.model = spendingModel
 //        binding.offersList.layoutManager = LinearLayoutManager(context)
 //        binding.offersList.adapter = OfferListAdapter(context, spendingModel)

@@ -75,6 +75,9 @@
             android:name=".view.spend.PurchaseOfferActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".view.spend.AppDetailsActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".view.spend.Peer2PeerActivity"

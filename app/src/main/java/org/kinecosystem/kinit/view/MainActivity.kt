@@ -71,7 +71,7 @@ class MainActivity : BaseActivity(), PageSelectionListener {
         }
 
         navigation.selectedTabIndex = selectedTabIndex
-        view_pager.adapter = TabsAdapter(this)
+        view_pager.adapter = TabsAdapter(this, supportFragmentManager)
 
         if (shouldShowPreEarnAnimation()) {
             disablePageSelection()

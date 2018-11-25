@@ -34,7 +34,9 @@ import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.*
+import org.kinecosystem.kinit.view.spend.OffersTabFragment
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
+import org.kinecosystem.kinit.view.spend.EcoAppsTabFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
 import org.kinecosystem.kinit.viewmodel.FAQViewModel
@@ -46,19 +48,16 @@ import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.*
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
-import org.kinecosystem.kinit.viewmodel.spend.Peer2PeerViewModel
-import org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel
-import org.kinecosystem.kinit.viewmodel.spend.SpendTabViewModel
-import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
+import org.kinecosystem.kinit.viewmodel.spend.*
 import javax.inject.Singleton
 
 @Singleton
 @Component(
-        modules = [(ContextModule::class), (UserRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class)])
+        modules = [(ContextModule::class), (UserRepositoryModule::class), (OffersRepositoryModule::class), (EcoAppsRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class)])
 interface CoreComponent {
 
     fun inject(balanceViewModel: BalanceViewModel)
-    fun inject(spendViewModel: SpendViewModel)
+    fun inject(spendViewModel: OffersViewModel)
     fun inject(tabsAdapter: TabsAdapter)
     fun inject(transactionsListAdapter: TransactionsListAdapter)
     fun inject(couponsListAdapter: CouponsListAdapter)
@@ -119,5 +118,11 @@ interface CoreComponent {
     fun inject(categoryTaskActivity: CategoryTaskActivity)
     fun inject(categoryTaskViewModel: CategoryTaskViewModel)
     fun inject(tasksRepo: TasksRepo)
-    fun inject(spendTabViewModel: SpendTabViewModel)
+    fun inject(spendTabViewModel: SpendTabsViewModel)
+    fun inject(offersFragment: OffersTabFragment)
+    fun inject(transfersFragment: EcoAppsTabFragment)
+    fun inject(transferViewModel: EcoAppsViewModel)
+    fun inject(appViewModel: AppViewModel)
+    fun inject(ecoAppsViewModel: EcoAppsCategoryViewModel)
+
 }
