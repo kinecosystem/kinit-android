@@ -48,6 +48,7 @@ import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
 import org.kinecosystem.kinit.viewmodel.spend.Peer2PeerViewModel
 import org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel
+import org.kinecosystem.kinit.viewmodel.spend.SpendTabViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
 import javax.inject.Singleton
 
@@ -118,4 +119,5 @@ interface CoreComponent {
     fun inject(categoryTaskActivity: CategoryTaskActivity)
     fun inject(categoryTaskViewModel: CategoryTaskViewModel)
     fun inject(tasksRepo: TasksRepo)
+    fun inject(spendTabViewModel: SpendTabViewModel)
 }
