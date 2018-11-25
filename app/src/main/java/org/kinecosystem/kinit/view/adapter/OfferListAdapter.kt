@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.Observable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,10 @@ import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.model.spend.isAvailable
 import org.kinecosystem.kinit.model.spend.isP2p
 import org.kinecosystem.kinit.util.ImageUtils
+import org.kinecosystem.kinit.viewmodel.spend.SpendTabViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
 
-class OfferListAdapter(private val context: Context, private val model: SpendViewModel)
+class OfferListAdapter(private val context: Context, private val model: SpendTabViewModel)
     : RecyclerView.Adapter<OfferListAdapter.ViewHolder>() {
 
 
@@ -31,6 +33,7 @@ class OfferListAdapter(private val context: Context, private val model: SpendVie
         offers = model.offers()
         model.onDataLoaded()
         notifyDataSetChanged()
+        Log.d("####", "#### refresh ${offers.size} $offers")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,

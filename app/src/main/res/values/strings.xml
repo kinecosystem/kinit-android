@@ -216,4 +216,6 @@
     <string name="error_register">We were unable to create a profile for you</string>
     <string name="spend_policy_title">In order to always bring you the best new offers, you will be able to buy a maximum of 1 gift cards from every company each month</string>
     <string name="i_understand">I Understand</string>
+    <string name="spend_kin">Spend Kin</string>
+    <string name="transfer_kin">Transfer Kin</string>
 </resources>
