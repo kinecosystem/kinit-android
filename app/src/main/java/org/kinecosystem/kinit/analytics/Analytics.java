@@ -22,8 +22,8 @@ public class Analytics {
     public static final String VIEW_ERROR_TYPE_CODE_NOT_PROVIDED = "Code not provided";
     public static final String VIEW_ERROR_TYPE_INTERNET_CONNECTION = "Internet Connection";
     public static final String VIEW_ERROR_TYPE_GENERIC = "Generic";
+    public static final String MENU_ITEM_NAME_USE_KIN = "use kin";
     public static final String MENU_ITEM_NAME_EARN = "earn";
-    public static final String MENU_ITEM_NAME_SPEND = "spend";
     public static final String TRANSACTION_TYPE_P2P = "p2p";
     public static final String TRANSACTION_TYPE_EARN = "earn";
     public static final String TRANSACTION_TYPE_SPEND = "spend";

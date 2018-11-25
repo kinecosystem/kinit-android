@@ -6,10 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.blockchain.Wallet
-import org.kinecosystem.kinit.repository.CategoriesRepository
-import org.kinecosystem.kinit.repository.DataStoreProvider
-import org.kinecosystem.kinit.repository.OffersRepository
-import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.repository.*
 import org.kinecosystem.kinit.server.api.*
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.Scheduler
@@ -36,13 +33,14 @@ class NetworkServices {
     val categoriesService: CategoriesService
     val walletService: Wallet
     val offerService: OfferService
+    val ecoApplicationServie:EcoApplicationsService
     val backupService: BackupService
     val clientValidationService: ClientValidationService
 
     private val applicationContext: Context
 
     constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository,
-                offerRepo: OffersRepository, categoryRepository: CategoriesRepository,
+                offerRepo: OffersRepository, categoryRepository: CategoriesRepository, ecoApplicationsRepository: EcoApplicationsRepository,
                 analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
@@ -74,6 +72,7 @@ class NetworkServices {
                 userRepo, analytics, taskService, walletService, categoriesService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
                 userRepo, offerRepo, analytics, walletService, scheduler)
+        ecoApplicationServie = EcoApplicationsService(context, retrofit.create(EcoApplicationsApi::class.java), ecoApplicationsRepository, userRepo, analytics)
         backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))
         clientValidationService = ClientValidationService(userRepo, retrofit.create<ClientValidationApi>(ClientValidationApi::class.java))
     }

@@ -20,10 +20,10 @@ class ServicesModule {
     @Singleton
     fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider,
                          userRepository: UserRepository,
-                         offersRepository: OffersRepository, categoryRepository:CategoriesRepository, analytics: Analytics,
+                         offersRepository: OffersRepository, categoryRepository:CategoriesRepository, ecoApplicationsRepository: EcoApplicationsRepository, analytics: Analytics,
                          scheduler: Scheduler): NetworkServices {
         serivce = NetworkServices(context, dataStoreProvider,
-                userRepository, offersRepository, categoryRepository , analytics, scheduler)
+                userRepository, offersRepository, categoryRepository , ecoApplicationsRepository, analytics, scheduler)
         return serivce
     }
 

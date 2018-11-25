@@ -39,4 +39,8 @@
     <dimen name="backup_title_size">22sp</dimen>
     <dimen name="next_text_size">18sp</dimen>
     <dimen name="min_touch_size">48dp</dimen>
+    <dimen name="page_indicator_margin">5dp</dimen>
+    <dimen name="page_indicator_size">7dp</dimen>
+    <dimen name="app_header_image_long_height">420dp</dimen>
+    <dimen name="app_panel_header_height">56dp</dimen>
 </resources>

@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.spend.SpendTabViewModel" />
+            type="org.kinecosystem.kinit.viewmodel.spend.SpendTabsViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -128,86 +128,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/line_delim">
 
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/spend_page_wrapper"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="#22aabb"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/balance">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/offersList"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:scrollbars="vertical"
-                    android:background="#ff88aa"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-
-                   <ProgressBar
-                android:layout_width="30dp"
-                android:layout_height="300dp"
-                android:theme="@style/AppTheme.Blue"
-                android:visibility="@{model.isLoading}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
-
-          <!--  <android.support.v7.widget.RecyclerView
-                android:id="@+id/offers_list"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scrollbars="vertical"
-                android:visibility="@{model.showData}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />-->
-
-            <include
-                android:id="@+id/general_error"
-                layout="@layout/error_general_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{model.hasErrors}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <include
-                android:id="@+id/no_internet_error"
-                layout="@layout/error_no_internet_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{!model.hasNetwork}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
-
-
-            </android.support.constraint.ConstraintLayout>
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/transfer_page_wrapper"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/red_wrong"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/balance">
-
-
-            </android.support.constraint.ConstraintLayout>
         </android.support.v4.view.ViewPager>
 
 
