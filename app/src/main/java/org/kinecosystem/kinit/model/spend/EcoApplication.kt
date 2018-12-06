@@ -1,8 +1,10 @@
 package org.kinecosystem.kinit.model.spend
 
+import android.content.Context
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import org.kinecosystem.kinit.util.ImageUtils
 
 @Parcelize
 data class EcoApplication(
@@ -33,8 +35,8 @@ fun EcoApplication.isKinTransferSupported() = transferData != null
 
 fun EcoApplication.getHeaderImageCount(): Int {
     return when {
-        !data.appImage2Url.isNullOrEmpty() && !data.appImage1Url.isNullOrEmpty() && !data.appImage0Url.isNullOrEmpty() -> 3
-        !data.appImage1Url.isNullOrEmpty() && !data.appImage0Url.isNullOrEmpty() -> 2
+        !data.appImage2Url.isNullOrEmpty() && !data.appImage1Url.isNullOrEmpty() && !data.appImage0Url.isEmpty() -> 3
+        !data.appImage1Url.isNullOrEmpty() && !data.appImage0Url.isEmpty() -> 2
         !data.appImage0Url.isEmpty() -> 1
         else -> 0
     }
@@ -45,5 +47,17 @@ fun EcoApplication.getHeaderImageUrl(position: Int): String {
         2 -> data.appImage2Url.orEmpty()
         1 -> data.appImage1Url.orEmpty()
         else -> data.appImage0Url
+    }
+}
+
+fun EcoApplication.preload(context: Context) {
+    ImageUtils.fetchImage(context.applicationContext, data.cardImageUrl)
+    ImageUtils.fetchImage(context.applicationContext, data.iconUrl)
+    ImageUtils.fetchImage(context.applicationContext, data.appImage0Url)
+    data.appImage1Url?.let {
+        ImageUtils.fetchImage(context.applicationContext, it)
+    }
+    data.appImage2Url?.let {
+        ImageUtils.fetchImage(context.applicationContext, it)
     }
 }

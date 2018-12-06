@@ -45,9 +45,9 @@ class PagesIndicatorsView : LinearLayout {
         container.addView(newView)
     }
 
-    fun setPageSelected(page: Int) {
+    fun setPageSelected(pageIndex: Int) {
         for (childIndex in 0..container.childCount) {
-            container.getChildAt(childIndex)?.isSelected = childIndex == page
+            container.getChildAt(childIndex)?.isSelected = childIndex == pageIndex
         }
     }
 }

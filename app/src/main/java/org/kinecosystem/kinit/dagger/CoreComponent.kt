@@ -34,9 +34,7 @@ import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.*
-import org.kinecosystem.kinit.view.spend.OffersTabFragment
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
-import org.kinecosystem.kinit.view.spend.EcoAppsTabFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
 import org.kinecosystem.kinit.viewmodel.FAQViewModel
@@ -87,7 +85,7 @@ interface CoreComponent {
     fun inject(trueXWebFragment: WebTaskTruexFragment)
     fun inject(webModel: WebViewModel)
     fun inject(trueXModel: WebTaskTruexViewModel)
-    fun inject(questionDualFragmentViewModel:QuestionDualImageViewModel)
+    fun inject(questionDualFragmentViewModel: QuestionDualImageViewModel)
     fun inject(purchaseOfferFragment: PurchaseOfferFragment)
     fun inject(quizViewModel: QuizQuestionViewModel)
     fun inject(answerViewModel: AnswerViewModel)
@@ -119,8 +117,6 @@ interface CoreComponent {
     fun inject(categoryTaskViewModel: CategoryTaskViewModel)
     fun inject(tasksRepo: TasksRepo)
     fun inject(spendTabViewModel: SpendTabsViewModel)
-    fun inject(offersFragment: OffersTabFragment)
-    fun inject(transfersFragment: EcoAppsTabFragment)
     fun inject(transferViewModel: EcoAppsViewModel)
     fun inject(appViewModel: AppViewModel)
     fun inject(ecoAppsViewModel: EcoAppsCategoryViewModel)

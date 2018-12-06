@@ -9,6 +9,7 @@
             type="org.kinecosystem.kinit.viewmodel.spend.OffersViewModel"/>
     </data>
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -41,8 +42,8 @@
             layout="@layout/error_general_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{model.hasErrors}"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="@{model.hasErrors}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"

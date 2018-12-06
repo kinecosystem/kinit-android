@@ -30,6 +30,7 @@ private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
 private const val FORCE_UPDATE = "FORCE_UPDATE"
 private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
 private const val SEEN_NEW_SPEND_POLICY = "SEEN_NEW_SPEND_POLICY"
+private const val SEEN_EXPLORE_APPS_ALERT = "SEEN_EXPLORE_APPS_ALERT"
 
 
 
@@ -122,6 +123,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var seenNewSPendPolicy: Boolean
         set(seen) = userCache.putBoolean(SEEN_NEW_SPEND_POLICY, seen)
         get() = userCache.getBoolean(SEEN_NEW_SPEND_POLICY, false)
+
+    var seenExploreAppsAlert: Boolean
+        set(seen) = userCache.putBoolean(SEEN_EXPLORE_APPS_ALERT, seen)
+        get() = userCache.getBoolean(SEEN_EXPLORE_APPS_ALERT, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")

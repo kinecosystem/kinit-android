@@ -2,7 +2,9 @@ package org.kinecosystem.kinit.viewmodel.spend
 
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.isKinTransferSupported
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.EcoApplicationsRepository
 import javax.inject.Inject
@@ -25,10 +27,17 @@ class EcoAppsCategoryViewModel(private val navigator: Navigator, private val cat
     fun categoryTitle() = appsRepository.categoryTitle(categoryId)
 
 
-    fun onItemClicked(app: EcoApplication, position: Int) {
+    fun onItemClicked(app: EcoApplication) {
         navigator.navigateTo(app)
-        //TODO
-        //analytics.logEvent(Events.Analytics.ClickOfferItemOnSpendPage(offer.provider?.name, offer.price)
+    }
+
+    fun onActionBtnClicked(app: EcoApplication) {
+        navigator.navigateTo(app)
+        if(app.isKinTransferSupported()){
+            analytics.logEvent(Events.Analytics.ClickSendButtonOnAppItem(app.data.categoryTitle, app.identifier, app.name))
+        }else{
+            analytics.logEvent(Events.Analytics.ClickGetButtonOnAppItem(app.data.categoryTitle, app.identifier, app.name))
+        }
     }
 
 }

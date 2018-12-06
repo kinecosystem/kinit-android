@@ -83,7 +83,7 @@
                     android:id="@+id/appIcon"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginStart="22dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="19dp"
                     android:background="@drawable/place_holder_rounded_rec_grey"
                     android:scaleType="centerCrop"
@@ -116,43 +116,44 @@
                     android:lines="1"
                     android:text="@{model.appName}"
                     android:textColor="#7884a5"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/btn"
                     app:layout_constraintStart_toEndOf="@+id/appIcon"
-                    app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+                    app:layout_constraintTop_toBottomOf="@+id/viewPager"
+                    tools:text="APP Name"/>
 
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
-                    android:gravity="left|bottom"
                     android:text="@{model.shortDescription}"
                     android:textColor="#767e93"
                     android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/appIcon"
                     app:layout_constraintEnd_toStartOf="@+id/btn"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/appIcon"
-                    app:layout_constraintTop_toBottomOf="@+id/name" />
+                    app:layout_constraintTop_toBottomOf="@+id/name"
+                    tools:text="Some Info with a long ome Info with a long ome Info with a long ome Info with a long ome Ih a long ome Info with a long ome Info with a long ome Ih a long ome Info with a long ome Info with a long ome Ih a long ome Info with a long ome Info with a long ome Ih a long ome Info with a long ome Info with a long ome Info with a long" />
 
                 <TextView
                     android:id="@+id/btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="22dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@{model.canTransferKin ? @drawable/full_rounded_blue : @drawable/empty_rounded_blue}"
                     android:onClick="@{model::onActionBtnClicked}"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:text="@{model.canTransferKin ? @string/send : @string/get}"
+                    android:text="@{model.canTransferKin ? @string/send : @string/get_app}"
                     android:textColor="@{model.canTransferKin ? @color/white :@color/blue}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+                    app:layout_constraintTop_toBottomOf="@+id/viewPager"
+                    tools:text="Get" />
 
                 <TextView
                     android:id="@+id/category"
@@ -161,12 +162,12 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
                     android:text="@{model.categoryTitle}"
-                    android:textColor="#7884a5"
-                    android:textSize="10sp"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/appIcon"
-                    app:layout_constraintTop_toBottomOf="@+id/appIcon" />
-
-
+                    app:layout_constraintTop_toBottomOf="@+id/description"
+                    tools:text="Fun and More" />
+                
                 <TextView
                     android:id="@+id/availability_text"
                     android:layout_width="0dp"
@@ -174,7 +175,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="19dp"
-                    android:text="Soon you’ll be able to send Kin to this account"
+                    android:text="@string/soon_you_ll_be_able_to_send_kin_to_this_account"
                     android:textColor="@color/grey"
                     android:textSize="14sp"
                     android:visibility="@{!model.canTransferKin}"
@@ -186,7 +187,7 @@
                     android:id="@+id/warning_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
+                    android:layout_marginStart="16dp"
                     android:visibility="@{!model.canTransferKin}"
                     app:layout_constraintBottom_toTopOf="@+id/warning_delim"
                     app:layout_constraintStart_toStartOf="parent"
@@ -211,22 +212,23 @@
                     android:id="@+id/about_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="20dp"
                     android:fontFamily="sans-serif"
                     android:text="@string/about"
-                    android:textColor="#7884a5"
+                    android:textColor="@color/grey"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@{model.canTransferKin ? @id/delim : @id/warning_delim}"
-                    tools:layout_constraintTop_toBottomOf="@id/warning_delim" />
+                    tools:layout_constraintTop_toBottomOf="@id/warning_delim"
+                    tools:layout_editor_absoluteY="594dp" />
 
                 <TextView
                     android:id="@+id/aboutText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="19dp"
                     android:fontFamily="sans-serif"
@@ -236,17 +238,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/about_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/about_title"
+                    tools:text="about this app" />
 
                 <TextView
                     android:id="@+id/kinUsageTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:fontFamily="sans-serif"
-                    android:text="Kin Usage"
-                    android:textColor="#7884a5"
+                    android:text="@string/kin_usage"
+                    android:textColor="@color/grey"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -256,19 +259,20 @@
                     android:id="@+id/KinUsageText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="19dp"
                     android:layout_marginBottom="35dp"
                     android:fontFamily="sans-serif"
                     android:text="@{model.kinUsage}"
-                    android:textColor="#7884a5"
+                    android:textColor="@color/grey"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/kinUsageTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/kinUsageTitle"
+                    tools:text="about kin usage in this app" />
 
 
             </android.support.constraint.ConstraintLayout>
@@ -294,7 +298,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:elevation="7dp"
             android:outlineProvider="@null"
-            app:srcCompat="@drawable/close_icon"
+            app:srcCompat="@drawable/close_dark"
             android:alpha="0"/>
 
         <TextView
@@ -308,7 +312,7 @@
             android:paddingRight="15dp"
             android:elevation="7dp"
             android:outlineProvider="@null"
-            android:text="@{model.canTransferKin ? @string/send : @string/getApp}"
+            android:text="@{model.canTransferKin ? @string/send : @string/get_app}"
             android:textColor="@{model.canTransferKin ? @color/white :@color/blue}"
             app:layout_constraintBottom_toBottomOf="@+id/topPanel"
             app:layout_constraintEnd_toEndOf="parent"

@@ -221,12 +221,17 @@
     <string name="travel_local">Travel &amp; Local</string>
     <string name="communications_social">Communications &amp; Social</string>
     <string name="get">GET</string>
-    <string name="getApp">Get App</string>
+    <string name="get_app">Get App</string>
     <string name="send">SEND</string>
     <string name="about">About</string>
     <string name="more_apps_are_coming_soon">More apps are coming soon</string>
     <string name="learn_more_about_send_kin">Learn more about Send Kin</string>
     <string name="introducing_the_kin_ecosystem_apps">Introducing the Kin Ecosystem apps</string>
-    <string name="discover_all_the_exciting_apps_to_earn_and_use_kin_and_take_it_with_you_everywhere_you_want">Discover all the exciting apps to earn and use Kin, and take it with you everywhere you want</string>
+    <string name="discover_all">Discover all the amazing apps where you can  use Kin.</string>
+    <string name="soon_you_ll_be_able_to_send_kin_to_this_account">Soon you’ll be able to send Kin to this account</string>
+    <string name="kin_usage">Kin Usage</string>
+    <string name="explore_apps_title">Why just have one when you can have many? Discover and download all of the amazing apps with Kin in one place.</string>
+    <string name="awesome">Awesome</string>
+
 
 </resources>

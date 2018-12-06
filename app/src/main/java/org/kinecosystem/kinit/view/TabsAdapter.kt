@@ -4,7 +4,6 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
-import android.support.v4.app.FragmentManager
 import android.support.v4.view.PagerAdapter
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -23,17 +22,17 @@ import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.adapter.BalancePagerViewsAdapter
 import org.kinecosystem.kinit.view.adapter.CategoryListAdapter
-import org.kinecosystem.kinit.view.adapter.SpendPagerFragmentsAdapter
+import org.kinecosystem.kinit.view.adapter.OnTabIndexListener
+import org.kinecosystem.kinit.view.adapter.SpendPagerAdapter
 import org.kinecosystem.kinit.view.customView.AlertManager
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.CategoriesViewModel
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.spend.SpendTabsViewModel
-import org.kinecosystem.kinit.viewmodel.spend.TabStateListener
 import javax.inject.Inject
 
 
-class TabsAdapter(val context: Context,private val supportFragmentManager: FragmentManager) :
+class TabsAdapter(val context: Context) :
         PagerAdapter() {
 
     private var models = arrayOfNulls<TabViewModel?>(NUMBER_OF_TABS)
@@ -106,35 +105,32 @@ class TabsAdapter(val context: Context,private val supportFragmentManager: Fragm
     private fun getSpendTab(parent: ViewGroup, position: Int): View {
         val binding = DataBindingUtil.inflate<SpendTabBinding>(LayoutInflater.from(context),
                 R.layout.spend_tab, parent, false)
-        val adapter = SpendPagerFragmentsAdapter(context, supportFragmentManager)
-        binding.model = SpendTabsViewModel(object: TabStateListener{
-            override fun getCurrentTabIndex(): Int {
+        val modelsAdapter = SpendPagerAdapter(context, object : OnTabIndexListener {
+            override fun currentTab(): Int {
                 return binding.viewPager.currentItem
             }
+
         })
-        binding.viewPager.adapter = adapter
+        binding.viewPager.addOnPageChangeListener(modelsAdapter)
+        modelsAdapter.offersModel.showNewOfferPolicyAlert.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if (sender is ObservableBoolean && sender.get()) {
+                    AlertManager.showGeneralAlert(context, null, R.string.spend_policy_title, R.string.i_understand, {}, null, null, null, R.drawable.new_purchase_illust)
+                }
+            }
+        })
+        modelsAdapter.appsModel.showAppsAlert.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if (sender is ObservableBoolean && sender.get()) {
+                    AlertManager.showGeneralAlert(context, null, R.string.explore_apps_title, R.string.awesome, {}, null, null, null, R.drawable.ecosystem_illus_popup)
+                }
+            }
+        })
+        binding.model = SpendTabsViewModel()
+        binding.viewPager.adapter = modelsAdapter
         binding.spendNavTabs.setupWithViewPager(binding.viewPager)
-        models[position] = binding.model
+        models[position] = modelsAdapter
         return binding.root
-
-
-//        val spendingModel = OffersViewModel(Navigator(context))
-//
-//
-//
-//TODO show alert
-//        binding.model = spendingModel
-//        binding.offersList.layoutManager = LinearLayoutManager(context)
-//        binding.offersList.adapter = OfferListAdapter(context, spendingModel)
-//        models[position] = binding.model
-//        spendingModel.showNewOfferPolicyAlert.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-//            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-//                if (sender is ObservableBoolean && sender.get()) {
-//                    AlertManager.showGeneralAlert(context, null, R.string.spend_policy_title, R.string.i_understand, {}, null, null, null, R.drawable.new_purchase_illust)
-//                }
-//            }
-//        })
-//        return binding.root
     }
 
     private fun getBalanceTab(parent: ViewGroup, position: Int): View {

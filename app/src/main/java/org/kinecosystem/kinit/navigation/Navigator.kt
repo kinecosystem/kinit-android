@@ -3,7 +3,6 @@ package org.kinecosystem.kinit.navigation
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.model.earn.isTaskWebView
@@ -11,8 +10,8 @@ import org.kinecosystem.kinit.model.spend.EcoApplication
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.GeneralUtils
-import org.kinecosystem.kinit.view.RegisterErrorActivity
 import org.kinecosystem.kinit.view.MainActivity
+import org.kinecosystem.kinit.view.RegisterErrorActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
 import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
@@ -109,7 +108,7 @@ class Navigator(private val context: Context) {
         }
     }
 
-    fun navigateToUrl(url:String){
+    fun navigateToUrl(url: String) {
         GeneralUtils.navigateToUrl(context, url)
     }
 }

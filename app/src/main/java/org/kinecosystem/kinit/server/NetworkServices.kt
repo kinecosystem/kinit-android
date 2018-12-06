@@ -33,7 +33,7 @@ class NetworkServices {
     val categoriesService: CategoriesService
     val walletService: Wallet
     val offerService: OfferService
-    val ecoApplicationServie:EcoApplicationsService
+    val ecoApplicationService:EcoApplicationsService
     val backupService: BackupService
     val clientValidationService: ClientValidationService
 
@@ -72,7 +72,7 @@ class NetworkServices {
                 userRepo, analytics, taskService, walletService, categoriesService)
         offerService = OfferService(applicationContext, retrofit.create<OffersApi>(OffersApi::class.java),
                 userRepo, offerRepo, analytics, walletService, scheduler)
-        ecoApplicationServie = EcoApplicationsService(context, retrofit.create(EcoApplicationsApi::class.java), ecoApplicationsRepository, userRepo, analytics)
+        ecoApplicationService = EcoApplicationsService(context, retrofit.create(EcoApplicationsApi::class.java), ecoApplicationsRepository, userRepo)
         backupService = BackupService(applicationContext, userRepo, retrofit.create<BackupApi>(BackupApi::class.java))
         clientValidationService = ClientValidationService(userRepo, retrofit.create<ClientValidationApi>(ClientValidationApi::class.java))
     }

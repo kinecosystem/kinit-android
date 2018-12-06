@@ -1,8 +1,7 @@
 package org.kinecosystem.kinit.server
 
 import android.content.Context
-import android.util.Log
-import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.model.spend.preload
 import org.kinecosystem.kinit.repository.EcoApplicationsRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.api.EcoApplicationsApi
@@ -12,8 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class EcoApplicationsService(context: Context, private val api: EcoApplicationsApi,private val repo: EcoApplicationsRepository, private val userRepository: UserRepository,
-                            private val analytics: Analytics) {
+class EcoApplicationsService(context: Context, private val api: EcoApplicationsApi, private val repo: EcoApplicationsRepository, private val userRepository: UserRepository) {
 
     val applicationContext: Context = context.applicationContext
 
@@ -25,18 +23,23 @@ class EcoApplicationsService(context: Context, private val api: EcoApplicationsA
 
         api.getApps(userRepository.userId()).enqueue(object : Callback<List<EcoApplicationsApi.AppsCategory>> {
             override fun onFailure(call: Call<List<EcoApplicationsApi.AppsCategory>>, t: Throwable) {
-                Log.d("####", "### no apps ")
-                //repo.updateCategories(listOf(EcoApplicationsApi.AppsCategory("ttt", 1, listOf(EcoApplication("iddd", "whaap", null, EcoApplicationData("ddd", "", "", "fun and more", "", "", null, null, "usaage", "fffdrr"))))))
+                callback?.onError(0)
             }
 
             override fun onResponse(call: Call<List<EcoApplicationsApi.AppsCategory>>, response: Response<List<EcoApplicationsApi.AppsCategory>>) {
-                if(response.isSuccessful) {
-                    repo.updateCategories(response.body())
-                }
-            }
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        repo.updateCategories(it)
+                        for (appCategory in it) {
+                            for (app in appCategory.apps) {
+                                app.preload(applicationContext)
+                            }
+                        }
+                    }
 
+                }
+                callback?.onSuccess()
+            }
         })
     }
-
-
 }
