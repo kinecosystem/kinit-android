@@ -124,10 +124,10 @@
 
         <TextView
             android:id="@+id/hash_code"
-            android:layout_width="0dp"
-            android:layout_height="17dp"
-            android:layout_marginBottom="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="11dp"
+            android:layout_marginBottom="12dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
             android:letterSpacing="0.08"
@@ -142,10 +142,10 @@
             android:textStyle="normal"
             android:visibility="@{model.isExpanded ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/right_guid"
-            app:layout_constraintStart_toStartOf="@+id/left_guid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bottom_delim"
-            tools:text="23476234-3242342-234234234" />
+            tools:text="23476234-3242342-2342-423   312-123-12" />
 
         <View
             android:id="@+id/coupons_bottom_delim"
