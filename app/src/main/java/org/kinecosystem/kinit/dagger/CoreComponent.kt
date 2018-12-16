@@ -46,18 +46,16 @@ import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.*
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
-import org.kinecosystem.kinit.viewmodel.spend.Peer2PeerViewModel
-import org.kinecosystem.kinit.viewmodel.spend.PurchaseOfferViewModel
-import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
+import org.kinecosystem.kinit.viewmodel.spend.*
 import javax.inject.Singleton
 
 @Singleton
 @Component(
-        modules = [(ContextModule::class), (UserRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class)])
+        modules = [(ContextModule::class), (UserRepositoryModule::class), (OffersRepositoryModule::class), (EcoAppsRepositoryModule::class), (AnalyticsModule::class), (SchedulerModule::class), (NotificationModule::class), (DataStoreModule::class), (ServicesModule::class)])
 interface CoreComponent {
 
     fun inject(balanceViewModel: BalanceViewModel)
-    fun inject(spendViewModel: SpendViewModel)
+    fun inject(spendViewModel: OffersViewModel)
     fun inject(tabsAdapter: TabsAdapter)
     fun inject(transactionsListAdapter: TransactionsListAdapter)
     fun inject(couponsListAdapter: CouponsListAdapter)
@@ -87,7 +85,7 @@ interface CoreComponent {
     fun inject(trueXWebFragment: WebTaskTruexFragment)
     fun inject(webModel: WebViewModel)
     fun inject(trueXModel: WebTaskTruexViewModel)
-    fun inject(questionDualFragmentViewModel:QuestionDualImageViewModel)
+    fun inject(questionDualFragmentViewModel: QuestionDualImageViewModel)
     fun inject(purchaseOfferFragment: PurchaseOfferFragment)
     fun inject(quizViewModel: QuizQuestionViewModel)
     fun inject(answerViewModel: AnswerViewModel)
@@ -118,4 +116,9 @@ interface CoreComponent {
     fun inject(categoryTaskActivity: CategoryTaskActivity)
     fun inject(categoryTaskViewModel: CategoryTaskViewModel)
     fun inject(tasksRepo: TasksRepo)
+    fun inject(spendTabViewModel: SpendTabsViewModel)
+    fun inject(transferViewModel: EcoAppsViewModel)
+    fun inject(appViewModel: AppViewModel)
+    fun inject(ecoAppsViewModel: EcoAppsCategoryViewModel)
+
 }

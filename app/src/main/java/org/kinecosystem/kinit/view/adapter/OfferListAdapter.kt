@@ -14,9 +14,9 @@ import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.model.spend.isAvailable
 import org.kinecosystem.kinit.model.spend.isP2p
 import org.kinecosystem.kinit.util.ImageUtils
-import org.kinecosystem.kinit.viewmodel.spend.SpendViewModel
+import org.kinecosystem.kinit.viewmodel.spend.OffersViewModel
 
-class OfferListAdapter(private val context: Context, private val model: SpendViewModel)
+class OfferListAdapter(private val context: Context, private val model: OffersViewModel)
     : RecyclerView.Adapter<OfferListAdapter.ViewHolder>() {
 
 

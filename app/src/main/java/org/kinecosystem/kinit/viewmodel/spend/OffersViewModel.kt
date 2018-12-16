@@ -16,7 +16,7 @@ import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
-class SpendViewModel(private val navigator: Navigator) :
+class OffersViewModel(private val navigator: Navigator) :
         TabViewModel {
 
     @Inject
@@ -101,7 +101,7 @@ class SpendViewModel(private val navigator: Navigator) :
                 if (!hasNetwork.get()) {
                     Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION, "no internet")
                 } else if (offersRepository.offers.get().isEmpty()) {
-                    Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_EARN, "")
+                    Events.Analytics.ViewEmptyStatePage(Analytics.MENU_ITEM_NAME_USE_KIN, "")
                 } else {
                     Events.Analytics.ViewSpendPage(offersRepository.offersCount())
                 }

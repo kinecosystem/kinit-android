@@ -72,6 +72,7 @@ class MainActivity : BaseActivity(), PageSelectionListener {
 
         navigation.selectedTabIndex = selectedTabIndex
         view_pager.adapter = TabsAdapter(this)
+        view_pager.offscreenPageLimit = 2
 
         if (shouldShowPreEarnAnimation()) {
             disablePageSelection()

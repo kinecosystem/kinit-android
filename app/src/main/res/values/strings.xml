@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kinit</string>
     <string name="title_earn">Earn</string>
-    <string name="title_spend">Spend</string>
+    <string name="title_spend">Use Kin</string>
     <string name="title_balance">Balance</string>
     <string name="title_more">More</string>
     <string name="resume">Continue</string>
@@ -216,4 +216,22 @@
     <string name="error_register">We were unable to create a profile for you</string>
     <string name="spend_policy_title">In order to always bring you the best new offers, you will be able to buy a maximum of 1 gift cards from every company each month</string>
     <string name="i_understand">I Understand</string>
+    <string name="spend_kin">Spend Kin</string>
+    <string name="transfer_kin">Transfer Kin</string>
+    <string name="travel_local">Travel &amp; Local</string>
+    <string name="communications_social">Communications &amp; Social</string>
+    <string name="get">GET</string>
+    <string name="get_app">Get App</string>
+    <string name="send">SEND</string>
+    <string name="about">About</string>
+    <string name="more_apps_are_coming_soon">More apps are coming soon</string>
+    <string name="learn_more_about_send_kin">Learn more about Send Kin</string>
+    <string name="introducing_the_kin_ecosystem_apps">Introducing the Kin Ecosystem apps</string>
+    <string name="discover_all">Discover all the amazing apps where you can  use Kin.</string>
+    <string name="soon_you_ll_be_able_to_send_kin_to_this_account">Soon you’ll be able to send Kin to this account</string>
+    <string name="kin_usage">Kin Usage</string>
+    <string name="explore_apps_title">Why just have one when you can have many? Discover and download all of the amazing apps with Kin in one place.</string>
+    <string name="awesome">Awesome</string>
+
+
 </resources>
