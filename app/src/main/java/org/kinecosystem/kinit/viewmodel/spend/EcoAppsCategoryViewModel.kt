@@ -32,7 +32,7 @@ class EcoAppsCategoryViewModel(private val navigator: Navigator, private val cat
     }
 
     fun onActionBtnClicked(app: EcoApplication) {
-        navigator.navigateTo(app)
+        navigator.navigateToUrl(app.data.appUrl)
         if(app.isKinTransferSupported()){
             analytics.logEvent(Events.Analytics.ClickSendButtonOnAppItem(app.data.categoryTitle, app.identifier, app.name))
         }else{
