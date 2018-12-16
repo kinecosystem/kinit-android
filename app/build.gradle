@@ -35,7 +35,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 26
-        versionName "1.4.3"
+        versionName "1.4.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         dataBinding {
