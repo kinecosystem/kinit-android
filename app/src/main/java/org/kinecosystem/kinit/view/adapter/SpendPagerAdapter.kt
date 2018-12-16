@@ -46,8 +46,8 @@ class SpendPagerAdapter(val context: Context, private val tabIndexListener: OnTa
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when (position) {
-            0 -> context.resources.getString(R.string.transfer_kin)
-            else -> context.resources.getString(R.string.spend_kin)
+            0 -> context.resources.getString(R.string.ecosystem_apps)
+            else -> context.resources.getString(R.string.gift_cards)
         }
     }
 
