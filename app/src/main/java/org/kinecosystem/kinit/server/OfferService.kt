@@ -25,6 +25,7 @@ const val ERROR_REDEEM_COUPON_FAILED = 101
 const val ERROR_NO_GOOD_LEFT = 200
 private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
 private const val P2P_ORDER_ID = "1-kit-p2p"
+private const val P2P_TO_APP_ORDER_ID = "1-kit-to-app"
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userRepo: UserRepository,
                    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
@@ -153,7 +154,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                     analytics.logEvent(
                             Events.Business.KINTransactionFailed(
                                     "Spend failed. Exception $e with message ${e.message}",
-                                    offer.price?.toFloat(), Analytics.TRANSACTION_TYPE_SPEND))
+                                    offer.price, Analytics.TRANSACTION_TYPE_SPEND))
                 } catch (e: Exception) {
                     callbackWithError(ERROR_TRANSACTION_FAILED)
                 }
@@ -169,24 +170,36 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
     }
 
     fun p2pTransfer(toAddress: String, amount: Int, callback: OperationResultCallback<String>) {
+        transfer(toAddress, amount, callback, false)
+    }
 
+    fun app2appTransfer(toAddress: String, appSid: String, amount: Int, callback: OperationResultCallback<String>) {
+        transfer(toAddress, amount, callback, true, appSid)
+    }
+
+    private fun transfer(toAddress: String, amount: Int, callback: OperationResultCallback<String>, isApp2app: Boolean = false, appSid: String = "") {
         if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
         }
         scheduler.executeOnBackground(object : Runnable {
             override fun run() {
                 try {
-
-                    val transactionId = wallet.payForOrder(toAddress, amount, P2P_ORDER_ID)
+                    val type = if (isApp2app) P2P_TO_APP_ORDER_ID else P2P_ORDER_ID
+                    val transactionId = wallet.payForOrder(toAddress, amount, type)
                     wallet.updateBalanceSync()
-                    if (transactionId != null && !transactionId.id().isEmpty()) {
+                    if (!transactionId.id().isEmpty()) {
                         scheduler.post {
                             callback.onResult(transactionId.id())
                         }
-                        wallet.logP2pTransactionCompleted(amount, transactionId.id())
+                        wallet.logP2pTransactionCompleted(amount, transactionId.id(), isApp2app)
                         //update to the server the transactionId
-                        offersApi.sendTransactionInfo(userRepo.userId(),
-                                OffersApi.TransactionInfo(transactionId.id(), toAddress, amount)).execute()
+                        if (isApp2app) {
+                            offersApi.sendToAppTransactionInfo(userRepo.userId(),
+                                    OffersApi.AppsTransactionInfo(transactionId.id(), toAddress, amount, appSid)).execute()
+                        } else {
+                            offersApi.sendTransactionInfo(userRepo.userId(),
+                                    OffersApi.PeersTransactionInfo(transactionId.id(), toAddress, amount)).execute()
+                        }
                         wallet.retrieveTransactions()
                     }
                 } catch (e: OperationFailedException) {
@@ -194,13 +207,13 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                         callbackWithError(ERROR_TRANSACTION_FAILED)
                     })
                     analytics.logEvent(
-                            Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
+                            Events.Business.KINTransactionFailed(e.message, amount, TYPE_P2P))
                 } catch (e: Exception) {
                     scheduler.post({
                         callbackWithError(ERROR_UPDATE_TRANSACTION_TO_SERVER)
                     })
                     analytics.logEvent(
-                            Events.Business.KINTransactionFailed(e.message, amount.toFloat(), TYPE_P2P))
+                            Events.Business.KINTransactionFailed(e.message, amount, TYPE_P2P))
                 }
             }
 

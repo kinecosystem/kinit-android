@@ -30,10 +30,16 @@ interface OffersApi {
         @SerializedName("address") val address: String)
 
 
-    data class TransactionInfo(
+    data class PeersTransactionInfo(
         @SerializedName("tx_hash") val txHash: String,
         @SerializedName("destination_address") val address: String,
         @SerializedName("amount") val amount: Int)
+
+    data class AppsTransactionInfo(
+            @SerializedName("tx_hash") val txHash: String,
+            @SerializedName("destination_address") val address: String,
+            @SerializedName("amount") val amount: Int,
+            @SerializedName("destination_app_sid") val appSid: String)
 
 
     data class StatusResponse(@SerializedName("status") val status: String)
@@ -50,7 +56,11 @@ interface OffersApi {
 
     @POST("/user/transaction/p2p")
     fun sendTransactionInfo(@Header(
-            USER_HEADER_KEY) userId: String, @Body transactionInfo: TransactionInfo): Call<StatusResponse>
+            USER_HEADER_KEY) userId: String, @Body transactionInfo: PeersTransactionInfo): Call<StatusResponse>
+
+    @POST("/user/transaction/app2app")
+    fun sendToAppTransactionInfo(@Header(
+            USER_HEADER_KEY) userId: String, @Body transactionInfo: AppsTransactionInfo): Call<StatusResponse>
 
     // redeem coupon after paying
     data class PaymentReceipt(@SerializedName("tx_hash") val txHash: String)

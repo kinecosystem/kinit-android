@@ -9,14 +9,15 @@ import org.kinecosystem.kinit.util.ImageUtils
 @Parcelize
 data class EcoApplication(
         @SerializedName("identifier") val identifier: String,
+        @SerializedName("sid") val sid: String,
         @SerializedName("name") val name: String,
         @SerializedName("transfer_data") val transferData: TransferData?,
         @SerializedName("meta_data") val data: EcoApplicationData) : Parcelable
 
 @Parcelize
 data class TransferData(
-        @SerializedName("launch_activity") val identifier: String,
-        @SerializedName("launch_action") val transferData: String) : Parcelable
+        @SerializedName("launch_activity") val fullPathClass: String,
+        @SerializedName("launch_action") val transferData: String?) : Parcelable
 
 @Parcelize
 data class EcoApplicationData(

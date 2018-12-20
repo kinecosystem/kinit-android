@@ -186,7 +186,7 @@ public class Peer2PeerViewModel {
     }
 
     public void onSend(View view) {
-        analytics.logEvent(new ClickSendButtonOnSendKinPage((float) amount.get()));
+        analytics.logEvent(new ClickSendButtonOnSendKinPage(amount.get()));
         if (isValidAmount()) {
             sendingTransaction.set(true);
             isClickable.set(false);

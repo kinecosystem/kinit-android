@@ -1,0 +1,81 @@
+package org.kinecosystem.kinit.viewmodel.spend
+
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ResolveInfo
+import android.util.Log
+import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.view.transfer.TransferActions
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import javax.inject.Inject
+
+const val EXTRA_HAS_ERROR = "EXTRA_HAS_ERROR"
+
+class TransferActivityModel(private val app: EcoApplication, val transferActions: TransferActions?) {
+    val REQUEST_CODE = 77
+    val EXTRA_SOURCE_APP_NAME = "EXTRA_SOURCE_APP_NAME"
+
+    @Inject
+    lateinit var userRepository: UserRepository
+
+    init {
+        KinitApplication.coreComponent.inject(this)
+    }
+
+    fun getIntent(context: Context): Intent? {
+        val intent = Intent()
+        intent.`package` = app.identifier
+        intent.component = ComponentName(app.identifier, app.transferData?.fullPathClass)
+        intent.putExtra(EXTRA_SOURCE_APP_NAME, "Kinit")
+        val queryIntentServices: MutableList<ResolveInfo> = context.packageManager.queryIntentActivities(intent, 0)
+        return if (!queryIntentServices.isEmpty()) {
+            intent
+        } else {
+            null
+        }
+    }
+
+    fun parseError(intent: Intent?){
+        intent?.let {
+            if(it.hasExtra(EXTRA_HAS_ERROR) && it.getBooleanExtra(EXTRA_HAS_ERROR, false)){
+               transferActions?.onConnectionError()
+            }
+        } ?: run {
+            transferActions?.onClose()
+        }
+    }
+
+    fun parseData(context: Context, intent: Intent?) {
+        if (intent != null && intent.data != null) {
+            try {
+                val uri = intent.data
+                val inputStream = context.contentResolver.openInputStream(uri)
+                val reader = BufferedReader(InputStreamReader(inputStream!!))
+                val stringBuilder = StringBuilder()
+
+                var data: String? = reader.readLine()
+                while (data != null) {
+                    stringBuilder.append(data).append('\n')
+                    data = reader.readLine()
+                }
+                Log.d("####", "#### KINIT READ file ####" + stringBuilder.toString())
+                val address = stringBuilder.toString()
+                if (address.isNullOrEmpty()) {
+                    transferActions?.onConnectionError()
+                } else {
+                    userRepository.updateApplicationAddress(app.identifier, address)
+                    transferActions?.onConnected()
+                }
+            } catch (e: Exception) {
+                transferActions?.onConnectionError()
+            }
+        }
+
+    }
+
+
+}

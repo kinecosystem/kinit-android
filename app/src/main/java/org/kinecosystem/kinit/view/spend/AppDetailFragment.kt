@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,7 @@ class AppDetailFragment : BaseFragment() {
             if (args.containsKey(ARG_APP)) {
                 val app = args.getParcelable<EcoApplication>(ARG_APP)
                 activity?.let { activity ->
-                    model = AppViewModel(Navigator(activity), app)
+                    model = AppViewModel(Navigator(activity), app, getActivity()!!.applicationContext)
                     binding.model = model
                     binding.viewPager.adapter = AppPagerAdapter(activity.supportFragmentManager, model)
                     binding.viewPager.addOnPageChangeListener(model)
@@ -76,7 +75,6 @@ class AppDetailFragment : BaseFragment() {
     }
 
     private class AppPagerAdapter(fragmentManager: FragmentManager, val model: AppViewModel) : FragmentPagerAdapter(fragmentManager) {
-
         override fun getCount(): Int {
             return model.headerImagesCount
         }

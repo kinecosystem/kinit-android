@@ -1,9 +1,11 @@
 package org.kinecosystem.kinit.repository
 
+import android.databinding.ObservableBoolean
 import android.util.Log
 import org.kinecosystem.kinit.model.user.UserInfo
 import org.kinecosystem.kinit.server.api.BackupApi
 import java.util.*
+import kotlin.collections.HashMap
 
 
 private const val USER_ID_KEY = "user_id"
@@ -41,6 +43,8 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     private val userCache: DataStore = dataStoreProvider.dataStore(USER_CACHE_NAME)
     var userInfo: UserInfo
         private set
+
+    private var appsPublicAddresses = mutableMapOf<String,String>()
 
     var fcmTokenSent: Boolean
         set(tokenSent) = userCache.putBoolean(FCM_TOKEN_SENT_KEY, tokenSent)
@@ -110,6 +114,8 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(token) = userCache.putString(AUTH_TOKEN, token)
         get() = userCache.getString(AUTH_TOKEN, "")
 
+
+
     var restoreHints: List<String>
         set(hints) {
             val hintsString = hints.joinToString(separator = ";")
@@ -143,6 +149,13 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         }
         userInfo = UserInfo(userId)
     }
+
+
+    fun updateApplicationAddress(app:String, address:String){
+        appsPublicAddresses[app] = address
+    }
+
+    fun getApplicationAddress(app:String)  = appsPublicAddresses[app]
 
     fun updateUserId(userId: String) {
         userCache.putString(USER_ID_KEY, userId)

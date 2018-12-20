@@ -1,8 +1,12 @@
 package org.kinecosystem.kinit.viewmodel.spend
 
+import android.content.Context
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
@@ -11,9 +15,10 @@ import org.kinecosystem.kinit.model.spend.getHeaderImageCount
 import org.kinecosystem.kinit.model.spend.getHeaderImageUrl
 import org.kinecosystem.kinit.model.spend.isKinTransferSupported
 import org.kinecosystem.kinit.navigation.Navigator
+import org.kinecosystem.kinit.util.GeneralUtils
 import javax.inject.Inject
 
-class AppViewModel(private val navigator: Navigator, private val app: EcoApplication) : ViewPager.OnPageChangeListener {
+class AppViewModel(private val navigator: Navigator, private val app: EcoApplication, context:Context) : ViewPager.OnPageChangeListener {
 
     @Inject
     lateinit var analytics: Analytics
@@ -25,7 +30,7 @@ class AppViewModel(private val navigator: Navigator, private val app: EcoApplica
     val categoryTitle = app.data.categoryTitle
     val aboutApp = app.data.description
     val kinUsage = app.data.kinUsage
-    val canTransferKin = app.isKinTransferSupported()
+    val canTransferKin = ObservableBoolean(false)
 
     val headerImagesCount = app.getHeaderImageCount()
     val showPagesIndicator = app.getHeaderImageCount() >= 2
@@ -34,6 +39,7 @@ class AppViewModel(private val navigator: Navigator, private val app: EcoApplica
 
     init {
         KinitApplication.coreComponent.inject(this)
+        canTransferKin.set(app.isKinTransferSupported() && GeneralUtils.isAppInstalled(context, app.identifier))
     }
 
     fun getHeaderImageUrl(position: Int) = app.getHeaderImageUrl(position)
@@ -43,8 +49,10 @@ class AppViewModel(private val navigator: Navigator, private val app: EcoApplica
     }
 
     fun onActionBtnClicked(view: View?) {
-        if (canTransferKin) {
+        if (canTransferKin.get()) {
+            navigator.navigateToTransfer(app, true)
             analytics.logEvent(Events.Analytics.ClickSendButtonOnAppPage(app.data.categoryTitle, app.identifier, app.name, app.isKinTransferSupported()))
+
         } else {
             navigator.navigateToUrl(app.data.appUrl)
             analytics.logEvent(Events.Analytics.ClickGetButtonOnAppPage(app.data.categoryTitle, app.identifier, app.name, app.isKinTransferSupported()))

@@ -51,7 +51,7 @@ class EcoAppCardListAdapter(private val context: Context, private val model: Eco
         fun bind(app: EcoApplication) {
             name.text = app.name
             info.text = app.data.descriptionShort
-            if (app.isKinTransferSupported()) {
+            if (app.isKinTransferSupported() && GeneralUtils.isAppInstalled(context, app.identifier)) {
                 actionBtn.text = context.resources.getString(R.string.send_kin)
                 actionBtn.setTextColor(ContextCompat.getColor(context, R.color.white))
                 actionBtn.setBackgroundResource(R.drawable.full_rounded_blue)

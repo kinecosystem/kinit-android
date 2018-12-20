@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/transaction_bg_gradient_list">
+
+    <data>
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.spend.AppsConnectionViewModel" />
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:text="@string/connecting_apps"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/kinitIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="64dp"
+            android:background="@drawable/place_holder_rounded_rec_grey"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/appIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info"
+            app:srcCompat="@drawable/logo_kinit" />
+
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="62dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="64dp"
+            android:background="@drawable/place_holder_rounded_rec_grey"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{model.appIconUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/kinitIcon"
+            app:layout_constraintTop_toBottomOf="@+id/info" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:indeterminate="true"
+            android:layout_width="0dp"
+            android:visibility="@{!model.onConnected}"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/appIcon"
+            app:layout_constraintEnd_toStartOf="@+id/appIcon"
+            app:layout_constraintStart_toEndOf="@+id/kinitIcon"
+            app:layout_constraintTop_toTopOf="@+id/appIcon" />
+
+        <ProgressBar
+            android:id="@+id/progressBarBack"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:indeterminate="true"
+            android:visibility="@{model.onConnected}"
+            android:rotation="180"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/appIcon"
+            app:layout_constraintEnd_toStartOf="@+id/appIcon"
+            app:layout_constraintStart_toEndOf="@+id/kinitIcon"
+            app:layout_constraintTop_toTopOf="@+id/appIcon" />
+    </android.support.constraint.ConstraintLayout>
+
+
+
+
+</layout>
