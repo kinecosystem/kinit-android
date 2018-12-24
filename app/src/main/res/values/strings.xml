@@ -9,13 +9,13 @@
     <string name="min_to_complete">%s Min</string>
     <string name="kin_reward">+%s KIN</string>
     <string name="kin_reward_upto">Up to %s KIN</string>
-    <string name="reward_comming_your_way">are coming your way...</string>
+    <string name="reward_comming_your_way">are coming your way…</string>
     <string name="added_to_your_account">added to your account</string>
     <string name="next_task_available_on">Your next activity will be available on %s</string>
     <string name="next_task_available_tomorrow">Your next activity will be available tomorrow.</string>
     <string name="next_task_subtitle">We have planted the seed and your next activity is currently growing</string>
-    <string name="creating_wallet">Creating wallet...</string>
-    <string name="complete_task_subtitle">You have completed today\'s activity.</string>
+    <string name="creating_wallet">Creating wallet for your Kin…</string>
+    <string name="complete_task_subtitle">You have completed this activity.</string>
     <string name="complete_task_title">Awesome!</string>
     <string name="transferring_your_kin">Your Kin is on its way</string>
     <string name="tap_to_finish">Tap to finish</string>
@@ -25,7 +25,7 @@
     <string name="buying">Buying</string>
     <string name="share_code_to">Share code to</string>
     <string name="dialog_no_good_left_message">Please check back later</string>
-    <string name="dialog_no_good_left_title">Oops! Someone grabbed the last one... for now</string>
+    <string name="dialog_no_good_left_title">Oops! Someone grabbed the last one… for now</string>
     <string name="dialog_coupon_redeem_failed_title">Oops! Transaction incomplete</string>
     <string name="dialog_coupon_redeem_failed_message">Sorry! We\’re unable to retrieve your code. Please contact support.</string>
     <string name="dialog_exit_before_share_message">This code will only appear once.\nCopy and paste it somewhere safe</string>
@@ -37,7 +37,7 @@
     <string name="dialog_back_to_list">Back to list</string>
     <string name="record_transactions">Your transactions will appear here!</string>
     <string name="settings">Settings</string>
-    <string name="send_feedback">Give Us Feedback</string>
+    <string name="send_feedback">Suggestion Box</string>
     <string name="no_internet_subtitle">It seems that something is missing…\nPlease check your internet connection.</string>
     <string name="no_internet_title">Your internet is MIA</string>
     <string name="no_tasks_subtitle">We are laying the groundwork for your next activity.\nStay tuned :)</string>
@@ -49,7 +49,7 @@
     <string name="save_code_warning">To make sure you get your Kin , hit close below and continue on the next screen.</string>
     <string name="close">close</string>
     <string name="your_kin_is_on_its_way_with_a_brief_delay">Your Kin is on its way with a brief delay</string>
-    <string name="warning_info_transaction">We have received your results but something got stuck along the way.   Please press “close” and check your balance in a few hours. If no change has ocurred, contact support.</string>
+    <string name="warning_info_transaction">We have received your results but something got stuck along the way.   Please press “close” and check your balance in a few hours. If no change has occurred, contact support.</string>
     <string name="support_email_address">support@kinitapp.com</string>
     <string name="support_email_subject">Kin Support Request</string>
     <string name="up_to_date">Up to date</string>
@@ -73,7 +73,7 @@
     <string name="multi_answer_next_btn_text">Next</string>
     <string name="term_of_service">By clicking “Start earning Kin” you are agreeing\nto our Terms of Service and Privacy Policy</string>
     <string name="start_tutorial_text">Start earning Kin</string>
-    <string name="tutorial_welcome_subtitle">Earn Kin by completing fun daily activities, and enjoy it toward brown paper packages tied up\nwith string (aka travel, movies, music, and more).</string>
+    <string name="tutorial_welcome_subtitle">Earn Kin, a new cryptocurrency, by completing fun daily activities and use it for your favorite things (travel, movies, music, and more)</string>
     <string name="welcome_to_kinit">Welcome to Kinit</string>
     <string name="enjoy">Enjoy</string>
     <string name="tutorial_subtitle_enjoy">In no time, you’ll have enough Kin to use towards great experiences or to share with your friends.</string>
@@ -134,7 +134,7 @@
     <string name="choose_hint">Choose Question</string>
     <string name="yay">YAY!</string>
     <string name="your_wallet_is_backed_up">Your wallet is backed up!</string>
-    <string name="confirm">Confirm</string>
+    <string name="confirm">Check your email</string>
     <string name="check_email"><![CDATA[Please check your email to make sure you received your QR code.\n
         If you did, click confirm below.\n
         If not, <u><font color=#047cfc>resend</font></u>  or check your spam folder]]></string>
@@ -208,7 +208,7 @@
     <string name="send_feedback_text">We can’t respond to feedbacks individually.\nIf you have a question or need help resolving a problem, you’ll find answers in our help center.</string>
     <string name="feedback_email_address">feedback@kinitapp.com</string>
     <string name="feedback_email_subject">Feedback</string>
-    <string name="help_center">Help Center</string>
+    <string name="help_center">I Need Help</string>
     <string name="thank_you_for_feedback_text">Thank you for your feedback!</string>
     <string name="activities_count">%d Activities</string>
     <string name="title_general_error">Oh… Something isn’t working</string>
