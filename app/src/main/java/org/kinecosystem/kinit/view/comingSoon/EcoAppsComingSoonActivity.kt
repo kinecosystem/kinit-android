@@ -30,6 +30,11 @@ class EcoAppsComingSoonActivity : SingleFragmentActivity(), EcoAppsComingSoonVie
         model.listener = this
     }
 
+    override fun onDestroy() {
+        model.listener = null
+        super.onDestroy()
+    }
+
     fun getModel(): EcoAppsComingSoonViewModel {
         return model
     }
