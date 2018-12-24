@@ -17,8 +17,7 @@ class EcoAppsComingSoonActivity : SingleFragmentActivity(), EcoAppsComingSoonVie
     private var model: EcoAppsComingSoonViewModel = EcoAppsComingSoonViewModel()
 
     override fun getFragment(): Fragment {
-        webfragment = EcoAppsComingSoonWebFragment.getInstance()
-        return webfragment as EcoAppsComingSoonWebFragment
+        return EcoAppsComingSoonWebFragment.getInstance()
     }
 
     init {
