@@ -13,6 +13,7 @@ import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.RegisterErrorActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
+import org.kinecosystem.kinit.view.comingSoon.EcoAppsComingSoonActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
 import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
@@ -30,7 +31,7 @@ import javax.inject.Inject
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER
+        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER, ECO_APPS_COMING_SOON
     }
 
     @Inject
@@ -83,6 +84,7 @@ class Navigator(private val context: Context) {
             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.FAQ -> navigateToActivity(FAQActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsComingSoonActivity.getIntent(context), withSlideAnim, reverseAnim)
         }
     }
 

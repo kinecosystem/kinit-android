@@ -18,6 +18,7 @@ import org.kinecosystem.kinit.view.adapter.TransactionsListAdapter
 import org.kinecosystem.kinit.view.backup.BackupQRCodeFragment
 import org.kinecosystem.kinit.view.backup.BackupQuestionAnswerFragment
 import org.kinecosystem.kinit.view.backup.BackupSummaryFragment
+import org.kinecosystem.kinit.view.comingSoon.EcoAppsComingSoonActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletErrorFragment
 import org.kinecosystem.kinit.view.createWallet.CreateWalletFragment
@@ -36,10 +37,7 @@ import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.*
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
-import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
-import org.kinecosystem.kinit.viewmodel.FAQViewModel
-import org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel
-import org.kinecosystem.kinit.viewmodel.SplashViewModel
+import org.kinecosystem.kinit.viewmodel.*
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
 import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
@@ -120,5 +118,7 @@ interface CoreComponent {
     fun inject(transferViewModel: EcoAppsViewModel)
     fun inject(appViewModel: AppViewModel)
     fun inject(ecoAppsViewModel: EcoAppsCategoryViewModel)
+    fun inject(ecoAppsComingSoonViewModel: EcoAppsComingSoonViewModel)
+    fun inject(ecoAppsComingSoonActivity: EcoAppsComingSoonActivity)
 
 }

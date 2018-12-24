@@ -12,15 +12,15 @@ import org.kinecosystem.kinit.viewmodel.FAQViewModel
 import javax.inject.Inject
 
 class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
-    @Inject
-    lateinit var userRepository: UserRepository
-
-    private var webfragment: FAQWebFragment? = null
 
     override fun getFragment(): Fragment {
         webfragment = FAQWebFragment.getInstance()
         return webfragment as FAQWebFragment
     }
+
+    @Inject
+    lateinit var userRepository: UserRepository
+    private var webfragment: FAQWebFragment? = null
 
     companion object {
         fun getIntent(context: Context) = Intent(context, FAQActivity::class.java)
