@@ -90,6 +90,9 @@
         <activity
             android:name=".view.faq.FAQActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.comingSoon.EcoAppsComingSoonActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".firebase.KinInstanceIdService">
             <intent-filter>

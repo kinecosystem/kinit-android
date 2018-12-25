@@ -31,6 +31,7 @@ interface OnboardingApi {
                       @SerializedName("p2p_min_tasks") val p2p_min_tasks: Int,
                       @SerializedName("phone_verification_enabled") val phone_verification_enabled: Boolean,
                       @SerializedName("faq_url") val faq_url: String,
+                      @SerializedName("coming_soon") val coming_soon: String,
                       @SerializedName("tos") val tos: String)
 
     data class StatusResponse(@SerializedName("status") val status: String,

@@ -20,7 +20,7 @@ import org.kinecosystem.kinit.viewmodel.spend.OffersViewModel
 private const val NUMBER_OF_TABS = 2
 
 class SpendPagerAdapter(val context: Context, private val tabIndexListener: OnTabIndexListener) : PagerAdapter(), TabViewModel, ViewPager.OnPageChangeListener {
-    val appsModel = EcoAppsViewModel()
+    val appsModel = EcoAppsViewModel(Navigator(context))
     val offersModel = OffersViewModel(Navigator(context))
 
     override fun onScreenVisibleToUser() {

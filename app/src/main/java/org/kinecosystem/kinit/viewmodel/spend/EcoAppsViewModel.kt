@@ -2,9 +2,11 @@ package org.kinecosystem.kinit.viewmodel.spend
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.view.View
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.EcoApplicationsRepository
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.NetworkServices
@@ -13,7 +15,7 @@ import org.kinecosystem.kinit.server.api.EcoApplicationsApi
 import org.kinecosystem.kinit.view.TabViewModel
 import javax.inject.Inject
 
-class EcoAppsViewModel :
+class EcoAppsViewModel(val navigator: Navigator) :
         TabViewModel {
 
     @Inject
@@ -37,6 +39,10 @@ class EcoAppsViewModel :
             hasData.set(true)
         }
         hasNetwork.set(networkServices.isNetworkConnected())
+    }
+
+    fun onComingSoonClicked(view: View) {
+        navigator.navigateTo(Navigator.Destination.ECO_APPS_COMING_SOON)
     }
 
     override fun onScreenVisibleToUser() {
