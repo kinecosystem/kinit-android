@@ -134,7 +134,8 @@
     <string name="choose_hint">Choose Question</string>
     <string name="yay">YAY!</string>
     <string name="your_wallet_is_backed_up">Your wallet is backed up!</string>
-    <string name="confirm">Check your email</string>
+    <string name="check_your_email">Check your email</string>
+    <string name="confirm">Confirm</string>
     <string name="check_email"><![CDATA[Please check your email to make sure you received your QR code.\n
         If you did, click confirm below.\n
         If not, <u><font color=#047cfc>resend</font></u>  or check your spam folder]]></string>
