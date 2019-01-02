@@ -29,38 +29,12 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="org.kinecosystem.tippic.view.earn.QuestionnaireActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Questionnaire" />
-
-        <activity
-            android:name="org.kinecosystem.tippic.view.earn.CategoryTaskActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Questionnaire" />
 
         <activity
             android:name="org.kinecosystem.tippic.view.RegisterErrorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Questionnaire" />
 
-        <activity
-            android:name="org.kinecosystem.tippic.view.earn.WebTaskCompleteActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Questionnaire" />
-
-
-        <activity
-            android:name="org.kinecosystem.tippic.view.tutorial.TutorialActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="org.kinecosystem.tippic.view.restore.RestoreWalletActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="org.kinecosystem.tippic.view.backup.BackupWalletActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name="org.kinecosystem.tippic.view.createWallet.CreateWalletActivity"
@@ -70,29 +44,6 @@
             android:name="org.kinecosystem.tippic.view.phoneVerify.PhoneVerifyActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name="org.kinecosystem.tippic.view.spend.PurchaseOfferActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="org.kinecosystem.tippic.view.spend.AppDetailsActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="org.kinecosystem.tippic.view.spend.Peer2PeerActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="org.kinecosystem.tippic.view.earn.WebTaskActivity"
-            android:screenOrientation="landscape" />
-
-        <activity
-            android:name="org.kinecosystem.tippic.view.faq.FAQActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="org.kinecosystem.tippic.view.comingSoon.EcoAppsComingSoonActivity"
-            android:screenOrientation="portrait" />
 
         <service android:name="org.kinecosystem.tippic.firebase.KinInstanceIdService">
             <intent-filter>

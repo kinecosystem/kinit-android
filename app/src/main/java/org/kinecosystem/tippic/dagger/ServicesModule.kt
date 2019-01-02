@@ -12,18 +12,17 @@ import javax.inject.Singleton
 
 @DebugOpenClass
 @Module(
-        includes = [(ContextModule::class), (UserRepositoryModule::class), (CategoriesRepositoryModule::class), (OffersRepositoryModule::class), (AnalyticsModule::class), (DataStoreModule::class)])
+        includes = [(ContextModule::class), (UserRepositoryModule::class), (AnalyticsModule::class), (DataStoreModule::class)])
 class ServicesModule {
 
     lateinit var serivce: NetworkServices
     @Provides
     @Singleton
     fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider,
-                         userRepository: UserRepository,
-                         offersRepository: OffersRepository, categoryRepository:CategoriesRepository, ecoApplicationsRepository: EcoApplicationsRepository, analytics: Analytics,
+                         userRepository: UserRepository, analytics: Analytics,
                          scheduler: Scheduler): NetworkServices {
         serivce = NetworkServices(context, dataStoreProvider,
-                userRepository, offersRepository, categoryRepository , ecoApplicationsRepository, analytics, scheduler)
+                userRepository, analytics, scheduler)
         return serivce
     }
 
@@ -39,21 +38,4 @@ class ServicesModule {
         return serivce.onBoardingService
     }
 
-    @Provides
-    @Singleton
-    fun taskService(): TaskService {
-        return serivce.taskService
-    }
-
-    @Provides
-    @Singleton
-    fun categoriesService(): CategoriesService {
-        return serivce.categoriesService
-    }
-
-    @Provides
-    @Singleton
-    fun offerService(): OfferService {
-        return serivce.offerService
-    }
 }

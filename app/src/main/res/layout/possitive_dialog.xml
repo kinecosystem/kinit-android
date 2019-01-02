@@ -75,6 +75,7 @@
         tools:text="Backup" />
 
     <TextView
+
         android:id="@+id/negativeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,4 +93,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/positiveBtn"
         tools:text="Later" />
+
+
 </android.support.constraint.ConstraintLayout>

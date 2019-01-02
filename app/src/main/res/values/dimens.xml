@@ -1,46 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="bottom_navigation_height">57dp</dimen>
-    <dimen name="tab_icon_height">23dp</dimen>
-    <dimen name="author_image_size_width">129dp</dimen>
-    <dimen name="author_image_size_height">98dp</dimen>
-    <dimen name="task_icon_size">33dp</dimen>
-    <dimen name="question_size">20sp</dimen>
-    <dimen name="question_size_small">17sp</dimen>
-    <dimen name="answer_gap">19dp</dimen>
-    <dimen name="small_text_size">16sp</dimen>
     <dimen name="answer_corner">25dp</dimen>
-    <dimen name="spend_place_holder_corner">8dp</dimen>
-    <dimen name="tab_text_size">10sp</dimen>
     <dimen name="button_text_size">16sp</dimen>
-    <dimen name="balance_height">56dp</dimen>
-    <dimen name="image_answer_corner">8dp</dimen>
-    <dimen name="image_answer_sides_spacing">5dp</dimen>
-    <dimen name="emojy_gap">16dp</dimen>
-    <dimen name="question_gray_text_size">14sp</dimen>
-    <dimen name="zero_dp">0dp</dimen>
-    <dimen name="answer_with_image_bottom_guide_space">12dp</dimen>
-    <dimen name="questionnaire_margins">33dp</dimen>
     <dimen name="auth_phone_next_height">56dp</dimen>
-    <dimen name="header_no_img_height">160dp</dimen>
-    <dimen name="header_img_height">180dp</dimen>
-    <dimen name="header_text_bottom_guid">267dp</dimen>
-    <dimen name="header_text_bottom_guid_space">28dp</dimen>
-    <dimen name="rounded_rec_small">8dp</dimen>
-    <dimen name="emoji_big">60sp</dimen>
-    <dimen name="emoji_normal">50sp</dimen>
-    <dimen name="pre_earn_text_size">30sp</dimen>
-    <dimen name="pre_earn_end_padding">15dp</dimen>
-    <dimen name="pre_earn_start_padding">24dp</dimen>
-    <dimen name="pageviewer_padding_bottom">1dp</dimen>
-    <dimen name="bottom_navigation_delim_height">1dp</dimen>
-    <dimen name="progress_steps_padding">15dp</dimen>
-    <dimen name="progress_step_height">5dp</dimen>
-    <dimen name="backup_title_size">22sp</dimen>
-    <dimen name="next_text_size">18sp</dimen>
     <dimen name="min_touch_size">48dp</dimen>
-    <dimen name="page_indicator_margin">5dp</dimen>
-    <dimen name="page_indicator_size">7dp</dimen>
-    <dimen name="app_header_image_long_height">420dp</dimen>
-    <dimen name="app_panel_header_height">56dp</dimen>
 </resources>

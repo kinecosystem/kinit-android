@@ -22,9 +22,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         private val phoneAuthenticationApi: PhoneAuthenticationApi,
                         val userRepo: UserRepository,
                         val analytics: Analytics,
-                        val taskService: TaskService,
-                        val wallet: Wallet,
-                        val categoriesService: CategoriesService) {
+                        val wallet: Wallet) {
 
     private val applicationContext: Context = context.applicationContext
     private var blackList = listOf<String>()
@@ -56,8 +54,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     override fun onResponse(call: Call<OnboardingApi.HintsResponse>,
                                             response: Response<OnboardingApi.HintsResponse>) {
                         if (response.isSuccessful) {
-                            categoriesService.retrieveCategories()
-                            taskService.retrieveAllTasks()
                             userRepo.restoreHints = response.body()?.hints ?: listOf()
                             callback.onSuccess()
                         } else {
@@ -142,8 +138,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                             } else {
                                 userRepo.updateUserId(response.body()?.userId ?: "")
-                                categoriesService.retrieveCategories()
-                                taskService.retrieveAllTasks()
                                 callback?.onSuccess()
                             }
                         } else {
@@ -220,15 +214,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         val config = response.body()?.config
         config?.tos?.let { userRepo.tos = it }
         userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled ?: false
-        userRepo.isP2pEnabled = config?.p2p_enabled ?: false
-        userRepo.isBackupNagAlertEnabled = config?.backupNagEnabled ?: false
-        userRepo.p2pMaxKin = config?.p2p_max_kin ?: 0
-        userRepo.p2pMinKin = config?.p2p_min_kin ?: 0
-        userRepo.p2pMinTasks = config?.p2p_min_tasks ?: 0
         userRepo.isUpdateAvailable = config?.is_update_available ?: false
         userRepo.forceUpdate = config?.force_update ?: false
-        config?.faq_url?.let { userRepo.faqUrl = it }
-        config?.coming_soon?.let { userRepo.comingSoonUrl = it }
     }
 
     private fun callAppLaunch(appVersion: String) {

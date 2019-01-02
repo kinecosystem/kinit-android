@@ -135,10 +135,7 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
 
     @Override
     public void onBackPressed(int fromPage) {
-        if (fromPage == 0) {
-            navigator.navigateTo(Navigator.Destination.TUTORIAL);
-            PhoneVerifyActivity.this.finish();
-        } else if (fromPage == 1) {
+        if (fromPage == 1) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, PhoneSendFragment.newInstance(hasPreviousScreen))
                     .commit();

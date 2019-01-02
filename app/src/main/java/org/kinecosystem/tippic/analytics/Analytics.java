@@ -16,21 +16,9 @@ import org.kinecosystem.tippic.analytics.Events.Event;
 public class Analytics {
 
     public static final String VIEW_ERROR_TYPE_ONBOARDING = "Onboarding";
-    public static final String VIEW_ERROR_TYPE_REWARD = "Reward";
-    public static final String VIEW_ERROR_TYPE_TASK_SUBMISSION = "Task Submission";
-    public static final String VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE = "Offer not available";
-    public static final String VIEW_ERROR_TYPE_CODE_NOT_PROVIDED = "Code not provided";
-    public static final String VIEW_ERROR_TYPE_INTERNET_CONNECTION = "Internet Connection";
-    public static final String VIEW_ERROR_TYPE_GENERIC = "Generic";
-    public static final String MENU_ITEM_NAME_USE_KIN = "use kin";
-    public static final String MENU_ITEM_NAME_EARN = "earn";
     public static final String TRANSACTION_TYPE_P2P = "p2p";
     public static final String TRANSACTION_TYPE_EARN = "earn";
     public static final String TRANSACTION_TYPE_SPEND = "spend";
-    public static final String P2P_EXCEED_MIN_MAX = "Exceed max/min Kin";
-    public static final String P2P_FRIEND_HAS_NO_ADDRESS = "Friend not exists";
-    public static final String P2P_SEND_KIN_TO_SELF = "Send Kin to self";
-    public static final String P2P_NOT_ENOUGH_BALANCE = "Exceed existing Kin";
     public static final String SERVER_ERROR_RESPONSE = "server Error response";
     public static final String SERVER_EMPTY_RESPONSE = "server empty response";
 

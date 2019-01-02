@@ -9,41 +9,16 @@
     tools:context="org.kinecosystem.tippic.view.MainActivity">
 
     <TextView
-        android:id="@+id/ready_to_earn_image"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:paddingEnd="@dimen/pre_earn_end_padding"
-        android:paddingStart="@dimen/pre_earn_start_padding"
-        android:textColor="@color/bright_blue"
-        android:textSize="@dimen/pre_earn_text_size"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_delim"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="MAIN PAGE"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <org.kinecosystem.tippic.view.customView.LockableViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingBottom="@dimen/pageviewer_padding_bottom"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/bottom_delim"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_navigation_delim_height"
-        android:background="@color/grey_delimiter_line_color"
-        app:layout_constraintBottom_toTopOf="@+id/navigation" />
-
-    <org.kinecosystem.tippic.view.BottomTabNavigation
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_navigation_height"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
 </android.support.constraint.ConstraintLayout>

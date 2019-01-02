@@ -71,7 +71,5 @@ app/.settings/org.eclipse.buildship.core.prefs
 /projectFilesBackup/.idea/workspace.xml
 
 secrets\.tar\.gz
-app/kinit\.properties
+app/tippic\.properties
 projectFilesBackup1/.idea/workspace.xml
-
-kinit-client-validation-android-module/

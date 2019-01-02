@@ -8,12 +8,11 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import kotlinx.android.synthetic.main.create_wallet_complete_fragment.*
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
-import org.kinecosystem.tippic.TippicApplication
 import org.kinecosystem.tippic.R
+import org.kinecosystem.tippic.TippicApplication
 import org.kinecosystem.tippic.analytics.Analytics
 import org.kinecosystem.tippic.analytics.Events
 import org.kinecosystem.tippic.view.BaseFragment
-import org.kinecosystem.tippic.view.restore.RestoreWalletActions
 import javax.inject.Inject
 
 class OnboardingCompleteFragment : BaseFragment() {
@@ -74,9 +73,6 @@ class OnboardingCompleteFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (activity is RestoreWalletActions)
-            analytics.logEvent(Events.Analytics.ViewWalletRestoredPage())
-        else
-            analytics.logEvent(Events.Analytics.ViewOnboardingCompletedPage())
+        analytics.logEvent(Events.Analytics.ViewOnboardingCompletedPage())
     }
 }

@@ -13,17 +13,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-
-import org.kinecosystem.tippic.model.earn.Answer;
-import org.kinecosystem.tippic.server.api.EcoApplicationsApi;
-import org.kinecosystem.tippic.view.customView.AnswerSelectedOverView;
-import org.kinecosystem.tippic.view.customView.EcoApplicationCategoryView;
-import org.kinecosystem.tippic.view.customView.PagesIndicatorsView;
-import org.kinecosystem.tippic.view.customView.QuizAnswerView;
-
-import java.util.List;
 
 
 public class BindingUtils {
@@ -118,46 +108,6 @@ public class BindingUtils {
         }
     }
 
-    @BindingAdapter("overSelectionListener")
-    public static void addOverListener(AnswerSelectedOverView view, AnswerSelectedOverView.OnSelectionListener listener) {
-        if (listener != null) {
-            view.setListener(listener);
-        }
-    }
-
-    @BindingAdapter("answer")
-    public static void answer(AnswerSelectedOverView view, Answer answer) {
-        if (answer != null) {
-            view.setAnswer(answer);
-        }
-    }
-
-    @BindingAdapter({"answer", "correct"})
-    public static void setAnswer(QuizAnswerView view, Answer answer, Boolean isCorrect) {
-        view.setAnswer(answer);
-        view.setCorrect(isCorrect);
-    }
-
-    @BindingAdapter("showCorrect")
-    public static void showCorrect(QuizAnswerView view, Boolean showCorrect) {
-        if(showCorrect) {
-            view.showCorrect(false);
-        }
-    }
-
-    @BindingAdapter("reward")
-    public static void setReward(QuizAnswerView view, Integer reward) {
-        view.setReward(reward);
-    }
-
-
-    @BindingAdapter("onSelectionListener")
-    public static void setSelectionListener(QuizAnswerView view, QuizAnswerView.OnSelectionListener listener) {
-        if (listener != null) {
-            view.setListener(listener);
-        }
-    }
-
     @BindingAdapter("onType")
     public static void setInputListener(EditText view, TextWatcher listener) {
         if (listener != null) {
@@ -187,22 +137,5 @@ public class BindingUtils {
         }
     }
 
-    @BindingAdapter("indicatorCount")
-    public static void setIndicatorCount(PagesIndicatorsView view, Integer count) {
-        view.addCircles(count);
-    }
-
-    @BindingAdapter("pageSelected")
-    public static void setIndicatorSelected(PagesIndicatorsView view, Integer page) {
-        view.setPageSelected(page);
-    }
-
-    @BindingAdapter("ecoAppsCategories")
-    public static void addEcoAppCategories(LinearLayout container, List<EcoApplicationsApi.AppsCategory> appCategories) {
-        container.removeAllViews();
-        for (int i = 0; i < appCategories.size(); i++) {
-            container.addView(new EcoApplicationCategoryView(container.getContext(), appCategories.get(i).getId()));
-        }
-    }
 
 }

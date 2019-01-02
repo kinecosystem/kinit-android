@@ -20,35 +20,11 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="Button.Blue">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textColor">@drawable/button_blue_font_color</item>
-        <item name="android:background">@drawable/button_blue_bg</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="Button.Blue.Wide">
-        <item name="android:paddingLeft">20dp</item>
-        <item name="android:paddingRight">20dp</item>
-    </style>
-
-    <style name="Button.OFFER_CODE">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textColor">#5c6786</item>
-        <item name="android:gravity">start|left|center_vertical</item>
-        <item name="android:paddingLeft">25dp</item>
-        <item name="android:background">@drawable/button_blue_hollow_bg</item>
-    </style>
-
     <style name="Button.Hollow">
         <item name="android:layout_width">match_parent</item>
         <item name="android:textColor">#5c6786</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/button_blue_hollow_line</item>
-    </style>
-
-    <style name="Button.Answer">
-        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Questionnaire" parent="Theme.AppCompat.Light.NoActionBar">
@@ -65,67 +41,7 @@
         <item name="colorAccent">@color/grey</item>
     </style>
 
-    <style name="AppTheme.Blue">
-        <item name="colorAccent">@color/blue</item>
-    </style>
-
-    <style name="settingHeader" parent="android:Widget.TextView">
-        <item name="android:background">@color/grey_settings_header</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingStart">17dp</item>
-    </style>
-
-    <style name="settingTitle" parent="android:Widget.TextView">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textColor">@color/answer_font_color</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="feedbackIcon">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">19dp</item>
-    </style>
-
-    <style name="settingView">
-        <item name="android:background">@drawable/settings_bg_color</item>
-        <item name="android:clickable">true</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">61dp</item>
-    </style>
-
-    <style name="settingViewDelimiter">
-        <item name="android:background">@color/grey_dark_medium</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-    </style>
-
-    <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
-        <item name="android:textColor">@color/grey</item>
-    </style>
-
     <!--Input field style-->
-    <style name="MyEditText" parent="Theme.AppCompat.Light">
-        <item name="colorControlNormal">@color/grey</item>
-        <item name="colorControlActivated">@color/grey</item>
-    </style>
-
-    <style name="help_center">Help Center</style>
-
-    <style name="CustomTextAppearanceTab" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
 
 
 </resources>

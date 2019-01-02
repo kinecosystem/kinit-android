@@ -8,13 +8,10 @@ import kin.core.*
 import kin.core.exception.*
 import org.kinecosystem.tippic.BuildConfig
 import org.kinecosystem.tippic.analytics.Analytics
-import org.kinecosystem.tippic.analytics.Analytics.*
+import org.kinecosystem.tippic.analytics.Analytics.TRANSACTION_TYPE_P2P
+import org.kinecosystem.tippic.analytics.Analytics.TRANSACTION_TYPE_SPEND
 import org.kinecosystem.tippic.analytics.Events
 import org.kinecosystem.tippic.model.KinTransaction
-import org.kinecosystem.tippic.model.Push
-import org.kinecosystem.tippic.model.TaskState
-import org.kinecosystem.tippic.model.spend.Coupon
-import org.kinecosystem.tippic.repository.CategoriesRepository
 import org.kinecosystem.tippic.repository.DataStore
 import org.kinecosystem.tippic.repository.DataStoreProvider
 import org.kinecosystem.tippic.repository.UserRepository
@@ -24,7 +21,6 @@ import org.kinecosystem.tippic.server.OperationCompletionCallback
 import org.kinecosystem.tippic.server.api.OnboardingApi
 import org.kinecosystem.tippic.server.api.WalletApi
 import org.kinecosystem.tippic.util.Scheduler
-import org.kinecosystem.tippic.viewmodel.earn.REWARD_TIMEOUT
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,7 +41,6 @@ private const val TAG = "Wallet"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
              val userRepo: UserRepository,
-             val categoriesRepository: CategoriesRepository,
              val analytics: Analytics,
              val onboardingApi: OnboardingApi,
              val walletApi: WalletApi,
@@ -60,11 +55,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private val walletCache: DataStore
     private var kinClient: KinClient
     private var account: KinAccount
-    private lateinit var paymentListener: ListenerRegistration
 
-    val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
     val transactions: ObservableField<List<KinTransaction>> = ObservableField(ArrayList())
-    val coupons: ObservableField<List<Coupon>> = ObservableField(ArrayList())
 
     init {
         val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
@@ -165,35 +157,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
     }
 
-
-    fun retrieveCoupons(callback: OperationCompletionCallback? = null) {
-        walletApi.getCoupons(userRepo.userId()).enqueue(object : Callback<WalletApi.CouponsResponse> {
-            override fun onResponse(call: Call<WalletApi.CouponsResponse>?,
-                                    response: Response<WalletApi.CouponsResponse>?) {
-                if (response != null && response.isSuccessful) {
-                    Log.d(TAG, "onResponse: ${response.body()}")
-                    val couponsList = response.body()
-                    if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals(
-                                    "ok")) {
-                        coupons.set(couponsList.coupons)
-                    } else {
-                        Log.d(TAG, "coupons list empty or null ")
-                        coupons.set(ArrayList())
-                    }
-                    callback?.onSuccess()
-                } else {
-                    Log.d(TAG, "onResponse null or isSuccessful=false: $response")
-                    callback?.onError(ERROR_EMPTY_RESPONSE)
-                }
-            }
-
-            override fun onFailure(call: Call<WalletApi.CouponsResponse>?, t: Throwable?) {
-                Log.d(TAG, "onFailure called with throwable $t")
-                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
-            }
-        })
-    }
-
     fun updateBalanceSync() {
         try {
             val balanceResult = account.balanceSync
@@ -224,14 +187,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         })
     }
 
-    fun exportAccountToStr(passphrase: String): String? {
-        return try {
-            account.export(passphrase)
-        } catch (cryptoException: CryptoException) {
-            null
-        }
-    }
-
     fun importBackedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
         return try {
             kinClient.importAccount(exportedStr, passphrase)
@@ -240,17 +195,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         } catch (createAccountException: CreateAccountException) {
             null
         }
-    }
-
-    fun restoreWallet(backedUpKinAccount: KinAccount) {
-        account = backedUpKinAccount
-        userRepo.userInfo.publicAddress = account.publicAddress!!
-        analytics.setUserId(userRepo.userId())
-        initKinWallet()
-        retrieveTransactions()
-        retrieveCoupons()
-        userRepo.isBackedup = true
-        analytics.logEvent(Events.Business.WalletRestored())
     }
 
     private fun createAccountSync(): Boolean {
@@ -308,96 +252,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
                 txHash, TRANSACTION_TYPE_SPEND))
-    }
-
-    fun logEarnTransactionCompleted(price: Int, txHash: String) {
-        analytics.incrementUserProperty(Events.UserProperties.EARN_COUNT, 1)
-        analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_EARNED,
-                price.toLong())
-        analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
-        analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                txHash, TRANSACTION_TYPE_EARN))
-    }
-
-    fun listenToPayment(taskId: String, memo: String) {
-        paymentListener = account.blockchainEvents().addPaymentListener {
-            if (it?.memo().equals(memo)) {
-                updateBalanceForPayment(taskId, it)
-                paymentListener.remove()
-            }
-        }
-        scheduler.scheduleOnMain({
-            if (!onEarnTransactionCompleted.get()) {
-                setTaskState(taskId, TaskState.TRANSACTION_ERROR)
-                paymentListener.remove()
-            }
-        }, REWARD_TIMEOUT)
-    }
-
-    private fun updateBalanceForPayment(taskId: String, payment: PaymentInfo? = null) {
-        updateBalance(object : ResultCallback<Balance> {
-            override fun onResult(balance: Balance) {
-                if (payment != null) {
-                    onEarnTransactionCompleted.set(true)
-                    setTaskState(taskId, TaskState.TRANSACTION_COMPLETED)
-                    retrieveTransactions()
-                    logEarnTransactionCompleted(payment.amount().toInt(), payment.hash().id())
-                } else {
-                    setTaskState(taskId, TaskState.TRANSACTION_ERROR)
-                }
-            }
-
-            override fun onError(e: Exception) {
-                setTaskState(taskId, TaskState.TRANSACTION_ERROR)
-                if (payment != null) {
-                    logEarnTransactionCompleted(payment.amount().toInt(), payment.hash().id())
-                }
-            }
-        })
-    }
-
-
-    fun onTransactionMessageReceived(transactionComplete: Push.TransactionCompleteMessage) {
-        if (!isValid(transactionComplete)) {
-            transactionComplete.taskId?.let {
-                setTaskState(it, TaskState.TRANSACTION_ERROR)
-            }
-            return
-        }
-        updateBalance(object : ResultCallback<Balance> {
-            override fun onResult(balance: Balance) {
-                if (transactionComplete.kin != null && transactionComplete.txHash != null) {
-                    onEarnTransactionCompleted.set(true)
-                    setTaskState(transactionComplete.taskId!!, TaskState.TRANSACTION_COMPLETED)
-                    retrieveTransactions()
-                    logEarnTransactionCompleted(transactionComplete.kin, transactionComplete.txHash)
-                } else {
-                    setTaskState(transactionComplete.taskId!!, TaskState.TRANSACTION_ERROR)
-                }
-            }
-
-            override fun onError(e: Exception) {
-                setTaskState(transactionComplete.taskId!!, TaskState.TRANSACTION_ERROR)
-                if (transactionComplete.kin != null && transactionComplete.txHash != null) {
-                    logEarnTransactionCompleted(transactionComplete.kin, transactionComplete.txHash)
-                }
-            }
-        })
-
-        Log.d(TAG, "#### KinMessagingService transactionComplete: $transactionComplete")
-    }
-
-
-    private fun isValid(transactionComplete: Push.TransactionCompleteMessage): Boolean {
-        return transactionComplete.kin != null &&
-                transactionComplete.kin > 0 &&
-                transactionComplete.taskId != null &&
-                transactionComplete.userId != null &&
-                transactionComplete.userId == userRepo.userInfo.userId
-    }
-
-    private fun setTaskState(taskId: String, state: Int) {
-        categoriesRepository.updateCurrentTaskState(taskId, state)
     }
 
 }

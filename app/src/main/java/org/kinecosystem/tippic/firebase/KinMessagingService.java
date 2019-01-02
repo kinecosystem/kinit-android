@@ -63,13 +63,7 @@ public class KinMessagingService extends FirebaseMessagingService {
 
                 try {
 
-                    if (type.equals(Push.TYPE_TX_COMPLETED)) {
-                        scheduler.post(() ->
-                            servicesProvider.getWalletService()
-                                .onTransactionMessageReceived(
-                                    gson.fromJson(message, TransactionCompleteMessage.class))
-                        );
-                    } else if (type.equals(Push.TYPE_AUTH_TOKEN)) {
+                    if (type.equals(Push.TYPE_AUTH_TOKEN)) {
                         analytics.logEvent(new AuthTokenReceived());
                         AuthTokenMessage authTokenMessage = gson.fromJson(message, AuthTokenMessage.class);
                         String token = authTokenMessage.getAuthToken();

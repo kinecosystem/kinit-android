@@ -7,9 +7,7 @@ import org.kinecosystem.tippic.TippicApplication
 import org.kinecosystem.tippic.analytics.Analytics
 import org.kinecosystem.tippic.analytics.Events
 import org.kinecosystem.tippic.repository.UserRepository
-import org.kinecosystem.tippic.server.CategoriesService
 import org.kinecosystem.tippic.server.NetworkServices
-import org.kinecosystem.tippic.server.TaskService
 import org.kinecosystem.tippic.util.Scheduler
 import javax.inject.Inject
 
@@ -23,17 +21,10 @@ class CreateWalletViewModel {
     lateinit var networkServices: NetworkServices
     @Inject
     lateinit var scheduler: Scheduler
-    @Inject
-    lateinit var taskService: TaskService
-    @Inject
-    lateinit var categoriesService: CategoriesService
-
 
 
     var callback: Observable.OnPropertyChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(p0: Observable?, p1: Int) {
-            categoriesService.retrieveCategories()
-            taskService.retrieveAllTasks()
             listener?.onWalletCreated()
         }
     }
@@ -77,8 +68,6 @@ class CreateWalletViewModel {
 
     private fun checkReadyToMove() {
         if (walletReady.get()) {
-            categoriesService.retrieveCategories()
-            taskService.retrieveAllTasks()
             listener?.onWalletCreated()
         } else {
             walletReady.addOnPropertyChangedCallback(callback)

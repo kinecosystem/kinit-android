@@ -53,10 +53,7 @@ class SplashViewModel {
             userRepository.isFirstTimeUser = false
             Navigator.Destination.PHONE_VERIFY
         } else if (!networkServices.walletService.ready.get()) {
-            if (userRepository.restoreHints.isNotEmpty())
-                Navigator.Destination.WALLET_RESTORE
-            else
-                Navigator.Destination.WALLET_CREATE
+            Navigator.Destination.WALLET_CREATE
         } else {
             Navigator.Destination.MAIN_SCREEN
         }

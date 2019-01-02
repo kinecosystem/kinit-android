@@ -144,9 +144,6 @@ public class PhoneVerificationViewModel {
     }
 
     public Navigator.Destination nextActivity() {
-        if (!userRepository.getRestoreHints().isEmpty()) {
-            return Navigator.Destination.WALLET_RESTORE;
-        }
         return Navigator.Destination.WALLET_CREATE;
     }
 }
