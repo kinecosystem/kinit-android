@@ -1,0 +1,7 @@
+package org.kinecosystem.tippic.util
+
+import android.util.Patterns
+
+fun CharSequence.isValidEmail(): Boolean
+        = this.isNotEmpty() &&
+        Patterns.EMAIL_ADDRESS.matcher(this).matches()

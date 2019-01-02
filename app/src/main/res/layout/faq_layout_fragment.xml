@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.FAQViewModel"/>
+            type="org.kinecosystem.tippic.viewmodel.FAQViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

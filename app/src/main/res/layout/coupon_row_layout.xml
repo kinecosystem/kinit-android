@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.balance.CouponViewModel" />
+            type="org.kinecosystem.tippic.viewmodel.balance.CouponViewModel" />
 
         <import type="android.view.View" />
     </data>

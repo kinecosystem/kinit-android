@@ -3,7 +3,7 @@
     <data xmlns:android="http://schemas.android.com/apk/res/android">
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.PhoneVerificationViewModel"/>
+            type="org.kinecosystem.tippic.viewmodel.PhoneVerificationViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

@@ -6,7 +6,7 @@
     android:background="@color/bottom_navigation_background"
     android:orientation="horizontal">
 
-    <org.kinecosystem.kinit.view.NavigationTab
+    <org.kinecosystem.tippic.view.NavigationTab
         android:id="@+id/tab_earn"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -14,7 +14,7 @@
         app:src="@drawable/earn_drawable"
         app:text="@string/title_earn" />
 
-    <org.kinecosystem.kinit.view.NavigationTab
+    <org.kinecosystem.tippic.view.NavigationTab
         android:id="@+id/tab_spend"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -22,10 +22,10 @@
         app:src="@drawable/spend_drawable"
         app:text="@string/title_spend">
 
-    </org.kinecosystem.kinit.view.NavigationTab>
+    </org.kinecosystem.tippic.view.NavigationTab>
 
 
-    <org.kinecosystem.kinit.view.NavigationTab
+    <org.kinecosystem.tippic.view.NavigationTab
         android:id="@+id/tab_balance"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -34,7 +34,7 @@
         app:text="@string/title_balance" />
 
 
-    <org.kinecosystem.kinit.view.NavigationTab
+    <org.kinecosystem.tippic.view.NavigationTab
         android:id="@+id/tab_info"
         android:layout_width="0dp"
         android:layout_height="match_parent"

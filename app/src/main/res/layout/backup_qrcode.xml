@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.backup.BackupModel" />
+            type="org.kinecosystem.tippic.viewmodel.backup.BackupModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

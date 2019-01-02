@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="org.kinecosystem.kinit.view.MainActivity">
+    tools:context="org.kinecosystem.tippic.view.MainActivity">
 
     <TextView
         android:id="@+id/ready_to_earn_image"
@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <org.kinecosystem.kinit.view.customView.LockableViewPager
+    <org.kinecosystem.tippic.view.customView.LockableViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -40,7 +40,7 @@
         android:background="@color/grey_delimiter_line_color"
         app:layout_constraintBottom_toTopOf="@+id/navigation" />
 
-    <org.kinecosystem.kinit.view.BottomTabNavigation
+    <org.kinecosystem.tippic.view.BottomTabNavigation
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_navigation_height"

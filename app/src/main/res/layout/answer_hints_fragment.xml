@@ -5,7 +5,7 @@
     <data>
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel" />
+            type="org.kinecosystem.tippic.viewmodel.restore.RestoreWalletViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

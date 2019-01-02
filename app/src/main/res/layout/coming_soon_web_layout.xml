@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.EcoAppsComingSoonViewModel"/>
+            type="org.kinecosystem.tippic.viewmodel.EcoAppsComingSoonViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.view.adapter.AnswerViewModel" />
+            type="org.kinecosystem.tippic.view.adapter.AnswerViewModel" />
     </data>
 
     <LinearLayout

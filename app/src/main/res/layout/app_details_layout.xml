@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.spend.AppViewModel" />
+            type="org.kinecosystem.tippic.viewmodel.spend.AppViewModel" />
 
         <import type="android.view.View" />
     </data>
@@ -65,7 +65,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/close_white" />
 
-                <org.kinecosystem.kinit.view.customView.PagesIndicatorsView
+                <org.kinecosystem.tippic.view.customView.PagesIndicatorsView
                     android:id="@+id/pages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

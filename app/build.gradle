@@ -17,7 +17,7 @@ if (captchaSecret == null) {
 }
 
 allOpen {
-    annotation("org.kinecosystem.kinit.annotations.OpenClass")
+    annotation("org.kinecosystem.tippic.annotations.OpenClass")
 }
 
 android {
@@ -31,11 +31,11 @@ android {
     }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "org.kinecosystem.kinit"
+        applicationId "org.kinecosystem.tippic"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 26
-        versionName "1.4.4"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         dataBinding {
@@ -133,7 +133,6 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.15'
     implementation 'com.google.dagger:dagger-android-support:2.15'
     kaptTest 'com.google.dagger:dagger-compiler:2.15'
-    compile project(path: ':kinit-client-validation-android-module')
 }
 
 apply plugin: 'com.google.gms.google-services'

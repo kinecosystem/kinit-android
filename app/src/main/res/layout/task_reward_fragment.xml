@@ -5,9 +5,9 @@
     <data>
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.earn.TaskRewardViewModel"/>
+            type="org.kinecosystem.tippic.viewmodel.earn.TaskRewardViewModel"/>
     </data>
-    <org.kinecosystem.kinit.view.customView.TransactionLayoutView
+    <org.kinecosystem.tippic.view.customView.TransactionLayoutView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/transaction_bg_gradient_list"
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@+id/transaction_anim"/>
 
 
-        <org.kinecosystem.kinit.view.customView.TransactionTextView
+        <org.kinecosystem.tippic.view.customView.TransactionTextView
             android:id="@+id/balance_amount"
             android:textStyle="normal"
             android:layout_width="wrap_content"
@@ -143,5 +143,5 @@
             app:srcCompat="@drawable/kincoins_illustration"/>
 
 
-    </org.kinecosystem.kinit.view.customView.TransactionLayoutView>
+    </org.kinecosystem.tippic.view.customView.TransactionLayoutView>
 </layout>

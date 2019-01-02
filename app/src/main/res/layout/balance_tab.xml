@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel" />
+            type="org.kinecosystem.tippic.viewmodel.balance.BalanceViewModel" />
 
         <import type="android.support.v7.widget.LinearLayoutManager" />
 

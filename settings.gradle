@@ -1,1 +1,1 @@
-include ':app', ':kinit-client-validation-android-module'
+include ':app'

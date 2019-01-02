@@ -6,7 +6,7 @@
     <data>
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.earn.QuestionnaireViewModel"/>
+            type="org.kinecosystem.tippic.viewmodel.earn.QuestionnaireViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="@+id/header_with_x_layout"
             android:onClick="@{()-> model.onClose()}"
             app:srcCompat="@drawable/close"/>
-        <org.kinecosystem.kinit.view.customView.QuestionnaireProgressBar
+        <org.kinecosystem.tippic.view.customView.QuestionnaireProgressBar
             android:id="@+id/questionnaire_progress_bar"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="0dp"

@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.info.InfoViewModel" />
+            type="org.kinecosystem.tippic.viewmodel.info.InfoViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

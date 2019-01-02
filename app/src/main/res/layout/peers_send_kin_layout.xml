@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.spend.Peer2PeerViewModel" />
+            type="org.kinecosystem.tippic.viewmodel.spend.Peer2PeerViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

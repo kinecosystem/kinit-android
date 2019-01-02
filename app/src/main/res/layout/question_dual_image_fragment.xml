@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.earn.QuestionDualImageViewModel" />
+            type="org.kinecosystem.tippic.viewmodel.earn.QuestionDualImageViewModel" />
 
 
         <import type="android.view.View" />
@@ -61,7 +61,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guidelineTopQuestion" />
 
-        <org.kinecosystem.kinit.view.customView.AnswerSelectedOverView
+        <org.kinecosystem.tippic.view.customView.AnswerSelectedOverView
             android:id="@+id/answer_a"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -89,7 +89,7 @@
             app:layout_constraintTop_toTopOf="@+id/guidelineDelimiter" />
 
 
-        <org.kinecosystem.kinit.view.customView.AnswerSelectedOverView
+        <org.kinecosystem.tippic.view.customView.AnswerSelectedOverView
             android:id="@+id/answer_b"
             android:layout_width="0dp"
             android:layout_height="0dp"
