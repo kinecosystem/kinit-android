@@ -10,22 +10,14 @@ private const val IS_REGISTERED_KEY = "is_registered"
 private const val IS_FRESH_INSTALL = "is_fresh_install"
 
 private const val FCM_TOKEN_SENT_KEY = "token_sent"
-private const val USER_CACHE_NAME = "kin.app.user"
+private const val USER_CACHE_NAME = "tippic.app.user"
 private const val TOS = "tos"
 private const val PHONE_VERIFICATION_ENABLED = "PHONE_VERIFICATION_ENABLED"
 private const val PHONE_VERIFIED = "PHONE_VERIFIED"
 private const val FIRST_TIME_USER = "FIRST_TIME_USER"
-private const val P2P_MAX_KIN = "P2P_MAX_KIN"
-private const val P2P_MIN_KIN = "P2P_MIN_KIN"
-private const val FAQ_URL = "FAQ_URL"
-private const val COMING_SOON_URL = "COMING_SOON_URL"
-private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
-private const val P2P_ENABLED = "P2P_ENABLED"
 private const val AUTH_TOKEN = "authToken"
 private const val RESTORE_HINTS = "RESTORE_HINTS"
 private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
-private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
-private const val COMING_SOON_DEFAULT = "https://cdn.kinitapp.com/discovery/coming-soon-webpage/index.html"
 private const val FORCE_UPDATE = "FORCE_UPDATE"
 private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
 
@@ -43,15 +35,7 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(registered) = userCache.putBoolean(IS_REGISTERED_KEY, registered)
         get() = userCache.getBoolean(IS_REGISTERED_KEY, false)
 
-    var comingSoonUrl: String
-        set(url) = userCache.putString(COMING_SOON_URL, url)
-        get() = userCache.getString(COMING_SOON_URL, COMING_SOON_DEFAULT)
-
-    var faqUrl: String
-        set(url) = userCache.putString(FAQ_URL, url)
-        get() = userCache.getString(FAQ_URL, FAQ_DEFAULT)
-
-    var isUpdateAvailable: Boolean
+     var isUpdateAvailable: Boolean
         set(value) = userCache.putBoolean(IS_UPDATE_AVAILABLE, value)
         get() = userCache.getBoolean(IS_UPDATE_AVAILABLE, false)
 
@@ -78,22 +62,6 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isFirstTimeUser: Boolean
         set(firstTime) = userCache.putBoolean(FIRST_TIME_USER, firstTime)
         get() = userCache.getBoolean(FIRST_TIME_USER, true)
-
-    var p2pMaxKin: Int
-        set(max) = userCache.putInt(P2P_MAX_KIN, max)
-        get() = userCache.getInt(P2P_MAX_KIN, 0)
-
-    var p2pMinKin: Int
-        set(max) = userCache.putInt(P2P_MIN_KIN, max)
-        get() = userCache.getInt(P2P_MIN_KIN, 0)
-
-    var p2pMinTasks: Int
-        set(max) = userCache.putInt(P2P_MIN_TASKS, max)
-        get() = userCache.getInt(P2P_MIN_TASKS, 0)
-
-    var isP2pEnabled: Boolean
-        set(enable) = userCache.putBoolean(P2P_ENABLED, enable)
-        get() = userCache.getBoolean(P2P_ENABLED, false)
 
     var authToken: String
         set(token) = userCache.putString(AUTH_TOKEN, token)

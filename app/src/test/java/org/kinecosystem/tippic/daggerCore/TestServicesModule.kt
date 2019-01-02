@@ -11,7 +11,7 @@ import org.mockito.Mockito.mock
 
 class TestServicesModule : ServicesModule() {
 
-    override fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider, userRepository: UserRepository, offersRepository: OffersRepository, categoryRepository: CategoriesRepository, ecoApplicationsRepository: EcoApplicationsRepository, analytics: Analytics, scheduler: Scheduler): NetworkServices {
+    override fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider, userRepository: UserRepository,  analytics: Analytics, scheduler: Scheduler): NetworkServices {
         return mock(NetworkServices::class.java)
     }
 
@@ -23,15 +23,4 @@ class TestServicesModule : ServicesModule() {
         return mock(OnboardingService::class.java)
     }
 
-    override fun categoriesService(): CategoriesService {
-        return mock(CategoriesService::class.java)
-    }
-
-    override fun taskService(): TaskService {
-        return mock(TaskService::class.java)
-    }
-
-    override fun offerService(): OfferService {
-        return mock(OfferService::class.java)
-    }
 }

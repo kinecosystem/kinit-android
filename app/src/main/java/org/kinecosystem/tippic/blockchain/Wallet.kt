@@ -8,8 +8,6 @@ import kin.core.*
 import kin.core.exception.*
 import org.kinecosystem.tippic.BuildConfig
 import org.kinecosystem.tippic.analytics.Analytics
-import org.kinecosystem.tippic.analytics.Analytics.TRANSACTION_TYPE_P2P
-import org.kinecosystem.tippic.analytics.Analytics.TRANSACTION_TYPE_SPEND
 import org.kinecosystem.tippic.analytics.Events
 import org.kinecosystem.tippic.model.KinTransaction
 import org.kinecosystem.tippic.repository.DataStore
@@ -24,7 +22,6 @@ import org.kinecosystem.tippic.util.Scheduler
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.math.BigDecimal
 
 private const val TEST_NET_URL = "https://horizon-playground.kininfrastructure.com/"
 private const val MAIN_NET_URL = "https://horizon-ecosystem.kininfrastructure.com/"
@@ -65,7 +62,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         var networkId = if (type == Type.Main) NETWORK_ID_MAIN else NETWORK_ID_TEST
         val issuer = if (type == Type.Main) KIN_ISSUER_MAIN else KIN_ISSUER_STAGE
 
-        kinClient = KinClient(context, KinitServiceProvider(providerUrl, networkId, issuer))
+        kinClient = KinClient(context, TippicServiceProvider(providerUrl, networkId, issuer))
         account = if (kinClient.hasAccount()) {
             kinClient.getAccount(kinClient.accountCount - 1)
         } else {
@@ -176,15 +173,11 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
     }
 
-    fun payForOrder(toAddress: String, amount: Int, orderId: String): TransactionId {
-        return account.sendTransactionSync(toAddress, BigDecimal(amount), orderId)
-    }
-
     fun initKinWallet() {
         Log.d(TAG, "### initializing Kin Wallet")
-        scheduler.executeOnBackground({
+        scheduler.executeOnBackground {
             updateBalanceSync()
-        })
+        }
     }
 
     fun importBackedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
@@ -224,7 +217,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         try {
             account.activateSync()
             analytics.logEvent(Events.Business.WalletCreated())
-            scheduler.post({ activeWallet = true })
+            scheduler.post { activeWallet = true }
             analytics.logEvent(Events.BILog.StellarKinTrustlineSetupSucceeded())
             return true
         } catch (e: Exception) {
@@ -239,24 +232,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.setUserProperty(Events.UserProperties.BALANCE, balance)
     }
 
-    fun logP2pTransactionCompleted(price: Int, txHash: String) {
-        analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
-        analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                txHash, TRANSACTION_TYPE_P2P))
-    }
-
-    fun logSpendTransactionCompleted(price: Int, txHash: String) {
-        analytics.incrementUserProperty(Events.UserProperties.SPEND_COUNT, 1)
-        analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_SPENT,
-                price.toLong())
-        analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
-        analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                txHash, TRANSACTION_TYPE_SPEND))
-    }
 
 }
 
-class KinitServiceProvider(providerUrl: String, networkId: String, private val issuer: String) :
+class TippicServiceProvider(providerUrl: String, networkId: String, private val issuer: String) :
         ServiceProvider(providerUrl, networkId) {
 
     override fun getIssuerAccountId(): String {

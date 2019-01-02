@@ -16,11 +16,6 @@ import org.kinecosystem.tippic.analytics.Events.Event;
 public class Analytics {
 
     public static final String VIEW_ERROR_TYPE_ONBOARDING = "Onboarding";
-    public static final String TRANSACTION_TYPE_P2P = "p2p";
-    public static final String TRANSACTION_TYPE_EARN = "earn";
-    public static final String TRANSACTION_TYPE_SPEND = "spend";
-    public static final String SERVER_ERROR_RESPONSE = "server Error response";
-    public static final String SERVER_EMPTY_RESPONSE = "server empty response";
 
     private static final String AMPLITUDE_API_KEY = BuildConfig.AnalyticsApiSecret;
     private static final String TEST_FAIRY_KEY = BuildConfig.TestFairyApiSecret;
