@@ -10,7 +10,7 @@ import org.kinecosystem.tippic.analytics.Events.Business.UserRegistered
 import org.kinecosystem.tippic.blockchain.Wallet
 import org.kinecosystem.tippic.repository.UserRepository
 import org.kinecosystem.tippic.server.api.OnboardingApi
-import org.kinecosystem.tippic.server.api.OnboardingApi.StatusResponse
+import org.kinecosystem.tippic.server.api.OnboardingApi.ConfigResponse
 import org.kinecosystem.tippic.server.api.PhoneAuthenticationApi
 import org.kinecosystem.tippic.util.DeviceUtils
 import org.kinecosystem.tippic.util.GeneralUtils
@@ -78,9 +78,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     fun updateToken(token: String) {
         val call = appLaunchApi.updateToken(userRepo.userId(), OnboardingApi.TokenInfo(token))
         call.enqueue(
-                object : Callback<StatusResponse> {
-                    override fun onResponse(call: Call<StatusResponse>?,
-                                            response: Response<StatusResponse>?) {
+                object : Callback<ConfigResponse> {
+                    override fun onResponse(call: Call<ConfigResponse>?,
+                                            response: Response<ConfigResponse>?) {
                         Log.d("OnboardingService", "### updateToken success : $response token:$token")
                         // successfully sent the token update to server - so it is not longer needed
                         if (response != null && response.isSuccessful) {
@@ -89,7 +89,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         }
                     }
 
-                    override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
+                    override fun onFailure(call: Call<ConfigResponse>?, t: Throwable?) {
                         Log.e("OnboardingService", "### updateToken onFailure called with throwable $t")
                     }
                 })
@@ -107,9 +107,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
     fun sendAuthTokenAck(token: String) {
         val call = appLaunchApi.authTokenAck(userRepo.userId(), OnboardingApi.TokenInfo(token))
         call.enqueue(
-                object : Callback<StatusResponse> {
-                    override fun onResponse(call: Call<StatusResponse>?,
-                                            response: Response<StatusResponse>?) {
+                object : Callback<ConfigResponse> {
+                    override fun onResponse(call: Call<ConfigResponse>?,
+                                            response: Response<ConfigResponse>?) {
                         Log.d("OnboardingService", "### authTokenAck success : $response token:$token")
                         if (response == null || !response.isSuccessful) {
                             analytics.logEvent(
@@ -117,7 +117,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         }
                     }
 
-                    override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
+                    override fun onFailure(call: Call<ConfigResponse>?, t: Throwable?) {
                         Log.e("OnboardingService", "### authTokenAck onFailure called with throwable $t")
                         analytics.logEvent(Events.BILog.AuthTokenAckFailed("Received onFailure with t=$t"))
                     }
@@ -185,9 +185,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 screenHeight = displayMetrics.heightPixels,
                 density = displayMetrics.densityDpi,
                 packageId = applicationContext.packageName))
-        call.enqueue(object : Callback<StatusResponse> {
-            override fun onResponse(call: Call<StatusResponse>?,
-                                    response: Response<StatusResponse>?) {
+        call.enqueue(object : Callback<ConfigResponse> {
+            override fun onResponse(call: Call<ConfigResponse>?,
+                                    response: Response<ConfigResponse>?) {
 
                 if (response != null && response.isSuccessful) {
                     updateConfig(response)
@@ -202,7 +202,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 }
             }
 
-            override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
+            override fun onFailure(call: Call<ConfigResponse>?, t: Throwable?) {
                 Log.d("OnboardingService", "### register onFailure called with throwable $t")
                 analytics.logEvent(Events.BILog.UserRegistrationFailed("onFailure with throwable $t"))
                 callback?.onError(0)
@@ -210,7 +210,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         })
     }
 
-    private fun updateConfig(response: Response<StatusResponse>) {
+    private fun updateConfig(response: Response<ConfigResponse>) {
         val config = response.body()?.config
         config?.tos?.let { userRepo.tos = it }
         userRepo.isPhoneVerificationEnabled = config?.phone_verification_enabled ?: false
@@ -222,9 +222,9 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         updateToken()
         val call = appLaunchApi.appLaunch(userRepo.userId(), OnboardingApi.AppVersion(appVersion))
         call.enqueue(
-                object : Callback<StatusResponse> {
-                    override fun onResponse(call: Call<StatusResponse>?,
-                                            response: Response<StatusResponse>?) {
+                object : Callback<ConfigResponse> {
+                    override fun onResponse(call: Call<ConfigResponse>?,
+                                            response: Response<ConfigResponse>?) {
                         if (response != null && response.isSuccessful) {
                             updateConfig(response)
                             Log.d("OnboardingService",
@@ -232,7 +232,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         }
                     }
 
-                    override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
+                    override fun onFailure(call: Call<ConfigResponse>?, t: Throwable?) {
                         Log.d("OnboardingService", "appLaunch onFailure called with throwable $t")
                     }
                 })

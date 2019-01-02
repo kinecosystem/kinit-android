@@ -34,8 +34,10 @@ interface OnboardingApi {
                       @SerializedName("coming_soon") val coming_soon: String,
                       @SerializedName("tos") val tos: String)
 
-    data class StatusResponse(@SerializedName("status") val status: String,
+    data class ConfigResponse(@SerializedName("status") val status: String,
                               @SerializedName("config") val config: Config)
+
+    data class StatusResponse(@SerializedName("status") val status: String)
 
     data class HintsResponse(@SerializedName("status") val status: String,
                              @SerializedName("hints") val hints: ArrayList<String>)
@@ -43,26 +45,37 @@ interface OnboardingApi {
     data class BlackListAreaCode(@SerializedName("areacodes") val list: List<String>)
 
     @POST("/user/register")
-    fun register(@Body registrationInfo: RegistrationInfo): Call<StatusResponse>
+    fun register(@Body registrationInfo: RegistrationInfo): Call<ConfigResponse>
 
     data class AppVersion(@SerializedName("app_ver") val appVersion: String)
 
     @POST("/user/app-launch")
-    fun appLaunch(@Header(USER_HEADER_KEY) userId: String, @Body appVersionBody: AppVersion): Call<StatusResponse>
+    fun appLaunch(@Header(USER_HEADER_KEY) userId: String, @Body appVersionBody: AppVersion): Call<ConfigResponse>
 
     data class TokenInfo(@SerializedName("token") val token: String)
 
     data class AccountInfo(@SerializedName("public_address") val publicAddress: String)
 
     @POST("/user/update-token")
-    fun updateToken(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<StatusResponse>
+    fun updateToken(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<ConfigResponse>
 
     @POST("/user/onboard")
-    fun createAccount(@Header(USER_HEADER_KEY) userId: String, @Body accountInfo: AccountInfo): Call<StatusResponse>
+    fun createAccount(@Header(USER_HEADER_KEY) userId: String, @Body accountInfo: AccountInfo): Call<ConfigResponse>
 
 
     @POST("/user/auth/ack")
-    fun authTokenAck(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<StatusResponse>
+    fun authTokenAck(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<ConfigResponse>
+
+    data class BlockedUser(@SerializedName("user_id") val user_id: String, @SerializedName("username") val username: String)
+
+    @GET("/user/block-list")
+    fun getUserBlockList(): Call<List<BlockedUser>>
+
+    @POST("/user/block")
+    fun blockUser(@Header(USER_HEADER_KEY) userId: String, @Body user_id: String): Call<StatusResponse>
+
+    @POST("/user/unblock")
+    fun unBlockUser(@Header(USER_HEADER_KEY) userId: String, @Body user_id: String): Call<StatusResponse>
 
     @GET("/blacklist/areacodes")
     fun blacklistAreaCodes(): Call<BlackListAreaCode>
