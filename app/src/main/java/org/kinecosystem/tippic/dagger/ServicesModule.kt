@@ -12,17 +12,17 @@ import javax.inject.Singleton
 
 @DebugOpenClass
 @Module(
-        includes = [(ContextModule::class), (UserRepositoryModule::class), (AnalyticsModule::class), (DataStoreModule::class)])
+        includes = [(ContextModule::class), (UserRepositoryModule::class), (PictureRepositoryModule::class), (AnalyticsModule::class), (DataStoreModule::class)])
 class ServicesModule {
 
     lateinit var serivce: NetworkServices
     @Provides
     @Singleton
     fun servicesProvider(context: Context, dataStoreProvider: DataStoreProvider,
-                         userRepository: UserRepository, analytics: Analytics,
+                         userRepository: UserRepository,pictureRepository: PictureRepository, analytics: Analytics,
                          scheduler: Scheduler): NetworkServices {
         serivce = NetworkServices(context, dataStoreProvider,
-                userRepository, analytics, scheduler)
+                userRepository, pictureRepository, analytics, scheduler)
         return serivce
     }
 

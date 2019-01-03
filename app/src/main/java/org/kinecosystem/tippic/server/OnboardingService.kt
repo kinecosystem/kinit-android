@@ -22,7 +22,8 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         private val phoneAuthenticationApi: PhoneAuthenticationApi,
                         val userRepo: UserRepository,
                         val analytics: Analytics,
-                        val wallet: Wallet) {
+                        val wallet: Wallet,
+                        val pictureService: PictureService) {
 
     private val applicationContext: Context = context.applicationContext
     private var blackList = listOf<String>()
@@ -124,30 +125,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 })
     }
 
-    fun restoreAccount(address: String, callback: OperationCompletionCallback?) {
-        val call = appLaunchApi.restoreAccount(userRepo.userId(), OnboardingApi.AccountAddress(address))
-        call.enqueue(
-                object : Callback<OnboardingApi.AccountAddressResponds> {
-                    override fun onFailure(call: Call<OnboardingApi.AccountAddressResponds>, t: Throwable) {
-                        callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
-                    }
-
-                    override fun onResponse(call: Call<OnboardingApi.AccountAddressResponds>, response: Response<OnboardingApi.AccountAddressResponds>) {
-                        if (response.isSuccessful) {
-                            if (response.body()?.userId.isNullOrEmpty()) {
-                                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
-                            } else {
-                                userRepo.updateUserId(response.body()?.userId ?: "")
-                                callback?.onSuccess()
-                            }
-                        } else {
-                            callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
-                        }
-                    }
-                }
-        )
-    }
-
     private fun processRegistration() {
         appLaunchApi.blacklistAreaCodes().enqueue(object : Callback<OnboardingApi.BlackListAreaCode> {
             override fun onFailure(call: Call<OnboardingApi.BlackListAreaCode>, t: Throwable) {
@@ -193,6 +170,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     updateConfig(response)
                     updateToken()
                     analytics.logEvent(UserRegistered())
+                    pictureService.retrievePicture()
                     userRepo.isRegistered = true
                     callback?.onSuccess()
                 } else {
@@ -227,6 +205,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                             response: Response<ConfigResponse>?) {
                         if (response != null && response.isSuccessful) {
                             updateConfig(response)
+                            pictureService.retrievePicture()
                             Log.d("OnboardingService",
                                     "appLaunch onResponse: $response" + " config " + response.body()?.config)
                         }

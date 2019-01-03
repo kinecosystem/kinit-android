@@ -35,6 +35,7 @@ class TippicApplication : Application(), DataStoreProvider {
                 ContextModule(applicationContext))
                 .dataStoreModule(DataStoreModule(this))
                 .userRepositoryModule(UserRepositoryModule())
+                .pictureRepositoryModule(PictureRepositoryModule())
                 .schedulerModule(SchedulerModule())
                 .analyticsModule(AnalyticsModule())
                 .notificationModule(NotificationModule())

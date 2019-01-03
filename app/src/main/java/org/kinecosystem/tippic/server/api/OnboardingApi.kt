@@ -22,16 +22,9 @@ interface OnboardingApi {
 
 
     data class Config(@SerializedName("auth_token_enabled") val auth_token_enabled: Boolean,
-                      @SerializedName("p2p_enabled") val p2p_enabled: Boolean,
-                      @SerializedName("p2p_max_kin") val p2p_max_kin: Int,
                       @SerializedName("is_update_available") val is_update_available: Boolean,
                       @SerializedName("force_update") val force_update: Boolean,
-                      @SerializedName("p2p_min_kin") val p2p_min_kin: Int,
-                      @SerializedName("backup_nag") val backupNagEnabled: Boolean,
-                      @SerializedName("p2p_min_tasks") val p2p_min_tasks: Int,
                       @SerializedName("phone_verification_enabled") val phone_verification_enabled: Boolean,
-                      @SerializedName("faq_url") val faq_url: String,
-                      @SerializedName("coming_soon") val coming_soon: String,
                       @SerializedName("tos") val tos: String)
 
     data class ConfigResponse(@SerializedName("status") val status: String,
@@ -79,13 +72,5 @@ interface OnboardingApi {
 
     @GET("/blacklist/areacodes")
     fun blacklistAreaCodes(): Call<BlackListAreaCode>
-
-    @POST("/user/restore")
-    fun restoreAccount(@Header(USER_HEADER_KEY) userId: String, @Body accountAddress: AccountAddress): Call<AccountAddressResponds>
-
-    data class AccountAddress(@SerializedName("address") val publicAddress: String)
-
-    data class AccountAddressResponds(@SerializedName("status") val status: String,
-                                      @SerializedName("user_id") val userId: String)
 
 }

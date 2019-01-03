@@ -29,11 +29,12 @@ interface OperationResultCallback<in T> {
 
 class NetworkServices {
     val onBoardingService: OnboardingService
+    val pictureService: PictureService
     val walletService: Wallet
 
     private val applicationContext: Context
 
-    constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository, analytics: Analytics, scheduler: Scheduler
+    constructor(context: Context, dataStoreProvider: DataStoreProvider, userRepo: UserRepository, pictureRepository: PictureRepository, analytics: Analytics, scheduler: Scheduler
     ) {
         applicationContext = context.applicationContext
 
@@ -56,10 +57,12 @@ class NetworkServices {
         walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, analytics,
                 onboardingApi, walletApi, scheduler)
 
+        pictureService = PictureService(applicationContext,retrofit.create<PictureApi>(PictureApi::class.java),userRepo, pictureRepository)
         onBoardingService = OnboardingService(applicationContext,
                 retrofit.create<OnboardingApi>(OnboardingApi::class.java),
                 retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
-                userRepo, analytics, walletService)
+                userRepo, analytics, walletService,pictureService )
+
     }
 
     fun isNetworkConnected(): Boolean {

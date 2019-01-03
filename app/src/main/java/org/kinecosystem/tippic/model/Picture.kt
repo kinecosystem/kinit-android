@@ -4,31 +4,31 @@ import com.google.gson.annotations.SerializedName
 
 data class Picture(
     @SerializedName("picture_id")
-    val picture_id: String? = null,
+    val picture_id: String,
     @SerializedName("title")
-    val title: String? = null,
+    val title: String,
     @SerializedName("image_url")
-    val image_url: String? = null,
+    val image_url: String,
     @SerializedName("author")
-    val author: Author? = null,
+    val author: Author,
     @SerializedName("tips_sum")
     val tips_sum: Int = 0
 )
 
 data class Author(
         @SerializedName("name")
-        val name: String? = null,
+        val name: String,
         @SerializedName("user_id")
-        val user_id: String? = null,
+        val user_id: String,
         @SerializedName("public_address")
-        val public_address: String? = null
+        val public_address: String
 )
 
 
 fun Author.isValid(): Boolean {
-    return !name.isNullOrBlank() && !user_id.isNullOrBlank() && !public_address.isNullOrBlank()
+    return !name.isBlank() && !user_id.isBlank() && !public_address.isBlank()
 }
 
 fun Picture.isValid(): Boolean {
-    return author != null && author.isValid() and !title.isNullOrBlank() and !image_url.isNullOrBlank()
+    return author.isValid() and !title.isBlank() and !image_url.isBlank()
 }

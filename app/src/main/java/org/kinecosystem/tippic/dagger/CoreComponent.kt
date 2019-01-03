@@ -5,6 +5,7 @@ import org.kinecosystem.tippic.TippicApplication
 import org.kinecosystem.tippic.firebase.KinInstanceIdService
 import org.kinecosystem.tippic.firebase.KinMessagingService
 import org.kinecosystem.tippic.navigation.Navigator
+import org.kinecosystem.tippic.repository.PictureRepository
 import org.kinecosystem.tippic.util.SupportUtil
 import org.kinecosystem.tippic.view.MainActivity
 import org.kinecosystem.tippic.view.SplashActivity
