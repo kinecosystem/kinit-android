@@ -41,7 +41,7 @@ class EcoAppsViewModel(val navigator: Navigator) :
         hasNetwork.set(networkServices.isNetworkConnected())
     }
 
-    fun onComingSoonClicked(view: View) {
+    fun onLearnMoreClicked(view: View) {
         navigator.navigateTo(Navigator.Destination.ECO_APPS_COMING_SOON)
     }
 
