@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="org.kinecosystem.tippic.TippicApplication"
+        android:name=".TippicApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher_app"
         android:label="@string/app_name"
@@ -16,11 +16,11 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name="org.kinecosystem.tippic.view.PictureActivity"
+            android:name=".view.PictureActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.kinecosystem.tippic.view.SplashActivity"
+            android:name=".view.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -31,26 +31,26 @@
 
 
         <activity
-            android:name="org.kinecosystem.tippic.view.RegisterErrorActivity"
+            android:name=".view.RegisterErrorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Questionnaire" />
 
 
         <activity
-            android:name="org.kinecosystem.tippic.view.createWallet.CreateWalletActivity"
+            android:name=".view.createWallet.CreateWalletActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="org.kinecosystem.tippic.view.phoneVerify.PhoneVerifyActivity"
+            android:name=".view.phoneVerify.PhoneVerifyActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
-        <service android:name="org.kinecosystem.tippic.firebase.TippicInstanceIdService">
+        <service android:name=".firebase.TippicInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name="org.kinecosystem.tippic.firebase.TippicMessagingService">
+        <service android:name=".firebase.TippicMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

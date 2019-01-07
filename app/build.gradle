@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-allopen'
 
-def propertiesFile = rootProject.file("app/kinit.properties")
+def propertiesFile = rootProject.file("app/tippic.properties")
 // Initialize a new Properties() object called keystoreProperties.
 def globalProperties = new Properties()
 // Load your keystore.properties file into the keystoreProperties object.
@@ -25,7 +25,7 @@ android {
         prodBeta {
             keyAlias globalProperties['keyAlias']
             keyPassword globalProperties['keyPassword']
-            storeFile file("kinit.jks")
+            storeFile file("tippic.jks")
             storePassword globalProperties['storePassword']
         }
     }
