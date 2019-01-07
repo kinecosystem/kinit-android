@@ -7,7 +7,7 @@ import org.kinecosystem.tippic.BuildConfig
 import org.kinecosystem.tippic.analytics.Analytics
 import org.kinecosystem.tippic.analytics.Events
 import org.kinecosystem.tippic.analytics.Events.Business.UserRegistered
-import org.kinecosystem.tippic.blockchain.Wallet
+import org.kinecosystem.tippic.blockchain.WalletService
 import org.kinecosystem.tippic.repository.UserRepository
 import org.kinecosystem.tippic.server.api.OnboardingApi
 import org.kinecosystem.tippic.server.api.OnboardingApi.ConfigResponse
@@ -22,7 +22,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                         private val phoneAuthenticationApi: PhoneAuthenticationApi,
                         val userRepo: UserRepository,
                         val analytics: Analytics,
-                        val wallet: Wallet,
+                        val walletService: WalletService,
                         val pictureService: PictureService) {
 
     private val applicationContext: Context = context.applicationContext
@@ -170,7 +170,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     updateConfig(response)
                     updateToken()
                     analytics.logEvent(UserRegistered())
-                    pictureService.retrievePicture()
+                    pictureService.refreshPicture()
                     userRepo.isRegistered = true
                     callback?.onSuccess()
                 } else {
@@ -205,7 +205,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                             response: Response<ConfigResponse>?) {
                         if (response != null && response.isSuccessful) {
                             updateConfig(response)
-                            pictureService.retrievePicture()
+                            pictureService.refreshPicture()
                             Log.d("OnboardingService",
                                     "appLaunch onResponse: $response" + " config " + response.body()?.config)
                         }

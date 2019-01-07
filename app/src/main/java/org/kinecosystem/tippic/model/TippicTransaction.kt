@@ -13,7 +13,7 @@ fun TxInfo.isValid(): Boolean {
     return !(memo.isNullOrBlank() || id.isNullOrBlank())
 }
 
-data class KinTransaction(
+data class TippicTransaction(
     @SerializedName("tx_hash")
     val txHash: String? = null,
     @SerializedName("title")
@@ -35,7 +35,7 @@ data class KinTransaction(
     var txBalance: Int? = null
 )
 
-fun KinTransaction.isValid(): Boolean {
+fun TippicTransaction.isValid(): Boolean {
     if (txHash.isNullOrBlank() || txHash.isNullOrBlank() || amount == null ||
         type.isNullOrBlank() || clientReceived == null || date == null ||
         provider == null || txInfo == null) {

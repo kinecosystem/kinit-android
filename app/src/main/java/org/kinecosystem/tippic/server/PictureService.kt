@@ -11,23 +11,36 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PictureService(context: Context,private val pictureApi: PictureApi,val userRepo: UserRepository,val repository: PictureRepository) {
-    private val applicationContext: Context = context.applicationContext
+class PictureService(private val pictureApi: PictureApi,val userRepo: UserRepository,val repository: PictureRepository) {
+    fun refreshShownPicturesSummery(callback: OperationCompletionCallback? = null){
+        pictureApi.picturesSummery(userRepo.userId()).enqueue(object : Callback<List<Picture>> {
+            override fun onFailure(call: Call<List<Picture>>, t: Throwable) {
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+            }
 
-    fun retrievePicture(callback: OperationCompletionCallback? = null) {
-        if (!GeneralUtils.isConnected(applicationContext)) return
+            override fun onResponse(call: Call<List<Picture>>, response: Response<List<Picture>>?) {
+                if (response != null && response.isSuccessful) {
+                    Log.d("PictureService", "onResponse: ${response.body()}")
+                    repository.updatePicturesSummery(response.body())
+                    callback?.onSuccess()
+                } else {
+                    Log.d("PictureService", "response null or isSuccessful=false: $response")
+                    callback?.onError(ERROR_EMPTY_RESPONSE)
+                }
+            }
+        })
+    }
 
+    fun refreshPicture(callback: OperationCompletionCallback? = null) {
         pictureApi.picture(userRepo.userId()).enqueue(object : Callback<PictureApi.PictureResponds> {
             override fun onFailure(call: Call<PictureApi.PictureResponds>, t: Throwable) {
-                callback?.onError(0)
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
 
             override fun onResponse(call: Call<PictureApi.PictureResponds>, response: Response<PictureApi.PictureResponds>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d("PictureService", "onResponse: ${response.body()}")
-                    response.body()?.let {
-                        repository.updatePicture(it.picture)
-                    }
+                    repository.updatePicture(response.body()?.picture)
                     callback?.onSuccess()
                 } else {
                     Log.d("PictureService", "response null or isSuccessful=false: $response")

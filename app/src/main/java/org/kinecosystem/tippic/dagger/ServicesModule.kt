@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.kinecosystem.tippic.analytics.Analytics
-import org.kinecosystem.tippic.blockchain.Wallet
+import org.kinecosystem.tippic.blockchain.WalletService
 import org.kinecosystem.tippic.repository.*
 import org.kinecosystem.tippic.server.*
 import org.kinecosystem.tippic.util.Scheduler
@@ -28,7 +28,13 @@ class ServicesModule {
 
     @Provides
     @Singleton
-    fun wallet(): Wallet {
+    fun pictureService(): PictureService {
+        return serivce.pictureService
+    }
+
+    @Provides
+    @Singleton
+    fun walletService(): WalletService {
         return serivce.walletService
     }
 

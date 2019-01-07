@@ -59,11 +59,6 @@ interface OnboardingApi {
     @POST("/user/auth/ack")
     fun authTokenAck(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<ConfigResponse>
 
-    data class BlockedUser(@SerializedName("user_id") val user_id: String, @SerializedName("username") val username: String)
-
-    @GET("/user/block-list")
-    fun getUserBlockList(): Call<List<BlockedUser>>
-
     @POST("/user/block")
     fun blockUser(@Header(USER_HEADER_KEY) userId: String, @Body user_id: String): Call<StatusResponse>
 

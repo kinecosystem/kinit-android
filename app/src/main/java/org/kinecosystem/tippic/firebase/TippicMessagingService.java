@@ -24,12 +24,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static org.kinecosystem.tippic.model.Push.TransactionCompleteMessage;
 
+public class TippicMessagingService extends FirebaseMessagingService {
 
-public class KinMessagingService extends FirebaseMessagingService {
-
-    public static String TAG = KinMessagingService.class.getSimpleName();
+    public static String TAG = TippicMessagingService.class.getSimpleName();
 
     @Inject
     NotificationPublisher notificationPublisher;
@@ -42,7 +40,7 @@ public class KinMessagingService extends FirebaseMessagingService {
     @Inject
     Analytics analytics;
 
-    public KinMessagingService() {
+    public TippicMessagingService() {
 
     }
 

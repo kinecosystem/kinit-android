@@ -2,7 +2,7 @@ package org.kinecosystem.tippic.daggerCore
 
 import android.content.Context
 import org.kinecosystem.tippic.analytics.Analytics
-import org.kinecosystem.tippic.blockchain.Wallet
+import org.kinecosystem.tippic.blockchain.WalletService
 import org.kinecosystem.tippic.dagger.ServicesModule
 import org.kinecosystem.tippic.repository.*
 import org.kinecosystem.tippic.server.*
@@ -15,8 +15,8 @@ class TestServicesModule : ServicesModule() {
         return mock(NetworkServices::class.java)
     }
 
-    override fun wallet(): Wallet {
-        return mock(Wallet::class.java)
+    override fun walletService(): WalletService {
+        return mock(WalletService::class.java)
     }
 
     override fun onboardingService(): OnboardingService {

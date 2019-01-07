@@ -46,6 +46,6 @@ class CreateWalletErrorFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING, "create wallet error"))
+        analytics.logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING, "create walletService error"))
     }
 }

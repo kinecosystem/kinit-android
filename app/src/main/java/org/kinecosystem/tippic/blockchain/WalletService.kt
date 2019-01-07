@@ -9,12 +9,13 @@ import kin.core.exception.*
 import org.kinecosystem.tippic.BuildConfig
 import org.kinecosystem.tippic.analytics.Analytics
 import org.kinecosystem.tippic.analytics.Events
-import org.kinecosystem.tippic.model.KinTransaction
+import org.kinecosystem.tippic.model.TippicTransaction
 import org.kinecosystem.tippic.repository.DataStore
 import org.kinecosystem.tippic.repository.DataStoreProvider
 import org.kinecosystem.tippic.repository.UserRepository
 import org.kinecosystem.tippic.server.ERROR_APP_SERVER_FAILED_RESPONSE
 import org.kinecosystem.tippic.server.ERROR_EMPTY_RESPONSE
+import org.kinecosystem.tippic.server.ERROR_INVALID_DATA
 import org.kinecosystem.tippic.server.OperationCompletionCallback
 import org.kinecosystem.tippic.server.api.OnboardingApi
 import org.kinecosystem.tippic.server.api.WalletApi
@@ -25,8 +26,8 @@ import retrofit2.Response
 
 private const val TEST_NET_URL = "https://horizon-playground.kininfrastructure.com/"
 private const val MAIN_NET_URL = "https://horizon-ecosystem.kininfrastructure.com/"
-private const val TEST_NET_WALLET_CACHE_NAME = "kin.app.wallet.testnet"
-private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.wallet.mainnet"
+private const val TEST_NET_WALLET_CACHE_NAME = "kin.app.walletService.testnet"
+private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.walletService.mainnet"
 
 private const val NETWORK_ID_MAIN = "Public Global Kin Ecosystem Network ; June 2018"
 private const val NETWORK_ID_TEST = "Kin Playground Network ; June 2018"
@@ -34,14 +35,14 @@ private const val KIN_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZVC
 private const val KIN_ISSUER_STAGE = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
 private const val ACTIVE_WALLET_KEY = "activeWallet"
 private const val WALLET_BALANCE_KEY = "WalletBalance"
-private const val TAG = "Wallet"
+private const val TAG = "WalletService"
 
-class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
-             val userRepo: UserRepository,
-             val analytics: Analytics,
-             val onboardingApi: OnboardingApi,
-             val walletApi: WalletApi,
-             val scheduler: Scheduler) {
+class WalletService(context: Context, dataStoreProvider: DataStoreProvider,
+                    val userRepo: UserRepository,
+                    val analytics: Analytics,
+                    val onboardingApi: OnboardingApi,
+                    val walletApi: WalletApi,
+                    val scheduler: Scheduler) {
 
     enum class Type {
         Main,
@@ -53,7 +54,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private var kinClient: KinClient
     private var account: KinAccount
 
-    val transactions: ObservableField<List<KinTransaction>> = ObservableField(ArrayList())
+    val transactions: ObservableField<List<TippicTransaction>> = ObservableField(ArrayList())
 
     init {
         val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
@@ -111,6 +112,28 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
     }
 
+    fun reportTransaction(tx: TippicTransaction, callback: OperationCompletionCallback? = null){
+        walletApi.reportTransaction(userRepo.userId(), tx).enqueue(object : Callback<OnboardingApi.StatusResponse> {
+            override fun onFailure(call: Call<OnboardingApi.StatusResponse>, t: Throwable) {
+                callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+            }
+
+            override fun onResponse(call: Call<OnboardingApi.StatusResponse>, response: Response<OnboardingApi.StatusResponse>?) {
+                if (response != null && response.isSuccessful) {
+                    Log.d("PictureService", "onResponse: ${response.body()}")
+                    if (response.body()?.status == "ok")
+                        callback?.onSuccess()
+                    else
+                        callback?.onError(ERROR_INVALID_DATA)
+                } else {
+                    Log.d("PictureService", "response null or isSuccessful=false: $response")
+                    callback?.onError(ERROR_EMPTY_RESPONSE)
+                }
+            }
+
+        })
+    }
+
 
     fun retrieveTransactions(callback: OperationCompletionCallback? = null) {
         walletApi.getTransactions(userRepo.userId()).enqueue(object : Callback<WalletApi.TransactionsResponse> {
@@ -141,7 +164,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         })
     }
 
-    private fun injectTxsBalance(txs: List<KinTransaction>) {
+    private fun injectTxsBalance(txs: List<TippicTransaction>) {
         for (index in txs.indices) {
             if (index == 0) txs[0].txBalance = balanceInt
             else {
@@ -174,19 +197,9 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     }
 
     fun initKinWallet() {
-        Log.d(TAG, "### initializing Kin Wallet")
+        Log.d(TAG, "### initializing Kin WalletService")
         scheduler.executeOnBackground {
             updateBalanceSync()
-        }
-    }
-
-    fun importBackedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
-        return try {
-            kinClient.importAccount(exportedStr, passphrase)
-        } catch (cryptoException: CryptoException) {
-            null
-        } catch (createAccountException: CreateAccountException) {
-            null
         }
     }
 

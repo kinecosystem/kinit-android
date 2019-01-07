@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 class Push {
 
     /*
-        Class used by KinMessagingService
+        Class used by TippicMessagingService
         The push notification data that we receive from our servers is
         in the following format:
         "data"={"push_id":"the_id",

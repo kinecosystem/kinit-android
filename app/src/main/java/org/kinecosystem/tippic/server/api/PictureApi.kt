@@ -13,7 +13,7 @@ interface PictureApi {
     @GET("/user/picture")
     fun picture(@Header(USER_HEADER_KEY) userId: String): Call<PictureResponds>
 
-    @GET(".user/pictures-summery")
+    @GET("/user/pictures-summery")
     fun picturesSummery(@Header(USER_HEADER_KEY) userId: String): Call<List<Picture>>
 
 

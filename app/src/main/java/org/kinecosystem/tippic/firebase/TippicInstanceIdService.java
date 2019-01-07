@@ -7,7 +7,7 @@ import org.kinecosystem.tippic.TippicApplication;
 import org.kinecosystem.tippic.server.OnboardingService;
 
 
-public class KinInstanceIdService extends FirebaseInstanceIdService {
+public class TippicInstanceIdService extends FirebaseInstanceIdService {
 
     @Inject
     OnboardingService onboardingService;

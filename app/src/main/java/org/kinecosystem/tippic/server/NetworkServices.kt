@@ -5,7 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.kinecosystem.tippic.BuildConfig
 import org.kinecosystem.tippic.analytics.Analytics
-import org.kinecosystem.tippic.blockchain.Wallet
+import org.kinecosystem.tippic.blockchain.WalletService
 import org.kinecosystem.tippic.repository.*
 import org.kinecosystem.tippic.server.api.*
 import org.kinecosystem.tippic.util.GeneralUtils
@@ -30,7 +30,7 @@ interface OperationResultCallback<in T> {
 class NetworkServices {
     val onBoardingService: OnboardingService
     val pictureService: PictureService
-    val walletService: Wallet
+    val walletService: WalletService
 
     private val applicationContext: Context
 
@@ -54,15 +54,14 @@ class NetworkServices {
         val walletApi = retrofit.create<WalletApi>(WalletApi::class.java)
 
 
-        walletService = Wallet(context.applicationContext, dataStoreProvider, userRepo, analytics,
+        walletService = WalletService(context.applicationContext, dataStoreProvider, userRepo, analytics,
                 onboardingApi, walletApi, scheduler)
 
-        pictureService = PictureService(applicationContext,retrofit.create<PictureApi>(PictureApi::class.java),userRepo, pictureRepository)
+        pictureService = PictureService(retrofit.create<PictureApi>(PictureApi::class.java),userRepo, pictureRepository)
         onBoardingService = OnboardingService(applicationContext,
                 retrofit.create<OnboardingApi>(OnboardingApi::class.java),
                 retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
                 userRepo, analytics, walletService,pictureService )
-
     }
 
     fun isNetworkConnected(): Boolean {
