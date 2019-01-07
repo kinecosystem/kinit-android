@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/blue_light</color>
-    <color name="colorPrimaryDark">@color/status_bar_color</color>
+    <color name="colorPrimary">@color/gray</color>
+    <color name="colorPrimaryDark">@color/grey_light</color>
     <color name="colorAccent">#FF4081</color>
     <color name="tab_font_color_selected">#047cfc</color>
     <color name="gray">#a4acc2</color>

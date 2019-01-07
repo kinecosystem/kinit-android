@@ -1,29 +1,29 @@
 package org.kinecosystem.tippic.view
 
-import android.app.AlertDialog.Builder
 import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import org.kinecosystem.tippic.R
 import org.kinecosystem.tippic.TippicApplication
 import org.kinecosystem.tippic.analytics.Analytics
-import org.kinecosystem.tippic.analytics.Events
 import org.kinecosystem.tippic.analytics.Events.Analytics.ClickEngagementPush
+import org.kinecosystem.tippic.databinding.PictureActivityBinding
 import org.kinecosystem.tippic.navigation.Navigator
 import org.kinecosystem.tippic.repository.UserRepository
 import org.kinecosystem.tippic.view.customView.AlertManager
+import org.kinecosystem.tippic.viewmodel.PictureActivityViewModel
 import javax.inject.Inject
 
-class MainActivity : BaseActivity() {
+class PictureActivity : BaseActivity() {
 
     companion object {
         const val REPORT_PUSH_ID_KEY = "report_push_id_key"
         const val REPORT_PUSH_TEXT_KEY = "report_push_text_key"
-        private const val SELECTED_TAB_INDEX_KEY = "selected_tab_index_key"
 
         fun getIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
+            return Intent(context, PictureActivity::class.java)
         }
     }
 
@@ -32,10 +32,15 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var userRepository: UserRepository
 
+    private lateinit var model: PictureActivityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         TippicApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        val binding = DataBindingUtil.setContentView<PictureActivityBinding>(this, R.layout.picture_activity)
+        model = PictureActivityViewModel(Navigator(this))
+        binding.model = model
+
 
         if (userRepository.forceUpdate) {
             AlertManager.showGeneralAlert(context = this, title = "New version available", message = "Update to the newest version to keep the kin rolling in", positiveMessage = "Update Now", positiveAction = {
@@ -57,5 +62,10 @@ class MainActivity : BaseActivity() {
             analytics.logEvent(ClickEngagementPush(intentExtras.getString(REPORT_PUSH_ID_KEY),
                     intentExtras.getString(REPORT_PUSH_TEXT_KEY)))
         }
+    }
+
+    override fun onDestroy() {
+
+        super.onDestroy()
     }
 }

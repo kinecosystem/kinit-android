@@ -70,7 +70,7 @@ public class BindingUtils {
         }
     }
 
-    @BindingAdapter("app:layout_constraintTop_toBottomOf")
+    @BindingAdapter("layout_constraintTop_toBottomOf")
     public static void updateConstrainTopToBottom(View view, @IdRes int resId) {
         ConstraintLayout constraintLayout = (ConstraintLayout) view.getParent();
         ConstraintSet constraintSet = new ConstraintSet();
@@ -101,7 +101,7 @@ public class BindingUtils {
         }
     }
 
-    @BindingAdapter({"bind:run", "bind:script"})
+    @BindingAdapter({"run", "script"})
     public static void callJavaScript(WebView webView, boolean run, String script) {
         if (run) {
             webView.evaluateJavascript(script, null);

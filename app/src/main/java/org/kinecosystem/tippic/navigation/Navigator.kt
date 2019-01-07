@@ -5,7 +5,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import org.kinecosystem.tippic.R
 import org.kinecosystem.tippic.TippicApplication
-import org.kinecosystem.tippic.view.MainActivity
+import org.kinecosystem.tippic.view.PictureActivity
 import org.kinecosystem.tippic.view.RegisterErrorActivity
 import org.kinecosystem.tippic.view.createWallet.CreateWalletActivity
 import org.kinecosystem.tippic.view.phoneVerify.PhoneVerifyActivity
@@ -30,7 +30,7 @@ class Navigator(private val context: Context) {
             Destination.ERROR_REGISTER -> navigateToActivity(RegisterErrorActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.MAIN_SCREEN -> navigateToActivity(PictureActivity.getIntent(context), withSlideAnim, reverseAnim)
         }
     }
 

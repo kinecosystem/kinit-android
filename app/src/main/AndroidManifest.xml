@@ -16,7 +16,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name="org.kinecosystem.tippic.view.MainActivity"
+            android:name="org.kinecosystem.tippic.view.PictureActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity

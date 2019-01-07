@@ -6,7 +6,7 @@ import org.kinecosystem.tippic.firebase.TippicInstanceIdService
 import org.kinecosystem.tippic.firebase.TippicMessagingService
 import org.kinecosystem.tippic.navigation.Navigator
 import org.kinecosystem.tippic.util.SupportUtil
-import org.kinecosystem.tippic.view.MainActivity
+import org.kinecosystem.tippic.view.PictureActivity
 import org.kinecosystem.tippic.view.SplashActivity
 import org.kinecosystem.tippic.view.createWallet.CreateWalletActivity
 import org.kinecosystem.tippic.view.createWallet.CreateWalletErrorFragment
@@ -29,7 +29,7 @@ interface CoreComponent {
     fun inject(phoneVerificationViewModel: PhoneVerificationViewModel)
     fun inject(tippicMessagingService: TippicMessagingService)
     fun inject(tippicInstanceIdService: TippicInstanceIdService)
-    fun inject(mainActivity: MainActivity)
+    fun inject(pictureActivity: PictureActivity)
     fun inject(phoneVerifyActivity: PhoneVerifyActivity)
     fun inject(phoneSendFragment: PhoneSendFragment)
     fun inject(codeVerificationFragment: CodeVerificationFragment)

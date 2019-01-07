@@ -13,7 +13,7 @@ import org.kinecosystem.tippic.R
 import org.kinecosystem.tippic.analytics.Analytics
 import org.kinecosystem.tippic.analytics.Events
 import org.kinecosystem.tippic.model.Push
-import org.kinecosystem.tippic.view.MainActivity
+import org.kinecosystem.tippic.view.PictureActivity
 
 class NotificationPublisher(private val context: Context, private val analytics: Analytics) {
 
@@ -31,10 +31,10 @@ class NotificationPublisher(private val context: Context, private val analytics:
 
 
     fun notify(id: String, notificationData: Push.NotificationMessage) {
-        val actionIntent = Intent(context, MainActivity::class.java)
+        val actionIntent = Intent(context, PictureActivity::class.java)
         actionIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        actionIntent.putExtra(MainActivity.REPORT_PUSH_ID_KEY, id)
-        actionIntent.putExtra(MainActivity.REPORT_PUSH_TEXT_KEY, notificationData.body)
+        actionIntent.putExtra(PictureActivity.REPORT_PUSH_ID_KEY, id)
+        actionIntent.putExtra(PictureActivity.REPORT_PUSH_TEXT_KEY, notificationData.body)
         val pendingIntent = PendingIntent.getActivity(context, 0, actionIntent, 0)
 
         val contentTitle = if (notificationData.title.isNullOrEmpty())
