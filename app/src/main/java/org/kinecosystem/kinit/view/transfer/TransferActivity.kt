@@ -43,19 +43,19 @@ class TransferActivity : BaseActivity(), TransferActions {
     override fun onPause() {
         super.onPause()
         Log.d("###", "### on onPause TransferActivity")
-
+        model.onPause()
     }
 
 
     override fun onResume() {
         super.onResume()
         Log.d("###", "### on onResume TransferActivity")
-
+        model.onResume()
     }
 
     override fun onStartConnect() {
         if (isFinished) return
-        val intent = model.getIntent(this)
+        val intent = model.createTransferIntent(this)
         if (intent != null) {
             startActivityForResult(intent, model.REQUEST_CODE)
         } else {

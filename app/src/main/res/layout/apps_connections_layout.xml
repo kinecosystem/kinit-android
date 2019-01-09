@@ -62,25 +62,12 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:indeterminate="true"
             android:layout_width="0dp"
-            android:visibility="@{!model.onConnected}"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@+id/appIcon"
             app:layout_constraintEnd_toStartOf="@+id/appIcon"
             app:layout_constraintStart_toEndOf="@+id/kinitIcon"
             app:layout_constraintTop_toTopOf="@+id/appIcon" />
 
-        <ProgressBar
-            android:id="@+id/progressBarBack"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:indeterminate="true"
-            android:visibility="@{model.onConnected}"
-            android:rotation="180"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/appIcon"
-            app:layout_constraintEnd_toStartOf="@+id/appIcon"
-            app:layout_constraintStart_toEndOf="@+id/kinitIcon"
-            app:layout_constraintTop_toTopOf="@+id/appIcon" />
     </android.support.constraint.ConstraintLayout>
 
 

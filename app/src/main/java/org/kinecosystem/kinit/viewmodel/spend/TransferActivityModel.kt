@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
+import android.os.Handler
 import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.model.spend.EcoApplication
@@ -14,19 +15,27 @@ import java.io.InputStreamReader
 import javax.inject.Inject
 
 const val EXTRA_HAS_ERROR = "EXTRA_HAS_ERROR"
+private const val CONNECTION_START_DELAY: Long = 1500
 
 class TransferActivityModel(private val app: EcoApplication, val transferActions: TransferActions?) {
     val REQUEST_CODE = 77
     val EXTRA_SOURCE_APP_NAME = "EXTRA_SOURCE_APP_NAME"
+    private var delayPassed: Boolean = false
+    private var isPaused: Boolean = false
+    private var isConnectionStarted: Boolean = false
 
     @Inject
     lateinit var userRepository: UserRepository
 
     init {
         KinitApplication.coreComponent.inject(this)
+        Handler().postDelayed({
+            delayPassed = true
+            startConnection()
+        }, CONNECTION_START_DELAY)
     }
 
-    fun getIntent(context: Context): Intent? {
+    fun createTransferIntent(context: Context): Intent? {
         val intent = Intent()
         intent.`package` = app.identifier
         intent.component = ComponentName(app.identifier, app.transferData?.fullPathClass)
@@ -77,5 +86,23 @@ class TransferActivityModel(private val app: EcoApplication, val transferActions
 
     }
 
+
+    fun onResume(){
+        isPaused = false
+        if (delayPassed) {
+            startConnection()
+        }
+    }
+
+    private fun startConnection() {
+        if (!isPaused && !isConnectionStarted) {
+            isConnectionStarted = true
+            transferActions?.onStartConnect()
+        }
+    }
+
+    fun onPause() {
+        isPaused = true
+    }
 
 }
