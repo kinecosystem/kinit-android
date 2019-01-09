@@ -49,10 +49,15 @@ class SendAmountFragment : BaseFragment() {
         handler.postDelayed({
             binding.amount.requestFocus()
             GeneralUtils.openKeyboard(context, binding.amount)
-        }, 200)
+        }, 50)
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.amount.clearFocus()
+        GeneralUtils.closeKeyboard(context, binding.amount)
+    }
 
     companion object {
         val ARG_APP = "arg_app"

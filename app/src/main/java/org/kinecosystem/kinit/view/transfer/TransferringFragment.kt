@@ -1,7 +1,6 @@
 package org.kinecosystem.kinit.view.transfer
 
 import android.databinding.DataBindingUtil
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,9 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TransferringKinToAppLayoutBinding
 import org.kinecosystem.kinit.model.spend.EcoApplication
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.view.spend.AppDetailFragment
 import org.kinecosystem.kinit.viewmodel.spend.TransferringToAppViewModel
+
 
 class TransferringFragment : BaseFragment() {
 
@@ -46,7 +44,6 @@ class TransferringFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         model.onResume()
-        GeneralUtils.closeKeyboard(context, binding.balanceSubtitle)
     }
 
     override fun onPause() {

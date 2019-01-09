@@ -31,22 +31,12 @@ class AppsConnectionFragment : BaseFragment() {
             if (args.containsKey(AppDetailFragment.ARG_APP)) {
                 val app = args.getParcelable<EcoApplication>(AppsConnectionFragment.ARG_APP)
                 context?.let {
-                    model = AppsConnectionViewModel(app, transferActions)
+                    model = AppsConnectionViewModel(app)
                     binding.model = model
                 }
             }
         }
         return binding.root
-    }
-
-    override fun onPause() {
-        super.onPause()
-        model.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        model.onResume()
     }
 
     companion object {

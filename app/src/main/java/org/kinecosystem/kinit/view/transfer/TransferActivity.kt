@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.model.spend.EcoApplication
@@ -25,37 +24,31 @@ class TransferActivity : BaseActivity(), TransferActions {
     private var isFinished = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("###", "### on create TransferActivity")
-        Log.d("###", "### on create TransferActivity savedInstanceState " + savedInstanceState)
-
         KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
         navigator = Navigator(this)
         setContentView(R.layout.single_fragment_layout)
-        app = intent.getParcelableExtra<EcoApplication>(APP_PARAM)
+        app = intent.getParcelableExtra(APP_PARAM)
         returnToAppDetail = intent.getBooleanExtra(FROM_APP_DETAIL_PARAM, false)
         val fragment = AppsConnectionFragment.newInstance(app)
         supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment).commit()
-        model = TransferActivityModel(app, this)
+        model = TransferActivityModel(applicationInfo.loadLabel(packageManager).toString(), app, this)
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d("###", "### on onPause TransferActivity")
-
+        model.onPause()
     }
-
 
     override fun onResume() {
         super.onResume()
-        Log.d("###", "### on onResume TransferActivity")
-
+        model.onResume()
     }
 
     override fun onStartConnect() {
         if (isFinished) return
-        val intent = model.getIntent(this)
+        val intent = model.createTransferIntent(this)
         if (intent != null) {
             startActivityForResult(intent, model.REQUEST_CODE)
         } else {
@@ -81,7 +74,7 @@ class TransferActivity : BaseActivity(), TransferActions {
         val fragment = TransferringFragment.newInstance(app, amount)
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .add(R.id.fragment_container, fragment).commit()
+                .replace(R.id.fragment_container, fragment).commit()
     }
 
     override fun onTransferFailed() {
@@ -89,7 +82,7 @@ class TransferActivity : BaseActivity(), TransferActions {
         val fragment = TransferFailedFragment.newInstance()
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .add(R.id.fragment_container, fragment).commit()
+                .replace(R.id.fragment_container, fragment).commit()
     }
 
     override fun onTransferTimeout() {
@@ -97,7 +90,7 @@ class TransferActivity : BaseActivity(), TransferActions {
         val fragment = TransferTimeoutFragment.newInstance()
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .add(R.id.fragment_container, fragment).commit()
+                .replace(R.id.fragment_container, fragment).commit()
 
     }
 
@@ -105,7 +98,7 @@ class TransferActivity : BaseActivity(), TransferActions {
         val fragment = SendAmountFragment.newInstance(app)
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .add(R.id.fragment_container, fragment).commit()
+                .replace(R.id.fragment_container, fragment).commit()
     }
 
     override fun onTransferComplete() {
@@ -120,7 +113,7 @@ class TransferActivity : BaseActivity(), TransferActions {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_CANCELED) {
-            model.parseError(intent)
+            model.parseCancel(intent)
         } else if (resultCode == Activity.RESULT_OK && requestCode == model.REQUEST_CODE) {
             model.parseData(this, intent)
         }
