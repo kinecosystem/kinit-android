@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.model.earn.isTaskWebView
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.model.spend.Offer
 import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.util.GeneralUtils
@@ -66,14 +66,14 @@ class Navigator(private val context: Context) {
         }
     }
 
-    fun navigateTo(app: EcoApplication) {
+    fun navigateTo(app: EcosystemApp) {
         context.startActivity(AppDetailsActivity.getIntent(context, app))
         if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
     }
 
-    fun navigateToTransfer(app: EcoApplication, fromAppDetail:Boolean) {
+    fun navigateToTransfer(app: EcosystemApp, fromAppDetail:Boolean) {
         context.startActivity(TransferActivity.getIntent(context, app, fromAppDetail))
         if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)

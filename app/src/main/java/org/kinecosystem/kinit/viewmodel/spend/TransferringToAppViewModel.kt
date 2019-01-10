@@ -7,7 +7,7 @@ import android.os.Handler
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.NetworkServices
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 const val TRANSFER_TIMEOUT: Long = 30000
 
-class TransferringToAppViewModel(val navigator: Navigator, val app: EcoApplication, val amount: Int, val transferActions: TransferActions?) {
+class TransferringToAppViewModel(val navigator: Navigator, val app: EcosystemApp, val amount: Int, var transferActions: TransferActions?) {
 
     @Inject
     lateinit var servicesProvider: NetworkServices
@@ -87,5 +87,9 @@ class TransferringToAppViewModel(val navigator: Navigator, val app: EcoApplicati
 
     fun onPause() {
         isPaused = true
+    }
+
+    fun onDestroy() {
+        transferActions = null
     }
 }

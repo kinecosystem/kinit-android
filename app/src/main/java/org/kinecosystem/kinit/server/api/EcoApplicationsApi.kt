@@ -1,7 +1,7 @@
 package org.kinecosystem.kinit.server.api
 
 import com.google.gson.annotations.SerializedName
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -14,7 +14,7 @@ interface EcoApplicationsApi {
     data class AppsCategory(
             @SerializedName("category_name") val title: String,
             @SerializedName("category_id") val id: Int,
-            @SerializedName("apps") val apps: List<EcoApplication>)
+            @SerializedName("apps") val apps: List<EcosystemApp>)
 
 
 

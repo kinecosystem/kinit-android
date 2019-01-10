@@ -7,7 +7,7 @@ import android.content.pm.ResolveInfo
 import android.os.Handler
 import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.transfer.TransferActions
 import java.io.BufferedReader
@@ -17,7 +17,8 @@ import javax.inject.Inject
 const val EXTRA_HAS_ERROR = "EXTRA_HAS_ERROR"
 private const val CONNECTION_START_DELAY: Long = 1500
 
-class TransferActivityModel(private val sourceAppName: String, private val app: EcoApplication, private val transferActions: TransferActions?) {
+
+class TransferActivityModel(private val sourceAppName: String, private val app: EcosystemApp, var transferActions: TransferActions?) {
     val REQUEST_CODE = 77
     val EXTRA_SOURCE_APP_NAME = "EXTRA_SOURCE_APP_NAME"
     private var delayPassed: Boolean = false
@@ -38,7 +39,7 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
     fun createTransferIntent(context: Context): Intent? {
         val intent = Intent()
         intent.`package` = app.identifier
-        intent.component = ComponentName(app.identifier, app.transferData?.fullPathClass)
+        intent.component = ComponentName(app.identifier, app.transferData?.launchActivityFullPath)
         intent.putExtra(EXTRA_SOURCE_APP_NAME, sourceAppName)
         val queryIntentServices: MutableList<ResolveInfo> = context.packageManager.queryIntentActivities(intent, 0)
         return if (!queryIntentServices.isEmpty()) {
@@ -105,6 +106,10 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
 
     fun onPause() {
         isPaused = true
+    }
+
+    fun onDestroy() {
+        transferActions = null
     }
 
 }

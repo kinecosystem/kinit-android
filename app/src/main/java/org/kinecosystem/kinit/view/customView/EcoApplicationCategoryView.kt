@@ -27,7 +27,7 @@ class EcoApplicationCategoryView : ConstraintLayout {
         val inflater = context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.apps_category_layout, this, true)
-        val model = EcoAppsCategoryViewModel(context, Navigator(context), categoryId)
+        val model = EcoAppsCategoryViewModel(Navigator(context), categoryId)
         view.findViewById<TextView>(R.id.title).text = model.categoryTitle()
         val list = view.findViewById<RecyclerView>(R.id.list)
         list.isFocusable = false

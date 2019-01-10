@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.AppDetailsLayoutBinding
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.util.BindingUtils
 import org.kinecosystem.kinit.util.GeneralUtils
@@ -27,9 +27,9 @@ class AppDetailFragment : BaseFragment() {
         val binding = DataBindingUtil.inflate<AppDetailsLayoutBinding>(inflater, R.layout.app_details_layout, container, false)
         arguments?.let { args ->
             if (args.containsKey(ARG_APP)) {
-                val app = args.getParcelable<EcoApplication>(ARG_APP)
+                val app = args.getParcelable<EcosystemApp>(ARG_APP)
                 activity?.let { activity ->
-                    model = AppViewModel(Navigator(activity), app, getActivity()!!.applicationContext)
+                    model = AppViewModel(Navigator(activity), app, GeneralUtils.isAppInstalled(context, app.identifier))
                     binding.model = model
                     binding.viewPager.adapter = AppPagerAdapter(activity.supportFragmentManager, model)
                     binding.viewPager.addOnPageChangeListener(model)
@@ -65,7 +65,7 @@ class AppDetailFragment : BaseFragment() {
         val ARG_APP = "arg_app"
         val TAG = AppDetailFragment::class.java.simpleName
 
-        fun newInstance(app: EcoApplication): AppDetailFragment {
+        fun newInstance(app: EcosystemApp): AppDetailFragment {
             val fragment = AppDetailFragment()
             val args = Bundle()
             args.putParcelable(ARG_APP, app)

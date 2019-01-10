@@ -4,21 +4,18 @@ import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.support.v4.view.ViewPager
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.model.spend.getHeaderImageCount
 import org.kinecosystem.kinit.model.spend.getHeaderImageUrl
 import org.kinecosystem.kinit.model.spend.isKinTransferSupported
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.util.GeneralUtils
 import javax.inject.Inject
 
-class AppViewModel(private val navigator: Navigator, private val app: EcoApplication, context:Context) : ViewPager.OnPageChangeListener {
+class AppViewModel(private val navigator: Navigator, private val app: EcosystemApp, isAppInstalled: Boolean) : ViewPager.OnPageChangeListener {
 
     @Inject
     lateinit var analytics: Analytics
@@ -39,7 +36,7 @@ class AppViewModel(private val navigator: Navigator, private val app: EcoApplica
 
     init {
         KinitApplication.coreComponent.inject(this)
-        canTransferKin.set(app.isKinTransferSupported() && GeneralUtils.isAppInstalled(context, app.identifier))
+        canTransferKin.set(app.isKinTransferSupported() && isAppInstalled)
     }
 
     fun getHeaderImageUrl(position: Int) = app.getHeaderImageUrl(position)

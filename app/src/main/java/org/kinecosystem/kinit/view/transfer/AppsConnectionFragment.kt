@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.AppsConnectionsLayoutBinding
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.view.spend.AppDetailFragment
 import org.kinecosystem.kinit.viewmodel.spend.AppsConnectionViewModel
@@ -22,14 +22,10 @@ class AppsConnectionFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<AppsConnectionsLayoutBinding>(inflater, R.layout.apps_connections_layout, container, false)
 
-        if (activity is TransferActions) {
-            transferActions = activity as TransferActions
-        } else {
-            activity?.finish()
-        }
+        transferActions = activity as TransferActions
         arguments?.let { args ->
             if (args.containsKey(AppDetailFragment.ARG_APP)) {
-                val app = args.getParcelable<EcoApplication>(AppsConnectionFragment.ARG_APP)
+                val app = args.getParcelable<EcosystemApp>(AppsConnectionFragment.ARG_APP)
                 context?.let {
                     model = AppsConnectionViewModel(app)
                     binding.model = model
@@ -42,7 +38,7 @@ class AppsConnectionFragment : BaseFragment() {
     companion object {
         val ARG_APP = "arg_app"
 
-        fun newInstance(app: EcoApplication): AppsConnectionFragment {
+        fun newInstance(app: EcosystemApp): AppsConnectionFragment {
             val fragment = AppsConnectionFragment()
             val args = Bundle()
             args.putParcelable(ARG_APP, app)
