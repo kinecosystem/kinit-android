@@ -24,6 +24,8 @@ class TransferFailedFragment : BaseFragment() {
     }
 
     companion object {
+        val TAG: String = TransferFailedFragment::class.java.simpleName
+
         fun newInstance(): TransferFailedFragment {
             return TransferFailedFragment()
         }

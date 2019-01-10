@@ -116,7 +116,11 @@
     <string name="to">To</string>
     <string name="change">change</string>
     <string name="transaction_completed">Transaction completed</string>
-    <string name="transaction_complete_subtitle">You’ve successfully sent %dKIN, see transaction details under balance</string>
+    <string name="transaction_complete_subtitle">You’ve successfully sent %d KIN,\nsee transaction details under balance</string>
+    <string name="transaction_complete_subtitle_prefix">You’ve successfully sent</string>
+    <string name="transaction_complete_subtitle_amount">%d,</string>
+    <string name="transaction_complete_subtitle_postfix">see transaction details under balance</string>
+
     <string name="or">Or</string>
     <string name="p2p_send_kin_to_self_body">You cannot send Kin to yourself, right? 😉</string>
     <string name="p2p_select_valid_contact">Please select a valid contact.</string>
@@ -238,5 +242,6 @@
     <string name="transfer_connection_error_title">Echo… Echo… Echo…</string>
     <string name="transfer_connection_error_message">There was a problem establishing a connection. Please try again later.</string>
     <string name="transaction_failed_subtitle">We received your send request but something went wrong. Please try again later.</string>
+    <string name="sending_completed">Sending completed</string>
 
 </resources>

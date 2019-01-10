@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.constraint.Guideline;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -24,11 +23,8 @@ import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
 import org.kinecosystem.kinit.view.customView.EcoApplicationCategoryView;
 import org.kinecosystem.kinit.view.customView.PagesIndicatorsView;
 import org.kinecosystem.kinit.view.customView.QuizAnswerView;
-import org.kinecosystem.kinit.view.customView.TransactionTextView;
 
 import java.util.List;
-
-import javax.annotation.Resource;
 
 
 public class BindingUtils {
@@ -95,7 +91,7 @@ public class BindingUtils {
     }
 
     @BindingAdapter(value = {"bind:animatedFadeIn", "bind:animationDelay"}, requireAll = false)
-    public static void setVisibility(View view, boolean visible,  int delay) {
+    public static void setVisibility(View view, boolean visible, int delay) {
         if (view != null) {
             if (visible) {
                 view.setAlpha(0);
@@ -109,7 +105,6 @@ public class BindingUtils {
 
     @BindingAdapter(value = {"bind:animatedFadeOut", "bind:animationDelay"}, requireAll = false)
     public static void setInVisibility(View view, boolean invisible, int delay) {
-        Log.d("####", "#### setInVisibility delay " + delay);
         if (view != null) {
             if (invisible) {
                 view.setAlpha(1);
@@ -160,7 +155,7 @@ public class BindingUtils {
 
     @BindingAdapter("showCorrect")
     public static void showCorrect(QuizAnswerView view, Boolean showCorrect) {
-        if(showCorrect) {
+        if (showCorrect) {
             view.showCorrect(false);
         }
     }
@@ -227,7 +222,7 @@ public class BindingUtils {
 
     @BindingAdapter({"changeBackground"})
     public static void changeBackground(ViewGroup view, boolean changeBackground) {
-        if(changeBackground) {
+        if (changeBackground) {
             if (view.getBackground() instanceof AnimationDrawable) {
                 AnimationDrawable animationDrawable = (AnimationDrawable) view.getBackground();
                 animationDrawable.setEnterFadeDuration(3000);

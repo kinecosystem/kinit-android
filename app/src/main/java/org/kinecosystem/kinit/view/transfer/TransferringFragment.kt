@@ -27,7 +27,7 @@ class TransferringFragment : BaseFragment() {
 
         arguments?.let { args ->
             if (args.containsKey(ARG_APP)) {
-                val app =  args.getParcelable<EcosystemApp>(ARG_APP)
+                val app = args.getParcelable<EcosystemApp>(ARG_APP)
                 val amount = args.getInt(ARG_AMOUNT)
                 context?.let {
                     model = TransferringToAppViewModel(Navigator(it), app, amount, transferActions)
@@ -56,6 +56,7 @@ class TransferringFragment : BaseFragment() {
     companion object {
         val ARG_APP = "arg_app"
         val ARG_AMOUNT = "arg_amount"
+        val TAG: String = TransferringFragment::class.java.simpleName
 
         fun newInstance(app: EcosystemApp, amount: Int): TransferringFragment {
             val fragment = TransferringFragment()

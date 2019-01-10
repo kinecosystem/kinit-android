@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.model.spend.EcosystemApp
@@ -21,6 +22,12 @@ class TransferActivity : BaseActivity(), TransferActions {
     lateinit var model: TransferActivityModel
     lateinit var app: EcosystemApp
     private var returnToAppDetail: Boolean = false
+    private var currentFragmentTag: String = ""
+    private var transferAmount: Int = 0
+
+
+    private val SAVE_FRAGMENT_TAG_KEY = "CURRENT_FRAGMENT_TAG"
+    private val SAVE_AMOUNT_KEY = "SAVE_AMOUNT_KEY"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
@@ -29,11 +36,40 @@ class TransferActivity : BaseActivity(), TransferActions {
         setContentView(R.layout.single_fragment_layout)
         app = intent.getParcelableExtra(APP_PARAM)
         returnToAppDetail = intent.getBooleanExtra(FROM_APP_DETAIL_PARAM, false)
-        val fragment = AppsConnectionFragment.newInstance(app)
-        supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment).commit()
         model = TransferActivityModel(applicationInfo.loadLabel(packageManager).toString(), app, this)
+        savedInstanceState?.let {
+            if (it.containsKey(SAVE_FRAGMENT_TAG_KEY)) {
+                val tag = it.getString(SAVE_FRAGMENT_TAG_KEY)
+                val fragment = getFragment(tag)
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment, tag).commitNowAllowingStateLoss()
+                currentFragmentTag = tag
+            }
+        } ?: run {
+            val fragment = AppsConnectionFragment.newInstance(app)
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, fragment, AppsConnectionFragment.TAG).commitNowAllowingStateLoss()
+            currentFragmentTag = AppsConnectionFragment.TAG
+            model.startConnectWithDelay()
+        }
     }
+
+    private fun getFragment(tag: String): Fragment {
+        var fragment = supportFragmentManager.findFragmentByTag(tag)
+        //TODO
+        if (fragment == null) {
+            fragment = TransferringFragment.newInstance(app, 55)
+        }
+        return fragment
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putString(SAVE_FRAGMENT_TAG_KEY, currentFragmentTag)
+        outState?.putInt(SAVE_AMOUNT_KEY, transferAmount)
+    }
+
 
     override fun onPause() {
         super.onPause()
@@ -44,6 +80,12 @@ class TransferActivity : BaseActivity(), TransferActions {
         super.onResume()
         model.onResume()
     }
+
+    override fun onDestroy() {
+        model.onDestroy()
+        super.onDestroy()
+    }
+
 
     override fun onStartConnect() {
         val intent = model.createTransferIntent(this)
@@ -68,41 +110,41 @@ class TransferActivity : BaseActivity(), TransferActions {
     }
 
     override fun onStartTransferring(amount: Int) {
+        transferAmount = amount
         val fragment = TransferringFragment.newInstance(app, amount)
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .replace(R.id.fragment_container, fragment).commit()
+                .replace(R.id.fragment_container, fragment, TransferringFragment.TAG).commit()
+        currentFragmentTag = TransferringFragment.TAG
     }
 
     override fun onTransferFailed() {
         val fragment = TransferFailedFragment.newInstance()
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .replace(R.id.fragment_container, fragment).commit()
+                .replace(R.id.fragment_container, fragment, TransferFailedFragment.TAG).commit()
+        currentFragmentTag = TransferFailedFragment.TAG
     }
 
     override fun onTransferTimeout() {
         val fragment = TransferTimeoutFragment.newInstance()
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .replace(R.id.fragment_container, fragment).commit()
-
+                .replace(R.id.fragment_container, fragment, TransferTimeoutFragment.TAG).commit()
+        currentFragmentTag = TransferTimeoutFragment.TAG
     }
 
     override fun onConnected() {
         val fragment = SendAmountFragment.newInstance(app)
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
-                .replace(R.id.fragment_container, fragment).commit()
+                .replace(R.id.fragment_container, fragment, SendAmountFragment.TAG).commit()
+        currentFragmentTag = SendAmountFragment.TAG
     }
 
     override fun onTransferComplete() {
     }
 
-    override fun onDestroy() {
-        model.onDestroy()
-        super.onDestroy()
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
@@ -125,7 +167,6 @@ class TransferActivity : BaseActivity(), TransferActions {
             return intent
         }
     }
-
 }
 
 interface TransferActions {

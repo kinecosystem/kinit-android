@@ -24,6 +24,8 @@ class TransferTimeoutFragment : BaseFragment() {
     }
 
     companion object {
+        val TAG: String = TransferTimeoutFragment::class.java.simpleName
+
         fun newInstance(): TransferTimeoutFragment {
             return TransferTimeoutFragment()
         }

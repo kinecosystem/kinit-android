@@ -19,7 +19,7 @@ import org.kinecosystem.kinit.viewmodel.spend.TransferToAppViewModel
 
 class SendAmountFragment : BaseFragment() {
 
-    lateinit var model: TransferToAppViewModel
+    var model: TransferToAppViewModel? = null
     var transferActions: TransferActions? = null
     lateinit var binding: TransferKinToAppLayoutBinding
 
@@ -47,7 +47,6 @@ class SendAmountFragment : BaseFragment() {
             binding.amount.requestFocus()
             GeneralUtils.openKeyboard(context, binding.amount)
         }, 50)
-
     }
 
     override fun onPause() {
@@ -59,18 +58,18 @@ class SendAmountFragment : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        model.onDetach()
+        model?.onDetach()
         transferActions = null
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        model.transferActions = activity as TransferActions
+        model?.transferActions = activity as TransferActions
     }
 
     companion object {
         val ARG_APP = "arg_app"
-
+        val TAG: String = SendAmountFragment::class.java.simpleName
         fun newInstance(app: EcosystemApp): SendAmountFragment {
             val fragment = SendAmountFragment()
             val args = Bundle()

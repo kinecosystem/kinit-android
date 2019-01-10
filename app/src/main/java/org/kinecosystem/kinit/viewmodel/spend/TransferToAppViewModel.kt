@@ -64,8 +64,4 @@ class TransferToAppViewModel(private val navigator: Navigator, val app: Ecosyste
     fun onDetach() {
         transferActions = null
     }
-
-    fun onAttach(t: TransferActions) {
-        transferActions = t
-    }
 }

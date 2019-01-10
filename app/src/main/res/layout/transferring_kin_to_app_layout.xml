@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -128,62 +127,116 @@
                 app:layout_constraintTop_toBottomOf="@+id/balance_amount" />
 
 
-
             <TextView
                 android:id="@+id/sendingCompleteTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="170dp"
-                android:text="Sending completed"
+                android:text="@string/sending_completed"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                app:animatedFadeIn="@{model.onTransactionComplete}"
-                app:animationDelay="@{model.delayFadeInAnim}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="invisible"/>
-
-            <TextView
-                android:id="@+id/completeSubtitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="32dp"
-                android:gravity="center"
-                android:text="You’ve successfully sent Kin,\nsee transaction details under balance"
-                android:lineSpacingExtra="4sp"
-                android:textColor="@color/white"
-                android:textSize="14sp"
                 android:visibility="invisible"
                 app:animatedFadeIn="@{model.onTransactionComplete}"
                 app:animationDelay="@{model.delayFadeInAnim}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/completeSubtitlePrefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/transaction_complete_subtitle_prefix"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:visibility="invisible"
+                app:animatedFadeIn="@{model.onTransactionComplete}"
+                app:animationDelay="@{model.delayFadeInAnim}"
+                app:layout_constraintEnd_toStartOf="@+id/kin_logo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sendingCompleteTitle" />
+
+            <ImageView
+                android:id="@+id/kin_logo"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="4dp"
+                android:scaleType="centerInside"
+                android:visibility="invisible"
+                app:animatedFadeIn="@{model.onTransactionComplete}"
+                app:animationDelay="@{model.delayFadeInAnim}"
+                app:layout_constraintBottom_toBottomOf="@+id/completeSubtitlePrefix"
+                app:layout_constraintEnd_toStartOf="@+id/completeSubtitleAmount"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/completeSubtitlePrefix"
+                app:srcCompat="@drawable/k_kin_white" />
+
+            <TextView
+                android:id="@+id/completeSubtitleAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="4sp"
+                android:text="@{@string/transaction_complete_subtitle_amount(model.amount)}"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:visibility="invisible"
+                app:animatedFadeIn="@{model.onTransactionComplete}"
+                app:animationDelay="@{model.delayFadeInAnim}"
+                app:layout_constraintBottom_toBottomOf="@+id/completeSubtitlePrefix"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/kin_logo"
+                tools:text="56," />
+
+            <TextView
+                android:id="@+id/completeSubtitlePostfix"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/transaction_complete_subtitle_postfix"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:visibility="invisible"
+                app:animatedFadeIn="@{model.onTransactionComplete}"
+                app:animationDelay="@{model.delayFadeInAnim}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/completeSubtitlePrefix" />
+
 
             <TextView
                 android:id="@+id/finishText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="120dp"
-                android:text="@string/tap_to_finish"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:padding="20dp"
                 android:gravity="center"
                 android:onClick="@{()->model.onFinish()}"
+                android:padding="20dp"
+                android:text="@string/tap_to_finish"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
                 app:animatedFadeIn="@{model.onTransactionComplete}"
                 app:animationDelay="@{model.delayFadeInAnim}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                android:visibility="invisible"/>
+                app:layout_constraintStart_toStartOf="parent" />
+
 
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>

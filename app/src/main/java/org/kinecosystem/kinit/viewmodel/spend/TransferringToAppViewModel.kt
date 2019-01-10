@@ -50,7 +50,6 @@ class TransferringToAppViewModel(val navigator: Navigator, val app: EcosystemApp
                 }
             }
         }, TRANSFER_TIMEOUT)
-
     }
 
     private fun onTimeout() {

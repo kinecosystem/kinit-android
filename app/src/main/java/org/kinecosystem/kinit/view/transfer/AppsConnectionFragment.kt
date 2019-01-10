@@ -37,6 +37,7 @@ class AppsConnectionFragment : BaseFragment() {
 
     companion object {
         val ARG_APP = "arg_app"
+        val TAG: String = AppsConnectionFragment::class.java.simpleName
 
         fun newInstance(app: EcosystemApp): AppsConnectionFragment {
             val fragment = AppsConnectionFragment()

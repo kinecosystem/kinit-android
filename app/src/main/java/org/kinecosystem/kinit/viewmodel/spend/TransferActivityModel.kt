@@ -30,6 +30,9 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
 
     init {
         KinitApplication.coreComponent.inject(this)
+    }
+
+    fun startConnectWithDelay() {
         Handler().postDelayed({
             delayPassed = true
             startConnection()
@@ -49,11 +52,11 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
         }
     }
 
-    fun parseCancel(intent: Intent?){
+    fun parseCancel(intent: Intent?) {
         intent?.let {
-            if(it.hasExtra(EXTRA_HAS_ERROR) && it.getBooleanExtra(EXTRA_HAS_ERROR, false)){
-               transferActions?.onConnectionError()
-            }else{
+            if (it.hasExtra(EXTRA_HAS_ERROR) && it.getBooleanExtra(EXTRA_HAS_ERROR, false)) {
+                transferActions?.onConnectionError()
+            } else {
                 transferActions?.onClose()
             }
         } ?: run {
@@ -89,10 +92,9 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
 
     }
 
-
-    fun onResume(){
+    fun onResume() {
         isPaused = false
-        if (delayPassed) {
+        if (delayPassed && !isConnectionStarted) {
             startConnection()
         }
     }
