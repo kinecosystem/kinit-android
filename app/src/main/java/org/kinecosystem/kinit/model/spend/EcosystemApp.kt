@@ -7,20 +7,20 @@ import kotlinx.android.parcel.Parcelize
 import org.kinecosystem.kinit.util.ImageUtils
 
 @Parcelize
-data class EcoApplication(
-        @SerializedName("identifier") val identifier: String,
+data class EcosystemApp(
         @SerializedName("sid") val sid: String,
+        @SerializedName("identifier") val identifier: String,
         @SerializedName("name") val name: String,
         @SerializedName("transfer_data") val transferData: TransferData?,
-        @SerializedName("meta_data") val data: EcoApplicationData) : Parcelable
+        @SerializedName("meta_data") val data: MetaData) : Parcelable
 
 @Parcelize
 data class TransferData(
-        @SerializedName("launch_activity") val fullPathClass: String,
-        @SerializedName("launch_action") val transferData: String?) : Parcelable
+        @SerializedName("launch_activity") val launchActivityFullPath: String,
+        @SerializedName("launch_action") val launchAction: String?) : Parcelable
 
 @Parcelize
-data class EcoApplicationData(
+data class MetaData(
         @SerializedName("short_description") val descriptionShort: String,
         @SerializedName("card_image_url") val cardImageUrl: String,
         @SerializedName("icon_url") val iconUrl: String,
@@ -32,9 +32,9 @@ data class EcoApplicationData(
         @SerializedName("kin_usage") val kinUsage: String,
         @SerializedName("description") val description: String) : Parcelable
 
-fun EcoApplication.isKinTransferSupported() = transferData != null
+fun EcosystemApp.isKinTransferSupported() = transferData != null
 
-fun EcoApplication.getHeaderImageCount(): Int {
+fun EcosystemApp.getHeaderImageCount(): Int {
     return when {
         !data.appImage2Url.isNullOrEmpty() && !data.appImage1Url.isNullOrEmpty() && !data.appImage0Url.isEmpty() -> 3
         !data.appImage1Url.isNullOrEmpty() && !data.appImage0Url.isEmpty() -> 2
@@ -43,7 +43,7 @@ fun EcoApplication.getHeaderImageCount(): Int {
     }
 }
 
-fun EcoApplication.getHeaderImageUrl(position: Int): String {
+fun EcosystemApp.getHeaderImageUrl(position: Int): String {
     return when (position) {
         2 -> data.appImage2Url.orEmpty()
         1 -> data.appImage1Url.orEmpty()
@@ -51,7 +51,7 @@ fun EcoApplication.getHeaderImageUrl(position: Int): String {
     }
 }
 
-fun EcoApplication.preload(context: Context) {
+fun EcosystemApp.preload(context: Context) {
     ImageUtils.fetchImage(context.applicationContext, data.cardImageUrl)
     ImageUtils.fetchImage(context.applicationContext, data.iconUrl)
     ImageUtils.fetchImage(context.applicationContext, data.appImage0Url)

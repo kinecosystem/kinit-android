@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.BaseActivity
 import org.kinecosystem.kinit.view.customView.AlertManager
@@ -19,9 +19,8 @@ class TransferActivity : BaseActivity(), TransferActions {
 
     lateinit var navigator: Navigator
     lateinit var model: TransferActivityModel
-    lateinit var app: EcoApplication
+    lateinit var app: EcosystemApp
     private var returnToAppDetail: Boolean = false
-    private var isFinished = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
@@ -47,7 +46,6 @@ class TransferActivity : BaseActivity(), TransferActions {
     }
 
     override fun onStartConnect() {
-        if (isFinished) return
         val intent = model.createTransferIntent(this)
         if (intent != null) {
             startActivityForResult(intent, model.REQUEST_CODE)
@@ -57,7 +55,6 @@ class TransferActivity : BaseActivity(), TransferActions {
     }
 
     override fun onConnectionError() {
-        if (isFinished) return
         showConnectionErrorAlert()
     }
 
@@ -78,7 +75,6 @@ class TransferActivity : BaseActivity(), TransferActions {
     }
 
     override fun onTransferFailed() {
-        if (isFinished) return
         val fragment = TransferFailedFragment.newInstance()
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
@@ -86,7 +82,6 @@ class TransferActivity : BaseActivity(), TransferActions {
     }
 
     override fun onTransferTimeout() {
-        if (isFinished) return
         val fragment = TransferTimeoutFragment.newInstance()
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
@@ -104,10 +99,9 @@ class TransferActivity : BaseActivity(), TransferActions {
     override fun onTransferComplete() {
     }
 
-
-    override fun onBackPressed() {
-        isFinished = true
-        super.onBackPressed()
+    override fun onDestroy() {
+        model.onDestroy()
+        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -124,7 +118,7 @@ class TransferActivity : BaseActivity(), TransferActions {
     }
 
     companion object {
-        fun getIntent(context: Context, app: EcoApplication, fromAppDetail: Boolean): Intent {
+        fun getIntent(context: Context, app: EcosystemApp, fromAppDetail: Boolean): Intent {
             val intent = Intent(context, TransferActivity::class.java)
             intent.putExtra(APP_PARAM, app)
             intent.putExtra(FROM_APP_DETAIL_PARAM, fromAppDetail)

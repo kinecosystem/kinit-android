@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TransferringKinToAppLayoutBinding
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.viewmodel.spend.TransferringToAppViewModel
@@ -23,14 +23,11 @@ class TransferringFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate<TransferringKinToAppLayoutBinding>(inflater, R.layout.transferring_kin_to_app_layout, container, false)
 
-        if (activity is TransferActions) {
-            transferActions = activity as TransferActions
-        } else {
-            activity?.finish()
-        }
+        transferActions = activity as TransferActions
+
         arguments?.let { args ->
             if (args.containsKey(ARG_APP)) {
-                val app =  args.getParcelable<EcoApplication>(ARG_APP)
+                val app =  args.getParcelable<EcosystemApp>(ARG_APP)
                 val amount = args.getInt(ARG_AMOUNT)
                 context?.let {
                     model = TransferringToAppViewModel(Navigator(it), app, amount, transferActions)
@@ -51,11 +48,16 @@ class TransferringFragment : BaseFragment() {
         model.onPause()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        model.onDestroy()
+    }
+
     companion object {
         val ARG_APP = "arg_app"
         val ARG_AMOUNT = "arg_amount"
 
-        fun newInstance(app: EcoApplication, amount: Int): TransferringFragment {
+        fun newInstance(app: EcosystemApp, amount: Int): TransferringFragment {
             val fragment = TransferringFragment()
             val args = Bundle()
             args.putParcelable(ARG_APP, app)

@@ -7,14 +7,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import org.kinecosystem.kinit.KinitApplication
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.view.transfer.TransferActions
 import javax.inject.Inject
 
-class TransferToAppViewModel(private val navigator: Navigator, val app: EcoApplication, val transferActions: TransferActions?) {
+class TransferToAppViewModel(private val navigator: Navigator, val app: EcosystemApp, var transferActions: TransferActions?) {
 
     val appIcon = app.data.iconUrl
     @Inject
@@ -59,5 +59,13 @@ class TransferToAppViewModel(private val navigator: Navigator, val app: EcoAppli
 
     fun onSend(view: View?) {
         transferActions?.onStartTransferring(amount.get())
+    }
+
+    fun onDetach() {
+        transferActions = null
+    }
+
+    fun onAttach(t: TransferActions) {
+        transferActions = t
     }
 }
