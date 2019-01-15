@@ -36,7 +36,8 @@ class TransferActivity : BaseActivity(), TransferActions {
         setContentView(R.layout.single_fragment_layout)
         app = intent.getParcelableExtra(APP_PARAM)
         returnToAppDetail = intent.getBooleanExtra(FROM_APP_DETAIL_PARAM, false)
-        model = TransferActivityModel(applicationInfo.loadLabel(packageManager).toString(), app, this)
+        val appName = applicationInfo.loadLabel(packageManager).toString()
+        model = TransferActivityModel(appName, app, this)
         savedInstanceState?.let {
             if (it.containsKey(SAVE_FRAGMENT_TAG_KEY)) {
                 val tag = it.getString(SAVE_FRAGMENT_TAG_KEY)
