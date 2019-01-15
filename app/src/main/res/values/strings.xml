@@ -49,7 +49,7 @@
     <string name="save_code_warning">To make sure you get your Kin , hit close below and continue on the next screen.</string>
     <string name="close">close</string>
     <string name="your_kin_is_on_its_way_with_a_brief_delay">Your Kin is on its way with a brief delay</string>
-    <string name="warning_info_transaction">We have received your results but something got stuck along the way.   Please press “close” and check your balance in a few hours. If no change has occurred, contact support.</string>
+    <string name="warning_info_transaction">We have received your request but something got stuck along the way. Please press “close” and check your balance in a few hours. If no change has occurred, contact support.</string>
     <string name="support_email_address">support@kinitapp.com</string>
     <string name="support_email_subject">Kin Support Request</string>
     <string name="up_to_date">Up to date</string>
@@ -116,7 +116,11 @@
     <string name="to">To</string>
     <string name="change">change</string>
     <string name="transaction_completed">Transaction completed</string>
-    <string name="transaction_complete_subtitle">You’ve successfully sent %dKIN, see transaction details under balance</string>
+    <string name="transaction_complete_subtitle">You’ve successfully sent %d KIN,\nsee transaction details under balance</string>
+    <string name="transaction_complete_subtitle_prefix">You’ve successfully sent</string>
+    <string name="transaction_complete_subtitle_amount">%d,</string>
+    <string name="transaction_complete_subtitle_postfix">see transaction details under balance</string>
+
     <string name="or">Or</string>
     <string name="p2p_send_kin_to_self_body">You cannot send Kin to yourself, right? 😉</string>
     <string name="p2p_select_valid_contact">Please select a valid contact.</string>
@@ -233,6 +237,11 @@
     <string name="kin_usage">Kin Usage</string>
     <string name="explore_apps_title">Why just have one when you can have many? Discover and download all of the amazing apps with Kin in one place.</string>
     <string name="awesome">Awesome</string>
-
+    <string name="connecting_apps">Connecting apps..</string>
+    <string name="balance_transfer">Balance:</string>
+    <string name="transfer_connection_error_title">Echo… Echo… Echo…</string>
+    <string name="transfer_connection_error_message">There was a problem establishing a connection. Please try again later.</string>
+    <string name="transaction_failed_subtitle">We received your send request but something went wrong. Please try again later.</string>
+    <string name="sending_completed">Sending completed</string>
 
 </resources>

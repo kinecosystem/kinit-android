@@ -36,6 +36,7 @@ import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.*
 import org.kinecosystem.kinit.view.spend.PurchaseOfferFragment
+import org.kinecosystem.kinit.view.transfer.TransferActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.*
 import org.kinecosystem.kinit.viewmodel.backup.BackupAlertManager
@@ -120,5 +121,8 @@ interface CoreComponent {
     fun inject(ecoAppsViewModel: EcoAppsCategoryViewModel)
     fun inject(ecoAppsComingSoonViewModel: EcoAppsComingSoonViewModel)
     fun inject(ecoAppsComingSoonActivity: EcoAppsComingSoonActivity)
-
+    fun inject(transferActivity: TransferActivity)
+    fun inject(transferToAppViewModel: TransferToAppViewModel)
+    fun inject(transferAmountToAppViewModel: TransferringToAppViewModel)
+    fun inject(transferActivityModel: TransferActivityModel)
 }

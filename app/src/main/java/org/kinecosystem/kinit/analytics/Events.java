@@ -8,7 +8,7 @@ import org.json.JSONObject;
 // Events.java
 //
 // Don't edit this file.
-// Generated at 2018-11-21 09:54:54 +0000 by Kik BI-Generator.
+// Generated at 2019-01-02 10:42:38 +0000 by Kik BI-Generator.
 //
 
 public class Events {
@@ -29,332 +29,6 @@ public class Events {
         public static final String TRANSACTION_COUNT = "transaction_count";
     }
 
-
-    public static class BILog {
-
-        /**
-         An error occurred while updating the user's balance using the client blockchain sdk (on app launch, after task completion, after purchase). Event name: `balance_update_failed`
-         */
-        public static class BalanceUpdateFailed implements Event {
-
-            private String failureReason;
-
-
-
-            public BalanceUpdateFailed( String failureReason) {
-
-                this.failureReason = failureReason;
-            }
-
-            @Override
-            public String getName() {
-                return "balance_update_failed";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-                    properties.put("failure_reason", failureReason);
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         An error occured while creating the stellar account or when funding it with lumens. Event name: `stellar_account_creation_failed`
-         */
-        public static class StellarAccountCreationFailed implements Event {
-
-            private String failureReason;
-
-
-
-            public StellarAccountCreationFailed( String failureReason) {
-
-                this.failureReason = failureReason;
-            }
-
-            @Override
-            public String getName() {
-                return "stellar_account_creation_failed";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-                    properties.put("failure_reason", failureReason);
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         Our server created the stellar account successfully and funded it with lumens. Event name: `stellar_account_creation_succeeded`
-         */
-        public static class StellarAccountCreationSucceeded implements Event {
-
-
-
-
-            @Override
-            public String getName() {
-                return "stellar_account_creation_succeeded";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         An error occurred while activating the client account using client blockchain sdk. Event name: `stellar_kin_trustline_setup_failed`
-         */
-        public static class StellarKinTrustlineSetupFailed implements Event {
-
-            private String failureReason;
-
-
-
-            public StellarKinTrustlineSetupFailed( String failureReason) {
-
-                this.failureReason = failureReason;
-            }
-
-            @Override
-            public String getName() {
-                return "stellar_kin_trustline_setup_failed";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-                    properties.put("failure_reason", failureReason);
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         Client successfully activated the account using client blockchain sdk. Event name: `stellar_kin_trustline_setup_succeeded`
-         */
-        public static class StellarKinTrustlineSetupSucceeded implements Event {
-
-
-
-
-            @Override
-            public String getName() {
-                return "stellar_kin_trustline_setup_succeeded";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         User registration failed. Event name: `user_registration_failed`
-         */
-        public static class UserRegistrationFailed implements Event {
-
-            private String failureReason;
-
-
-
-            public UserRegistrationFailed( String failureReason) {
-
-                this.failureReason = failureReason;
-            }
-
-            @Override
-            public String getName() {
-                return "user_registration_failed";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-                    properties.put("failure_reason", failureReason);
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         When formatting of the phone inserted by the user when validating fails. Event name: `phone_formatting_failed`
-         */
-        public static class PhoneFormattingFailed implements Event {
-
-
-
-
-            @Override
-            public String getName() {
-                return "phone_formatting_failed";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         When server sends the auth token via push, and the client receives it.. Event name: `auth_token_received`
-         */
-        public static class AuthTokenReceived implements Event {
-
-
-
-
-            @Override
-            public String getName() {
-                return "auth_token_received";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         When asking the auth token to the server fails.. Event name: `auth_token_ack_failed`
-         */
-        public static class AuthTokenAckFailed implements Event {
-
-            private String failureReason;
-
-
-
-            public AuthTokenAckFailed( String failureReason) {
-
-                this.failureReason = failureReason;
-            }
-
-            @Override
-            public String getName() {
-                return "auth_token_ack_failed";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-                    properties.put("failure_reason", failureReason);
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-        /**
-         When captcha fails or is cancelled . Event name: `captcha_failed`
-         */
-        public static class CaptchaFailed implements Event {
-
-            private String failureReason;
-
-
-
-            public CaptchaFailed( String failureReason) {
-
-                this.failureReason = failureReason;
-            }
-
-            @Override
-            public String getName() {
-                return "captcha_failed";
-            }
-
-            @Override
-            public JSONObject getProperties() {
-                JSONObject properties = new JSONObject();
-                try {
-
-                    properties.put("failure_reason", failureReason);
-
-                    properties.put("event_type", "log");
-                } catch (JSONException e) {
-                    Log.e("Events",
-                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
-                }
-                return properties;
-            }
-        }
-
-    }
 
     public static class Business {
 
@@ -483,13 +157,13 @@ public class Events {
 
             private String failureReason;
 
-            private Float kinAmount;
+            private Integer kinAmount;
 
             private String transactionType;
 
 
 
-            public KINTransactionFailed( String failureReason, Float kinAmount, String transactionType) {
+            public KINTransactionFailed( String failureReason, Integer kinAmount, String transactionType) {
 
                 this.failureReason = failureReason;
                 this.kinAmount = kinAmount;
@@ -524,7 +198,7 @@ public class Events {
          */
         public static class KINTransactionSucceeded implements Event {
 
-            private Float kinAmount;
+            private Integer kinAmount;
 
             private String transactionId;
 
@@ -532,7 +206,7 @@ public class Events {
 
 
 
-            public KINTransactionSucceeded( Float kinAmount, String transactionId, String transactionType) {
+            public KINTransactionSucceeded( Integer kinAmount, String transactionId, String transactionType) {
 
                 this.kinAmount = kinAmount;
                 this.transactionId = transactionId;
@@ -868,6 +542,109 @@ public class Events {
             }
         }
 
+        /**
+         user successfully sent Kin to another app. Event name: `cross_app_KIN_sent`
+         */
+        public static class CrossAppKinSent implements Event {
+
+            private String appCategory;
+
+            private String appId;
+
+            private String appName;
+
+            private Integer kinAmount;
+
+
+
+            public CrossAppKinSent( String appCategory, String appId, String appName, Integer kinAmount) {
+
+                this.appCategory = appCategory;
+                this.appId = appId;
+                this.appName = appName;
+                this.kinAmount = kinAmount;
+            }
+
+            @Override
+            public String getName() {
+                return "cross_app_KIN_sent";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("app_category", appCategory);
+                    properties.put("app_id", appId);
+                    properties.put("app_name", appName);
+                    properties.put("KIN_amount", kinAmount);
+
+                    properties.put("event_type", "business");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         User successfully submitted a Support form. Event name: `support_form_submitted`
+         */
+        public static class SupportFormSubmitted implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "support_form_submitted";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("event_type", "business");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         User successfully submitted a Feedback form. Event name: `Feedback_form_submitted`
+         */
+        public static class FeedbackFormSubmitted implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "Feedback_form_submitted";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("event_type", "business");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
     }
 
     public static class Analytics {
@@ -1016,9 +793,9 @@ public class Events {
                     properties.put("task_title", taskTitle);
 
                     properties.put("item_name", "Answer");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Question");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -1096,9 +873,9 @@ public class Events {
                     properties.put("task_title", taskTitle);
 
                     properties.put("item_name", "Close");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Question");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -1160,9 +937,9 @@ public class Events {
                     properties.put("task_type", taskType);
 
                     properties.put("item_name", "Close");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Reward");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -1228,9 +1005,9 @@ public class Events {
                     properties.put("task_type", taskType);
 
                     properties.put("item_name", "Start");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Task");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -1292,9 +1069,9 @@ public class Events {
                     properties.put("task_type", taskType);
 
                     properties.put("item_name", "KIN_Provided");
-                    properties.put("item_type", "image");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Reward");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "image");
                     properties.put("event_type", "analytics");
                     properties.put("action", "view");
                 } catch (JSONException e) {
@@ -1658,9 +1435,9 @@ public class Events {
                     properties.put("offer_type", offerType);
 
                     properties.put("item_name", "Offer");
-                    properties.put("item_type", "item");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Spend");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "item");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -1718,9 +1495,9 @@ public class Events {
                     properties.put("offer_type", offerType);
 
                     properties.put("item_name", "Share");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Offer");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -1778,9 +1555,9 @@ public class Events {
                     properties.put("offer_type", offerType);
 
                     properties.put("item_name", "Code");
-                    properties.put("item_type", "text");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Offer");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "text");
                     properties.put("event_type", "analytics");
                     properties.put("action", "view");
                 } catch (JSONException e) {
@@ -1969,7 +1746,7 @@ public class Events {
         }
 
         /**
-         user clicks to send Kin to specific app in the ecosystem, from the app page. Event name: `click_Send_button_on_App_page`
+         user clicks to send Kin to specific app in the ecosystem, a specific app page. Event name: `click_Send_button_on_App_page`
          */
         public static class ClickSendButtonOnAppPage implements Event {
 
@@ -2007,9 +1784,9 @@ public class Events {
                     properties.put("transfer_ready", transferReady);
 
                     properties.put("item_name", "Send");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "App");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2021,7 +1798,7 @@ public class Events {
         }
 
         /**
-         user clicks to send Kin to specific app in the ecosystem, from the app item on explore page. Event name: `click_Send_button_on_App_item`
+         user clicks to send Kin to specific app in the ecosystem, from the app item (discovery). Event name: `click_Send_button_on_App_item`
          */
         public static class ClickSendButtonOnAppItem implements Event {
 
@@ -2055,9 +1832,9 @@ public class Events {
                     properties.put("app_name", appName);
 
                     properties.put("item_name", "Send");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "item");
                     properties.put("parent_name", "App");
+                    properties.put("parent_type", "item");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2069,7 +1846,7 @@ public class Events {
         }
 
         /**
-         user clicks on the explore page to get the app from the app store. Event name: `click_Get_button_on_App_item`
+         user clicks on the discovery page to get the app from the app item (discovery). Event name: `click_Get_button_on_App_item`
          */
         public static class ClickGetButtonOnAppItem implements Event {
 
@@ -2103,9 +1880,9 @@ public class Events {
                     properties.put("app_name", appName);
 
                     properties.put("item_name", "Get");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "item");
                     properties.put("parent_name", "App");
+                    properties.put("parent_type", "item");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2117,7 +1894,7 @@ public class Events {
         }
 
         /**
-         user clicks to get the app from the app store. Event name: `click_Get_button_on_App_page`
+         user clicks to get the app from a specific app page. Event name: `click_Get_button_on_App_page`
          */
         public static class ClickGetButtonOnAppPage implements Event {
 
@@ -2155,9 +1932,9 @@ public class Events {
                     properties.put("transfer_ready", transferReady);
 
                     properties.put("item_name", "Get");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "App");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2334,9 +2111,9 @@ public class Events {
 
 
                     properties.put("item_name", "Reminder");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Locked_Task");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2458,9 +2235,9 @@ public class Events {
                     properties.put("error_type", errorType);
 
                     properties.put("item_name", "Retry");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Error");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2498,9 +2275,9 @@ public class Events {
                     properties.put("error_type", errorType);
 
                     properties.put("item_name", "Close");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Error");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2580,9 +2357,9 @@ public class Events {
                     properties.put("error_type", errorType);
 
                     properties.put("item_name", "Contact");
-                    properties.put("item_type", "link");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Error");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "link");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2620,9 +2397,9 @@ public class Events {
                     properties.put("error_type", errorType);
 
                     properties.put("item_name", "Error");
-                    properties.put("item_type", "popup");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Offer");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "popup");
                     properties.put("event_type", "analytics");
                     properties.put("action", "view");
                 } catch (JSONException e) {
@@ -2660,9 +2437,9 @@ public class Events {
                     properties.put("error_type", errorType);
 
                     properties.put("item_name", "OK");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "popup");
                     properties.put("parent_name", "Error");
+                    properties.put("parent_type", "popup");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2700,9 +2477,9 @@ public class Events {
                     properties.put("onboarding_tutorial_page", onboardingTutorialPage);
 
                     properties.put("item_name", "Start");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Onboarding");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2802,9 +2579,9 @@ public class Events {
 
 
                     properties.put("item_name", "Next");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Phone_Auth");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -2866,9 +2643,9 @@ public class Events {
 
 
                     properties.put("item_name", "Error");
-                    properties.put("item_type", "message");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Verification");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "message");
                     properties.put("event_type", "analytics");
                     properties.put("action", "view");
                 } catch (JSONException e) {
@@ -2937,9 +2714,9 @@ public class Events {
                     properties.put("verification_code_count", verificationCodeCount);
 
                     properties.put("item_name", "New_Code");
-                    properties.put("item_type", "link");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Verification");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "link");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3001,9 +2778,9 @@ public class Events {
 
 
                     properties.put("item_name", "Verify");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "popup");
                     properties.put("parent_name", "Phone_Auth");
+                    properties.put("parent_type", "popup");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3050,11 +2827,11 @@ public class Events {
          */
         public static class ClickSendButtonOnSendKinPage implements Event {
 
-            private Float kinAmount;
+            private Integer kinAmount;
 
 
 
-            public ClickSendButtonOnSendKinPage( Float kinAmount) {
+            public ClickSendButtonOnSendKinPage( Integer kinAmount) {
 
                 this.kinAmount = kinAmount;
             }
@@ -3072,9 +2849,9 @@ public class Events {
                     properties.put("KIN_amount", kinAmount);
 
                     properties.put("item_name", "Send");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Send_Kin");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3090,11 +2867,11 @@ public class Events {
          */
         public static class ViewSuccessMessageOnSendKinPage implements Event {
 
-            private Float kinAmount;
+            private Integer kinAmount;
 
 
 
-            public ViewSuccessMessageOnSendKinPage( Float kinAmount) {
+            public ViewSuccessMessageOnSendKinPage( Integer kinAmount) {
 
                 this.kinAmount = kinAmount;
             }
@@ -3112,9 +2889,9 @@ public class Events {
                     properties.put("KIN_amount", kinAmount);
 
                     properties.put("item_name", "Success");
-                    properties.put("item_type", "message");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Send_Kin");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "message");
                     properties.put("event_type", "analytics");
                     properties.put("action", "view");
                 } catch (JSONException e) {
@@ -3152,9 +2929,9 @@ public class Events {
                     properties.put("error_type", errorType);
 
                     properties.put("item_name", "Error");
-                    properties.put("item_type", "popup");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Send_Kin");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "popup");
                     properties.put("event_type", "analytics");
                     properties.put("action", "view");
                 } catch (JSONException e) {
@@ -3223,9 +3000,9 @@ public class Events {
                     properties.put("video_title", videoTitle);
 
                     properties.put("item_name", "Play");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Video");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3287,9 +3064,9 @@ public class Events {
 
 
                     properties.put("item_name", "Backup");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Backup_Intro");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3365,9 +3142,9 @@ public class Events {
                     properties.put("backup_flow_step", backupFlowStep);
 
                     properties.put("item_name", "Completed_Step");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Backup_Flow");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3474,9 +3251,9 @@ public class Events {
                     properties.put("backup_notification_type", backupNotificationType);
 
                     properties.put("item_name", "Backup");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "popup");
                     properties.put("parent_name", "Backup_Notification");
+                    properties.put("parent_type", "popup");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3538,9 +3315,9 @@ public class Events {
 
 
                     properties.put("item_name", "Restore_Wallet");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Welcome_Back");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3571,9 +3348,9 @@ public class Events {
 
 
                     properties.put("item_name", "Create_New_Wallet");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Welcome_Back");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3635,9 +3412,9 @@ public class Events {
 
 
                     properties.put("item_name", "Scan");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Scan");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3699,9 +3476,9 @@ public class Events {
 
 
                     properties.put("item_name", "Confirm");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Answer_Security_Questions");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3801,9 +3578,9 @@ public class Events {
                     properties.put("already_backed_up", alreadyBackedUp);
 
                     properties.put("item_name", "Backup");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "More");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -3953,9 +3730,9 @@ public class Events {
                     properties.put("Helpful", helpful);
 
                     properties.put("item_name", "Page_Helpful");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "FAQ");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -4070,9 +3847,9 @@ public class Events {
                     properties.put("task_id", taskId);
 
                     properties.put("item_name", "Link");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "popup");
                     properties.put("parent_name", "Campaign");
+                    properties.put("parent_type", "popup");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -4141,9 +3918,9 @@ public class Events {
                     properties.put("task_category", taskCategory);
 
                     properties.put("item_name", "Category");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Task_Categories");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
                 } catch (JSONException e) {
@@ -4184,6 +3961,149 @@ public class Events {
                     properties.put("item_type", "page");
                     properties.put("event_type", "analytics");
                     properties.put("action", "view");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         User clicks the "I need help" button to get help. Event name: `click_I_need_help_button_on_More_item`
+         */
+        public static class ClickINeedHelpButtonOnMoreItem implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "click_I_need_help_button_on_More_item";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("item_name", "I_need_help");
+                    properties.put("parent_name", "More");
+                    properties.put("parent_type", "item");
+                    properties.put("item_type", "button");
+                    properties.put("event_type", "analytics");
+                    properties.put("action", "click");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         User clicks the "contact us" button after choosing a category and a sub category from the FAQ page. Event name: `click_Contact_us_button_on_Sub_category_page`
+         */
+        public static class ClickContactUsButtonOnSubCategoryPage implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "click_Contact_us_button_on_Sub_category_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("item_name", "Contact_us");
+                    properties.put("parent_name", "Sub_category");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
+                    properties.put("event_type", "analytics");
+                    properties.put("action", "click");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         User clicks on the "submit" button to send a Support form. Event name: `click_Submit_button_on_Support_form_page`
+         */
+        public static class ClickSubmitButtonOnSupportFormPage implements Event {
+
+            private String faqCategory;
+
+            private String faqTitle;
+
+
+
+            public ClickSubmitButtonOnSupportFormPage( String faqCategory, String faqTitle) {
+
+                this.faqCategory = faqCategory;
+                this.faqTitle = faqTitle;
+            }
+
+            @Override
+            public String getName() {
+                return "click_Submit_button_on_Support_form_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("FAQ_category", faqCategory);
+                    properties.put("FAQ_title", faqTitle);
+
+                    properties.put("item_name", "Submit");
+                    properties.put("parent_name", "Support_form");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
+                    properties.put("event_type", "analytics");
+                    properties.put("action", "click");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         User clicks on the "submit" button to send a Feedback form. Event name: `click_Submit_button_on_Feedback_form_page`
+         */
+        public static class ClickSubmitButtonOnFeedbackFormPage implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "click_Submit_button_on_Feedback_form_page";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("item_name", "Submit");
+                    properties.put("parent_name", "Feedback_form");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
+                    properties.put("event_type", "analytics");
+                    properties.put("action", "click");
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
@@ -4239,11 +4159,337 @@ public class Events {
                     properties.put("offer_type", offerType);
 
                     properties.put("item_name", "Buy");
-                    properties.put("item_type", "button");
-                    properties.put("parent_type", "page");
                     properties.put("parent_name", "Offer");
+                    properties.put("parent_type", "page");
+                    properties.put("item_type", "button");
                     properties.put("event_type", "analytics");
                     properties.put("action", "click");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+    }
+
+    public static class BILog {
+
+        /**
+         An error occurred while updating the user's balance using the client blockchain sdk (on app launch, after task completion, after purchase). Event name: `balance_update_failed`
+         */
+        public static class BalanceUpdateFailed implements Event {
+
+            private String failureReason;
+
+
+
+            public BalanceUpdateFailed( String failureReason) {
+
+                this.failureReason = failureReason;
+            }
+
+            @Override
+            public String getName() {
+                return "balance_update_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("failure_reason", failureReason);
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         An error occured while creating the stellar account or when funding it with lumens. Event name: `stellar_account_creation_failed`
+         */
+        public static class StellarAccountCreationFailed implements Event {
+
+            private String failureReason;
+
+
+
+            public StellarAccountCreationFailed( String failureReason) {
+
+                this.failureReason = failureReason;
+            }
+
+            @Override
+            public String getName() {
+                return "stellar_account_creation_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("failure_reason", failureReason);
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         Our server created the stellar account successfully and funded it with lumens. Event name: `stellar_account_creation_succeeded`
+         */
+        public static class StellarAccountCreationSucceeded implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "stellar_account_creation_succeeded";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         An error occurred while activating the client account using client blockchain sdk. Event name: `stellar_kin_trustline_setup_failed`
+         */
+        public static class StellarKinTrustlineSetupFailed implements Event {
+
+            private String failureReason;
+
+
+
+            public StellarKinTrustlineSetupFailed( String failureReason) {
+
+                this.failureReason = failureReason;
+            }
+
+            @Override
+            public String getName() {
+                return "stellar_kin_trustline_setup_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("failure_reason", failureReason);
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         Client successfully activated the account using client blockchain sdk. Event name: `stellar_kin_trustline_setup_succeeded`
+         */
+        public static class StellarKinTrustlineSetupSucceeded implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "stellar_kin_trustline_setup_succeeded";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         User registration failed. Event name: `user_registration_failed`
+         */
+        public static class UserRegistrationFailed implements Event {
+
+            private String failureReason;
+
+
+
+            public UserRegistrationFailed( String failureReason) {
+
+                this.failureReason = failureReason;
+            }
+
+            @Override
+            public String getName() {
+                return "user_registration_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("failure_reason", failureReason);
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         When formatting of the phone inserted by the user when validating fails. Event name: `phone_formatting_failed`
+         */
+        public static class PhoneFormattingFailed implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "phone_formatting_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         When server sends the auth token via push, and the client receives it.. Event name: `auth_token_received`
+         */
+        public static class AuthTokenReceived implements Event {
+
+
+
+
+            @Override
+            public String getName() {
+                return "auth_token_received";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         When asking the auth token to the server fails.. Event name: `auth_token_ack_failed`
+         */
+        public static class AuthTokenAckFailed implements Event {
+
+            private String failureReason;
+
+
+
+            public AuthTokenAckFailed( String failureReason) {
+
+                this.failureReason = failureReason;
+            }
+
+            @Override
+            public String getName() {
+                return "auth_token_ack_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("failure_reason", failureReason);
+
+                    properties.put("event_type", "log");
+                } catch (JSONException e) {
+                    Log.e("Events",
+                            "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());
+                }
+                return properties;
+            }
+        }
+
+        /**
+         When captcha fails or is cancelled . Event name: `captcha_failed`
+         */
+        public static class CaptchaFailed implements Event {
+
+            private String failureReason;
+
+
+
+            public CaptchaFailed( String failureReason) {
+
+                this.failureReason = failureReason;
+            }
+
+            @Override
+            public String getName() {
+                return "captcha_failed";
+            }
+
+            @Override
+            public JSONObject getProperties() {
+                JSONObject properties = new JSONObject();
+                try {
+
+                    properties.put("failure_reason", failureReason);
+
+                    properties.put("event_type", "log");
                 } catch (JSONException e) {
                     Log.e("Events",
                             "Exception " + e + ", while building JSONObject properties of " + this.getClass().getName());

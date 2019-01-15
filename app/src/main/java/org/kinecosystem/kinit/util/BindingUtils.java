@@ -2,12 +2,12 @@ package org.kinecosystem.kinit.util;
 
 import android.databinding.BindingAdapter;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.constraint.Guideline;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -25,8 +25,6 @@ import org.kinecosystem.kinit.view.customView.PagesIndicatorsView;
 import org.kinecosystem.kinit.view.customView.QuizAnswerView;
 
 import java.util.List;
-
-import javax.annotation.Resource;
 
 
 public class BindingUtils {
@@ -92,15 +90,29 @@ public class BindingUtils {
         constraintSet.applyTo(constraintLayout);
     }
 
-    @BindingAdapter("animatedFadeIn")
-    public static void setVisibility(View view, boolean visible) {
+    @BindingAdapter(value = {"bind:animatedFadeIn", "bind:animationDelay"}, requireAll = false)
+    public static void setVisibility(View view, boolean visible, int delay) {
         if (view != null) {
             if (visible) {
                 view.setAlpha(0);
                 view.setVisibility(View.VISIBLE);
-                view.animate().alpha(1).setDuration(250);
+                view.animate().setStartDelay(delay).alpha(1).setDuration(750);
             } else {
                 view.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    @BindingAdapter(value = {"bind:animatedFadeOut", "bind:animationDelay"}, requireAll = false)
+    public static void setInVisibility(View view, boolean invisible, int delay) {
+        if (view != null) {
+            if (invisible) {
+                view.setAlpha(1);
+                view.setVisibility(View.VISIBLE);
+                view.animate().setStartDelay(delay).alpha(0).setDuration(500).withEndAction(() -> view.setVisibility(View.INVISIBLE));
+            } else {
+                view.setAlpha(1);
+                view.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -143,7 +155,7 @@ public class BindingUtils {
 
     @BindingAdapter("showCorrect")
     public static void showCorrect(QuizAnswerView view, Boolean showCorrect) {
-        if(showCorrect) {
+        if (showCorrect) {
             view.showCorrect(false);
         }
     }
@@ -205,6 +217,18 @@ public class BindingUtils {
         container.removeAllViews();
         for (int i = 0; i < appCategories.size(); i++) {
             container.addView(new EcoApplicationCategoryView(container.getContext(), appCategories.get(i).getId()));
+        }
+    }
+
+    @BindingAdapter({"changeBackground"})
+    public static void changeBackground(ViewGroup view, boolean changeBackground) {
+        if (changeBackground) {
+            if (view.getBackground() instanceof AnimationDrawable) {
+                AnimationDrawable animationDrawable = (AnimationDrawable) view.getBackground();
+                animationDrawable.setEnterFadeDuration(3000);
+                animationDrawable.setExitFadeDuration(1500);
+                animationDrawable.start();
+            }
         }
     }
 

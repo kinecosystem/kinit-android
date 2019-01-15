@@ -1,6 +1,6 @@
 package org.kinecosystem.kinit.repository
 
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.server.api.EcoApplicationsApi
 
 class EcoApplicationsRepository {
@@ -22,7 +22,7 @@ class EcoApplicationsRepository {
         return ""
     }
 
-    fun apps(categoryId: Int): List<EcoApplication> {
+    fun apps(categoryId: Int): List<EcosystemApp> {
         val category = appCategories.singleOrNull { cat -> cat.id == categoryId }
         category?.let {
             return it.apps

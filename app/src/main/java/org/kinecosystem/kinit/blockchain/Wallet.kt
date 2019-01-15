@@ -295,10 +295,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.setUserProperty(Events.UserProperties.BALANCE, balance)
     }
 
-    fun logP2pTransactionCompleted(price: Int, txHash: String) {
+    fun logP2pTransactionCompleted(price: Int, txHash: String, isApp2App: Boolean) {
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
-        analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
-                txHash, TRANSACTION_TYPE_P2P))
+        val type = if (isApp2App) TRANSACTION_TYPE_SEND else TRANSACTION_TYPE_P2P
+        analytics.logEvent(Events.Business.KINTransactionSucceeded(price, txHash, type))
     }
 
     fun logSpendTransactionCompleted(price: Int, txHash: String) {
@@ -306,7 +306,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_SPENT,
                 price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
-        analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
+        analytics.logEvent(Events.Business.KINTransactionSucceeded(price,
                 txHash, TRANSACTION_TYPE_SPEND))
     }
 
@@ -315,7 +315,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_EARNED,
                 price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
-        analytics.logEvent(Events.Business.KINTransactionSucceeded(price.toFloat(),
+        analytics.logEvent(Events.Business.KINTransactionSucceeded(price,
                 txHash, TRANSACTION_TYPE_EARN))
     }
 

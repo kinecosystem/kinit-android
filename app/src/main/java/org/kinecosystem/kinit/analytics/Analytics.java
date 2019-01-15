@@ -27,6 +27,7 @@ public class Analytics {
     public static final String TRANSACTION_TYPE_P2P = "p2p";
     public static final String TRANSACTION_TYPE_EARN = "earn";
     public static final String TRANSACTION_TYPE_SPEND = "spend";
+    public static final String TRANSACTION_TYPE_SEND = "send";
     public static final String P2P_EXCEED_MIN_MAX = "Exceed max/min Kin";
     public static final String P2P_FRIEND_HAS_NO_ADDRESS = "Friend not exists";
     public static final String P2P_SEND_KIN_TO_SELF = "Send Kin to self";

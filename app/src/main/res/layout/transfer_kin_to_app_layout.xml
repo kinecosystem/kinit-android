@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="org.kinecosystem.kinit.viewmodel.spend.TransferToAppViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+
+        <View
+            android:id="@+id/gradient"
+            android:layout_width="0dp"
+            android:layout_height="67dp"
+            android:alpha=".7"
+            android:background="@drawable/spend_peer2peer_detail_top_gradient"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/close_x"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="center"
+            android:onClick="@{model::onClose}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/close_white" />
+
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="true"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:hint="0"
+            android:inputType="number"
+            android:letterSpacing="-0.02"
+            android:textColor="#047cfc"
+            android:textColorHint="#047cfc"
+            android:textSize="70sp"
+            android:textStyle="bold"
+            app:addTextChangedListener="@{model.textWatcher}"
+            app:layout_constraintBottom_toTopOf="@+id/send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gradient" />
+
+        <ImageView
+            android:id="@+id/kin_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="19dp"
+            android:baselineAlignBottom="@+id/amount"
+            app:layout_constraintBottom_toBottomOf="@+id/amount"
+            app:layout_constraintEnd_toStartOf="@+id/amount"
+            app:srcCompat="@drawable/letter_bdark" />
+
+        <TextView
+            android:id="@+id/to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="11dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/to"
+            android:textColor="#7884a5"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gradient" />
+
+        <View
+            android:id="@+id/delim"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#d7dce9"
+            app:layout_constraintBottom_toTopOf="@+id/send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/send"
+            android:layout_width="0dp"
+            android:layout_height="68dp"
+            android:background="@drawable/button_send_p2p_bg_color"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:letterSpacing="0.06"
+            android:text="@string/send_kin"
+            android:onClick="@{model::onSend}"
+            android:enabled="@{model.sendEnabled}"
+            android:textColor="@drawable/button_send_p2p_font_color"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            tools:imageUrl="@{model.appIcon}"
+            app:layout_constraintStart_toEndOf="@+id/to"
+            app:layout_constraintTop_toBottomOf="@+id/gradient" />
+
+        <TextView
+            android:id="@+id/balance_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="11dp"
+            android:fontFamily="sans-serif"
+            android:textColor="#7884a5"
+            android:textStyle="normal"
+            android:text="@string/title_balance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/to" />
+
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{model.balance}"
+            android:fontFamily="sans-serif"
+            android:textColor="#047cfc"
+            android:textStyle="bold"
+            tools:text="58"
+            app:layout_constraintBottom_toBottomOf="@+id/balance_title"
+            app:layout_constraintStart_toEndOf="@+id/balance_title" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
