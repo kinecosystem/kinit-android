@@ -6,6 +6,7 @@ import android.databinding.ObservableInt
 import android.os.Handler
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Analytics.FAILURE_TYPE_ERROR
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.navigation.Navigator
@@ -72,6 +73,7 @@ class TransferringToAppViewModel(val navigator: Navigator, val app: EcosystemApp
                 override fun onError(errorCode: Int) {
                     onTransactionFailed = true
                     transferActions?.onTransferFailed()
+                    analytics.logEvent(Events.Business.CrossAppKinFailure("", FAILURE_TYPE_ERROR))
                 }
             })
         }

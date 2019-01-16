@@ -7,6 +7,8 @@ import android.content.pm.ResolveInfo
 import android.os.Handler
 import android.util.Log
 import org.kinecosystem.kinit.KinitApplication
+import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.transfer.TransferActions
@@ -27,6 +29,8 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
 
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var analytics: Analytics
 
     init {
         KinitApplication.coreComponent.inject(this)
@@ -56,10 +60,13 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
         intent?.let {
             if (it.hasExtra(EXTRA_HAS_ERROR) && it.getBooleanExtra(EXTRA_HAS_ERROR, false)) {
                 transferActions?.onConnectionError()
+                analytics.logEvent(Events.Business.CrossAppKinFailure("", Analytics.FAILURE_TYPE_ERROR))
             } else {
+                analytics.logEvent(Events.Business.CrossAppKinFailure("", Analytics.FAILURE_TYPE_CANCEL))
                 transferActions?.onClose()
             }
         } ?: run {
+            analytics.logEvent(Events.Business.CrossAppKinFailure("", Analytics.FAILURE_TYPE_CANCEL))
             transferActions?.onClose()
         }
     }
