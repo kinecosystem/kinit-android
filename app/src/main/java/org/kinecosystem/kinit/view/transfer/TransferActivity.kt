@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.model.spend.EcosystemApp
@@ -27,7 +26,6 @@ class TransferActivity : BaseActivity(), TransferActions {
 
 
     private val SAVE_FRAGMENT_TAG_KEY = "CURRENT_FRAGMENT_TAG"
-    private val SAVE_AMOUNT_KEY = "SAVE_AMOUNT_KEY"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
@@ -40,7 +38,7 @@ class TransferActivity : BaseActivity(), TransferActions {
         savedInstanceState?.let {
             if (it.containsKey(SAVE_FRAGMENT_TAG_KEY)) {
                 val tag = it.getString(SAVE_FRAGMENT_TAG_KEY)
-                val fragment = getFragment(tag)
+                val fragment = supportFragmentManager.findFragmentByTag(tag)
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, fragment, tag).commitNowAllowingStateLoss()
                 currentFragmentTag = tag
@@ -54,20 +52,9 @@ class TransferActivity : BaseActivity(), TransferActions {
         }
     }
 
-    private fun getFragment(tag: String): Fragment {
-        var fragment = supportFragmentManager.findFragmentByTag(tag)
-        //TODO
-        if (fragment == null) {
-            fragment = TransferringFragment.newInstance(app, 55)
-        }
-        return fragment
-    }
-
-
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putString(SAVE_FRAGMENT_TAG_KEY, currentFragmentTag)
-        outState?.putInt(SAVE_AMOUNT_KEY, transferAmount)
     }
 
 

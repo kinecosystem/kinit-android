@@ -203,15 +203,15 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                         wallet.retrieveTransactions()
                     }
                 } catch (e: OperationFailedException) {
-                    scheduler.post({
+                    scheduler.post {
                         callbackWithError(ERROR_TRANSACTION_FAILED)
-                    })
+                    }
                     analytics.logEvent(
                             Events.Business.KINTransactionFailed(e.message, amount, TYPE_P2P))
                 } catch (e: Exception) {
-                    scheduler.post({
+                    scheduler.post {
                         callbackWithError(ERROR_UPDATE_TRANSACTION_TO_SERVER)
-                    })
+                    }
                     analytics.logEvent(
                             Events.Business.KINTransactionFailed(e.message, amount, TYPE_P2P))
                 }

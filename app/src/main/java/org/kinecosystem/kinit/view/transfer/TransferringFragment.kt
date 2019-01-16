@@ -16,7 +16,7 @@ import org.kinecosystem.kinit.viewmodel.spend.TransferringToAppViewModel
 class TransferringFragment : BaseFragment() {
 
     lateinit var model: TransferringToAppViewModel
-    var transferActions: TransferActions? = null
+    private var transferActions: TransferActions? = null
     lateinit var binding: TransferringKinToAppLayoutBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
