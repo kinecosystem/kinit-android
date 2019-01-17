@@ -4,7 +4,6 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.kinecosystem.kinit.KinitApplication
@@ -41,7 +40,6 @@ class TransactionsListAdapter(val context: Context)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        Log.d("####", "TransactionsListAdapter onAttachedToRecyclerView")
         networkServices.walletService.transactions.addOnPropertyChangedCallback(updateTransactionsCallback)
         super.onAttachedToRecyclerView(recyclerView)
     }
@@ -54,7 +52,7 @@ class TransactionsListAdapter(val context: Context)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsListAdapter.ViewHolder {
         val inflater = LayoutInflater.from(context)
         val binding: TransactionRowLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.transaction_row_layout,
-            parent, false)
+                parent, false)
 
         return when (viewType) {
             TOP_TRANSACTION -> TopTransactionViewHolder(binding)

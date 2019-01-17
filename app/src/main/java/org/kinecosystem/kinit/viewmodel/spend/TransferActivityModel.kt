@@ -84,7 +84,6 @@ class TransferActivityModel(private val sourceAppName: String, private val app: 
                     stringBuilder.append(data).append('\n')
                     data = reader.readLine()
                 }
-                Log.d("####", "#### KINIT READ file ####" + stringBuilder.toString())
                 val address = stringBuilder.toString()
                 if (address.isNullOrEmpty()) {
                     transferActions?.onConnectionError()

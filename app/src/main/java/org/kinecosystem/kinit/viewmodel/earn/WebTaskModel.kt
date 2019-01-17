@@ -70,24 +70,24 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
 
     @JavascriptInterface
     fun updateStatus(status: String) {
-        Log.d("###", "### got web status " + status)
+        Log.d("WebViewModel", "got web status " + status)
     }
 
     @JavascriptInterface
     fun onCredit() {
-        Log.d("###", "### got web credit ")
+        Log.d("WebViewModel", "got web credit ")
         startListenToPayment()
     }
 
     @JavascriptInterface
     fun onFinish() {
-        Log.d("###", "### got web finish ")
+        Log.d("WebViewModel", "got web finish ")
         onComplete()
     }
 
     @JavascriptInterface
     fun onClickthrough(url: String) {
-        Log.d("###", "### opening browser with url $url")
+        Log.d("WebViewModel", "opening browser with url $url")
         webFragmentActions.openBrowser(url)
     }
 
@@ -107,7 +107,7 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
                 if (webFragmentActions != null) {
                     webFragmentActions.showErrorDialog()
                 }
-                Log.d("####", "#### task web model retrieveTruexActivity error")
+                Log.d("WebViewModel", "task web model retrieveTruexActivity error")
             }
         })
     }
