@@ -50,8 +50,8 @@ public class KinMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         KinitApplication.coreComponent.inject(this);
         super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "###From: " + remoteMessage.getFrom());
-        Log.d(TAG, "###Message data payload: " + remoteMessage.getData());
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         Gson gson = new Gson();
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {

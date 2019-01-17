@@ -66,7 +66,6 @@ class TaskService(context: Context, api: TasksApi,
                     callback.onResult(response.body()?.activity)
                 } else {
                     callback.onError(1)
-                    Log.e("###", "### getTrueX return not successful response")
                 }
             }
         })
@@ -96,7 +95,7 @@ class TaskService(context: Context, api: TasksApi,
             }
 
             override fun onFailure(call: Call<TasksApi.NextTasksResponse>?, t: Throwable?) {
-                Log.d("TaskService", "onFailure called with throwable $t")
+                Log.e("TaskService", "onFailure called with throwable $t")
                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
             }
         })
@@ -122,7 +121,7 @@ class TaskService(context: Context, api: TasksApi,
             }
 
             override fun onFailure(call: Call<TasksApi.NextCategoryTasksResponse>?, t: Throwable?) {
-                Log.d("TaskService", "onFailure called with throwable $t")
+                Log.e("TaskService", "onFailure called with throwable $t")
                 callback?.onError(0)
             }
         })
@@ -158,7 +157,7 @@ class TaskService(context: Context, api: TasksApi,
                     }
 
                     override fun onFailure(call: Call<TasksApi.TaskSubmitResponse>?, t: Throwable?) {
-                        Log.d("TaskService", "submit onFailure called with throwable $t")
+                        Log.e("TaskService", "submit onFailure called with throwable $t")
                         currentTaskRepo?.taskState = TaskState.SUBMIT_ERROR_RETRY
                     }
                 })

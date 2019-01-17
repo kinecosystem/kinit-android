@@ -160,12 +160,12 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     fun updateUserId(userId: String) {
         userCache.putString(USER_ID_KEY, userId)
         userInfo = UserInfo(userId)
-        Log.d("UserRepository", "### user id $userId")
+        Log.d("UserRepository", "user id $userId")
     }
 
 
     fun userId(): String {
-        Log.d("UserRepository", "### user id ${userInfo.userId}")
+        Log.d("UserRepository", "user id ${userInfo.userId}")
         return userInfo.userId
     }
 }
