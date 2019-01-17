@@ -2,7 +2,6 @@ package org.kinecosystem.kinit.viewmodel.earn
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.util.Log
 import android.webkit.JavascriptInterface
 import com.google.gson.JsonElement
 import org.kinecosystem.kinit.BuildConfig
@@ -70,24 +69,20 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
 
     @JavascriptInterface
     fun updateStatus(status: String) {
-        Log.d("###", "### got web status " + status)
     }
 
     @JavascriptInterface
     fun onCredit() {
-        Log.d("###", "### got web credit ")
         startListenToPayment()
     }
 
     @JavascriptInterface
     fun onFinish() {
-        Log.d("###", "### got web finish ")
         onComplete()
     }
 
     @JavascriptInterface
     fun onClickthrough(url: String) {
-        Log.d("###", "### opening browser with url $url")
         webFragmentActions.openBrowser(url)
     }
 
@@ -107,7 +102,6 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
                 if (webFragmentActions != null) {
                     webFragmentActions.showErrorDialog()
                 }
-                Log.d("####", "#### task web model retrieveTruexActivity error")
             }
         })
     }

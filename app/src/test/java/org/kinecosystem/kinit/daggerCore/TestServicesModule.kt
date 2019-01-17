@@ -19,8 +19,8 @@ class TestServicesModule : ServicesModule() {
         return mock(Wallet::class.java)
     }
 
-    override fun onboardingService(): OnboardingService {
-        return mock(OnboardingService::class.java)
+    override fun onboardingService(): OnBoardingService {
+        return mock(OnBoardingService::class.java)
     }
 
     override fun categoriesService(): CategoriesService {

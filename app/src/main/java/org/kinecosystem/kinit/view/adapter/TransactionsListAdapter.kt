@@ -41,7 +41,6 @@ class TransactionsListAdapter(val context: Context)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        Log.d("####", "TransactionsListAdapter onAttachedToRecyclerView")
         networkServices.walletService.transactions.addOnPropertyChangedCallback(updateTransactionsCallback)
         super.onAttachedToRecyclerView(recyclerView)
     }

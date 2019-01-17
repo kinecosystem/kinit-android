@@ -76,12 +76,9 @@ class CategoriesRepository {
     fun updateTasks(updatedTasks: Map<String, List<Task>>) {
         for ((catId, tasksList) in updatedTasks) {
             if (tasks[catId] == null) {
-                //Log.d("###", "#### updateTasks null new repo $catId")
                 tasks[catId] = TasksRepo(catId, tasksList.firstOrNull())
             } else {
-                //Log.d("###", "#### update tasksk   $catId  ${tasks[catId]}")
                 tasks[catId]?.task = tasksList.firstOrNull()
-                // val repos = tasks[catId]
             }
         }
     }
@@ -160,7 +157,6 @@ class CategoriesRepository {
     fun onTaskStarted() {
         currentTaskRepo?.onTaskStarted()
         currentTaskInProgress = currentTaskRepo?.taskInProgress
-        Log.d("#####", "#### onTaskStarted cat id $currentCategoryId  task repo $currentTaskRepo task in progress $currentTaskInProgress")
     }
 
     fun hasAnyTaskAvailable(): Boolean {

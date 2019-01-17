@@ -66,7 +66,6 @@ class TaskService(context: Context, api: TasksApi,
                     callback.onResult(response.body()?.activity)
                 } else {
                     callback.onError(1)
-                    Log.e("###", "### getTrueX return not successful response")
                 }
             }
         })

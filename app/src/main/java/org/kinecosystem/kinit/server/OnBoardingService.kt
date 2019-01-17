@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class OnboardingService(context: Context, private val appLaunchApi: OnboardingApi,
+class OnBoardingService(context: Context, private val appLaunchApi: OnboardingApi,
                         private val phoneAuthenticationApi: PhoneAuthenticationApi,
                         val userRepo: UserRepository,
                         val analytics: Analytics,
@@ -85,7 +85,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 object : Callback<StatusResponse> {
                     override fun onResponse(call: Call<StatusResponse>?,
                                             response: Response<StatusResponse>?) {
-                        Log.d("OnboardingService", "### updateToken success : $response token:$token")
+                        Log.d("OnBoardingService", "updateToken success : $response token:$token")
                         // successfully sent the token update to server - so it is not longer needed
                         if (response != null && response.isSuccessful) {
                             // managed to send so can delete now
@@ -94,7 +94,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     }
 
                     override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
-                        Log.e("OnboardingService", "### updateToken onFailure called with throwable $t")
+                        Log.e("OnBoardingService", "updateToken onFailure called with throwable $t")
                     }
                 })
     }
@@ -114,7 +114,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                 object : Callback<StatusResponse> {
                     override fun onResponse(call: Call<StatusResponse>?,
                                             response: Response<StatusResponse>?) {
-                        Log.d("OnboardingService", "### authTokenAck success : $response token:$token")
+                        Log.d("OnBoardingService", "authTokenAck success : $response token:$token")
                         if (response == null || !response.isSuccessful) {
                             analytics.logEvent(
                                     Events.BILog.AuthTokenAckFailed("ack success but response $response"))
@@ -122,7 +122,7 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     }
 
                     override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
-                        Log.e("OnboardingService", "### authTokenAck onFailure called with throwable $t")
+                        Log.e("OnBoardingService", "authTokenAck onFailure called with throwable $t")
                         analytics.logEvent(Events.BILog.AuthTokenAckFailed("Received onFailure with t=$t"))
                     }
                 })
@@ -202,14 +202,14 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                     userRepo.isRegistered = true
                     callback?.onSuccess()
                 } else {
-                    Log.d("OnboardingService", "### register onResponse NOT SUCCESSFULL OR null: $response")
+                    Log.d("OnBoardingService", "register onResponse NOT SUCCESSFULL OR null: $response")
                     analytics.logEvent(Events.BILog.UserRegistrationFailed("response: $response"))
                     callback?.onError(0)
                 }
             }
 
             override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
-                Log.d("OnboardingService", "### register onFailure called with throwable $t")
+                Log.d("OnBoardingService", "register onFailure called with throwable $t")
                 analytics.logEvent(Events.BILog.UserRegistrationFailed("onFailure with throwable $t"))
                 callback?.onError(0)
             }
@@ -240,13 +240,12 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
                                             response: Response<StatusResponse>?) {
                         if (response != null && response.isSuccessful) {
                             updateConfig(response)
-                            Log.d("OnboardingService",
-                                    "appLaunch onResponse: $response" + " config " + response?.body()?.config)
+                            Log.d("OnBoardingService", "appLaunch onResponse: $response" + " config " + response?.body()?.config)
                         }
                     }
 
                     override fun onFailure(call: Call<StatusResponse>?, t: Throwable?) {
-                        Log.d("OnboardingService", "appLaunch onFailure called with throwable $t")
+                        Log.d("OnBoardingService", "appLaunch onFailure called with throwable $t")
                     }
                 })
     }

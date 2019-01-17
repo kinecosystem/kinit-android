@@ -99,12 +99,10 @@ class TaskRewardViewModel(private var timeoutCallback: TransactionTimeout? = nul
                             onTimeoutCompleted()
                             timeoutCallback?.onSubmitError()
                         } else if (categoriesRepository.getCurrentTaskState() == TaskState.SHOWING_CAPTCHA) {
-                            Log.d(TAG,
-                                    "timeout reached however state is SHOWING_CAPTCHA will wait some more. taskState= ${categoriesRepository.getCurrentTaskState()}")
+                            Log.d(TAG, "timeout reached however state is SHOWING_CAPTCHA will wait some more. taskState= ${categoriesRepository.getCurrentTaskState()}")
                             waitForReward(REWARD_TIMEOUT)
                         } else if (timeDiff < REWARD_TIMEOUT) {
-                            Log.d(TAG,
-                                    "timeout reached however timeDiff since submission is $timeDiff < $REWARD_TIMEOUT. will wait some more. taskState= ${categoriesRepository.getCurrentTaskState()}")
+                            Log.d(TAG, "timeout reached however timeDiff since submission is $timeDiff < $REWARD_TIMEOUT. will wait some more. taskState= ${categoriesRepository.getCurrentTaskState()}")
                             // wait some more
                             waitForReward(REWARD_TIMEOUT - timeDiff + SMALL_DELAY)
                         } else {

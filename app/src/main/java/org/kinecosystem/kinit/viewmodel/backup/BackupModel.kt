@@ -151,7 +151,6 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
     }
 
     fun getHints(): List<BackupApi.BackUpQuestion> {
-        Log.d("###", "### get hints ${userRepository.backUpHints.size} ${userRepository.backUpHints}")
         val tmpList = userRepository.backUpHints.toMutableList()
         for (pair in questionsAndAnswers) {
             if (tmpList.contains(pair.first)) {
@@ -280,7 +279,7 @@ class BackupModel(val uiActions: UIActions) : AdapterView.OnItemSelectedListener
                         userRepository.isBackedup = true
                         onMoveNextStep()
                         analytics.logEvent(Events.Business.WalletBackedUp())
-                        Log.d("BackupModel", "#### BackupModel send list of question ids $list")
+                        Log.d("BackupModel", "BackupModel send list of question ids $list")
                     } else {
                         uiActions.showErrorAlert()
                     }

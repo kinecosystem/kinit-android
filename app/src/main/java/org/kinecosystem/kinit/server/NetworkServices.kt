@@ -28,7 +28,7 @@ interface OperationResultCallback<in T> {
 }
 
 class NetworkServices {
-    val onBoardingService: OnboardingService
+    val onBoardingService: OnBoardingService
     val taskService: TaskService
     val categoriesService: CategoriesService
     val walletService: Wallet
@@ -66,7 +66,7 @@ class NetworkServices {
         categoriesService = CategoriesService(applicationContext, retrofit.create(CategoriesApi::class.java), userRepo, categoryRepository)
         taskService = TaskService(applicationContext,
                 retrofit.create<TasksApi>(TasksApi::class.java), categoryRepository, userRepo, walletService, categoriesService)
-        onBoardingService = OnboardingService(applicationContext,
+        onBoardingService = OnBoardingService(applicationContext,
                 retrofit.create<OnboardingApi>(OnboardingApi::class.java),
                 retrofit.create<PhoneAuthenticationApi>(PhoneAuthenticationApi::class.java),
                 userRepo, analytics, taskService, walletService, categoriesService)

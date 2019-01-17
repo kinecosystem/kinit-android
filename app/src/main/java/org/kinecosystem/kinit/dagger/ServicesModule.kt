@@ -35,7 +35,7 @@ class ServicesModule {
 
     @Provides
     @Singleton
-    fun onboardingService(): OnboardingService {
+    fun onboardingService(): OnBoardingService {
         return serivce.onBoardingService
     }
 

@@ -108,12 +108,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             account.balance.run(object : ResultCallback<Balance> {
                 override fun onResult(currentBalance: Balance) {
                     balanceInt = currentBalance.value().toInt()
-                    Log.d(TAG, "#### update balance  " + balance.get())
                     callback?.onResult(currentBalance)
+                    Log.e(TAG, "update balance $balanceInt")
                 }
 
                 override fun onError(exception: java.lang.Exception) {
-                    Log.d(TAG, "#### no update balance  " + balance.get())
+                    Log.e(TAG, "error updating balance")
                     analytics.logEvent(
                             Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
                     callback?.onError(exception)
@@ -218,7 +218,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     }
 
     fun initKinWallet() {
-        Log.d(TAG, "### initializing Kin Wallet")
+        Log.d(TAG, "initializing Kin Wallet")
         scheduler.executeOnBackground({
             updateBalanceSync()
         })
@@ -383,8 +383,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 }
             }
         })
-
-        Log.d(TAG, "#### KinMessagingService transactionComplete: $transactionComplete")
+        Log.d(TAG, "KinMessagingService transactionComplete: $transactionComplete")
     }
 
 

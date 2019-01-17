@@ -103,7 +103,7 @@ class TransferActivity : BaseActivity(), TransferActions {
         replaceFragment(SendAmountFragment.newInstance(app), SendAmountFragment.TAG)
     }
 
-    private fun replaceFragment(fragment:Fragment, tag:String){
+    private fun replaceFragment(fragment: Fragment, tag: String) {
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
                 .replace(R.id.fragment_container, fragment, tag).commit()
@@ -119,6 +119,8 @@ class TransferActivity : BaseActivity(), TransferActions {
         super.onActivityResult(requestCode, resultCode, intent)
         if (intent != null) {
             model.parseResult(this, requestCode, resultCode, intent)
+        } else {
+            showConnectionErrorAlert()
         }
     }
 
