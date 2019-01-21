@@ -49,7 +49,7 @@ class TransferActivityModel(private val app: EcosystemApp, var transferActions: 
     }
 
     fun parseResult(context: Context, requestCode: Int, resultCode: Int, intent: Intent) {
-        transferManager.parseActivityResult(context, requestCode, resultCode, intent, object : AccountInfoResponseListener {
+        transferManager.processResponse(context, requestCode, resultCode, intent, object : AccountInfoResponseListener {
             override fun onCancel() {
                 transferActions?.onClose()
             }
