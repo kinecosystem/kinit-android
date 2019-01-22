@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.AppsConnectionsLayoutBinding
 import org.kinecosystem.kinit.model.spend.EcosystemApp
@@ -33,6 +35,24 @@ class AppsConnectionFragment : BaseFragment() {
             }
         }
         return binding.root
+    }
+
+    fun animateConnected() {
+        val wiggle = AnimationUtils.loadAnimation(activity, R.anim.wiggle_connection)
+        binding.progressBar.rotation = 180f
+        wiggle.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(p0: Animation?) {
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                transferActions?.onAnimationConnectionEnd()
+            }
+
+            override fun onAnimationStart(p0: Animation?) {
+            }
+
+        })
+        binding.appIcon.startAnimation(wiggle)
     }
 
     companion object {
