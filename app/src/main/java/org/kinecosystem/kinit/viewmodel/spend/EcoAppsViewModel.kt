@@ -31,10 +31,12 @@ class EcoAppsViewModel(val navigator: Navigator) :
     val hasNetwork = ObservableBoolean(true)
     val hasData = ObservableBoolean(true)
     var showAppsAlert = ObservableBoolean(false)
+    lateinit var ableToSend: ObservableBoolean
 
     init {
         KinitApplication.coreComponent.inject(this)
         if (!ecoApplicationsRepository.appCategories.isEmpty()) {
+            ableToSend = ecoApplicationsRepository.hasAppToSendObservable
             appCategories.set(ecoApplicationsRepository.appCategories)
             hasData.set(true)
         }
@@ -42,7 +44,11 @@ class EcoAppsViewModel(val navigator: Navigator) :
     }
 
     fun onLearnMoreClicked(view: View) {
-        navigator.navigateTo(Navigator.Destination.ECO_APPS_COMING_SOON)
+        if (ableToSend.get()) {
+            navigator.navigateTo(Navigator.Destination.ECO_APPS_LEARN_MORE)
+        } else {
+            navigator.navigateTo(Navigator.Destination.ECO_APPS_COMING_SOON)
+        }
     }
 
     override fun onScreenVisibleToUser() {

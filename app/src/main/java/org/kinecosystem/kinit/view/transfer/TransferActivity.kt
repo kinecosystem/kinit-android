@@ -74,6 +74,10 @@ class TransferActivity : BaseActivity(), TransferActions {
         model.startTransferRequestActivity(this)
     }
 
+    override fun onAnimationConnectionEnd() {
+        replaceFragment(SendAmountFragment.newInstance(app), SendAmountFragment.TAG)
+    }
+
     override fun onConnectionError() {
         showConnectionErrorAlert()
     }
@@ -100,10 +104,15 @@ class TransferActivity : BaseActivity(), TransferActions {
     }
 
     override fun onConnected() {
-        replaceFragment(SendAmountFragment.newInstance(app), SendAmountFragment.TAG)
+        val fragment = supportFragmentManager.findFragmentByTag(AppsConnectionFragment.TAG)
+        if (fragment is AppsConnectionFragment && fragment.isVisible) {
+            fragment.animateConnected()
+        } else {
+            onAnimationConnectionEnd()
+        }
     }
 
-    private fun replaceFragment(fragment:Fragment, tag:String){
+    private fun replaceFragment(fragment: Fragment, tag: String) {
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out)
                 .replace(R.id.fragment_container, fragment, tag).commit()
@@ -140,6 +149,7 @@ interface TransferActions {
     fun onClose()
     fun onStartConnect()
     fun onConnected()
+    fun onAnimationConnectionEnd()
     fun onConnectionError()
     fun onStartTransferring(amount: Int)
     fun onTransferFailed()

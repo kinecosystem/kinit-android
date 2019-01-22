@@ -46,7 +46,7 @@ class SendAmountFragment : BaseFragment() {
         handler.postDelayed({
             binding.amount.requestFocus()
             GeneralUtils.openKeyboard(context, binding.amount)
-        }, 50)
+        }, 750)
     }
 
     override fun onPause() {

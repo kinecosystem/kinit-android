@@ -231,7 +231,8 @@
     <string name="about">About</string>
     <string name="more_apps_are_coming_soon">More apps are coming soon</string>
     <string name="send_kin_learn_more">Learn more about sending Kin</string>
-    <string name="introducing_the_kin_ecosystem_apps">Introducing the Kin Ecosystem apps</string>
+    <string name="send_kin_coming_soon">Coming soon: a new way to use Kin across the ecosystem</string>
+    <string name="introducing_the_kin_ecosystem_apps">Introducing Kin Ecosystem apps</string>
     <string name="discover_all">Discover all the amazing apps where you can  use Kin.</string>
     <string name="soon_you_ll_be_able_to_send_kin_to_this_account">Soon you’ll be able to send Kin to this account</string>
     <string name="kin_usage">Kin Usage</string>
