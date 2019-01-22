@@ -12,7 +12,7 @@ import org.kinecosystem.kinit.view.transfer.TransferActions
 import org.kinecosystem.kinit.viewmodel.spend.TransferManager.AccountInfoResponseListener
 import javax.inject.Inject
 
-private const val CONNECTION_START_DELAY: Long = 1500
+private const val CONNECTION_START_DELAY: Long = 1200
 
 
 class TransferActivityModel(private val app: EcosystemApp, var transferActions: TransferActions?) {
