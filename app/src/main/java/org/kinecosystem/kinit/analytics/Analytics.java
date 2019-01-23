@@ -27,12 +27,15 @@ public class Analytics {
     public static final String TRANSACTION_TYPE_P2P = "p2p";
     public static final String TRANSACTION_TYPE_EARN = "earn";
     public static final String TRANSACTION_TYPE_SPEND = "spend";
+    public static final String TRANSACTION_TYPE_SEND = "send";
     public static final String P2P_EXCEED_MIN_MAX = "Exceed max/min Kin";
     public static final String P2P_FRIEND_HAS_NO_ADDRESS = "Friend not exists";
     public static final String P2P_SEND_KIN_TO_SELF = "Send Kin to self";
     public static final String P2P_NOT_ENOUGH_BALANCE = "Exceed existing Kin";
     public static final String SERVER_ERROR_RESPONSE = "server Error response";
     public static final String SERVER_EMPTY_RESPONSE = "server empty response";
+    public static final String FAILURE_TYPE_CANCEL = "Cancel";
+    public static final String FAILURE_TYPE_ERROR = "Error";
 
     private static final String AMPLITUDE_API_KEY = BuildConfig.AnalyticsApiSecret;
     private static final String TEST_FAIRY_KEY = BuildConfig.TestFairyApiSecret;

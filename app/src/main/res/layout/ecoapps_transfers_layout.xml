@@ -46,7 +46,6 @@
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:paddingLeft="19dp"
                     android:paddingTop="21dp"
                     android:paddingRight="19dp"
@@ -82,12 +81,12 @@
                     android:layout_marginTop="45dp"
                     android:layout_marginRight="22dp"
                     android:layout_marginBottom="10dp"
-                    android:onClick="@{model::onComingSoonClicked}"
+                    android:onClick="@{model::onLearnMoreClicked}"
                     app:cardCornerRadius="8dp">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="128dp"
+                        android:layout_height="100dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/learn_more_illustration_minsize_card" />
 
@@ -96,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="14dp"
                         android:paddingTop="13dp"
-                        android:text="@string/send_kin_coming_soon"
+                        android:text="@string/send_kin_learn_more"
                         android:textColor="@color/grey"
                         android:textSize="16sp" />
 

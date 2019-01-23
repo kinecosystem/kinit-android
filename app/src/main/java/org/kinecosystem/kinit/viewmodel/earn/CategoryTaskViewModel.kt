@@ -61,7 +61,7 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
         KinitApplication.coreComponent.inject(this)
         task = categoriesRepository.getTask(category.id)
         availableTasksCount = categoriesRepository.currentAvailableTasks
-        Log.d("###", "### got task $task")
+        Log.d("CategoryTaskViewModel", "got task $task")
         bindCategoryData()
         refresh()
     }
@@ -69,7 +69,7 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
     fun refreshTaskData() {
         scheduler.cancel(scheduledRunnable)
         task = categoriesRepository.getTask(category.id)
-        Log.d("####", "#### ${task?.startDateInSeconds} ${scheduler.currentTimeMillis()}")
+        Log.d("CategoryTaskViewModel", "${task?.startDateInSeconds} ${scheduler.currentTimeMillis()}")
         task?.let {
             when {
                 it.isAvailableNow(scheduler.currentTimeMillis()) -> {
@@ -191,9 +191,8 @@ class CategoryTaskViewModel(private val navigator: Navigator, private val catego
             }
 
             override fun onError(errorCode: Int) {
-                Log.e("###", "### error loading task")
+                Log.e("CategoryTaskViewModel", "error loading task")
             }
-
         })
     }
 

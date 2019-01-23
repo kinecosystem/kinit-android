@@ -3,6 +3,7 @@ package org.kinecosystem.kinit.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -29,6 +30,19 @@ public class GeneralUtils {
         }
     }
 
+    public static boolean isAppInstalled(Context context, String packageName) {
+        PackageManager packageManager = context.getPackageManager();
+        boolean found = true;
+        try {
+
+            packageManager.getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            found = false;
+        }
+        return found;
+    }
+
+
     public static boolean isConnected(final Context context) {
         final ConnectivityManager connectivityManager = (ConnectivityManager) context.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -50,19 +64,19 @@ public class GeneralUtils {
         }
     }
 
-    public static void updateStatusBarColor(Activity activity, String color){
+    public static void updateStatusBarColor(Activity activity, String color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().setStatusBarColor(Color.parseColor(color));
         }
     }
 
-    public static int getScreenWidth(Activity context){
+    public static int getScreenWidth(Activity context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.widthPixels;
     }
 
-    public static int getScreenHeight(Activity context){
+    public static int getScreenHeight(Activity context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels;

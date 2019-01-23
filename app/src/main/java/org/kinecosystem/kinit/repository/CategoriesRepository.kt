@@ -2,7 +2,6 @@ package org.kinecosystem.kinit.repository
 
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import android.util.Log
 import com.google.gson.Gson
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.model.earn.Category
@@ -76,12 +75,9 @@ class CategoriesRepository {
     fun updateTasks(updatedTasks: Map<String, List<Task>>) {
         for ((catId, tasksList) in updatedTasks) {
             if (tasks[catId] == null) {
-                //Log.d("###", "#### updateTasks null new repo $catId")
                 tasks[catId] = TasksRepo(catId, tasksList.firstOrNull())
             } else {
-                //Log.d("###", "#### update tasksk   $catId  ${tasks[catId]}")
                 tasks[catId]?.task = tasksList.firstOrNull()
-                // val repos = tasks[catId]
             }
         }
     }
@@ -160,7 +156,6 @@ class CategoriesRepository {
     fun onTaskStarted() {
         currentTaskRepo?.onTaskStarted()
         currentTaskInProgress = currentTaskRepo?.taskInProgress
-        Log.d("#####", "#### onTaskStarted cat id $currentCategoryId  task repo $currentTaskRepo task in progress $currentTaskInProgress")
     }
 
     fun hasAnyTaskAvailable(): Boolean {

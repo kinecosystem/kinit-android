@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.model.spend.EcoApplication
+import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.model.spend.isKinTransferSupported
 import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.util.ImageUtils
@@ -19,7 +19,7 @@ import org.kinecosystem.kinit.viewmodel.spend.EcoAppsCategoryViewModel
 class EcoAppCardListAdapter(private val context: Context, private val model: EcoAppsCategoryViewModel)
     : RecyclerView.Adapter<EcoAppCardListAdapter.ViewHolder>() {
 
-    private var apps: List<EcoApplication> = model.apps()
+    private var apps: List<EcosystemApp> = model.apps()
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): EcoAppCardListAdapter.ViewHolder {
@@ -31,10 +31,10 @@ class EcoAppCardListAdapter(private val context: Context, private val model: Eco
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val app: EcoApplication = apps[position]
+        val app: EcosystemApp = apps[position]
         holder.bind(app)
         holder.view.setOnClickListener { model.onItemClicked(app) }
-        holder.actionBtn.setOnClickListener { model.onActionBtnClicked(app) }
+        holder.actionBtn.setOnClickListener { model.onActionBtnClicked(app, context) }
     }
 
     override fun getItemCount(): Int {
@@ -48,10 +48,10 @@ class EcoAppCardListAdapter(private val context: Context, private val model: Eco
         private val imageView: ImageView = view.findViewById(R.id.app_image)
         private val iconView: ImageView = view.findViewById(R.id.app_icon)
 
-        fun bind(app: EcoApplication) {
+        fun bind(app: EcosystemApp) {
             name.text = app.name
             info.text = app.data.descriptionShort
-            if (app.isKinTransferSupported()) {
+            if (app.isKinTransferSupported() && GeneralUtils.isAppInstalled(context, app.identifier)) {
                 actionBtn.text = context.resources.getString(R.string.send_kin)
                 actionBtn.setTextColor(ContextCompat.getColor(context, R.color.white))
                 actionBtn.setBackgroundResource(R.drawable.full_rounded_blue)
