@@ -30,7 +30,6 @@ private const val AUTH_TOKEN = "authToken"
 private const val RESTORE_HINTS = "RESTORE_HINTS"
 private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
 private const val FAQ_DEFAULT = "https://cdn.kinitapp.com/faq/index.html"
-private const val COMING_SOON_DEFAULT = "https://cdn.kinitapp.com/discovery/learn-more-webpage/index.html"
 private const val FORCE_UPDATE = "FORCE_UPDATE"
 private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
 private const val SEEN_NEW_SPEND_POLICY = "SEEN_NEW_SPEND_POLICY"
@@ -53,10 +52,6 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isRegistered: Boolean
         set(registered) = userCache.putBoolean(IS_REGISTERED_KEY, registered)
         get() = userCache.getBoolean(IS_REGISTERED_KEY, false)
-
-    var comingSoonUrl: String
-        set(url) = userCache.putString(COMING_SOON_URL, url)
-        get() = userCache.getString(COMING_SOON_URL, COMING_SOON_DEFAULT)
 
     var faqUrl: String
         set(url) = userCache.putString(FAQ_URL, url)
