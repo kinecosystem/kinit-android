@@ -228,7 +228,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         userRepo.isUpdateAvailable = config?.is_update_available ?: false
         userRepo.forceUpdate = config?.force_update ?: false
         config?.faq_url?.let { userRepo.faqUrl = it }
-        config?.coming_soon?.let { userRepo.comingSoonUrl = it }
     }
 
     private fun callAppLaunch(appVersion: String) {

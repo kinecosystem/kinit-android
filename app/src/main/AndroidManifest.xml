@@ -91,7 +91,7 @@
             android:name=".view.faq.FAQActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.comingSoon.EcoAppsComingSoonActivity"
+            android:name=".view.spend.EcoAppsInfoActivity"
             android:screenOrientation="portrait" />
 
         <activity android:name=".view.transfer.TransferActivity"
