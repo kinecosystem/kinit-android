@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.view.comingSoon
+package org.kinecosystem.kinit.view.spend
 
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
@@ -13,23 +13,23 @@ import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.ComingSoonWebLayoutBinding
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.EcoAppsComingSoonViewModel
+import org.kinecosystem.kinit.viewmodel.WebInfoViewModel
 
 
-class EcoAppsComingSoonWebFragment : BaseFragment(){
+class EcoAppsInfoWebFragment : BaseFragment(){
 
     companion object {
-        fun getInstance(): EcoAppsComingSoonWebFragment {
-            return EcoAppsComingSoonWebFragment()
+        fun getInstance(): EcoAppsInfoWebFragment {
+            return EcoAppsInfoWebFragment()
         }
     }
 
-    lateinit var model: EcoAppsComingSoonViewModel
+    lateinit var model: WebInfoViewModel
     lateinit var binding: ComingSoonWebLayoutBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.coming_soon_web_layout, container, false)
-        model = (activity as EcoAppsComingSoonActivity).getModel()
+        model = (activity as EcoAppsInfoActivity).getModel()
         binding.model = model
         return binding.root
     }

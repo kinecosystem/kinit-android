@@ -13,7 +13,6 @@ import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.RegisterErrorActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
-import org.kinecosystem.kinit.view.comingSoon.EcoAppsComingSoonActivity
 import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
 import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
@@ -23,16 +22,18 @@ import org.kinecosystem.kinit.view.faq.FAQActivity
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.RestoreWalletActivity
 import org.kinecosystem.kinit.view.spend.AppDetailsActivity
+import org.kinecosystem.kinit.view.spend.EcoAppsInfoActivity
 import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
 import org.kinecosystem.kinit.view.transfer.TransferActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
+import org.kinecosystem.kinit.viewmodel.WebInfoViewModel.Type
 import javax.inject.Inject
 
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER, ECO_APPS_COMING_SOON
+        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER, ECO_APPS_COMING_SOON, ECO_APPS_LEARN_MORE
     }
 
     @Inject
@@ -73,7 +74,7 @@ class Navigator(private val context: Context) {
         }
     }
 
-    fun navigateToTransfer(app: EcosystemApp, fromAppDetail:Boolean) {
+    fun navigateToTransfer(app: EcosystemApp, fromAppDetail: Boolean) {
         context.startActivity(TransferActivity.getIntent(context, app, fromAppDetail))
         if (context is AppCompatActivity) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
@@ -92,7 +93,8 @@ class Navigator(private val context: Context) {
             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.FAQ -> navigateToActivity(FAQActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsComingSoonActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsInfoActivity.getIntent(context, Type.ECO_APPS_COMING_SOON), withSlideAnim, reverseAnim)
+            Destination.ECO_APPS_LEARN_MORE -> navigateToActivity(EcoAppsInfoActivity.getIntent(context, Type.ECO_APPS_LEARN_MORE), withSlideAnim, reverseAnim)
         }
     }
 
