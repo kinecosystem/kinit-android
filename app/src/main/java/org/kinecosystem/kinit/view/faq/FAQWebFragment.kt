@@ -1,8 +1,10 @@
 package org.kinecosystem.kinit.view.faq
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +41,13 @@ class FAQWebFragment : BaseFragment(){
 
         binding.webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
+                try {
+                    model.versionName = context?.packageManager
+                            ?.getPackageInfo(context?.packageName, 0)?.versionName
+                } catch (e: PackageManager.NameNotFoundException) {
+                    Log.e("SupportUtil", "cant get version name " + e.message)
+                }
+                model.setJavaScript(BuildConfig.DEBUG)
                 model.loading.set(false)
             }
 

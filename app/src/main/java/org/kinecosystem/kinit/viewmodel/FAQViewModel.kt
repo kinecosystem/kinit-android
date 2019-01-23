@@ -1,11 +1,14 @@
 package org.kinecosystem.kinit.viewmodel
 
 import android.databinding.ObservableBoolean
+import android.databinding.ObservableField
+import android.util.Log
 import android.webkit.JavascriptInterface
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.repository.UserRepository
+import org.kinecosystem.kinit.util.DeviceUtils
 import javax.inject.Inject
 
 class FAQViewModel {
@@ -13,8 +16,10 @@ class FAQViewModel {
     @Inject
     lateinit var userRepository: UserRepository
 
-
+    var errorsCount = 0
+    var versionName: String? = null
     val loading: ObservableBoolean = ObservableBoolean(true)
+    val javascript: ObservableField<String> = ObservableField("")
     var listener: FAQActions? = null
     var interfaceName: String = "Kinit"
     var url: String = ""
@@ -27,11 +32,20 @@ class FAQViewModel {
         fun moveBack()
         fun moveHome()
         fun contactSupport()
+        fun showSubmissionError(errorsCount: Number)
     }
 
     init {
         KinitApplication.coreComponent.inject(this)
         url = userRepository.faqUrl
+    }
+
+    fun submitForm(){
+        javascript.set("$.submitForm();")
+    }
+
+    fun setJavaScript(debug: Boolean){
+        javascript.set("$.setMiscData(\"${userRepository.userInfo.userId}\",\"android: ${DeviceUtils.deviceName()}\",\"$versionName\",\"$debug\");")
     }
 
     fun onHeaderButtonClicked() {
@@ -48,6 +62,13 @@ class FAQViewModel {
             analytics.logEvent(Events.Analytics.ViewFaqMainPage())
         else
             analytics.logEvent(Events.Analytics.ViewFaqPage(faqCategory, faqTitle))
+    }
+
+    @JavascriptInterface
+    fun showSubmissionError(data: String) {
+        errorsCount++
+        Log.d("FAQViewModel", "error #$errorsCount: showing submission error $data")
+        listener?.showSubmissionError(errorsCount)
     }
 
     @JavascriptInterface

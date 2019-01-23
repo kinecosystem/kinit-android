@@ -209,8 +209,8 @@
     <string name="remember_answers_warning_title">Notice!</string>
     <string name="remember_answers_warning_desc">It is important to remember your answers. You will be required to provide exactly the same answers when restoring your account and will not be able to restore your account without them. The only way to reset your answers is by creating a new backup.</string>
     <string name="dialog_continue">I understand, continue</string>
-    <string name="send_feedback_title">Feedback</string>
-    <string name="send_feedback_text">We can’t respond to feedbacks individually.\nIf you have a question or need help resolving a problem, you’ll find answers in our help center.</string>
+    <string name="send_feedback_title">How can we do better?</string>
+    <string name="send_feedback_text">Thoughts? Suggestions? Share them here! If you need help resolving a problem, check out ״I Need Help"</string>
     <string name="feedback_email_address">feedback@kinitapp.com</string>
     <string name="feedback_email_subject">Feedback</string>
     <string name="help_center">I Need Help</string>
@@ -237,11 +237,18 @@
     <string name="kin_usage">Kin Usage</string>
     <string name="explore_apps_title">Why just have one when you can have many? Discover and download all of the amazing apps with Kin in one place.</string>
     <string name="awesome">Awesome</string>
+    <string name="my_topic">My Topic</string>
+    <string name="send_feedback_positive">Give product feedback</string>
+    <string name="i_have_a_problem">I have a problem</string>
     <string name="connecting_apps">Connecting apps..</string>
     <string name="balance_transfer">Balance:</string>
     <string name="transfer_connection_error_title">Echo… Echo… Echo…</string>
     <string name="transfer_connection_error_message">There was a problem establishing a connection. Please try again later.</string>
     <string name="transaction_failed_subtitle">We received your send request but something went wrong. Please try again later.</string>
     <string name="sending_completed">Sending completed</string>
+    <string name="support_submission_error_1_title">Swing and a miss…</string>
+    <string name="support_submission_error_1_body">There was a technical issue sending your message. Let’s try that again…</string>
+    <string name="support_submission_error_2_title">It’s just not happening…</string>
+    <string name="support_submission_error_2_body">It looks like we have a technical issue and can’t send your message right now. Please try again later.</string>
 
 </resources>
