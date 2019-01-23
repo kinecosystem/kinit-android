@@ -13,8 +13,8 @@ class EcoApplicationsRepository {
 
     fun updateCategories(newAppCategories: List<EcoApplicationsApi.AppsCategory>?) {
         newAppCategories?.let {
+            hasAppToSendObservable.set(hasAppToSend(it))
             appCategories = it
-            hasAppToSendObservable.set(hasAppToSend())
         }
     }
 
@@ -35,9 +35,9 @@ class EcoApplicationsRepository {
         return listOf()
     }
 
-    private fun hasAppToSend(): Boolean {
-        for (category in appCategories) {
-            for (app in category.apps) {
+    private fun hasAppToSend(newAppCategories: List<EcoApplicationsApi.AppsCategory>): Boolean {
+        for (categories in newAppCategories) {
+            for (app in categories.apps) {
                 if (app.isKinTransferSupported()) {
                     return true
                 }
