@@ -31,12 +31,12 @@ class EcoAppsViewModel(val navigator: Navigator) :
     val hasNetwork = ObservableBoolean(true)
     val hasData = ObservableBoolean(true)
     var showAppsAlert = ObservableBoolean(false)
-    lateinit var ableToSend: ObservableBoolean
+    var ableToSend: ObservableBoolean
 
     init {
         KinitApplication.coreComponent.inject(this)
+        ableToSend = ecoApplicationsRepository.hasAppToSendObservable
         if (!ecoApplicationsRepository.appCategories.isEmpty()) {
-            ableToSend = ecoApplicationsRepository.hasAppToSendObservable
             appCategories.set(ecoApplicationsRepository.appCategories)
             hasData.set(true)
         }
