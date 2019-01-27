@@ -37,6 +37,7 @@ class EcoAppsViewModel(val navigator: Navigator) :
         KinitApplication.coreComponent.inject(this)
         ableToSend = ecoApplicationsRepository.hasAppToSendObservable
         if (!ecoApplicationsRepository.appCategories.isEmpty()) {
+            ableToSend = ecoApplicationsRepository.hasAppToSendObservable
             appCategories.set(ecoApplicationsRepository.appCategories)
             hasData.set(true)
         }
@@ -55,15 +56,13 @@ class EcoAppsViewModel(val navigator: Navigator) :
         hasNetwork.set(networkServices.isNetworkConnected())
         hasData.set(networkServices.isNetworkConnected())
         analytics.logEvent(Events.Analytics.ViewExplorePage())
-        if (!userRepository.seenExploreAppsAlert) {
-            showAppsAlert.set(true)
-            userRepository.seenExploreAppsAlert = true
-        }
+        checkIfNeedToSeeAppAlert()
         if (appCategories.get().isEmpty()) {
             networkServices.ecoApplicationService.retrieveApps(object : OperationCompletionCallback {
                 override fun onSuccess() {
                     appCategories.set(ecoApplicationsRepository.appCategories)
                     hasData.set(true)
+                    checkIfNeedToSeeAppAlert()
                 }
 
                 override fun onError(errorCode: Int) {
@@ -72,5 +71,14 @@ class EcoAppsViewModel(val navigator: Navigator) :
             })
         }
     }
+
+    private fun checkIfNeedToSeeAppAlert(){
+        if (!userRepository.seenAppsAlert && appCategories.get().isNotEmpty()) {
+            showAppsAlert.set(true)
+        }
+    }
+     fun onSeenAppAlert(){
+         userRepository.seenAppsAlert = true
+     }
 }
 
