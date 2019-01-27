@@ -297,7 +297,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     fun logP2pTransactionCompleted(price: Int, txHash: String, isApp2App: Boolean) {
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
-        val type = if (isApp2App) TRANSACTION_TYPE_SEND else TRANSACTION_TYPE_P2P
+        val type = if (isApp2App) TRANSACTION_TYPE_APP_TO_APP else TRANSACTION_TYPE_P2P
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price, txHash, type))
     }
 
