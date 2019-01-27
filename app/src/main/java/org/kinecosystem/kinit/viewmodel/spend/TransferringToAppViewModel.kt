@@ -73,7 +73,7 @@ class TransferringToAppViewModel(val navigator: Navigator, val app: EcosystemApp
                 override fun onError(errorCode: Int) {
                     onTransactionFailed = true
                     transferActions?.onTransferFailed()
-                    analytics.logEvent(Events.Business.CrossAppKinFailure("", FAILURE_TYPE_ERROR))
+                    analytics.logEvent(Events.Business.CrossAppKinFailure("Transfer error $errorCode", FAILURE_TYPE_ERROR))
                 }
             })
         }

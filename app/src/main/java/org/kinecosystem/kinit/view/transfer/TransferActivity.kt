@@ -16,7 +16,6 @@ private const val APP_PARAM = "TransferActivity_APP_PARAM"
 private const val FROM_APP_DETAIL_PARAM = "FROM_APP_DETAIL_PARAM"
 
 class TransferActivity : BaseActivity(), TransferActions {
-
     lateinit var navigator: Navigator
     private lateinit var model: TransferActivityModel
     lateinit var app: EcosystemApp
@@ -82,6 +81,10 @@ class TransferActivity : BaseActivity(), TransferActions {
         showConnectionErrorAlert()
     }
 
+    override fun onStartConnectingError() {
+        showStartConnectingErrorAlert()
+    }
+
     override fun onClose() {
         if (returnToAppDetail) {
             navigator.navigateTo(app)
@@ -135,6 +138,16 @@ class TransferActivity : BaseActivity(), TransferActions {
         AlertManager.showAlert(this, R.string.transfer_connection_error_title, R.string.transfer_connection_error_message, R.string.dialog_ok, { onClose() })
     }
 
+    private fun showStartConnectingErrorAlert() {
+        val message = resources.getString(R.string.transfer_start_connecting_error_message, app.name)
+        AlertManager.showAlert(this, R.string.transfer_start_connecting_error_title, message ,R.string.dialog_ok, { onNeedUpdate() })
+    }
+
+    private fun onNeedUpdate(){
+        onClose()
+        navigator.navigateToUrl(app.data.appUrl)
+    }
+
     companion object {
         fun getIntent(context: Context, app: EcosystemApp, fromAppDetail: Boolean): Intent {
             val intent = Intent(context, TransferActivity::class.java)
@@ -151,6 +164,7 @@ interface TransferActions {
     fun onConnected()
     fun onAnimationConnectionEnd()
     fun onConnectionError()
+    fun onStartConnectingError()
     fun onStartTransferring(amount: Int)
     fun onTransferFailed()
     fun onTransferTimeout()
