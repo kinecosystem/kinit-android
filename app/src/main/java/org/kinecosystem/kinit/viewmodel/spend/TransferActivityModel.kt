@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Handler
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.model.spend.EcosystemApp
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.view.transfer.TransferActions
@@ -41,21 +42,23 @@ class TransferActivityModel(private val app: EcosystemApp, var transferActions: 
         if (app.transferData != null) {
             val started = transferManager.startTransferRequestActivity(activity, app.identifier, app.transferData.launchActivityFullPath)
             if (!started) {
-                transferActions?.onConnectionError()
+                transferActions?.onStartConnectingError()
+                analytics.logEvent(Events.Business.CrossAppKinFailure("Could not launch ${app.transferData.launchActivityFullPath}  on ${app.identifier}", Analytics.FAILURE_TYPE_ERROR))
             }
         } else {
-            transferActions?.onConnectionError()
+            onConnectionError("Missing launching activity information for ${app.identifier}")
         }
     }
 
     fun parseResult(context: Context, requestCode: Int, resultCode: Int, intent: Intent) {
         transferManager.processResponse(context, requestCode, resultCode, intent, object : AccountInfoResponseListener {
             override fun onCancel() {
+                analytics.logEvent(Events.Business.CrossAppKinFailure("", Analytics.FAILURE_TYPE_CANCEL))
                 transferActions?.onClose()
             }
 
             override fun onError(error: String?) {
-                transferActions?.onConnectionError()
+                onConnectionError("got error when parse result from ${app.identifier}")
             }
 
             override fun onAddressReceived(address: String?) {
@@ -64,13 +67,18 @@ class TransferActivityModel(private val app: EcosystemApp, var transferActions: 
                         userRepository.updateApplicationAddress(app.identifier, it)
                         transferActions?.onConnected()
                     } else {
-                        transferActions?.onConnectionError()
+                        onConnectionError("Received empty public address")
                     }
                 } ?: run {
-                    transferActions?.onConnectionError()
+                    onConnectionError("Received null public address")
                 }
             }
         })
+    }
+
+    private fun onConnectionError(message:String) {
+        transferActions?.onConnectionError()
+        analytics.logEvent(Events.Business.CrossAppKinFailure(message, Analytics.FAILURE_TYPE_ERROR))
     }
 
     fun onResume() {

@@ -246,6 +246,7 @@
     <string name="sending_completed">Sending completed</string>
     <string name="send_to_apps_dialog_title">The future is here!</string>
     <string name="send_to_apps_dialog_info">Now you can send Kin to any app in the ecosystem using Kinit!\nJust look for the “Send Kin” button  on the apps page to try it for yourself</string>
-
+    <string name="transfer_start_connecting_error_title">Almost there…</string>
+    <string name="transfer_start_connecting_error_message">You need to have the latest version of %s in order to send Kin. Please update the app before trying again.</string>
 
 </resources>
