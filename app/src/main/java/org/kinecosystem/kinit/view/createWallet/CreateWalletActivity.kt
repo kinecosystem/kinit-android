@@ -8,6 +8,7 @@ import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.SingleFragmentActivity
+import org.kinecosystem.kinit.view.faq.FAQActivity
 import org.kinecosystem.kinit.viewmodel.CreateWalletEventsListener
 import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
 
@@ -75,13 +76,16 @@ class CreateWalletActivity : SingleFragmentActivity(), CreateWalletActions, Crea
         model.onDestroy()
     }
 
-    override fun contactSupport(userRepository: UserRepository) {
-        SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
+    override fun contactSupport() {
+        val intent = FAQActivity.getIntent(this)
+        intent.putExtra("Category", "Other")
+        intent.putExtra("subCategory", "On-boarding error")
+        Navigator(this).navigateTo(intent)
     }
 }
 
 interface CreateWalletActions {
     fun moveToMainScreen()
-    fun contactSupport(userRepository: UserRepository)
+    fun contactSupport()
     fun getModel(): CreateWalletViewModel
 }

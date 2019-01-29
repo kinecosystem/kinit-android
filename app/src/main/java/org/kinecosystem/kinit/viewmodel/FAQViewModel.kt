@@ -31,7 +31,6 @@ class FAQViewModel {
     interface FAQActions {
         fun moveBack()
         fun moveHome()
-        fun contactSupport()
         fun showSubmissionError(errorsCount: Number)
     }
 
@@ -57,11 +56,11 @@ class FAQViewModel {
     }
 
     @JavascriptInterface
-    fun pageLoaded(faqCategory: String, faqTitle: String) {
-        if (faqTitle == "FAQ")
+    fun pageLoaded(faqCategory: String, faqSubCategory: String) {
+        if (faqSubCategory == "FAQ")
             analytics.logEvent(Events.Analytics.ViewFaqMainPage())
         else
-            analytics.logEvent(Events.Analytics.ViewFaqPage(faqCategory, faqTitle))
+            analytics.logEvent(Events.Analytics.ViewFaqPage(faqCategory, faqSubCategory))
     }
 
     @JavascriptInterface
@@ -74,11 +73,5 @@ class FAQViewModel {
     @JavascriptInterface
     fun isPageHelpfulSelection(faqCategory: String, faqTitle: String, isHelpful: Boolean) {
         analytics.logEvent(Events.Analytics.ClickPageHelpfulButtonOnFaqPage(faqCategory, faqTitle, isHelpful))
-    }
-
-    @JavascriptInterface
-    fun contactSupport(faqCategory: String, faqTitle: String) {
-        listener?.contactSupport()
-        analytics.logEvent(Events.Analytics.ClickSupportButton(faqCategory, faqTitle))
     }
 }

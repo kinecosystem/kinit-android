@@ -47,6 +47,10 @@ class Navigator(private val context: Context) {
         navigateTo(dest, false, false)
     }
 
+    fun navigateTo(intent: Intent) {
+        navigateToActivity(intent, false, false)
+    }
+
     fun navigateToTask(categoryId: String) {
         categoriesRepository.getTask(categoryId)?.let {
             if (it.isTaskWebView()) {
@@ -80,6 +84,7 @@ class Navigator(private val context: Context) {
             context.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
         }
     }
+
 
     fun navigateTo(dest: Destination, withSlideAnim: Boolean, reverseAnim: Boolean) {
         when (dest) {

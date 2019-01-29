@@ -7,10 +7,8 @@ import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.customView.AlertManager
-import org.kinecosystem.kinit.view.feedback.FeedbackWebFragment
 import org.kinecosystem.kinit.viewmodel.FAQViewModel
 import javax.inject.Inject
 
@@ -42,14 +40,15 @@ class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         model.listener = this
+        val category = intent?.extras?.getString("Category")
+        val subCategory = intent?.extras?.getString("subCategory")
+        if (category != null && subCategory != null){
+            model.url = userRepository.contactUsUrl + "?category=$category&sub_category=$subCategory"
+        }
     }
 
     override fun moveHome() {
         webfragment?.binding?.webview?.loadUrl(model.url)
-    }
-
-    override fun contactSupport() {
-        SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
     }
 
     override fun onBackPressed() {
@@ -71,9 +70,9 @@ class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
 
     override fun moveBack() {
         val webview = webfragment?.binding?.webview
-        if (webview?.url == model.url)
+        if (webview?.url == userRepository.faqUrl)
             super.onBackPressed()
-        if (webview?.url != model.url)
-            webview?.loadUrl(model.url)
+        if (webview?.url != userRepository.faqUrl)
+            webview?.loadUrl(userRepository.faqUrl)
     }
 }

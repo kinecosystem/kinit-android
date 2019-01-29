@@ -96,7 +96,7 @@ class CreateWalletViewModel {
 
     fun onContactSupportClicked(view: View?) {
         analytics.logEvent(Events.Analytics.ClickContactLinkOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
-        listener?.contactSupport(userRepository)
+        listener?.contactSupport()
     }
 }
 
@@ -104,5 +104,5 @@ interface CreateWalletEventsListener {
     fun onWalletCreated()
     fun onCreateWalletError()
     fun onWalletCreating()
-    fun contactSupport(userRepository: UserRepository)
+    fun contactSupport()
 }
