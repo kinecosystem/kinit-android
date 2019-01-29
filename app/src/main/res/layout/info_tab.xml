@@ -105,34 +105,13 @@
 
 
         <View
-            android:id="@+id/my_topics_view"
-            style="@style/settingView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/settings_header" />
-
-        <ImageView
-            android:id="@+id/my_topics_icon"
-            style="@style/feedbackIcon"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/my_topics_view"
-            app:layout_constraintEnd_toStartOf="@+id/icon_guide"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/my_topics_view"
-            app:srcCompat="@drawable/topics_ic" />
-
-        <View
             android:id="@+id/helpcenter_view"
             style="@style/settingView"
             android:onClick="@{model::onHelpCenterClicked}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/my_topics_view" />
+            app:layout_constraintTop_toBottomOf="@+id/settings_header" />
 
         <ImageView
             android:id="@+id/helpcenter_icon"
@@ -183,23 +162,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/helpcenter_view" />
-
-        <View
-            android:id="@+id/delimter"
-            style="@style/settingViewDelimiter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/my_topics_view" />
-
-        <TextView
-            android:id="@+id/my_topics_text"
-            style="@style/settingTitle"
-            android:layout_marginStart="6dp"
-            android:text="@string/my_topic"
-            app:layout_constraintBottom_toBottomOf="@+id/my_topics_view"
-            app:layout_constraintStart_toStartOf="@+id/icon_guide"
-            app:layout_constraintTop_toTopOf="@+id/my_topics_view" />
 
         <TextView
             android:id="@+id/feedback_text"

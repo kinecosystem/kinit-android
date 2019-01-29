@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.view.faq
+package org.kinecosystem.kinit.view.feedback
 
 import android.content.Context
 import android.content.Intent
@@ -7,35 +7,33 @@ import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.customView.AlertManager
-import org.kinecosystem.kinit.view.feedback.FeedbackWebFragment
-import org.kinecosystem.kinit.viewmodel.FAQViewModel
+import org.kinecosystem.kinit.viewmodel.FeedbackViewModel
 import javax.inject.Inject
 
-class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
+class FeedbackActivity : SingleFragmentActivity(), FeedbackViewModel.FeedbackActions {
 
     override fun getFragment(): Fragment {
-        webfragment = FAQWebFragment.getInstance()
-        return webfragment as FAQWebFragment
+        webfragment = FeedbackWebFragment.getInstance()
+        return webfragment as FeedbackWebFragment
     }
 
     @Inject
     lateinit var userRepository: UserRepository
-    private var webfragment: FAQWebFragment? = null
+    private var webfragment: FeedbackWebFragment? = null
 
     companion object {
-        fun getIntent(context: Context) = Intent(context, FAQActivity::class.java)
+        fun getIntent(context: Context) = Intent(context, FeedbackActivity::class.java)
     }
 
     init {
         KinitApplication.coreComponent.inject(this)
     }
 
-    private var model: FAQViewModel = FAQViewModel()
+    private var model: FeedbackViewModel = FeedbackViewModel()
 
-    fun getModel(): FAQViewModel {
+    fun getModel(): FeedbackViewModel {
         return model
     }
 
@@ -46,14 +44,6 @@ class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
 
     override fun moveHome() {
         webfragment?.binding?.webview?.loadUrl(model.url)
-    }
-
-    override fun contactSupport() {
-        SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
-    }
-
-    override fun onBackPressed() {
-        moveBack()
     }
 
     override fun showSubmissionError(errorsCount: Number) {
@@ -67,13 +57,5 @@ class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
                 AlertManager.showAlert(this, R.string.support_submission_error_2_title, R.string.support_submission_error_2_body, R.string.close, {})
             }
         }
-    }
-
-    override fun moveBack() {
-        val webview = webfragment?.binding?.webview
-        if (webview?.url == model.url)
-            super.onBackPressed()
-        if (webview?.url != model.url)
-            webview?.loadUrl(model.url)
     }
 }

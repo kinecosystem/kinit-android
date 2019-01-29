@@ -41,7 +41,7 @@ class FAQViewModel {
     }
 
     fun submitForm(){
-        javascript.set("$.submitForm();")
+        javascript.set("$.submitForm('/contact-us','/ticket-submitted.html');")
     }
 
     fun setJavaScript(debug: Boolean){

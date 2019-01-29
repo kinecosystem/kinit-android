@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.view.faq
+package org.kinecosystem.kinit.view.feedback
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -13,25 +13,24 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.databinding.FaqLayoutFragmentBinding
+import org.kinecosystem.kinit.databinding.FeedbackLayoutFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.view.feedback.FeedbackWebFragment
-import org.kinecosystem.kinit.viewmodel.FAQViewModel
+import org.kinecosystem.kinit.viewmodel.FeedbackViewModel
 
 
-class FAQWebFragment : BaseFragment(){
+class FeedbackWebFragment : BaseFragment(){
     companion object {
-        fun getInstance(): FAQWebFragment {
-            return FAQWebFragment()
+        fun getInstance(): FeedbackWebFragment {
+            return FeedbackWebFragment()
         }
     }
 
-    lateinit var model: FAQViewModel
-    lateinit var binding: FaqLayoutFragmentBinding
+    lateinit var model: FeedbackViewModel
+    lateinit var binding: FeedbackLayoutFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.faq_layout_fragment, container, false)
-        model = (activity as FAQActivity).getModel()
+        binding = DataBindingUtil.inflate(inflater, R.layout.feedback_layout_fragment, container, false)
+        model = (activity as FeedbackActivity).getModel()
         binding.model = model
         return binding.root
     }

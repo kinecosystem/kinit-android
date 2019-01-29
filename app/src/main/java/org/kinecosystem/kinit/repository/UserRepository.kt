@@ -22,6 +22,7 @@ private const val FIRST_TIME_USER = "FIRST_TIME_USER"
 private const val P2P_MAX_KIN = "P2P_MAX_KIN"
 private const val P2P_MIN_KIN = "P2P_MIN_KIN"
 private const val FAQ_URL = "FAQ_URL"
+private const val FEEDBACK_URL = "FEEDBACK_URL"
 private const val COMING_SOON_URL = "COMING_SOON_URL"
 private const val P2P_MIN_TASKS = "P2P_MIN_TASKS"
 private const val P2P_ENABLED = "P2P_ENABLED"
@@ -30,6 +31,7 @@ private const val AUTH_TOKEN = "authToken"
 private const val RESTORE_HINTS = "RESTORE_HINTS"
 private const val TOS_DEFAULT = "http://www.kinitapp.com/terms-and-privacy-policy"
 private const val FAQ_DEFAULT = "https://s3.amazonaws.com/kinapp-static/faq2/index.html"
+private const val FEEDBACK_DEFAULT = "https://s3.amazonaws.com/kinapp-static/faq2/feedback.html"
 private const val COMING_SOON_DEFAULT = "https://cdn.kinitapp.com/discovery/coming-soon-webpage/index.html"
 private const val FORCE_UPDATE = "FORCE_UPDATE"
 private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
@@ -61,6 +63,10 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var faqUrl: String
         set(url) = userCache.putString(FAQ_URL, url)
         get() = userCache.getString(FAQ_URL, FAQ_DEFAULT)
+
+    var feedbackUrl: String
+        set(url) = userCache.putString(FEEDBACK_URL, url)
+        get() = userCache.getString(FEEDBACK_URL, FEEDBACK_DEFAULT)
 
     var isUpdateAvailable: Boolean
         set(value) = userCache.putBoolean(IS_UPDATE_AVAILABLE, value)

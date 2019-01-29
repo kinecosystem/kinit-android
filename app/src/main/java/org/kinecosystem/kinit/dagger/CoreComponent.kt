@@ -31,6 +31,7 @@ import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.TaskErrorFragment
 import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
 import org.kinecosystem.kinit.view.faq.FAQActivity
+import org.kinecosystem.kinit.view.feedback.FeedbackActivity
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
@@ -125,4 +126,6 @@ interface CoreComponent {
     fun inject(transferToAppViewModel: TransferToAppViewModel)
     fun inject(transferAmountToAppViewModel: TransferringToAppViewModel)
     fun inject(transferActivityModel: TransferActivityModel)
+    fun inject(feedbackActivity: FeedbackActivity)
+    fun inject(feedbackViewModel: FeedbackViewModel)
 }

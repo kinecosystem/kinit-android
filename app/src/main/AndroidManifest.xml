@@ -91,6 +91,9 @@
             android:name=".view.faq.FAQActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".view.feedback.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".view.comingSoon.EcoAppsComingSoonActivity"
             android:screenOrientation="portrait" />
 
