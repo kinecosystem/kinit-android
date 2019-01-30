@@ -47,10 +47,6 @@ class FAQActivity : SingleFragmentActivity(), FAQViewModel.FAQActions {
         }
     }
 
-    override fun moveHome() {
-        webfragment?.binding?.webview?.loadUrl(model.url)
-    }
-
     override fun onBackPressed() {
         moveBack()
     }

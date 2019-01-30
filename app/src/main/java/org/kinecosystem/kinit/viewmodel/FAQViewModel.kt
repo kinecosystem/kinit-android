@@ -30,7 +30,6 @@ class FAQViewModel {
 
     interface FAQActions {
         fun moveBack()
-        fun moveHome()
         fun showSubmissionError(errorsCount: Number)
     }
 
@@ -40,15 +39,11 @@ class FAQViewModel {
     }
 
     fun submitForm(){
-        javascript.set("$.submitForm('/contact-us','/ticket-submitted.html');")
+        javascript.set("$.submitForm('#support-data','/contact-us','/ticket-submitted.html');")
     }
 
     fun setJavaScript(debug: Boolean){
         javascript.set("$.setMiscData(\"${userRepository.userInfo.userId}\",\"android: ${DeviceUtils.deviceName()}\",\"$versionName\",\"$debug\");")
-    }
-
-    fun onHeaderButtonClicked() {
-        listener?.moveHome()
     }
 
     fun onBackButtonClicked() {
@@ -73,5 +68,11 @@ class FAQViewModel {
     @JavascriptInterface
     fun isPageHelpfulSelection(faqCategory: String, faqTitle: String, isHelpful: Boolean) {
         analytics.logEvent(Events.Analytics.ClickPageHelpfulButtonOnFaqPage(faqCategory, faqTitle, isHelpful))
+    }
+
+
+    @JavascriptInterface
+    fun contactSupport(faqCategory: String, faqTitle: String) {
+        analytics.logEvent(Events.Analytics.ClickContactButtonOnSpecificFaqPage())
     }
 }

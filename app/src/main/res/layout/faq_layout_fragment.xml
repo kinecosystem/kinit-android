@@ -56,7 +56,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:onClick="@{()->model.onHeaderButtonClicked()}"
             android:text="@string/help_center"
             android:textColor="@color/white"
             android:textSize="20dp"

@@ -37,19 +37,19 @@ class FeedbackViewModel {
     }
 
     fun submitForm(){
-        javascript.set("$.submitForm('/feedback','/feedback-submitted.html');")
+        javascript.set("$.submitForm('#feedback-data','/feedback','/feedback-submitted.html');")
     }
 
     fun onHeaderButtonClicked() {
         listener?.moveHome()
     }
 
-    fun setJavaScript(debug: Boolean){
-        javascript.set("$.setMiscData(\"${userRepository.userInfo.userId}\",\"android: ${DeviceUtils.deviceName()}\",\"$versionName\",\"$debug\");")
-    }
-
     fun onBackButtonClicked() {
         listener?.moveHome()
+    }
+
+    fun setJavaScript(debug: Boolean){
+        javascript.set("$.setMiscData(\"${userRepository.userInfo.userId}\",\"android: ${DeviceUtils.deviceName()}\",\"$versionName\",\"$debug\");")
     }
 
     @JavascriptInterface

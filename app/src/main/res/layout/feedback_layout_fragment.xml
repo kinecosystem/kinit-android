@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:onClick="@{()->model.onHeaderButtonClicked()}"
+            android:onClick="@{()->model.onBackButtonClicked()}"
             android:text="@string/send_feedback"
             android:textColor="@color/white"
             android:textSize="20dp"

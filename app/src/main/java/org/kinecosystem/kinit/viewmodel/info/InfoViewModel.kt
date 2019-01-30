@@ -64,6 +64,7 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
     }
 
     fun onHelpCenterClicked(view: View) {
+        analytics.logEvent(Events.Analytics.ClickHelpButtonOnMorePage())
         navigator.navigateTo(Navigator.Destination.FAQ)
     }
 

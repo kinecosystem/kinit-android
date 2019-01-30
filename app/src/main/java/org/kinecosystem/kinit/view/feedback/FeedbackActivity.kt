@@ -43,7 +43,7 @@ class FeedbackActivity : SingleFragmentActivity(), FeedbackViewModel.FeedbackAct
     }
 
     override fun moveHome() {
-        webfragment?.binding?.webview?.loadUrl(model.url)
+        super.onBackPressed()
     }
 
     override fun showSubmissionError(errorsCount: Number) {

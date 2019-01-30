@@ -47,7 +47,8 @@ class FeedbackWebFragment : BaseFragment(){
                 } catch (e: PackageManager.NameNotFoundException) {
                     Log.e("SupportUtil", "cant get version name " + e.message)
                 }
-                model.setJavaScript(BuildConfig.DEBUG)
+                if (url?.contains(model.userRepository.feedbackUrl) == true)
+                    model.setJavaScript(BuildConfig.DEBUG)
                 model.loading.set(false)
             }
 
