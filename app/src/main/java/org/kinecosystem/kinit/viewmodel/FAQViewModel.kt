@@ -9,6 +9,8 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.DeviceUtils
+import org.kinecosystem.kinit.util.GeneralUtils
+import java.lang.Exception
 import javax.inject.Inject
 
 class FAQViewModel {
@@ -39,11 +41,15 @@ class FAQViewModel {
     }
 
     fun submitForm(){
-        javascript.set("$.submitForm('#support-data','/contact-us','/ticket-submitted.html');")
+        javascript.set("submitForm('#support-data','/contact-us','/ticket-submitted.html');")
     }
 
     fun setJavaScript(debug: Boolean){
-        javascript.set("$.setMiscData(\"${userRepository.userInfo.userId}\",\"android: ${DeviceUtils.deviceName()}\",\"$versionName\",\"$debug\");")
+        val setUserId = "$('#user_id').val(\"${userRepository.userInfo.userId}\");"
+        val setPlatform = "$('#platform').val(\"android: ${DeviceUtils.deviceName()}\");"
+        val setVersion = "$('#version').val(\"$versionName\");"
+        val setDebugMode = "$('#debug').val(\"$debug\");"
+        javascript.set(setUserId + setVersion + setPlatform + setDebugMode)
     }
 
     fun onBackButtonClicked() {
@@ -51,28 +57,75 @@ class FAQViewModel {
     }
 
     @JavascriptInterface
-    fun pageLoaded(faqCategory: String, faqSubCategory: String) {
-        if (faqSubCategory == "FAQ")
-            analytics.logEvent(Events.Analytics.ViewFaqMainPage())
-        else
-            analytics.logEvent(Events.Analytics.ViewFaqPage(faqCategory, faqSubCategory))
+    fun pageLoaded(json: String) {
+        val jsonObj = GeneralUtils.stringToJson(json)
+        if (jsonObj != null){
+            try {
+                val faqCategory = jsonObj["faqCategory"] as String?
+                val faqSubCategory = jsonObj["faqSubCategory"] as String?
+                if (faqCategory == "FAQ")
+                    analytics.logEvent(Events.Analytics.ViewFaqMainPage())
+                else
+                    analytics.logEvent(Events.Analytics.ViewFaqPage(faqCategory, faqSubCategory))
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
     }
 
     @JavascriptInterface
-    fun showSubmissionError(data: String) {
+    fun showSubmissionError(json:String) {
         errorsCount++
-        Log.d("FAQViewModel", "error #$errorsCount: showing submission error $data")
+        val jsonObj = GeneralUtils.stringToJson(json)
+        try {
+            val data = jsonObj?.get("data") as String?
+            val error = jsonObj?.get("error") as String?
+            Log.d("FAQViewModel", "error #$errorsCount: showing submission error $error: $data")
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
         listener?.showSubmissionError(errorsCount)
     }
 
     @JavascriptInterface
-    fun isPageHelpfulSelection(faqCategory: String, faqTitle: String, isHelpful: Boolean) {
-        analytics.logEvent(Events.Analytics.ClickPageHelpfulButtonOnFaqPage(faqCategory, faqTitle, isHelpful))
+    fun isPageHelpfulSelection(json: String) {
+        val jsonObj = GeneralUtils.stringToJson(json)
+        try {
+            val faqCategory = jsonObj?.get("faqCategory") as String?
+            val faqSubCategory = jsonObj?.get("faqSubCategory") as String?
+            val isHelpful = jsonObj?.get("isHelpful") as Boolean?
+            analytics.logEvent(Events.Analytics.ClickPageHelpfulButtonOnFaqPage(faqCategory, faqSubCategory, isHelpful))
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
+    @JavascriptInterface
+    fun contactSupport() {
+        analytics.logEvent(Events.Analytics.ClickContactButtonOnSpecificFaqPage())
+    }
 
     @JavascriptInterface
-    fun contactSupport(faqCategory: String, faqTitle: String) {
-        analytics.logEvent(Events.Analytics.ClickContactButtonOnSpecificFaqPage())
+    fun supportRequestSent(json: String){
+        val jsonObj = GeneralUtils.stringToJson(json)
+        try {
+            val faqCategory = jsonObj?.get("faqCategory") as String?
+            val faqSubCategory = jsonObj?.get("faqSubCategory") as String?
+            analytics.logEvent(Events.Business.SupportRequestSent(faqCategory,faqSubCategory))
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    @JavascriptInterface
+    fun supportSubmitted(json: String) {
+        val jsonObj = GeneralUtils.stringToJson(json)
+        try {
+            val faqCategory = jsonObj?.get("faqCategory") as String?
+            val faqSubCategory = jsonObj?.get("faqSubCategory") as String?
+            analytics.logEvent(Events.Analytics.ClickSubmitButtonOnSupportFormPage(faqCategory,faqSubCategory))
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }

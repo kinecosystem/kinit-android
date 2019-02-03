@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -48,7 +49,7 @@ class FAQWebFragment : BaseFragment(){
                 } catch (e: PackageManager.NameNotFoundException) {
                     Log.e("SupportUtil", "cant get version name " + e.message)
                 }
-                if (url?.contains(model.userRepository.contactUsUrl) == true)
+                if (view?.url?.contains(model.userRepository.contactUsUrl) == true)
                     model.setJavaScript(BuildConfig.DEBUG)
                 model.loading.set(false)
             }
