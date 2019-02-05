@@ -110,8 +110,15 @@ class SupportViewModel(val destination: Destination, urlParams: Map<String, Stri
     }
 
     @JavascriptInterface
-    fun contactSupport() {
-        analytics.logEvent(Events.Analytics.ClickContactButtonOnSpecificFaqPage())
+    fun contactSupport(json: String) {
+        val jsonObj = GeneralUtils.stringToJson(json)
+        try {
+            val faqCategory = jsonObj?.get("faqCategory") as String?
+            val faqSubCategory = jsonObj?.get("faqSubCategory") as String?
+            analytics.logEvent(Events.Analytics.ClickContactButtonOnSpecificFaqPage(faqCategory,faqSubCategory))
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
     @JavascriptInterface
