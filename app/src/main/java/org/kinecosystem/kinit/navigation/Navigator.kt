@@ -19,8 +19,7 @@ import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
-import org.kinecosystem.kinit.view.faq.FAQActivity
-import org.kinecosystem.kinit.view.feedback.FeedbackActivity
+import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.RestoreWalletActivity
 import org.kinecosystem.kinit.view.spend.AppDetailsActivity
@@ -28,12 +27,13 @@ import org.kinecosystem.kinit.view.spend.Peer2PeerActivity
 import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
 import org.kinecosystem.kinit.view.transfer.TransferActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
+import org.kinecosystem.kinit.viewmodel.SupportViewModel
 import javax.inject.Inject
 
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER, ECO_APPS_COMING_SOON, FEEDBACK
+        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, SUPPORT, ERROR_REGISTER, ECO_APPS_COMING_SOON,FEEDBACK
     }
 
     @Inject
@@ -97,9 +97,9 @@ class Navigator(private val context: Context) {
             Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.FAQ -> navigateToActivity(FAQActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.SUPPORT -> navigateToActivity(SupportActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.FEEDBACK -> navigateToActivity(SupportActivity.getIntent(context, SupportViewModel.Destination.FEEDBACK), withSlideAnim, reverseAnim)
             Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsComingSoonActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.FEEDBACK -> navigateToActivity(FeedbackActivity.getIntent(context), withSlideAnim, reverseAnim)
         }
     }
 

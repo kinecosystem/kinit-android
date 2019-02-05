@@ -11,7 +11,6 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.TabViewModel
 import org.kinecosystem.kinit.view.customView.AlertManager
 import javax.inject.Inject
@@ -59,13 +58,13 @@ class InfoViewModel(val navigator: Navigator) : TabViewModel {
         AlertManager.showAlert(view.context, R.string.send_feedback_title, R.string.send_feedback_text, R.string.send_feedback_positive, {
             navigator.navigateTo(Navigator.Destination.FEEDBACK)
         }, R.string.i_have_a_problem, {
-            navigator.navigateTo(Navigator.Destination.FAQ)
+            navigator.navigateTo(Navigator.Destination.SUPPORT)
         })
     }
 
     fun onHelpCenterClicked(view: View) {
         analytics.logEvent(Events.Analytics.ClickHelpButtonOnMorePage())
-        navigator.navigateTo(Navigator.Destination.FAQ)
+        navigator.navigateTo(Navigator.Destination.SUPPORT)
     }
 
     fun onStartBackupClicked(view: View) {

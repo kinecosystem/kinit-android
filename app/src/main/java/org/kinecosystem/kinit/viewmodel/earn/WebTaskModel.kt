@@ -99,7 +99,7 @@ class WebTaskTruexViewModel(val agent: String, navigator: Navigator) : WebViewMo
                     javascript.set(
                             "updateTruexActivityData('$networkUserId', '${json.toString()}', '$TRUEX_HASH');")
                     loading.set(false)
-                    //loading javascript done by binding
+                    //loading jsToRun done by binding
                 }
             }
 

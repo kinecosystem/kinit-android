@@ -88,7 +88,7 @@
             android:screenOrientation="landscape" />
 
         <activity
-            android:name=".view.faq.FAQActivity"
+            android:name=".view.support.SupportActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.feedback.FeedbackActivity"

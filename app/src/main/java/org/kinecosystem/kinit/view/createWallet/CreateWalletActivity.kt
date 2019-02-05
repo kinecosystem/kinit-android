@@ -5,12 +5,11 @@ import android.content.Intent
 import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.navigation.Navigator
-import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.SingleFragmentActivity
-import org.kinecosystem.kinit.view.faq.FAQActivity
+import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.viewmodel.CreateWalletEventsListener
 import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.SupportViewModel
 
 class CreateWalletActivity : SingleFragmentActivity(), CreateWalletActions, CreateWalletEventsListener {
 
@@ -77,9 +76,8 @@ class CreateWalletActivity : SingleFragmentActivity(), CreateWalletActions, Crea
     }
 
     override fun contactSupport() {
-        val intent = FAQActivity.getIntent(this)
-        intent.putExtra("Category", "Other")
-        intent.putExtra("subCategory", "On-boarding error")
+        val urlParams = mapOf("category" to "Other","subCategory" to "On-boarding error")
+        val intent = SupportActivity.getIntent(this, SupportViewModel.Destination.CONTACT_US, urlParams)
         Navigator(this).navigateTo(intent)
     }
 }

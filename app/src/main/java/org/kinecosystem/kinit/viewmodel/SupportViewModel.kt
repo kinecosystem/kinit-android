@@ -13,16 +13,23 @@ import org.kinecosystem.kinit.util.GeneralUtils
 import java.lang.Exception
 import javax.inject.Inject
 
-class FAQViewModel {
+class SupportViewModel(val destination: Destination, urlParams: Map<String, String?>?) {
 
     @Inject
     lateinit var userRepository: UserRepository
 
+    enum class Destination {
+        FAQ,
+        CONTACT_US,
+        FEEDBACK
+
+    }
+
     var errorsCount = 0
     var versionName: String? = null
     val loading: ObservableBoolean = ObservableBoolean(true)
-    val javascript: ObservableField<String> = ObservableField("")
-    var listener: FAQActions? = null
+    val jsToRun: ObservableField<String> = ObservableField("")
+    var listener: SupportActions? = null
     var interfaceName: String = "Kinit"
     var url: String = ""
 
@@ -30,26 +37,30 @@ class FAQViewModel {
     @Inject
     lateinit var analytics: Analytics
 
-    interface FAQActions {
+    interface SupportActions {
         fun moveBack()
         fun showSubmissionError(errorsCount: Number)
     }
 
     init {
         KinitApplication.coreComponent.inject(this)
-        url = userRepository.faqUrl
+        url = when(destination){
+            Destination.FAQ -> userRepository.faqUrl
+            Destination.CONTACT_US -> userRepository.contactUsUrl + "?category=${urlParams?.get("category")}&sub_category=${urlParams?.get("subCategory")}"
+            Destination.FEEDBACK -> userRepository.feedbackUrl
+        }
     }
 
     fun submitForm(){
-        javascript.set("submitForm('#support-data','/contact-us','/ticket-submitted.html');")
+        jsToRun.set("submitForm();")
     }
 
-    fun setJavaScript(debug: Boolean){
+    fun setMiscFormData(debug: Boolean){
         val setUserId = "$('#user_id').val(\"${userRepository.userInfo.userId}\");"
         val setPlatform = "$('#platform').val(\"android: ${DeviceUtils.deviceName()}\");"
         val setVersion = "$('#version').val(\"$versionName\");"
         val setDebugMode = "$('#debug').val(\"$debug\");"
-        javascript.set(setUserId + setVersion + setPlatform + setDebugMode)
+        jsToRun.set(setUserId + setVersion + setPlatform + setDebugMode)
     }
 
     fun onBackButtonClicked() {
@@ -59,17 +70,15 @@ class FAQViewModel {
     @JavascriptInterface
     fun pageLoaded(json: String) {
         val jsonObj = GeneralUtils.stringToJson(json)
-        if (jsonObj != null){
-            try {
-                val faqCategory = jsonObj["faqCategory"] as String?
-                val faqSubCategory = jsonObj["faqSubCategory"] as String?
-                if (faqCategory == "FAQ")
-                    analytics.logEvent(Events.Analytics.ViewFaqMainPage())
-                else
-                    analytics.logEvent(Events.Analytics.ViewFaqPage(faqCategory, faqSubCategory))
-            } catch (e: Exception){
-                e.printStackTrace()
-            }
+        try {
+            val faqCategory = jsonObj?.get("faqCategory") as String?
+            val faqSubCategory = jsonObj?.get("faqSubCategory") as String?
+            if (faqCategory == "FAQ")
+                analytics.logEvent(Events.Analytics.ViewFaqMainPage())
+            else
+                analytics.logEvent(Events.Analytics.ViewFaqPage(faqCategory, faqSubCategory))
+        } catch (e: Exception){
+            e.printStackTrace()
         }
     }
 
@@ -80,7 +89,7 @@ class FAQViewModel {
         try {
             val data = jsonObj?.get("data") as String?
             val error = jsonObj?.get("error") as String?
-            Log.d("FAQViewModel", "error #$errorsCount: showing submission error $error: $data")
+            Log.d("SupportViewModel", "error #$errorsCount: showing submission error $error: $data")
         } catch (e: Exception){
             e.printStackTrace()
         }
@@ -127,5 +136,16 @@ class FAQViewModel {
         } catch (e: Exception){
             e.printStackTrace()
         }
+    }
+
+
+    @JavascriptInterface
+    fun feedbackFormSent(){
+        analytics.logEvent(Events.Business.FeedbackformSent())
+    }
+
+    @JavascriptInterface
+    fun feedbackSubmitted() {
+        analytics.logEvent(Events.Analytics.ClickSubmitButtonOnFeedbackForm())
     }
 }

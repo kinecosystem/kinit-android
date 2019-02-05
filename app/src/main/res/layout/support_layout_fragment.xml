@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.FAQViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.SupportViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view"
             app:run="@{!model.loading}"
-            app:script="@{model.javascript}"
+            app:script="@{model.jsToRun}"
             >
 
         </WebView>
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:text="@string/help_center"
+            android:text="@{model.destination == model.Destination.FAQ ? @string/help_center : @string/send_feedback_title}"
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold"
