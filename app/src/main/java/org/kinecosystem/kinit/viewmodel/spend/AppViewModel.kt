@@ -1,6 +1,5 @@
 package org.kinecosystem.kinit.viewmodel.spend
 
-import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.support.v4.view.ViewPager

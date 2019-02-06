@@ -231,6 +231,7 @@
     <string name="about">About</string>
     <string name="more_apps_are_coming_soon">More apps are coming soon</string>
     <string name="send_kin_learn_more">Learn more about sending Kin</string>
+    <string name="send_kin_coming_soon">Coming soon: a new way to use Kin across the ecosystem</string>
     <string name="introducing_the_kin_ecosystem_apps">Introducing Kin Ecosystem apps</string>
     <string name="discover_all">Discover all the amazing apps where you can  use Kin.</string>
     <string name="soon_you_ll_be_able_to_send_kin_to_this_account">Soon you’ll be able to send Kin to this account</string>
@@ -246,6 +247,10 @@
     <string name="transfer_connection_error_message">There was a problem establishing a connection. Please try again later.</string>
     <string name="transaction_failed_subtitle">We received your send request but something went wrong. Please try again later.</string>
     <string name="sending_completed">Sending completed</string>
+    <string name="send_to_apps_dialog_title">The future is here!</string>
+    <string name="send_to_apps_dialog_info">Now you can send Kin to any app in the ecosystem using Kinit!\nJust look for the “Send Kin” button  on the apps page to try it for yourself</string>
+    <string name="transfer_start_connecting_error_title">Almost there…</string>
+    <string name="transfer_start_connecting_error_message">You need to have the latest version of %s in order to send Kin. Please update the app before trying again.</string>
     <string name="support_submission_error_1_title">Swing and a miss…</string>
     <string name="support_submission_error_1_body">There was a technical issue sending your message. Let’s try that again…</string>
     <string name="support_submission_error_2_title">It’s just not happening…</string>

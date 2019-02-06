@@ -38,7 +38,7 @@ private const val COMING_SOON_DEFAULT = "https://cdn.kinitapp.com/discovery/comi
 private const val FORCE_UPDATE = "FORCE_UPDATE"
 private const val IS_UPDATE_AVAILABLE = "IS_UPDATE_AVAILABLE"
 private const val SEEN_NEW_SPEND_POLICY = "SEEN_NEW_SPEND_POLICY"
-private const val SEEN_EXPLORE_APPS_ALERT = "SEEN_EXPLORE_APPS_ALERT"
+private const val SEEN_APPS_ALERT = "SEEN_APPS_ALERT"
 
 
 
@@ -57,10 +57,6 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var isRegistered: Boolean
         set(registered) = userCache.putBoolean(IS_REGISTERED_KEY, registered)
         get() = userCache.getBoolean(IS_REGISTERED_KEY, false)
-
-    var comingSoonUrl: String
-        set(url) = userCache.putString(COMING_SOON_URL, url)
-        get() = userCache.getString(COMING_SOON_URL, COMING_SOON_DEFAULT)
 
     var faqUrl: String
         set(url) = userCache.putString(FAQ_URL, url)
@@ -148,9 +144,9 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
         set(seen) = userCache.putBoolean(SEEN_NEW_SPEND_POLICY, seen)
         get() = userCache.getBoolean(SEEN_NEW_SPEND_POLICY, false)
 
-    var seenExploreAppsAlert: Boolean
-        set(seen) = userCache.putBoolean(SEEN_EXPLORE_APPS_ALERT, seen)
-        get() = userCache.getBoolean(SEEN_EXPLORE_APPS_ALERT, false)
+    var seenAppsAlert: Boolean
+        set(seen) = userCache.putBoolean(SEEN_APPS_ALERT, seen)
+        get() = userCache.getBoolean(SEEN_APPS_ALERT, false)
 
     init {
         var userId = userCache.getString(USER_ID_KEY, "")

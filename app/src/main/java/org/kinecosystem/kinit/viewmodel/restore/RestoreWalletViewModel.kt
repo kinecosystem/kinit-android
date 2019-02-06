@@ -41,6 +41,7 @@ class RestoreWalletViewModel {
     }
 
     fun onAnswersSubmit() {
+        Events.Analytics.ClickConfirmButtonOnAnswerSecurityQuestionsPage()
         answersSubmitted.set(true)
         passphrase = answers.joinToString(separator = "") { it.trim() }
         var restoredAccount = walletService.importBackedUpAccount(qrCode, passphrase)

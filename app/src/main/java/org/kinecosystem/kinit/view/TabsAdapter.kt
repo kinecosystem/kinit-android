@@ -119,13 +119,21 @@ class TabsAdapter(val context: Context) :
                 }
             }
         })
-        modelsAdapter.appsModel.showAppsAlert.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+
+        modelsAdapter.appsModel.showAppsAlert.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback(){
+            override fun onPropertyChanged(sender: Observable?, p1: Int) {
                 if (sender is ObservableBoolean && sender.get()) {
-                    AlertManager.showGeneralAlert(context, null, R.string.explore_apps_title, R.string.awesome, {}, null, null, null, R.drawable.ecosystem_illus_popup)
+                    if (modelsAdapter.appsModel.ableToSend.get()) {
+                       AlertManager.showGeneralAlert(context, R.string.send_to_apps_dialog_title, R.string.send_to_apps_dialog_info, R.string.dialog_got_it, {}, null, null, null, R.drawable.future_here_dialog)
+                    } else {
+                       AlertManager.showGeneralAlert(context, null, R.string.explore_apps_title, R.string.awesome, {}, null, null, null, R.drawable.ecosystem_illus_popup)
+                    }
+                    modelsAdapter.appsModel.onSeenAppAlert()
                 }
             }
+
         })
+
         binding.model = SpendTabsViewModel()
         binding.viewPager.adapter = modelsAdapter
         binding.spendNavTabs.setupWithViewPager(binding.viewPager)
@@ -147,7 +155,7 @@ class TabsAdapter(val context: Context) :
         val binding = DataBindingUtil.inflate<InfoTabBinding>(LayoutInflater.from(context),
                 R.layout.info_tab, parent, false)
         val navigator = Navigator(context)
-        var model = InfoViewModel(navigator)
+        val model = InfoViewModel(navigator)
         model.showCreateNewBackupAlert.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if (sender is ObservableBoolean && sender.get()) {
