@@ -230,7 +230,6 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
         config?.faq_url?.let { userRepo.faqUrl = it }
         config?.feedback_url?.let { userRepo.feedbackUrl = it }
         config?.contact_us_url?.let { userRepo.contactUsUrl= it }
-        config?.coming_soon?.let { userRepo.comingSoonUrl = it }
     }
 
     private fun callAppLaunch(appVersion: String) {
