@@ -82,11 +82,11 @@ class SupportViewModel(val destination: Destination, urlParams: Map<String, Stri
     }
 
     fun setMiscFormData(debug: Boolean){
-        val setUserId = "$('#user_id').val(\"${userRepository.userInfo.userId}\");"
-        val setPlatform = "$('#platform').val(\"android: ${DeviceUtils.deviceName()}\");"
-        val setVersion = "$('#version').val(\"$versionName\");"
-        val setDebugMode = "$('#debug').val(\"$debug\");"
-        jsToRun.set(setUserId + setVersion + setPlatform + setDebugMode)
+        val userId = "\"${userRepository.userInfo.userId}\""
+        val platform = "\"android: ${DeviceUtils.deviceName()}\""
+        val version = "\"$versionName\""
+        val isDebug = "\"$debug\""
+        jsToRun.set("window.setMiscFormData($userId, $platform, $version, $isDebug);")
     }
 
     fun onBackButtonClicked() {
