@@ -41,8 +41,6 @@ class SupportFragment : BaseFragment(){
 
         binding.webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                if (view?.url?.contains(model?.userRepository?.contactUsUrl.toString()) == true || view?.url?.contains(model?.userRepository?.feedbackUrl.toString()) == true)
-                    model?.setMiscFormData(BuildConfig.DEBUG)
                 model?.loading?.set(false)
             }
 

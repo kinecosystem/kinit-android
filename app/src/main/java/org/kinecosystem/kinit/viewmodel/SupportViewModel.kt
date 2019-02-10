@@ -66,6 +66,7 @@ class SupportViewModel(val destination: Destination, urlParams: Map<String, Stri
     interface SupportActions {
         fun moveBack()
         fun showSubmissionError(errorsCount: Number)
+        fun formPageLoaded(json: String)
     }
 
     init {
@@ -100,7 +101,11 @@ class SupportViewModel(val destination: Destination, urlParams: Map<String, Stri
             analytics.logEvent(Events.Analytics.ViewFaqMainPage())
         else
             analytics.logEvent(Events.Analytics.ViewFaqPage(eventData.faqCategory, eventData.faqSubCategory))
+    }
 
+    @JavascriptInterface
+    fun formPageLoaded(json: String) {
+        listener?.formPageLoaded(json)
     }
 
     @JavascriptInterface

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
+import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.repository.UserRepository
@@ -41,6 +42,10 @@ class SupportActivity : SingleFragmentActivity(), SupportViewModel.SupportAction
 
     fun getModel(): SupportViewModel? {
         return model
+    }
+
+    override fun formPageLoaded(json: String) {
+        model?.setMiscFormData(BuildConfig.DEBUG)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
