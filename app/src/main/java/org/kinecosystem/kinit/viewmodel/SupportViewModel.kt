@@ -10,7 +10,7 @@ import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.DeviceUtils
 import org.kinecosystem.kinit.util.GeneralUtils
-import java.lang.Exception
+import org.kinecosystem.kinit.view.support.*
 import javax.inject.Inject
 
 class SupportViewModel(val destination: Destination, urlParams: Map<String, String?>?) {
@@ -34,11 +34,11 @@ class SupportViewModel(val destination: Destination, urlParams: Map<String, Stri
         var serverError: String? = null
 
         init {
-            faqCategory = get("faqCategory")
-            faqSubCategory = get("faqSubCategory")
-            isHelpful = get("isHelpful")
-            formData = get("formData")
-            serverError = get("serverError")
+            faqCategory = get(TICKET_CATEGORY)
+            faqSubCategory = get(TICKET_SUB_CATEGORY)
+            isHelpful = get(FAQ_IS_HELPFUL)
+            formData = get(TICKET_FORM_DATA)
+            serverError = get(TICKET_SERVER_ERROR)
         }
 
         fun <T: Any> get(name: String): T?{
@@ -73,7 +73,7 @@ class SupportViewModel(val destination: Destination, urlParams: Map<String, Stri
         KinitApplication.coreComponent.inject(this)
         url = when(destination){
             Destination.FAQ -> userRepository.faqUrl
-            Destination.CONTACT_US -> userRepository.contactUsUrl + "?category=${urlParams?.get("category")}&sub_category=${urlParams?.get("subCategory")}"
+            Destination.CONTACT_US -> userRepository.contactUsUrl + "?category=${urlParams?.get(TICKET_CATEGORY)}&sub_category=${urlParams?.get(TICKET_SUB_CATEGORY)}"
             Destination.FEEDBACK -> userRepository.feedbackUrl
         }
     }

@@ -14,6 +14,11 @@ import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.customView.AlertManager
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
 import javax.inject.Inject
+const val TICKET_CATEGORY = "category"
+const val TICKET_SUB_CATEGORY = "subCategory"
+const val FAQ_IS_HELPFUL = "isHelpful"
+const val TICKET_FORM_DATA = "formData"
+const val TICKET_SERVER_ERROR = "serverError"
 
 class SupportActivity : SingleFragmentActivity(), SupportViewModel.SupportActions {
     override fun getFragment(): Fragment {
@@ -50,10 +55,10 @@ class SupportActivity : SingleFragmentActivity(), SupportViewModel.SupportAction
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val category = intent?.extras?.getString("category")
-        val subCategory = intent?.extras?.getString("subCategory")
+        val category = intent?.extras?.getString(TICKET_CATEGORY)
+        val subCategory = intent?.extras?.getString(TICKET_SUB_CATEGORY)
         val destination = SupportViewModel.Destination.valueOf(intent?.extras?.getString("destination") ?: "FAQ")
-        val urlParams = mapOf("category" to category, "subCategory" to subCategory)
+        val urlParams = mapOf(TICKET_CATEGORY to category, TICKET_SUB_CATEGORY to subCategory)
         model = SupportViewModel(destination, urlParams)
         try {
             model?.versionName = packageManager?.getPackageInfo(packageName, 0)?.versionName
