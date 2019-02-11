@@ -16,6 +16,8 @@ import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
+import org.kinecosystem.kinit.view.support.SupportActivity
+import org.kinecosystem.kinit.viewmodel.SupportViewModel
 import org.kinecosystem.kinit.viewmodel.restore.RestoreState
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletActivityMessages
 import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
@@ -183,7 +185,9 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
     }
 
     override fun contactSupport() {
-        SupportUtil.openEmail(this, userRepository, SupportUtil.Type.SUPPORT)
+        val urlParams = mapOf("category" to "Backup %26 Restore your Kin","subCategory" to "Other")
+        val intent = SupportActivity.getIntent(this, SupportViewModel.Destination.CONTACT_US, urlParams)
+        Navigator(this).navigateTo(intent)
     }
 }
 
