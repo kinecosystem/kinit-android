@@ -31,10 +31,11 @@ public class TransferManager {
     /**
      * Checks that the move kin launching activity in the given application exists and if it does,
      * starts it using startActivityForResult
-     * @param activity The source application activity originating the request
-     * @param applicationId The application id of the destination application
+     *
+     * @param activity               The source application activity originating the request
+     * @param applicationId          The application id of the destination application
      * @param launchActivityFullPath The full path to the activity in the destination app that is responsible for
-     * returning a result with the destination app public address
+     *                               returning a result with the destination app public address
      * @return boolean true if the destination activity has been started
      */
     public boolean startTransferRequestActivity(@NonNull Activity activity, @NonNull String applicationId, @NonNull String launchActivityFullPath) {
@@ -44,28 +45,35 @@ public class TransferManager {
         intent.setComponent(new ComponentName(applicationId, launchActivityFullPath));
         final List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, 0);
         if (!resolveInfos.isEmpty()) {
-            String appName = activity.getApplicationInfo().loadLabel(packageManager).toString();
-            intent.putExtra(EXTRA_SOURCE_APP_NAME, appName);
-            activity.startActivityForResult(intent, REQUEST_CODE);
-            return true;
+            final boolean exported = resolveInfos.get(0).activityInfo.exported;
+            if (exported) {
+                String appName = activity.getApplicationInfo().loadLabel(packageManager).toString();
+                intent.putExtra(EXTRA_SOURCE_APP_NAME, appName);
+                try {
+                    activity.startActivityForResult(intent, REQUEST_CODE);
+                } catch (Exception e) {
+                    return false;
+                }
+                return true;
+            }
         }
         return false;
     }
 
     /**
      * Method should be called from onActivityResult
-     * @param context The activity context is needed to process the result
-     * @param requestCode The requestCode received in onActivityResult
-     * @param resultCode The resultCode received in onActivityResult
-     * @param intent The intent received in onActivityResult
+     *
+     * @param context                     The activity context is needed to process the result
+     * @param requestCode                 The requestCode received in onActivityResult
+     * @param resultCode                  The resultCode received in onActivityResult
+     * @param intent                      The intent received in onActivityResult
      * @param accountInfoResponseListener A listener that can handle the response
      */
     public void processResponse(Context context, int requestCode, int resultCode, Intent intent, AccountInfoResponseListener accountInfoResponseListener) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 processResultOk(context, intent, accountInfoResponseListener);
-            }
-            else if (resultCode == Activity.RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 processResultCanceled(intent, accountInfoResponseListener);
             }
         }
