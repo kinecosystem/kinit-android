@@ -62,7 +62,7 @@ class RestoreWalletIntroFragment : BaseFragment() {
     private fun moveToScanner() {
         activity?.let {
             if (ContextCompat.checkSelfPermission(it, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                actions.getModel().analytics.logEvent(Events.Analytics.ClickScanButtonOnScanPage())
+                actions.getModel().analytics.logEvent(Events.Analytics.ClickScanButtonOn2StepsAwayPage())
                 actions.moveToNextScreen()
             } else {
                 actions.getCameraPermissions()

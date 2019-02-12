@@ -103,6 +103,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/delimeter0" />
 
+
         <View
             android:id="@+id/helpcenter_view"
             style="@style/settingView"
@@ -115,13 +116,14 @@
         <ImageView
             android:id="@+id/helpcenter_icon"
             style="@style/feedbackIcon"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/helpcenter_view"
             app:layout_constraintEnd_toStartOf="@+id/icon_guide"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/helpcenter_view"
-            app:srcCompat="@drawable/support_icon" />
+            app:srcCompat="@drawable/help_center_ic" />
 
         <View
             android:id="@+id/feedback_view"

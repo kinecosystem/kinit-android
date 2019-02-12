@@ -18,7 +18,7 @@ import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
-import org.kinecosystem.kinit.view.faq.FAQActivity
+import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.RestoreWalletActivity
 import org.kinecosystem.kinit.view.spend.AppDetailsActivity
@@ -28,12 +28,14 @@ import org.kinecosystem.kinit.view.spend.PurchaseOfferActivity
 import org.kinecosystem.kinit.view.transfer.TransferActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.WebInfoViewModel.Type
+import org.kinecosystem.kinit.viewmodel.SupportViewModel
 import javax.inject.Inject
 
 class Navigator(private val context: Context) {
 
     enum class Destination {
-        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER, ECO_APPS_COMING_SOON, ECO_APPS_LEARN_MORE
+        MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER, ECO_APPS_COMING_SOON, ECO_APPS_LEARN_MORE,
+        SUPPORT ,FEEDBACK
     }
 
     @Inject
@@ -45,6 +47,10 @@ class Navigator(private val context: Context) {
 
     fun navigateTo(dest: Destination) {
         navigateTo(dest, false, false)
+    }
+
+    fun navigateTo(intent: Intent) {
+        navigateToActivity(intent, false, false)
     }
 
     fun navigateToTask(categoryId: String) {
@@ -81,6 +87,7 @@ class Navigator(private val context: Context) {
         }
     }
 
+
     fun navigateTo(dest: Destination, withSlideAnim: Boolean, reverseAnim: Boolean) {
         when (dest) {
             Destination.PEER2PEER -> navigateToActivity(Peer2PeerActivity.getIntent(context), withSlideAnim, reverseAnim)
@@ -92,9 +99,10 @@ class Navigator(private val context: Context) {
             Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.FAQ -> navigateToActivity(FAQActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsInfoActivity.getIntent(context, Type.ECO_APPS_COMING_SOON), withSlideAnim, reverseAnim)
             Destination.ECO_APPS_LEARN_MORE -> navigateToActivity(EcoAppsInfoActivity.getIntent(context, Type.ECO_APPS_LEARN_MORE), withSlideAnim, reverseAnim)
+            Destination.SUPPORT -> navigateToActivity(SupportActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.FEEDBACK -> navigateToActivity(SupportActivity.getIntent(context, SupportViewModel.Destination.FEEDBACK), withSlideAnim, reverseAnim)
         }
     }
 

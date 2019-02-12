@@ -1,6 +1,7 @@
 package org.kinecosystem.kinit.view.phoneVerify;
 
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -24,12 +25,18 @@ import org.kinecosystem.kinit.KinitApplication;
 import org.kinecosystem.kinit.R;
 import org.kinecosystem.kinit.analytics.Analytics;
 import org.kinecosystem.kinit.analytics.Events;
+import org.kinecosystem.kinit.navigation.Navigator;
 import org.kinecosystem.kinit.repository.DataStore;
 import org.kinecosystem.kinit.repository.DataStoreProvider;
 import org.kinecosystem.kinit.repository.UserRepository;
 import org.kinecosystem.kinit.util.GeneralUtils;
 import org.kinecosystem.kinit.util.SupportUtil;
 import org.kinecosystem.kinit.view.BaseFragment;
+import org.kinecosystem.kinit.view.support.SupportActivity;
+import org.kinecosystem.kinit.viewmodel.SupportViewModel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -232,7 +239,11 @@ public class CodeVerificationFragment extends BaseFragment {
     private void showContactSupport() {
         resend.setText(getResources().getString(R.string.contact_support) + " >");
         resend.setOnClickListener(resend -> {
-            SupportUtil.INSTANCE.openEmail(getActivity(), userRepository, SupportUtil.Type.SUPPORT);
+            HashMap<String, String> urlParams = new HashMap<>();
+            urlParams.put("category", "Other");
+            urlParams.put("subCategory", "On-boarding error");
+            Intent intent = SupportActivity.Companion.getIntent(getContext(), SupportViewModel.Destination.CONTACT_US, urlParams);
+            (new Navigator(getContext())).navigateTo(intent);
         });
     }
 

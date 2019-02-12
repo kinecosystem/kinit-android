@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.view.faq
+package org.kinecosystem.kinit.view.support
 
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
@@ -11,24 +11,24 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.databinding.FaqLayoutFragmentBinding
+import org.kinecosystem.kinit.databinding.SupportLayoutFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.FAQViewModel
+import org.kinecosystem.kinit.viewmodel.SupportViewModel
 
 
-class FAQWebFragment : BaseFragment(){
+class SupportFragment : BaseFragment(){
     companion object {
-        fun getInstance(): FAQWebFragment {
-            return FAQWebFragment()
+        fun getInstance(): SupportFragment {
+            return SupportFragment()
         }
     }
 
-    lateinit var model: FAQViewModel
-    lateinit var binding: FaqLayoutFragmentBinding
+    var model: SupportViewModel? = null
+    lateinit var binding: SupportLayoutFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.faq_layout_fragment, container, false)
-        model = (activity as FAQActivity).getModel()
+        binding = DataBindingUtil.inflate(inflater, R.layout.support_layout_fragment, container, false)
+        model = (activity as SupportActivity).getModel()
         binding.model = model
         return binding.root
     }
@@ -39,7 +39,7 @@ class FAQWebFragment : BaseFragment(){
 
         binding.webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                model.loading.set(false)
+                model?.loading?.set(false)
             }
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
@@ -51,7 +51,7 @@ class FAQWebFragment : BaseFragment(){
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         binding.webview.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         binding.webview.settings.javaScriptEnabled = true
-        binding.webview.addJavascriptInterface(model, model.interfaceName)
-        binding.webview.loadUrl(model.url)
+        binding.webview.addJavascriptInterface(model, model?.interfaceName)
+        binding.webview.loadUrl(model?.url)
     }
 }

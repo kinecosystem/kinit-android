@@ -9,12 +9,25 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class GeneralUtils {
+
+    public static @Nullable JSONObject stringToJson(String jsonStr){
+        try {
+            return new JSONObject(jsonStr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static void closeKeyboard(Context context, View view) {
         if (view != null && context != null) {
