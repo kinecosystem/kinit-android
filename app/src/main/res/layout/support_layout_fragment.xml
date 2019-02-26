@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:text="@{model.destination == model.Destination.FEEDBACK ? @string/send_feedback_title : @string/help_center}"
+            android:text="@{model.destination == model.Destination.FEEDBACK ? @string/send_feedback_page_title : @string/help_center}"
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold"
