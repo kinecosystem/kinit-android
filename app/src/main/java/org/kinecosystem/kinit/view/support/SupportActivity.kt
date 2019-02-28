@@ -89,6 +89,9 @@ class SupportActivity : SingleFragmentActivity(), SupportViewModel.SupportAction
         val webview = webfragment?.binding?.webview
         if (webview?.url == userRepository.faqUrl)
             super.onBackPressed()
+        else if (webview?.url?.contains("feedback") == true){
+            super.onBackPressed()
+        }
         if (webview?.url != userRepository.faqUrl)
             webview?.loadUrl(userRepository.faqUrl)
     }
