@@ -14,8 +14,8 @@ import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.customView.AlertManager
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
 import javax.inject.Inject
-const val TICKET_CATEGORY = "category"
-const val TICKET_SUB_CATEGORY = "subCategory"
+const val TICKET_CATEGORY = "faqCategory"
+const val TICKET_SUB_CATEGORY = "faqSubCategory"
 const val FAQ_IS_HELPFUL = "isHelpful"
 const val TICKET_FORM_DATA = "formData"
 const val TICKET_SERVER_ERROR = "serverError"
