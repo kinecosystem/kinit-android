@@ -12,6 +12,9 @@
     <color name="balance_text_color">#FFF</color>
     <color name="question_text_color">#047cfc</color>
     <color name="white">#FFF</color>
+    <color name="primary_blue">#0000ff</color>
+    <color name="primary_purple">#6f41e8</color>
+    <color name="kinecosystem_gray_light">#d7dce9</color>
     <color name="blue">#047cfc</color>
     <color name="answer_stroke">#d2d7e1</color>
     <color name="blue_light">#0e6ddc</color>
@@ -19,6 +22,7 @@
     <color name="blue_dark">#19a3fd</color>
     <color name="deep_blue">#033cc5</color>
     <color name="button_blue">#047cfc</color>
+    <color name="black">#000</color>
     <color name="button_blue_selected">#047cfc</color>
     <color name="grey_light">#efeef0</color>
     <color name="button_blue_font_color">#fff</color>

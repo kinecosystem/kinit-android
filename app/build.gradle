@@ -94,6 +94,7 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.0.1'
     implementation 'com.android.support:support-compat:27.1.1'
     implementation 'com.github.kinecosystem:kin-core-android:a3210c241c'
+    implementation 'com.github.kinfoundation.kin-ecosystem-android-sdk:transfer:0.8.0'
     implementation 'com.google.firebase:firebase-messaging:15.0.2'
     implementation 'com.airbnb.android:lottie:2.5.0'
     implementation 'androidx.core:core-ktx:0.3'

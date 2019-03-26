@@ -256,5 +256,7 @@
     <string name="support_submission_error_1_body">There was a technical issue sending your message. Let’s try that again…</string>
     <string name="support_submission_error_2_title">It’s just not happening…</string>
     <string name="support_submission_error_2_body">It looks like we have a technical issue and can’t send your message right now. Please try again later.</string>
-
+    <string name="kinecosystem_transfer_activity_title">Kin Ecosystem</string>
+    <string name="kinecosystem_transfer_agree">I agree</string>
+    <string name="kinecosystem_transfer_title">In order to send Kin, %1$s would like to receive your Kin account information (i.e. your public address) from Kinit.</string>
 </resources>
