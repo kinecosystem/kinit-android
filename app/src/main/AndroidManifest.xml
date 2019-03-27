@@ -38,6 +38,11 @@
             android:name=".view.earn.CategoryTaskActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Questionnaire" />
+        <activity
+            android:name=".view.transfer.AccountInfoActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
         <activity
             android:name=".view.RegisterErrorActivity"

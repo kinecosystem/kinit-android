@@ -125,4 +125,5 @@ interface CoreComponent {
     fun inject(transferToAppViewModel: TransferToAppViewModel)
     fun inject(transferAmountToAppViewModel: TransferringToAppViewModel)
     fun inject(transferActivityModel: TransferActivityModel)
+    fun inject(accountInfoViewModel: AccountInfoViewModel)
 }
