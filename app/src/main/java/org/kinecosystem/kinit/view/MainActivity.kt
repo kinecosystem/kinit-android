@@ -19,6 +19,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickEngagementPush
 import org.kinecosystem.kinit.analytics.Events.Analytics.ClickMenuItem
+import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.CategoriesRepository
 import org.kinecosystem.kinit.repository.UserRepository
@@ -52,6 +53,8 @@ class MainActivity : BaseActivity(), PageSelectionListener {
     lateinit var userRepository: UserRepository
     @Inject
     lateinit var categoriesRepository: CategoriesRepository
+    @Inject
+    lateinit var wallet: Wallet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
@@ -148,6 +151,8 @@ class MainActivity : BaseActivity(), PageSelectionListener {
         val event = ClickMenuItem(tabTitle)
         analytics.logEvent(event)
         (view_pager.adapter as TabsAdapter).onTabVisibleToUser(index)
+
+        wallet.updateBalance()
     }
 
     override fun onResume() {
@@ -157,6 +162,8 @@ class MainActivity : BaseActivity(), PageSelectionListener {
         if (userRepository.isPhoneVerificationEnabled && !userRepository.isPhoneVerified) {
             showPhoneVerifyPopup()
         }
+
+        wallet.updateBalance()
     }
 
     private fun showPhoneVerifyPopup() {
