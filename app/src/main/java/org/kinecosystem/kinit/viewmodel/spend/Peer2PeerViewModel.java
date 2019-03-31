@@ -194,7 +194,7 @@ public class Peer2PeerViewModel {
                 actions.onStartTransaction();
             }
             servicesProvider.getOfferService()
-                    .p2pTransfer(address, amount.get(), new OperationResultCallback<String>() {
+                    .p2pTransfer(null, address, amount.get(), new OperationResultCallback<String>() {
                         @Override
                         public void onResult(String transactionId) {
                             isClickable.set(true);

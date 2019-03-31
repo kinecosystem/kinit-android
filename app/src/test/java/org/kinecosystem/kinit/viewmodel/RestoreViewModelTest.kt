@@ -1,7 +1,7 @@
 package org.kinecosystem.kinit.viewmodel
 
 import com.google.common.truth.Truth.assertThat
-import kin.core.KinAccount
+import kin.sdk.KinAccount
 import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.blockchain.Wallet
