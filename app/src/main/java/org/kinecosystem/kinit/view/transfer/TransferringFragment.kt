@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import org.kinecosystem.ClientValidator
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.databinding.TransferringKinToAppLayoutBinding
 import org.kinecosystem.kinit.model.spend.EcosystemApp
@@ -30,7 +31,7 @@ class TransferringFragment : BaseFragment() {
                 val app = args.getParcelable<EcosystemApp>(ARG_APP)
                 val amount = args.getInt(ARG_AMOUNT)
                 context?.let {
-                    model = TransferringToAppViewModel(Navigator(it), app, amount, transferActions)
+                    model = TransferringToAppViewModel(ClientValidator(it), Navigator(it), app, amount, transferActions)
                     binding.model = model
                 }
             }
@@ -67,6 +68,4 @@ class TransferringFragment : BaseFragment() {
             return fragment
         }
     }
-
-
 }

@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.viewmodel.spend
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.util.Log
 import android.view.View
 import org.kinecosystem.ClientValidator
 import org.kinecosystem.kinit.KinitApplication
@@ -70,6 +71,7 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
         analytics.logEvent(
                 Events.Analytics.ClickBuyButtonOnOfferPage(offer.provider?.name, offer.price, offer.domain, offer.id,
                         offer.title, offer.type))
+
         if (!networkServices.isNetworkConnected()) {
             purchaseOfferActions?.showDialog(
                     R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
@@ -77,43 +79,28 @@ class PurchaseOfferViewModel(private val navigator: Navigator, val offer: Offer)
             return
         }
 
-        // first get a nonce
-        networkServices.clientValidationService.getNonce(object : OperationResultCallback<String> {
-            override fun onResult(result: String) {
-                // send nonce to validation module
-                purchaseOfferActions?.getClientValidator()?.validateClient(result, object : ClientValidator.OperationResultCallback {
-                    // handle jws validation result
-                    override fun onResult(clientValidationJws: String?) {
-                        scheduler.post {
-                            when {
-                                clientValidationJws.isNullOrBlank() -> {
-                                    val logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
-                                    purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
-                                            R.string.dialog_no_good_left_message,
-                                            R.string.dialog_back_to_list, true, logErrorType)
-                                }
-                                isP2p -> navigator.navigateTo(Navigator.Destination.PEER2PEER)
-                                else -> buy(clientValidationJws)
-                            }
-                        }
-                    }
-                })
-            }
+        if (isP2p) {
+            navigator.navigateTo(Navigator.Destination.PEER2PEER)
+        }
+        else {
+            networkServices.clientValidationService.validateAndAct(
+                ClientValidator(view.context),
+                ::buy, ::buyError)
+        }
+    }
 
-            // getting nonce failed
-            override fun onError(errorCode: Int) {
-                if (!networkServices.isNetworkConnected()) {
-                    purchaseOfferActions?.showDialog(
-                            R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
-                            R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
-                    return
-                } else {
-                    val logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
-                    purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
-                            R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
-                }
-            }
-        })
+    private fun buyError(errorCode: Int, message: String) {
+        Log.d("PurchaseOfferViewModel","buyError with errorCode $errorCode, message: $message")
+        if (!networkServices.isNetworkConnected()) {
+            purchaseOfferActions?.showDialog(
+                R.string.dialog_no_internet_title, R.string.dialog_no_internet_message,
+                R.string.dialog_ok, false, Analytics.VIEW_ERROR_TYPE_INTERNET_CONNECTION)
+            return
+        } else {
+            val logErrorType = Analytics.VIEW_ERROR_TYPE_OFFER_NOT_AVAILABLE
+            purchaseOfferActions?.showDialog(R.string.dialog_no_good_left_title,
+                R.string.dialog_no_good_left_message, R.string.dialog_back_to_list, true, logErrorType)
+        }
     }
 
     fun onCloseButtonClicked(view: View?) {

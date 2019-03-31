@@ -4,8 +4,10 @@ import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
-import kin.core.*
-import kin.core.exception.*
+import kin.base.xdr.Transaction
+import kin.sdk.*
+import kin.sdk.exception.*
+import kin.utils.ResultCallback
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Analytics.*
@@ -30,15 +32,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.math.BigDecimal
 
-private const val TEST_NET_URL = "https://horizon-playground.kininfrastructure.com/"
-private const val MAIN_NET_URL = "https://horizon-ecosystem.kininfrastructure.com/"
+private const val TEST_NET_URL = "https://horizon-testnet.kininfrastructure.com/"
+private const val MAIN_NET_URL = "https://horizon.kinfederation.com/"
 private const val TEST_NET_WALLET_CACHE_NAME = "kin.app.wallet.testnet"
 private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.wallet.mainnet"
+private const val KINIT_APP_ID = "kit"
 
-private const val NETWORK_ID_MAIN = "Public Global Kin Ecosystem Network ; June 2018"
-private const val NETWORK_ID_TEST = "Kin Playground Network ; June 2018"
-private const val KIN_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZVCX7XX5A5QXZIVK"
-private const val KIN_ISSUER_STAGE = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
+private const val NETWORK_ID_TEST = "Kin Testnet ; December 2018"
+private const val NETWORK_ID_MAIN = "Kin Mainnet ; December 2018"
 private const val ACTIVE_WALLET_KEY = "activeWallet"
 private const val WALLET_BALANCE_KEY = "WalletBalance"
 private const val TAG = "Wallet"
@@ -71,9 +72,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         walletCache = dataStoreProvider.dataStore(walletCacheName)
         var providerUrl = if (type == Type.Main) MAIN_NET_URL else TEST_NET_URL
         var networkId = if (type == Type.Main) NETWORK_ID_MAIN else NETWORK_ID_TEST
-        val issuer = if (type == Type.Main) KIN_ISSUER_MAIN else KIN_ISSUER_STAGE
 
-        kinClient = KinClient(context, KinitServiceProvider(providerUrl, networkId, issuer))
+        kinClient = KinClient(context, Environment(providerUrl, networkId), KINIT_APP_ID)
         account = if (kinClient.hasAccount()) {
             kinClient.getAccount(kinClient.accountCount - 1)
         } else {
@@ -205,23 +205,32 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             if (createAccountSync()) {
                 activateAccountSync()
             }
-        } catch (e: AccountNotActivatedException) {
-            activateAccountSync()
         } catch (e: OperationFailedException) {
             Log.e(TAG, "OperationFailedException occurred while retrieving balance ${e.message}")
             analytics.logEvent(Events.BILog.BalanceUpdateFailed(e.toString() + ":" + e.message))
         }
     }
 
-    fun payForOrder(toAddress: String, amount: Int, orderId: String): TransactionId {
-        return account.sendTransactionSync(toAddress, BigDecimal(amount), orderId)
+    fun payForOrderSync(validationToken: String?, toAddress: String, amount: Int, orderId: String): TransactionId? {
+        var transactionId: TransactionId? = null
+
+        var paddr = account.publicAddress
+        var tr = account.buildTransactionSync(toAddress, BigDecimal(amount), 0, orderId
+            ).whitelistableTransaction
+        var call = walletApi.addSignature(userRepo.userId(), WalletApi.TransactionInfo(orderId, paddr!!,
+            toAddress, amount, tr.transactionPayload, validationToken))
+        var resp = call.execute()
+        if (resp.isSuccessful && resp.body()!=null) {
+            transactionId = account.sendWhitelistTransactionSync(resp.body()?.signedTransaction)
+        }
+        return transactionId
     }
 
     fun initKinWallet() {
         Log.d(TAG, "initializing Kin Wallet")
-        scheduler.executeOnBackground({
+        scheduler.executeOnBackground {
             updateBalanceSync()
-        })
+        }
     }
 
     fun exportAccountToStr(passphrase: String): String? {
@@ -278,9 +287,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     private fun activateAccountSync(): Boolean {
         try {
-            account.activateSync()
             analytics.logEvent(Events.Business.WalletCreated())
-            scheduler.post({ activeWallet = true })
+            scheduler.post { activeWallet = true }
             analytics.logEvent(Events.BILog.StellarKinTrustlineSetupSucceeded())
             return true
         } catch (e: Exception) {
@@ -320,7 +328,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     }
 
     fun listenToPayment(taskId: String, memo: String) {
-        paymentListener = account.blockchainEvents().addPaymentListener {
+        paymentListener = account.addPaymentListener {
             if (it?.memo().equals(memo)) {
                 updateBalanceForPayment(taskId, it)
                 paymentListener.remove()
@@ -400,12 +408,4 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         categoriesRepository.updateCurrentTaskState(taskId, state)
     }
 
-}
-
-class KinitServiceProvider(providerUrl: String, networkId: String, private val issuer: String) :
-        ServiceProvider(providerUrl, networkId) {
-
-    override fun getIssuerAccountId(): String {
-        return issuer
-    }
 }
