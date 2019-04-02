@@ -37,7 +37,7 @@ class MigrateWalletViewModel {
             listener?.onWalletMigrated()
         }
     }
-    private var walletReady: ObservableBoolean
+    private var kin3Ready: ObservableBoolean
     var listener: MigrateWalletEventsListener? = null
 
     private companion object {
@@ -47,7 +47,7 @@ class MigrateWalletViewModel {
 
     init {
         KinitApplication.coreComponent.inject(this)
-        walletReady = networkServices.walletService.ready
+        kin3Ready = networkServices.walletService.kin3Ready
     }
 
     fun migrateWallet() {
@@ -59,13 +59,13 @@ class MigrateWalletViewModel {
     }
 
     fun onDestroy() {
-        walletReady.removeOnPropertyChangedCallback(callback)
+        kin3Ready.removeOnPropertyChangedCallback(callback)
     }
 
     private fun scheduleTimeout() {
         scheduler.scheduleOnMain(
                 {
-                    if (walletReady.get()) {
+                    if (kin3Ready.get()) {
                         categoriesService.retrieveCategories()
                         taskService.retrieveAllTasks()
                         listener?.onWalletMigrated()
@@ -78,12 +78,12 @@ class MigrateWalletViewModel {
     }
 
     private fun checkReadyToMove() {
-        if (walletReady.get()) {
+        if (kin3Ready.get()) {
             categoriesService.retrieveCategories()
             taskService.retrieveAllTasks()
             listener?.onWalletMigrated()
         } else {
-            walletReady.addOnPropertyChangedCallback(callback)
+            kin3Ready.addOnPropertyChangedCallback(callback)
             scheduleTimeout()
         }
     }

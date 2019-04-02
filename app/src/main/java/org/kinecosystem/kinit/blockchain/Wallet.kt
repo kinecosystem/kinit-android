@@ -112,10 +112,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         if (!isKin3) migrationManager = MigrationManager(context,KINIT_APP_ID, MigrationNetworkInfo(coreUrl, coreId, providerUrl, networkId,coreIssuer,migrationUrl), kinSdkVersion, MigrationManagerListener())
     }
 
-    private var isKin3: Boolean
+    var isKin3: Boolean
         set(value) {
             walletCache.putBoolean(IS_KIN3, value)
-            ready.set(value)
+            kin3Ready.set(value)
         }
         get() = walletCache.getBoolean(IS_KIN3, false)
 
@@ -138,6 +138,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         get() = walletCache.getInt(WALLET_BALANCE_KEY, 0)
 
     val ready: ObservableBoolean = ObservableBoolean(activeWallet)
+    val kin3Ready: ObservableBoolean = ObservableBoolean(isKin3)
     val balance: ObservableField<String> = ObservableField(balanceInt.toString())
 
     fun updateBalance(callback: ResultCallback<Balance>? = null) {
@@ -448,6 +449,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             override fun onReady(newKinClient: IKinClient) {
                 Log.d("WalletMigration", "migrateWallet onReady for account: ${userRepo.userId()} " +
                         "with public address ${kinClient.getAccount(0)?.publicAddress}")
+                isKin3 = true
                 migrationManagerCallbacks?.onReady(newKinClient)
             }
 
