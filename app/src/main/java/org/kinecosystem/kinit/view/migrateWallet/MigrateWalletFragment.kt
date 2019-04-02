@@ -10,30 +10,28 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
-import org.kinecosystem.kinit.view.createWallet.CreateWalletFragment
-import org.kinecosystem.kinit.viewmodel.CreateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.MigrateWalletViewModel
 import javax.inject.Inject
 
 class MigrateWalletFragment : BaseFragment() {
     @Inject
     lateinit var analytics: Analytics
-    private lateinit var model: CreateWalletViewModel
+    private lateinit var model: MigrateWalletViewModel
 
     companion object {
-        val TAG = CreateWalletFragment::class.java.simpleName
+        val TAG = MigrateWalletFragment::class.java.simpleName
         @JvmStatic
-        fun newInstance(): CreateWalletFragment {
-            return CreateWalletFragment()
+        fun newInstance(): MigrateWalletFragment {
+            return MigrateWalletFragment()
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         try {
-            model = (activity as CreateWalletActivity).getModel()
+            model = (activity as MigrateWalletActivity).getModel()
         } catch (e: Exception) {
-            Log.e(CreateWalletFragment.TAG, "Invalid data cant start CreateWalletFragment")
+            Log.e(MigrateWalletFragment.TAG, "Invalid data cant start MigrateWalletFragment")
             activity?.finish()
         }
         return inflater.inflate(R.layout.create_wallet_fragment, container, false)
@@ -46,7 +44,7 @@ class MigrateWalletFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model.initWallet()
+        model.migrateWallet()
     }
 
     override fun onResume() {

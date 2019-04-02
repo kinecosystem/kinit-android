@@ -49,8 +49,8 @@ private const val SDK_TEST_NETWORK_URL = "https://horizon-testnet.kininfrastruct
 private const val SDK_TEST_NETWORK_ID = "Kin Testnet ; December 2018"
 private const val SDK_MAIN_NETWORK_URL = "https://horizon.kinfederation.com/"
 private const val SDK_MAIN_NETWORK_ID = "Kin Mainnet ; December 2018"
-private const val MIGRATE_ACCOUNT_SERVICE_TEST_URL = "https://kin3stage.payments.kinitapp.com:8000/migrate?address="
-private const val MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL = "https://migration.kinapp.com/migrate?address="
+private const val MIGRATE_ACCOUNT_SERVICE_TEST_URL = "https://kin3stage.payments.kinitapp.com:8000/migrate?"
+private const val MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL = "https://migration.kinapp.com/migrate?$"
 
 private const val TEST_NET_WALLET_CACHE_NAME = "kin.app.wallet.testnet"
 private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.wallet.mainnet"
@@ -87,12 +87,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     init {
         val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
         walletCache = dataStoreProvider.dataStore(walletCacheName)
-        var providerUrl = if (type == Type.Main) SDK_MAIN_NETWORK_URL else SDK_TEST_NETWORK_URL
-        var networkId = if (type == Type.Main) SDK_MAIN_NETWORK_ID else SDK_TEST_NETWORK_ID
-        var coreUrl = if (type == Type.Main) CORE_MAIN_NETWORK_URL else CORE_TEST_NETWORK_URL
-        var coreId = if (type == Type.Main) CORE_MAIN_NETWORK_ID else CORE_TEST_NETWORK_ID
-        var coreIssuer = if (type == Type.Main) CORE_ISSUER_MAIN else CORE_ISSUER_TEST
-        var migrationUrl = if (type == Type.Main) MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL else MIGRATE_ACCOUNT_SERVICE_TEST_URL
+        val providerUrl = if (type == Type.Main) SDK_MAIN_NETWORK_URL else SDK_TEST_NETWORK_URL
+        val networkId = if (type == Type.Main) SDK_MAIN_NETWORK_ID else SDK_TEST_NETWORK_ID
+        val coreUrl = if (type == Type.Main) CORE_MAIN_NETWORK_URL else CORE_TEST_NETWORK_URL
+        val coreId = if (type == Type.Main) CORE_MAIN_NETWORK_ID else CORE_TEST_NETWORK_ID
+        val coreIssuer = if (type == Type.Main) CORE_ISSUER_MAIN else CORE_ISSUER_TEST
+        val migrationUrl = (if (type == Type.Main) MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL else MIGRATE_ACCOUNT_SERVICE_TEST_URL) + "user_id=${userRepo.userId()}&public_address="
         val kinSdkVersion = object: IKinVersionProvider {
             override fun getKinSdkVersion(): KinSdkVersion {
                 return KinSdkVersion.NEW_KIN_SDK
@@ -108,11 +108,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
         userRepo.userInfo.publicAddress = account.publicAddress!!
 
-
         if (!isKin3) migrationManager = MigrationManager(context,KINIT_APP_ID, MigrationNetworkInfo(coreUrl, coreId, providerUrl, networkId,coreIssuer,migrationUrl), kinSdkVersion, MigrationManagerListener())
     }
 
-    var isKin3: Boolean
+    private var isKin3: Boolean
         set(value) {
             walletCache.putBoolean(IS_KIN3, value)
             kin3Ready.set(value)

@@ -11,10 +11,7 @@ import nl.dionsegijn.konfetti.models.Size
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
-import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
-import org.kinecosystem.kinit.view.restore.RestoreWalletActions
 import javax.inject.Inject
 
 class MigrationCompleteFragment : BaseFragment() {
@@ -27,11 +24,11 @@ class MigrationCompleteFragment : BaseFragment() {
     }
 
     companion object {
-        val TAG = OnboardingCompleteFragment::class.java.simpleName
+        val TAG = AfterAnimationListener::class.java.simpleName
         const val ANIMATION_DURATION: Long = 5000
         @JvmStatic
-        fun newInstance(): OnboardingCompleteFragment {
-            return OnboardingCompleteFragment()
+        fun newInstance(): MigrationCompleteFragment {
+            return MigrationCompleteFragment()
         }
     }
 
@@ -75,9 +72,6 @@ class MigrationCompleteFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (activity is RestoreWalletActions)
-            analytics.logEvent(Events.Analytics.ViewWalletRestoredPage())
-        else
-            analytics.logEvent(Events.Analytics.ViewOnboardingCompletedPage())
+        // TODO : Logs
     }
 }

@@ -18,6 +18,7 @@ import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
+import org.kinecosystem.kinit.view.migrateWallet.MigrateWalletActivity
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.RestoreWalletActivity
@@ -35,7 +36,7 @@ class Navigator(private val context: Context) {
 
     enum class Destination {
         MAIN_SCREEN, PEER2PEER, COMPLETE_WEB_TASK, WALLET_BACKUP, WALLET_CREATE, TUTORIAL, PHONE_VERIFY, WALLET_RESTORE, FAQ, ERROR_REGISTER, ECO_APPS_COMING_SOON, ECO_APPS_LEARN_MORE,
-        SUPPORT ,FEEDBACK
+        SUPPORT ,FEEDBACK, WALLET_MIGRATE
     }
 
     @Inject
@@ -97,6 +98,7 @@ class Navigator(private val context: Context) {
             Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.WALLET_MIGRATE -> navigateToActivity(MigrateWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsInfoActivity.getIntent(context, Type.ECO_APPS_COMING_SOON), withSlideAnim, reverseAnim)

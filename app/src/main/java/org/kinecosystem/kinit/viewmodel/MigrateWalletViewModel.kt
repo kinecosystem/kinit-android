@@ -3,6 +3,8 @@ package org.kinecosystem.kinit.viewmodel
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.view.View
+import kin.sdk.migration.common.interfaces.IKinClient
+import kin.sdk.migration.common.interfaces.IMigrationManagerCallbacks
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
@@ -11,6 +13,7 @@ import org.kinecosystem.kinit.server.CategoriesService
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
+import java.lang.Exception
 import javax.inject.Inject
 
 class MigrateWalletViewModel {
@@ -28,74 +31,39 @@ class MigrateWalletViewModel {
     @Inject
     lateinit var categoriesService: CategoriesService
 
-
-
-    var callback: Observable.OnPropertyChangedCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(p0: Observable?, p1: Int) {
-            categoriesService.retrieveCategories()
-            taskService.retrieveAllTasks()
-            listener?.onWalletMigrated()
-        }
-    }
-    private var kin3Ready: ObservableBoolean
     var listener: MigrateWalletEventsListener? = null
-
-    private companion object {
-        const val WAIT_TIMEOUT: Long = 2000L
-        const val CREATE_WALLET_TIMEOUT = 20000L
-    }
 
     init {
         KinitApplication.coreComponent.inject(this)
-        kin3Ready = networkServices.walletService.kin3Ready
+        migrateWallet()
     }
 
     fun migrateWallet() {
-        networkServices.walletService.migrateWallet()
-        listener?.onWalletMigrating()
-        scheduler.scheduleOnMain({
-            checkReadyToMove()
-        }, WAIT_TIMEOUT)
+        networkServices.walletService.migrateWallet(object: IMigrationManagerCallbacks{
+            override fun onReady(kinClient: IKinClient?) {
+                categoriesService.retrieveCategories()
+                taskService.retrieveAllTasks()
+                listener?.onWalletMigrated()
+            }
+
+            override fun onMigrationStart() {
+                listener?.onWalletMigrating()
+            }
+
+            override fun onError(e: Exception?) {
+                listener?.onMigrateWalletError()
+            }
+        })
     }
 
-    fun onDestroy() {
-        kin3Ready.removeOnPropertyChangedCallback(callback)
-    }
-
-    private fun scheduleTimeout() {
-        scheduler.scheduleOnMain(
-                {
-                    if (kin3Ready.get()) {
-                        categoriesService.retrieveCategories()
-                        taskService.retrieveAllTasks()
-                        listener?.onWalletMigrated()
-                    } else {
-                        listener?.onMigrateWalletError()
-                        onDestroy()
-                    }
-                },
-                CREATE_WALLET_TIMEOUT)
-    }
-
-    private fun checkReadyToMove() {
-        if (kin3Ready.get()) {
-            categoriesService.retrieveCategories()
-            taskService.retrieveAllTasks()
-            listener?.onWalletMigrated()
-        } else {
-            kin3Ready.addOnPropertyChangedCallback(callback)
-            scheduleTimeout()
-        }
-    }
 
     fun onRetryClicked(view: View?) {
-        analytics.logEvent(Events.Analytics.ClickRetryButtonOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
+        // TODO: logs
         migrateWallet()
-        checkReadyToMove()
     }
 
     fun onContactSupportClicked(view: View?) {
-        analytics.logEvent(Events.Analytics.ClickContactLinkOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
+        // TODO: logs
         listener?.contactSupport()
     }
 }

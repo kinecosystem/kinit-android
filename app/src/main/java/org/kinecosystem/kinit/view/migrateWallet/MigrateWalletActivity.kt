@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.SingleFragmentActivity
-import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.viewmodel.MigrateWalletViewModel
 import org.kinecosystem.kinit.viewmodel.MigrateWalletEventsListener
@@ -48,8 +47,8 @@ class MigrateWalletActivity : SingleFragmentActivity(), MigrateWalletActions, Mi
     }
 
     override fun onWalletMigrated() {
-        val fragment = OnboardingCompleteFragment.newInstance()
-        fragment.listener = object : OnboardingCompleteFragment.AfterAnimationListener {
+        val fragment = MigrationCompleteFragment.newInstance()
+        fragment.listener = object : MigrationCompleteFragment.AfterAnimationListener {
             override fun onAnimationEnd() {
                 moveToMainScreen()
             }
@@ -69,11 +68,6 @@ class MigrateWalletActivity : SingleFragmentActivity(), MigrateWalletActions, Mi
             currentFragment = migrateWalletFragment
             replaceFragment(migrateWalletFragment)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        model.onDestroy()
     }
 
     override fun contactSupport() {
