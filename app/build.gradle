@@ -135,6 +135,7 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.15'
     kaptTest 'com.google.dagger:dagger-compiler:2.15'
     compile project(path: ':kinit-client-validation-android-module')
+    implementation 'com.github.kinecosystem:kin-migration-module-android:1.0.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -4,9 +4,13 @@ import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
-import kin.base.xdr.Transaction
 import kin.sdk.*
 import kin.sdk.exception.*
+import kin.sdk.migration.MigrationManager
+import kin.sdk.migration.MigrationNetworkInfo
+import kin.sdk.migration.bi.IMigrationEventsListener
+import kin.sdk.migration.common.KinSdkVersion
+import kin.sdk.migration.common.interfaces.IKinVersionProvider
 import kin.utils.ResultCallback
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
@@ -32,18 +36,27 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.math.BigDecimal
 
-private const val TEST_NET_URL = "https://horizon-testnet.kininfrastructure.com/"
+
+private const val CORE_TEST_NETWORK_URL = "https://horizon-playground.kininfrastructure.com/"
+private const val CORE_TEST_NETWORK_ID = "Kin Playground Network ; June 2018"
+private const val CORE_MAIN_NETWORK_URL = "https://horizon-ecosystem.kininfrastructure.com/"
+private const val CORE_MAIN_NETWORK_ID = "Public Global Kin Ecosystem Network ; June 2018"
+private const val CORE_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZVCX7XX5A5QXZIVK"
+private const val CORE_ISSUER_TEST = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
+private const val SDK_TEST_NETWORK_URL = "https://horizon-testnet.kininfrastructure.com/"
+private const val SDK_TEST_NETWORK_ID = "Kin Testnet ; December 2018"
 private const val MAIN_NET_URL = "https://horizon.kinfederation.com/"
+private const val NETWORK_ID_MAIN = "Kin Mainnet ; December 2018"
+private const val MIGRATE_ACCOUNT_SERVICE_TEST_URL = "https://kin3stage.payments.kinitapp.com:8000/migrate?address="
+private const val MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL = "https://migration.kinapp.com/migrate?address="
+
 private const val TEST_NET_WALLET_CACHE_NAME = "kin.app.wallet.testnet"
 private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.wallet.mainnet"
-private const val KINIT_APP_ID = "kit"
-
-private const val NETWORK_ID_TEST = "Kin Testnet ; December 2018"
-private const val NETWORK_ID_MAIN = "Kin Mainnet ; December 2018"
 private const val ACTIVE_WALLET_KEY = "activeWallet"
 private const val IS_KIN3 = "IS_KIN3"
 private const val WALLET_BALANCE_KEY = "WalletBalance"
 private const val TAG = "Wallet"
+private const val KINIT_APP_ID = "kit"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
              val userRepo: UserRepository,
@@ -62,7 +75,9 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private val walletCache: DataStore
     private var kinClient: KinClient
     private var account: KinAccount
+    private var migrationManager : MigrationManager? = null
     private lateinit var paymentListener: ListenerRegistration
+
 
     val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
     val transactions: ObservableField<List<KinTransaction>> = ObservableField(ArrayList())
@@ -71,8 +86,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     init {
         val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
         walletCache = dataStoreProvider.dataStore(walletCacheName)
-        var providerUrl = if (type == Type.Main) MAIN_NET_URL else TEST_NET_URL
-        var networkId = if (type == Type.Main) NETWORK_ID_MAIN else NETWORK_ID_TEST
+        var providerUrl = if (type == Type.Main) MAIN_NET_URL else SDK_TEST_NETWORK_URL
+        var networkId = if (type == Type.Main) NETWORK_ID_MAIN else SDK_TEST_NETWORK_ID
+        var coreUrl = if (type == Type.Main) CORE_MAIN_NETWORK_URL else CORE_TEST_NETWORK_URL
+        var coreId = if (type == Type.Main) CORE_MAIN_NETWORK_ID else CORE_TEST_NETWORK_ID
+        var coreIssuer = if (type == Type.Main) CORE_ISSUER_MAIN else CORE_ISSUER_TEST
+        var migrationUrl = if (type == Type.Main) MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL else MIGRATE_ACCOUNT_SERVICE_TEST_URL
 
         kinClient = KinClient(context, Environment(providerUrl, networkId), KINIT_APP_ID)
         account = if (kinClient.hasAccount()) {
@@ -82,6 +101,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
 
         userRepo.userInfo.publicAddress = account.publicAddress!!
+
+        if (!isKin3) migrationManager = MigrationManager(context,KINIT_APP_ID, MigrationNetworkInfo(coreUrl, coreId, providerUrl, networkId,coreIssuer,migrationUrl), object: IKinVersionProvider {
+            override fun getKinSdkVersion(): KinSdkVersion {
+                return KinSdkVersion.NEW_KIN_SDK
+            }
+        }, MigrationManagerListener())
     }
 
     private var isKin3: Boolean
@@ -415,6 +440,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     private fun setTaskState(taskId: String, state: Int) {
         categoriesRepository.updateCurrentTaskState(taskId, state)
+    }
+
+    fun migrateWallet() {
+
     }
 
 }
