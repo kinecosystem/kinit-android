@@ -91,7 +91,10 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
                 val onboardingCompleteFragment = OnboardingCompleteFragment.newInstance()
                 onboardingCompleteFragment.listener = object : OnboardingCompleteFragment.AfterAnimationListener {
                     override fun onAnimationEnd() {
-                        moveToMainScreen()
+                        if (!getModel().walletService.kin3Ready.get())
+                            moveToMigrationScreen()
+                        else
+                            moveToMainScreen()
                     }
                 }
                 onboardingCompleteFragment
@@ -99,7 +102,13 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
         }
     }
 
+    private fun moveToMigrationScreen(){
+        Navigator(this@RestoreWalletActivity).navigateTo(Navigator.Destination.WALLET_MIGRATE)
+        finish()
+    }
+
     private fun moveToMainScreen() {
+
         Navigator(this@RestoreWalletActivity).navigateTo(Navigator.Destination.MAIN_SCREEN)
         finish()
     }
