@@ -30,6 +30,10 @@ import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.TaskErrorFragment
 import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
+import org.kinecosystem.kinit.view.migrateWallet.MigrateWalletErrorFragment
+import org.kinecosystem.kinit.view.migrateWallet.MigrateWalletFragment
+import org.kinecosystem.kinit.view.migrateWallet.MigrationCompleteFragment
+import org.kinecosystem.kinit.view.migrateWallet.MigrateWalletActivity
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
@@ -126,4 +130,9 @@ interface CoreComponent {
     fun inject(transferAmountToAppViewModel: TransferringToAppViewModel)
     fun inject(transferActivityModel: TransferActivityModel)
     fun inject(accountInfoViewModel: AccountInfoViewModel)
+    fun inject(migrateWalletActivity: MigrateWalletActivity)
+    fun inject(migrationWalletActivity: MigrateWalletViewModel)
+    fun inject(migrationWalletActivity: MigrateWalletFragment)
+    fun inject(migrationWalletActivity: MigrateWalletErrorFragment)
+    fun inject(migrationWalletActivity: MigrationCompleteFragment)
 }

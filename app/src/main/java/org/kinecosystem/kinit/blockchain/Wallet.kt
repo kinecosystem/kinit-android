@@ -41,6 +41,7 @@ private const val KINIT_APP_ID = "kit"
 private const val NETWORK_ID_TEST = "Kin Testnet ; December 2018"
 private const val NETWORK_ID_MAIN = "Kin Mainnet ; December 2018"
 private const val ACTIVE_WALLET_KEY = "activeWallet"
+private const val IS_KIN3 = "IS_KIN3"
 private const val WALLET_BALANCE_KEY = "WalletBalance"
 private const val TAG = "Wallet"
 
@@ -82,6 +83,14 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
         userRepo.userInfo.publicAddress = account.publicAddress!!
     }
+
+    private var isKin3: Boolean
+        set(value) {
+            walletCache.putBoolean(IS_KIN3, value)
+            ready.set(value)
+        }
+        get() = walletCache.getBoolean(IS_KIN3, false)
+
 
     private var activeWallet: Boolean
         set(value) {
