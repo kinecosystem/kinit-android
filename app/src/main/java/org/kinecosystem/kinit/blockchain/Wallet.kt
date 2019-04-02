@@ -8,7 +8,6 @@ import kin.sdk.*
 import kin.sdk.exception.*
 import kin.sdk.migration.MigrationManager
 import kin.sdk.migration.MigrationNetworkInfo
-import kin.sdk.migration.bi.IMigrationEventsListener
 import kin.sdk.migration.common.KinSdkVersion
 import kin.sdk.migration.common.interfaces.IKinVersionProvider
 import kin.utils.ResultCallback
@@ -45,8 +44,8 @@ private const val CORE_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZV
 private const val CORE_ISSUER_TEST = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
 private const val SDK_TEST_NETWORK_URL = "https://horizon-testnet.kininfrastructure.com/"
 private const val SDK_TEST_NETWORK_ID = "Kin Testnet ; December 2018"
-private const val MAIN_NET_URL = "https://horizon.kinfederation.com/"
-private const val NETWORK_ID_MAIN = "Kin Mainnet ; December 2018"
+private const val SDK_MAIN_NETWORK_URL = "https://horizon.kinfederation.com/"
+private const val SDK_MAIN_NETWORK_ID = "Kin Mainnet ; December 2018"
 private const val MIGRATE_ACCOUNT_SERVICE_TEST_URL = "https://kin3stage.payments.kinitapp.com:8000/migrate?address="
 private const val MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL = "https://migration.kinapp.com/migrate?address="
 
@@ -86,8 +85,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     init {
         val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
         walletCache = dataStoreProvider.dataStore(walletCacheName)
-        var providerUrl = if (type == Type.Main) MAIN_NET_URL else SDK_TEST_NETWORK_URL
-        var networkId = if (type == Type.Main) NETWORK_ID_MAIN else SDK_TEST_NETWORK_ID
+        var providerUrl = if (type == Type.Main) SDK_MAIN_NETWORK_URL else SDK_TEST_NETWORK_URL
+        var networkId = if (type == Type.Main) SDK_MAIN_NETWORK_ID else SDK_TEST_NETWORK_ID
         var coreUrl = if (type == Type.Main) CORE_MAIN_NETWORK_URL else CORE_TEST_NETWORK_URL
         var coreId = if (type == Type.Main) CORE_MAIN_NETWORK_ID else CORE_TEST_NETWORK_ID
         var coreIssuer = if (type == Type.Main) CORE_ISSUER_MAIN else CORE_ISSUER_TEST
