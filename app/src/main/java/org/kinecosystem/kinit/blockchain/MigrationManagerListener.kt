@@ -5,68 +5,36 @@ import kin.sdk.migration.common.KinSdkVersion
 import java.lang.Exception
 
 class MigrationManagerListener : IMigrationEventsListener {
-    override fun onCheckBurnSucceeded(publicAddress: String?, reason: IMigrationEventsListener.CheckBurnReason?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onCheckBurnSucceeded(publicAddress: String?, reason: IMigrationEventsListener.CheckBurnReason?) {}
 
-    override fun onRequestAccountMigrationSucceeded(publicAddress: String?, reason: IMigrationEventsListener.RequestAccountMigrationSuccessReason?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onRequestAccountMigrationSucceeded(publicAddress: String?, reason: IMigrationEventsListener.RequestAccountMigrationSuccessReason?) {}
 
-    override fun onVersionCheckFailed(exception: Exception?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onVersionCheckFailed(exception: Exception?) {}
 
-    override fun onCallbackReady(sdkVersion: KinSdkVersion?, selectedSdkReason: IMigrationEventsListener.SelectedSdkReason?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onCallbackReady(sdkVersion: KinSdkVersion?, selectedSdkReason: IMigrationEventsListener.SelectedSdkReason?) {}
 
-    override fun onBurnSucceeded(publicAddress: String?, reason: IMigrationEventsListener.BurnReason?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onBurnSucceeded(publicAddress: String?, reason: IMigrationEventsListener.BurnReason?) {}
 
-    override fun onBurnFailed(publicAddress: String?, exception: Exception?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onBurnFailed(publicAddress: String?, exception: Exception?) {}
 
-    override fun onCallbackStart() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onCallbackStart() {}
 
-    override fun onBurnStarted(publicAddress: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onBurnStarted(publicAddress: String?) {}
 
-    override fun onCheckBurnStarted(publicAddress: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onCheckBurnStarted(publicAddress: String?) {}
 
-    override fun onVersionCheckStarted() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onVersionCheckStarted() {}
 
-    override fun onCallbackFailed(exception: Exception?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onCallbackFailed(exception: Exception?) {}
 
-    override fun onRequestAccountMigrationStarted(publicAddress: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onRequestAccountMigrationStarted(publicAddress: String?) {}
 
-    override fun onVersionCheckSucceeded(sdkVersion: KinSdkVersion?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onVersionCheckSucceeded(sdkVersion: KinSdkVersion?) {}
 
-    override fun onCheckBurnFailed(publicAddress: String?, exception: Exception?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onCheckBurnFailed(publicAddress: String?, exception: Exception?) {}
 
-    override fun onRequestAccountMigrationFailed(publicAddress: String?, exception: Exception?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onRequestAccountMigrationFailed(publicAddress: String?, exception: Exception?) {}
 
-    override fun onMethodStarted() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onMethodStarted() {}
 
 }

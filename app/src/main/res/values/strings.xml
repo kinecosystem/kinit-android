@@ -15,6 +15,7 @@
     <string name="next_task_available_tomorrow">Your next activity will be available tomorrow.</string>
     <string name="next_task_subtitle">We have planted the seed and your next activity is currently growing</string>
     <string name="creating_wallet">Creating wallet for your Kin…</string>
+    <string name="migrating_wallet">Migrating your wallet…</string>
     <string name="complete_task_subtitle">You have completed this activity.</string>
     <string name="complete_task_title">Awesome!</string>
     <string name="transferring_your_kin">Your Kin is on its way</string>
@@ -66,6 +67,7 @@
     <string name="kin_currency">KIN</string>
     <string name="version">version %s</string>
     <string name="error_unable_to_create_wallet">We were unable to create a wallet for you</string>
+    <string name="error_unable_to_migrate_wallet">We were unable to migrate a wallet for you</string>
     <string name="error_create_wallet">Please restart the app to try again.</string>
     <string name="retry">Retry</string>
     <string name="contact_support">contact support</string>

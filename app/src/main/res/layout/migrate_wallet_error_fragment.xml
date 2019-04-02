@@ -34,7 +34,7 @@
             android:layout_marginEnd="77dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="@string/error_unable_to_create_wallet"
+            android:text="@string/error_unable_to_migrate_wallet"
             android:textColor="#7884a5"
             android:textSize="16sp"
             android:textStyle="normal"
