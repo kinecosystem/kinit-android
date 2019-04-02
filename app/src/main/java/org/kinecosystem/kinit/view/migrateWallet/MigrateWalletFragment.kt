@@ -34,7 +34,7 @@ class MigrateWalletFragment : BaseFragment() {
             Log.e(MigrateWalletFragment.TAG, "Invalid data cant start MigrateWalletFragment")
             activity?.finish()
         }
-        return inflater.inflate(R.layout.create_wallet_fragment, container, false)
+        return inflater.inflate(R.layout.migrate_wallet_fragment, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

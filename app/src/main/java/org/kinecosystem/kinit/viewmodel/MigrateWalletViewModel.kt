@@ -35,7 +35,6 @@ class MigrateWalletViewModel {
 
     init {
         KinitApplication.coreComponent.inject(this)
-        migrateWallet()
     }
 
     fun migrateWallet() {
@@ -59,7 +58,7 @@ class MigrateWalletViewModel {
 
     fun onRetryClicked(view: View?) {
         // TODO: logs
-        migrateWallet()
+        listener?.onWalletMigrating()
     }
 
     fun onContactSupportClicked(view: View?) {

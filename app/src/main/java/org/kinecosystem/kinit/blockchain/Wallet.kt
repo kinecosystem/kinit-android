@@ -49,8 +49,8 @@ private const val SDK_TEST_NETWORK_URL = "https://horizon-testnet.kininfrastruct
 private const val SDK_TEST_NETWORK_ID = "Kin Testnet ; December 2018"
 private const val SDK_MAIN_NETWORK_URL = "https://horizon.kinfederation.com/"
 private const val SDK_MAIN_NETWORK_ID = "Kin Mainnet ; December 2018"
-private const val MIGRATE_ACCOUNT_SERVICE_TEST_URL = "https://kin3stage.payments.kinitapp.com:8000/migrate?"
-private const val MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL = "https://migration.kinapp.com/migrate?$"
+private const val MIGRATE_ACCOUNT_SERVICE_TEST_URL = "https://stage.kinitapp.com:8000/user/migrate?"
+private const val MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL = "https://migration.kinitapp.com/user/migrate?"
 
 private const val TEST_NET_WALLET_CACHE_NAME = "kin.app.wallet.testnet"
 private const val MAIN_NET_WALLET_CACHE_NAME = "kin.app.wallet.mainnet"

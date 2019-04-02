@@ -29,7 +29,7 @@ class MigrateWalletErrorFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding = DataBindingUtil.inflate<MigrateWalletErrorFragmentBinding>(
-                inflater, R.layout.create_wallet_error_fragment, container, false)
+                inflater, R.layout.migrate_wallet_error_fragment, container, false)
         try {
             binding.model = (activity as MigrateWalletActivity).getModel()
         } catch (e: Exception) {
