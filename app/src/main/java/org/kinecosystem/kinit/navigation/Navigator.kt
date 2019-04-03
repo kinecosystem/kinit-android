@@ -13,12 +13,11 @@ import org.kinecosystem.kinit.util.GeneralUtils
 import org.kinecosystem.kinit.view.MainActivity
 import org.kinecosystem.kinit.view.RegisterErrorActivity
 import org.kinecosystem.kinit.view.backup.BackupWalletActivity
-import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
+import org.kinecosystem.kinit.view.bootWallet.BootWalletActivity
 import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.WebTaskActivity
 import org.kinecosystem.kinit.view.earn.WebTaskCompleteActivity
-import org.kinecosystem.kinit.view.migrateWallet.MigrateWalletActivity
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.view.phoneVerify.PhoneVerifyActivity
 import org.kinecosystem.kinit.view.restore.RestoreWalletActivity
@@ -97,8 +96,8 @@ class Navigator(private val context: Context) {
             Destination.WALLET_BACKUP -> navigateToActivity(BackupWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.WALLET_CREATE -> navigateToActivity(CreateWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.WALLET_MIGRATE -> navigateToActivity(MigrateWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.WALLET_CREATE -> navigateToActivity(BootWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
+            Destination.WALLET_MIGRATE -> navigateToActivity(BootWalletActivity.getIntent(context, BootWalletActivity.BootAction.MIGRATE), withSlideAnim, reverseAnim)
             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsInfoActivity.getIntent(context, Type.ECO_APPS_COMING_SOON), withSlideAnim, reverseAnim)

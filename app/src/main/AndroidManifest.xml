@@ -68,7 +68,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".view.createWallet.CreateWalletActivity"
+            android:name=".view.bootWallet.BootWalletActivity"
             android:screenOrientation="portrait" />
 
         <activity

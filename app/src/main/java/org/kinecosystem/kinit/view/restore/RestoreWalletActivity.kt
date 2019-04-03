@@ -13,14 +13,13 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.SingleFragmentActivity
-import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
+import org.kinecosystem.kinit.view.bootWallet.BootCompleteFragment
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
-import org.kinecosystem.kinit.viewmodel.restore.RestoreState
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletActivityMessages
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreState
+import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletActivityMessages
+import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletViewModel
 import javax.inject.Inject
 
 
@@ -88,8 +87,8 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
             }
             RestoreState.SecurityQuestions -> RestoreWalletAnswerHintsFragment.newInstance()
             RestoreState.Complete -> {
-                val onboardingCompleteFragment = OnboardingCompleteFragment.newInstance()
-                onboardingCompleteFragment.listener = object : OnboardingCompleteFragment.AfterAnimationListener {
+                val onboardingCompleteFragment = BootCompleteFragment.newInstance()
+                onboardingCompleteFragment.listener = object : BootCompleteFragment.AfterAnimationListener {
                     override fun onAnimationEnd() {
                         if (!getModel().walletService.kin3Ready.get())
                             moveToMigrationScreen()

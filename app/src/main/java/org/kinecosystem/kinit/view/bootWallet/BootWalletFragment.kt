@@ -1,5 +1,6 @@
-package org.kinecosystem.kinit.view.migrateWallet
+package org.kinecosystem.kinit.view.bootWallet
 
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,42 +10,41 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
+import org.kinecosystem.kinit.databinding.BootWalletFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.MigrateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.walletBoot.CreateWalletViewModel
 import javax.inject.Inject
 
-class MigrateWalletFragment : BaseFragment() {
+class BootWalletFragment : BaseFragment() {
     @Inject
     lateinit var analytics: Analytics
-    private lateinit var model: MigrateWalletViewModel
+    private lateinit var model: CreateWalletViewModel
 
     companion object {
-        val TAG = MigrateWalletFragment::class.java.simpleName
+        val TAG = BootWalletFragment::class.java.simpleName
         @JvmStatic
-        fun newInstance(): MigrateWalletFragment {
-            return MigrateWalletFragment()
+        fun newInstance(): BootWalletFragment {
+            return BootWalletFragment()
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        val binding = DataBindingUtil.inflate<BootWalletFragmentBinding>(
+                inflater, R.layout.boot_wallet_fragment, container, false)
         try {
-            model = (activity as MigrateWalletActivity).getModel()
+            binding.model = (activity as BootWalletActivity).model
         } catch (e: Exception) {
-            Log.e(MigrateWalletFragment.TAG, "Invalid data cant start MigrateWalletFragment")
+            Log.e(BootWalletFragment.TAG, "Invalid data cant start BootWalletErrorFragment")
             activity?.finish()
         }
-        return inflater.inflate(R.layout.migrate_wallet_fragment, container, false)
+        return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         KinitApplication.coreComponent.inject(this)
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        model.migrateWallet()
     }
 
     override fun onResume() {
