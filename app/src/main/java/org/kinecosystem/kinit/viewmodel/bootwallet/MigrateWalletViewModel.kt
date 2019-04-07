@@ -5,6 +5,7 @@ import kin.sdk.migration.common.interfaces.IKinClient
 import kin.sdk.migration.common.interfaces.IMigrationManagerCallbacks
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
+import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.CategoriesService
 import org.kinecosystem.kinit.server.NetworkServices
@@ -35,16 +36,19 @@ class MigrateWalletViewModel(override var listener: BootWalletEventsListener?) :
     override fun bootWallet() {
         networkServices.walletService.migrateWallet(object: IMigrationManagerCallbacks{
             override fun onReady(kinClient: IKinClient?) {
+                analytics.logEvent(Events.Business.MigrationSucceeded())
                 categoriesService.retrieveCategories()
                 taskService.retrieveAllTasks()
                 listener?.onWalletBooted()
             }
 
             override fun onMigrationStart() {
+                analytics.logEvent(Events.Business.MigrationStarted())
                 listener?.onWalletBooting()
             }
 
             override fun onError(e: Exception?) {
+                analytics.logEvent(Events.BILog.MigrationFailed(e?.message))
                 listener?.onWalletBootError()
             }
         })
@@ -56,12 +60,12 @@ class MigrateWalletViewModel(override var listener: BootWalletEventsListener?) :
 
 
     override fun onRetryClicked(view: View?) {
-        // TODO: logs
+        analytics.logEvent(Events.Analytics.ClickRetryButtonOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
         listener?.onWalletBooting()
     }
 
     override fun onContactSupportClicked(view: View?) {
-        // TODO: logs
+        analytics.logEvent(Events.Analytics.ClickContactLinkOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
         listener?.contactSupport()
     }
 }
