@@ -29,6 +29,7 @@ import org.kinecosystem.kinit.view.transfer.TransferActivity
 import org.kinecosystem.kinit.view.tutorial.TutorialActivity
 import org.kinecosystem.kinit.viewmodel.WebInfoViewModel.Type
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.BootAction
 import javax.inject.Inject
 
 class Navigator(private val context: Context) {
@@ -97,7 +98,7 @@ class Navigator(private val context: Context) {
             Destination.TUTORIAL -> navigateToActivity(TutorialActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.PHONE_VERIFY -> navigateToActivity(PhoneVerifyActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_CREATE -> navigateToActivity(BootWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
-            Destination.WALLET_MIGRATE -> navigateToActivity(BootWalletActivity.getIntent(context, BootWalletActivity.BootAction.MIGRATE), withSlideAnim, reverseAnim)
+            Destination.WALLET_MIGRATE -> navigateToActivity(BootWalletActivity.getIntent(context, BootAction.MIGRATE), withSlideAnim, reverseAnim)
             Destination.MAIN_SCREEN -> navigateToActivity(MainActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.WALLET_RESTORE -> navigateToActivity(RestoreWalletActivity.getIntent(context), withSlideAnim, reverseAnim)
             Destination.ECO_APPS_COMING_SOON -> navigateToActivity(EcoAppsInfoActivity.getIntent(context, Type.ECO_APPS_COMING_SOON), withSlideAnim, reverseAnim)

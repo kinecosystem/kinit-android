@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.viewmodel.walletBoot
+package org.kinecosystem.kinit.viewmodel.bootwallet
 
 import android.view.View
 import kin.sdk.migration.common.interfaces.IKinClient
@@ -10,8 +10,6 @@ import org.kinecosystem.kinit.server.CategoriesService
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
-import org.kinecosystem.kinit.view.bootWallet.BootWalletActions
-import org.kinecosystem.kinit.view.bootWallet.BootWalletActivity
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -52,8 +50,8 @@ class MigrateWalletViewModel(override var listener: BootWalletEventsListener?) :
         })
     }
 
-    override var walletAction: BootWalletActivity.BootAction
-        get() = BootWalletActivity.BootAction.MIGRATE
+    override var walletAction: BootAction
+        get() = BootAction.MIGRATE
         set(value) {}
 
 

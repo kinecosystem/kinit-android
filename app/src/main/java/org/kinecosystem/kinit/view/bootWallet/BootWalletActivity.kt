@@ -3,22 +3,16 @@ package org.kinecosystem.kinit.view.bootWallet
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
-import android.view.View
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
-import org.kinecosystem.kinit.viewmodel.walletBoot.BootWalletEventsListener
-import org.kinecosystem.kinit.viewmodel.walletBoot.CreateWalletViewModel
-import org.kinecosystem.kinit.viewmodel.walletBoot.MigrateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.*
 
 class BootWalletActivity : SingleFragmentActivity() , BootWalletEventsListener {
 
-    enum class BootAction {
-        CREATE,
-        MIGRATE
-    }
+
 
     companion object {
         private const val BOOT_ACTION = "BOOT_ACTION"
@@ -96,11 +90,3 @@ class BootWalletActivity : SingleFragmentActivity() , BootWalletEventsListener {
     }
 }
 
-interface BootWalletActions {
-    var listener: BootWalletEventsListener?
-    var walletAction: BootWalletActivity.BootAction
-    fun onDestroy() {}
-    fun bootWallet()
-    fun onRetryClicked(view: View?)
-    fun onContactSupportClicked(view: View?)
-}

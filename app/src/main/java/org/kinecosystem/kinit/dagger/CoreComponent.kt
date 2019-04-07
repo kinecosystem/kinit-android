@@ -44,10 +44,10 @@ import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.*
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
-import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 import org.kinecosystem.kinit.viewmodel.spend.*
-import org.kinecosystem.kinit.viewmodel.walletBoot.CreateWalletViewModel
-import org.kinecosystem.kinit.viewmodel.walletBoot.MigrateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.CreateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.MigrateWalletViewModel
 import javax.inject.Singleton
 
 @Singleton

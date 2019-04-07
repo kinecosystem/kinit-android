@@ -10,8 +10,8 @@ import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ERROR_APP_SERVER_FAILED_RESPONSE
 import org.kinecosystem.kinit.server.OnboardingService
 import org.kinecosystem.kinit.server.OperationCompletionCallback
-import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletActivityMessages
-import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletActivityMessages
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations

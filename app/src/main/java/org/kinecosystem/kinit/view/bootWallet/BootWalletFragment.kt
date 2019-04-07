@@ -12,7 +12,7 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.databinding.BootWalletFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.walletBoot.CreateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.CreateWalletViewModel
 import javax.inject.Inject
 
 class BootWalletFragment : BaseFragment() {

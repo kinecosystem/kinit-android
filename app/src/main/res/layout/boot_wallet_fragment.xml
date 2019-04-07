@@ -5,11 +5,11 @@
     <data xmlns:android="http://schemas.android.com/apk/res/android">
         <variable
             name="model"
-            type="org.kinecosystem.kinit.view.bootWallet.BootWalletActions"/>
+            type="org.kinecosystem.kinit.viewmodel.bootwallet.BootWalletActions"/>
 
         <variable
             name="bootAction"
-            type="org.kinecosystem.kinit.view.bootWallet.BootWalletActivity.BootAction" />
+            type="org.kinecosystem.kinit.viewmodel.bootwallet.BootAction" />
     </data>
     <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"

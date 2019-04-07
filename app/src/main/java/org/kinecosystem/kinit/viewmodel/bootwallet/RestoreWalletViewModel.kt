@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.viewmodel.walletBoot
+package org.kinecosystem.kinit.viewmodel.bootwallet
 
 import android.databinding.ObservableBoolean
 import org.kinecosystem.kinit.KinitApplication

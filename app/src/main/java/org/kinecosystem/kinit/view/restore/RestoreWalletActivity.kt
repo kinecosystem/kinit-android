@@ -17,9 +17,9 @@ import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.bootWallet.BootCompleteFragment
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
-import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreState
-import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletActivityMessages
-import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreState
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletActivityMessages
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 import javax.inject.Inject
 
 

@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.viewmodel.walletBoot
+package org.kinecosystem.kinit.viewmodel.bootwallet
 
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
@@ -11,8 +11,6 @@ import org.kinecosystem.kinit.server.CategoriesService
 import org.kinecosystem.kinit.server.NetworkServices
 import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
-import org.kinecosystem.kinit.view.bootWallet.BootWalletActions
-import org.kinecosystem.kinit.view.bootWallet.BootWalletActivity
 import javax.inject.Inject
 
 class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : BootWalletActions {
@@ -86,8 +84,8 @@ class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : 
         }
     }
 
-    override var walletAction: BootWalletActivity.BootAction
-        get() = BootWalletActivity.BootAction.CREATE
+    override var walletAction: BootAction
+        get() = BootAction.CREATE
         set(value) {}
 
     override fun onRetryClicked(view: View?) {

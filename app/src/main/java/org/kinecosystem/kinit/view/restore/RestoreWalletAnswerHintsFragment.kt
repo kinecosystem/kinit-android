@@ -14,7 +14,7 @@ import org.kinecosystem.kinit.databinding.AnswerHintsFragmentBinding
 import org.kinecosystem.kinit.util.Scheduler
 import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.view.customView.SecurityQuestionAnswerView
-import org.kinecosystem.kinit.viewmodel.walletBoot.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 import javax.inject.Inject
 
 
