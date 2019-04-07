@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.util.Scheduler
 import java.lang.Exception
 import javax.inject.Inject
 
-class MigrateWalletViewModel(override var listener: BootWalletEventsListener?) : BootWalletActions {
+class MigrateWalletViewModel(override var listener: BootWalletEventsListener?) : BootWalletViewModel {
 
     @Inject
     lateinit var analytics: Analytics

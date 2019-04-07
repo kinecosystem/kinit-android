@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Inject
 
-class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : BootWalletActions {
+class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : BootWalletViewModel {
 
     @Inject
     lateinit var analytics: Analytics

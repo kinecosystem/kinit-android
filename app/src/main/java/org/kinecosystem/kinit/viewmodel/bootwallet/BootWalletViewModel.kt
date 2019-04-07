@@ -7,7 +7,7 @@ enum class BootAction {
     MIGRATE
 }
 
-interface BootWalletActions {
+interface BootWalletViewModel {
     var listener: BootWalletEventsListener?
     var walletAction: BootAction
     fun onDestroy() {}

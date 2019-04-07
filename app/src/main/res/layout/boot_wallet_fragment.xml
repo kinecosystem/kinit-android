@@ -5,7 +5,7 @@
     <data xmlns:android="http://schemas.android.com/apk/res/android">
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.bootwallet.BootWalletActions"/>
+            type="org.kinecosystem.kinit.viewmodel.bootwallet.BootWalletViewModel"/>
 
         <variable
             name="bootAction"

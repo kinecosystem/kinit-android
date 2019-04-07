@@ -24,7 +24,7 @@ class BootWalletActivity : SingleFragmentActivity() , BootWalletEventsListener {
         }
     }
 
-    lateinit var model: BootWalletActions
+    lateinit var model: BootWalletViewModel
     private lateinit var currentFragment: Fragment
     private val bootWalletErrorFragment: Fragment by lazy { BootWalletErrorFragment.newInstance() }
     private val bootWalletFragment: Fragment by lazy { BootWalletFragment.newInstance() }
