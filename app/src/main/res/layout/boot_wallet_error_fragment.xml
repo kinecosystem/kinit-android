@@ -9,6 +9,9 @@
         <variable
             name="model"
             type="org.kinecosystem.kinit.viewmodel.bootwallet.BootWalletViewModel" />
+        <variable
+            name="bootAction"
+            type="org.kinecosystem.kinit.viewmodel.bootwallet.BootAction" />
     </data>
 
     <android.support.constraint.ConstraintLayout
