@@ -323,7 +323,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private fun activateAccountSync(): Boolean {
         try {
             analytics.logEvent(Events.Business.WalletCreated())
-            scheduler.post { activeWallet = true }
+            scheduler.post {
+                activeWallet = true
+                isKin3 = true
+            }
             analytics.logEvent(Events.BILog.StellarKinTrustlineSetupSucceeded())
             return true
         } catch (e: Exception) {
