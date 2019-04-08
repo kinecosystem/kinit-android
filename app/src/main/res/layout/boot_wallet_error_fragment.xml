@@ -1,104 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout">
+
     <data xmlns:android="http://schemas.android.com/apk/res/android">
+
         <variable
             name="model"
-            type="org.kinecosystem.kinit.viewmodel.bootwallet.BootWalletViewModel"/>
+            type="org.kinecosystem.kinit.viewmodel.bootwallet.BootWalletViewModel" />
     </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        >
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/create_wallet_error_image"
-            android:layout_width="wrap_content"
-            android:layout_height="122dp"
-            android:layout_marginTop="50dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/wallet_create_failed"
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/creating_wallet_lottie" />
+
 
         <TextView
-            android:id="@+id/create_wallet_error_title"
-            android:layout_width="0dp"
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="77dp"
-            android:layout_marginTop="11dp"
-            android:layout_marginEnd="77dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:lineSpacingExtra="37sp"
+            android:padding="15sp"
+            android:text="@{ model.walletAction == bootAction.CREATE ? @string/creating_wallet : @string/migrating_wallet}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="35dp"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
-            android:text="@string/error_unable_to_create_wallet"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/error_booting_wallet_text"
             android:textColor="#7884a5"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/create_wallet_error_image"/>
-
-        <TextView
-            android:id="@+id/create_wallet_error_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="24dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="3sp"
-            android:text="@string/error_create_wallet"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/create_wallet_error_title" />
-        <TextView
-            android:id="@+id/create_wallet_error_retry_button"
-            style="@style/Button.Hollow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="5dp"
-            android:fontFamily="sans-serif-medium"
-            android:onClick="@{model::onRetryClicked}"
-            android:text="@string/retry"
-            android:textColor="#047cfc"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@id/create_wallet_error_contact_support"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <TextView
-            android:id="@+id/create_wallet_error_contact_support"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginBottom="56dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="3sp"
-            android:onClick="@{model::onContactSupportClicked}"
-            android:text="@string/contact_support"
-            android:textColor="@color/button_blue"
             android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:id="@+id/retry_block_click"
+            android:layout_width="34dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:onClick="@{model::onRetryClicked}"
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
+        <View
+            android:id="@+id/contact_block_click"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:onClick="@{model::onContactSupportClicked}"
+            app:layout_constraintEnd_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>
-
