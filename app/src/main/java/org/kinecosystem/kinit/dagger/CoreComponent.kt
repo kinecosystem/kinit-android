@@ -19,10 +19,10 @@ import org.kinecosystem.kinit.view.backup.BackupQRCodeFragment
 import org.kinecosystem.kinit.view.backup.BackupQuestionAnswerFragment
 import org.kinecosystem.kinit.view.backup.BackupSummaryFragment
 import org.kinecosystem.kinit.view.spend.EcoAppsInfoActivity
-import org.kinecosystem.kinit.view.createWallet.CreateWalletActivity
-import org.kinecosystem.kinit.view.createWallet.CreateWalletErrorFragment
-import org.kinecosystem.kinit.view.createWallet.CreateWalletFragment
-import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
+import org.kinecosystem.kinit.view.bootWallet.BootWalletActivity
+import org.kinecosystem.kinit.view.bootWallet.BootWalletErrorFragment
+import org.kinecosystem.kinit.view.bootWallet.BootWalletFragment
+import org.kinecosystem.kinit.view.bootWallet.BootCompleteFragment
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
 import org.kinecosystem.kinit.view.customView.SecurityQuestionAnswerView
 import org.kinecosystem.kinit.view.customView.TransactionLayoutView
@@ -44,8 +44,10 @@ import org.kinecosystem.kinit.viewmodel.backup.BackupModel
 import org.kinecosystem.kinit.viewmodel.balance.BalanceViewModel
 import org.kinecosystem.kinit.viewmodel.earn.*
 import org.kinecosystem.kinit.viewmodel.info.InfoViewModel
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 import org.kinecosystem.kinit.viewmodel.spend.*
+import org.kinecosystem.kinit.viewmodel.bootwallet.CreateWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.MigrateWalletViewModel
 import javax.inject.Singleton
 
 @Singleton
@@ -89,11 +91,11 @@ interface CoreComponent {
     fun inject(quizViewModel: QuizQuestionViewModel)
     fun inject(answerViewModel: AnswerViewModel)
     fun inject(quizAnswerView: QuizAnswerView)
-    fun inject(onboardingCompleteFragment: OnboardingCompleteFragment)
-    fun inject(createWalletFragment: CreateWalletFragment)
-    fun inject(createWalletErrorFragment: CreateWalletErrorFragment)
+    fun inject(bootCompleteFragment: BootCompleteFragment)
+    fun inject(bootWalletFragment: BootWalletFragment)
+    fun inject(bootWalletErrorFragment: BootWalletErrorFragment)
     fun inject(createWalletViewModel: CreateWalletViewModel)
-    fun inject(createWalletActivity: CreateWalletActivity)
+    fun inject(bootWalletActivity: BootWalletActivity)
     fun inject(backupModel: BackupModel)
     fun inject(backupAlertManager: BackupAlertManager)
     fun inject(securityQuestionAnswerView: SecurityQuestionAnswerView)
@@ -126,4 +128,5 @@ interface CoreComponent {
     fun inject(transferAmountToAppViewModel: TransferringToAppViewModel)
     fun inject(transferActivityModel: TransferActivityModel)
     fun inject(accountInfoViewModel: AccountInfoViewModel)
+    fun inject(migrationWalletActivity: MigrateWalletViewModel)
 }

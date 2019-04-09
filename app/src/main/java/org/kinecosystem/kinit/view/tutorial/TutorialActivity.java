@@ -104,6 +104,8 @@ public class TutorialActivity extends BaseActivity {
             navigator.navigateTo(Navigator.Destination.PHONE_VERIFY);
         } else if (!wallet.getReady().get()) {
             navigator.navigateTo(Navigator.Destination.WALLET_CREATE);
+        } else if (!wallet.getKin3Ready().get()){
+            navigator.navigateTo(Navigator.Destination.WALLET_MIGRATE);
         } else {
             navigator.navigateTo(Navigator.Destination.MAIN_SCREEN);
         }

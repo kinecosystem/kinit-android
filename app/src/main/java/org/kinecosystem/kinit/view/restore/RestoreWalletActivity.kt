@@ -13,14 +13,13 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.repository.UserRepository
-import org.kinecosystem.kinit.util.SupportUtil
 import org.kinecosystem.kinit.view.SingleFragmentActivity
-import org.kinecosystem.kinit.view.createWallet.OnboardingCompleteFragment
+import org.kinecosystem.kinit.view.bootWallet.BootCompleteFragment
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
-import org.kinecosystem.kinit.viewmodel.restore.RestoreState
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletActivityMessages
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreState
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletActivityMessages
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 import javax.inject.Inject
 
 
@@ -88,10 +87,13 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
             }
             RestoreState.SecurityQuestions -> RestoreWalletAnswerHintsFragment.newInstance()
             RestoreState.Complete -> {
-                val onboardingCompleteFragment = OnboardingCompleteFragment.newInstance()
-                onboardingCompleteFragment.listener = object : OnboardingCompleteFragment.AfterAnimationListener {
+                val onboardingCompleteFragment = BootCompleteFragment.newInstance()
+                onboardingCompleteFragment.listener = object : BootCompleteFragment.AfterAnimationListener {
                     override fun onAnimationEnd() {
-                        moveToMainScreen()
+                        if (!getModel().walletService.kin3Ready.get())
+                            moveToMigrationScreen()
+                        else
+                            moveToMainScreen()
                     }
                 }
                 onboardingCompleteFragment
@@ -99,7 +101,13 @@ class RestoreWalletActivity : SingleFragmentActivity(), RestoreWalletActions, Re
         }
     }
 
+    private fun moveToMigrationScreen(){
+        Navigator(this@RestoreWalletActivity).navigateTo(Navigator.Destination.WALLET_MIGRATE)
+        finish()
+    }
+
     private fun moveToMainScreen() {
+
         Navigator(this@RestoreWalletActivity).navigateTo(Navigator.Destination.MAIN_SCREEN)
         finish()
     }
