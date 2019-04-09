@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 
 class RestoreWalletIntroFragment : BaseFragment() {
 

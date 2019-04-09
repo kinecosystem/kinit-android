@@ -60,7 +60,10 @@ class SplashViewModel {
                 Navigator.Destination.WALLET_RESTORE
             else
                 Navigator.Destination.WALLET_CREATE
-        } else {
+        } else if (!networkServices.walletService.kin3Ready.get()){
+            Navigator.Destination.WALLET_MIGRATE
+        }
+        else {
             Navigator.Destination.MAIN_SCREEN
         }
     }

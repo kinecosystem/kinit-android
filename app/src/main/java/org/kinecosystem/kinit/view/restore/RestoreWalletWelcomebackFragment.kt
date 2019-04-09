@@ -11,7 +11,7 @@ import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletActivityMessages
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletActivityMessages
 import javax.inject.Inject
 
 class RestoreWalletWelcomebackFragment : BaseFragment() {

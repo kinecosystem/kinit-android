@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.single_security_answer_layout.view.*
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.server.api.BackupApi
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 
 class SecurityQuestionAnswerView: ConstraintLayout {
     private var backupQuestion: BackupApi.BackUpQuestion? = null

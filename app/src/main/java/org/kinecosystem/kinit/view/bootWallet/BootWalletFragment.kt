@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.view.createWallet
+package org.kinecosystem.kinit.view.bootWallet
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -10,30 +10,33 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
-import org.kinecosystem.kinit.databinding.CreateWalletErrorFragmentBinding
+import org.kinecosystem.kinit.databinding.BootWalletFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
+import org.kinecosystem.kinit.viewmodel.bootwallet.CreateWalletViewModel
 import javax.inject.Inject
 
-class CreateWalletErrorFragment : BaseFragment() {
+class BootWalletFragment : BaseFragment() {
     @Inject
     lateinit var analytics: Analytics
+    private lateinit var model: CreateWalletViewModel
 
     companion object {
-        val TAG = CreateWalletErrorFragment::class.java.simpleName
+        val TAG = BootWalletFragment::class.java.simpleName
         @JvmStatic
-        fun newInstance(): CreateWalletErrorFragment {
-            return CreateWalletErrorFragment()
+        fun newInstance(): BootWalletFragment {
+            return BootWalletFragment()
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<CreateWalletErrorFragmentBinding>(
-                inflater, R.layout.create_wallet_error_fragment, container, false)
+
+        val binding = DataBindingUtil.inflate<BootWalletFragmentBinding>(
+                inflater, R.layout.boot_wallet_fragment, container, false)
         try {
-            binding.model = (activity as CreateWalletActivity).getModel()
+            binding.model = (activity as BootWalletActivity).model
         } catch (e: Exception) {
-            Log.e(CreateWalletFragment.TAG, "Invalid data cant start CreateWalletErrorFragment")
+            Log.e(BootWalletFragment.TAG, "Invalid data cant start BootWalletErrorFragment")
             activity?.finish()
         }
         return binding.root
@@ -46,6 +49,6 @@ class CreateWalletErrorFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.logEvent(Events.Analytics.ViewErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING, "create wallet error"))
+        analytics.logEvent(Events.Analytics.ViewCreatingWalletPage())
     }
 }
