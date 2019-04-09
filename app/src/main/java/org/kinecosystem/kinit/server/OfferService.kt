@@ -26,8 +26,8 @@ const val ERROR_REDEEM_COUPON_FAILED = 101
 const val ERROR_NO_GOOD_LEFT = 200
 private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
 private const val P2P_ORDER_ID_PREFIX = "p2p"
-private const val P2P_TO_APP_ORDER_ID_PREFIX = "to-app"
-private const val P2P_ORDER_ID_LENGTH = 10
+private const val P2P_TO_APP_ORDER_ID_PREFIX = "to_app_"
+private const val ORDER_ID_LENGTH = 20
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userRepo: UserRepository,
                    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
@@ -187,7 +187,8 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
             override fun run() {
                 try {
                     val prefix = if (isApp2app) P2P_TO_APP_ORDER_ID_PREFIX else P2P_ORDER_ID_PREFIX
-                    val orderId = prefix + UUID.randomUUID().toString().subSequence(0, P2P_ORDER_ID_LENGTH)
+                    val orderId = (prefix + UUID.randomUUID().toString().replace("-","_")).take(ORDER_ID_LENGTH)
+
                     val transactionId = wallet.payForOrderSync(validationToken, toAddress, amount, orderId)
                     wallet.updateBalanceSync()
 
