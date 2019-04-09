@@ -89,9 +89,8 @@ public class TransferManager {
             StringBuilder stringBuilder = new StringBuilder();
 
             String data = reader.readLine();
-            while (data != null) {
-                stringBuilder.append(data).append('\n');
-                data = reader.readLine();
+            if (data != null) {
+                stringBuilder.append(data);
             }
             String address = stringBuilder.toString();
             if (!address.isEmpty()) {

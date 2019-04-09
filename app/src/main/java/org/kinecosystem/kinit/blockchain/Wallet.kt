@@ -251,12 +251,11 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun payForOrderSync(validationToken: String?, toAddress: String, amount: Int, orderId: String): TransactionId? {
         var transactionId: TransactionId? = null
         var paddr = account.publicAddress
-        var tr = account.buildTransactionSync(toAddress, BigDecimal(amount), 0, orderId).whitelistableTransaction
-        var call = walletApi.addSignature(userRepo.userId(), WalletApi.TransactionInfo(orderId, paddr!!,
-            toAddress, amount, tr.transactionPayload, validationToken))
-        var resp = call.execute()
-        if (resp.isSuccessful && resp.body()!=null) {
-            transactionId = account.sendWhitelistTransactionSync(resp.body()?.signedTransaction)
+        var transaction = account.buildTransactionSync(toAddress, BigDecimal(amount), 0, orderId).whitelistableTransaction
+        val transactionInfo = WalletApi.TransactionInfo(orderId, paddr!!, toAddress, amount, transaction.transactionPayload, validationToken)
+        var response = walletApi.addSignature(userRepo.userId(), transactionInfo).execute()
+        if (response.isSuccessful && response.body()!=null) {
+            transactionId = account.sendWhitelistTransactionSync(response.body()?.signedTransaction)
         }
         return transactionId
     }
