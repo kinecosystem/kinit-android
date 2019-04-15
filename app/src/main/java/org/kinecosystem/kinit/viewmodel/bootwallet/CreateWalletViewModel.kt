@@ -47,6 +47,7 @@ class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : 
     }
 
     override fun bootWallet() {
+        isError.set(false)
         networkServices.walletService.initKinWallet()
         listener?.onWalletBooting()
         scheduler.scheduleOnMain({
@@ -66,7 +67,7 @@ class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : 
                         taskService.retrieveAllTasks()
                         listener?.onWalletBooted()
                     } else {
-                        listener?.onWalletBootError()
+                        isError.set(true)
                         onDestroy()
                     }
                 },
@@ -84,9 +85,8 @@ class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : 
         }
     }
 
-    override var walletAction: BootAction
-        get() = BootAction.CREATE
-        set(value) {}
+    override var walletAction = BootAction.CREATE
+    override var isError = ObservableBoolean(false)
 
     override fun onRetryClicked(view: View?) {
         analytics.logEvent(Events.Analytics.ClickRetryButtonOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
@@ -95,13 +95,12 @@ class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : 
 
     override fun onContactSupportClicked(view: View?) {
         analytics.logEvent(Events.Analytics.ClickContactLinkOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
-        listener?.contactSupport()
+        listener?.contactSupport(walletAction)
     }
 }
 
 interface BootWalletEventsListener {
     fun onWalletBooted()
-    fun onWalletBootError()
     fun onWalletBooting()
-    fun contactSupport()
+    fun contactSupport(action: BootAction)
 }

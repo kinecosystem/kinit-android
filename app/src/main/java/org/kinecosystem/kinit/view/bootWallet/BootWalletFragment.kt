@@ -12,13 +12,11 @@ import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.databinding.BootWalletFragmentBinding
 import org.kinecosystem.kinit.view.BaseFragment
-import org.kinecosystem.kinit.viewmodel.bootwallet.CreateWalletViewModel
 import javax.inject.Inject
 
 class BootWalletFragment : BaseFragment() {
     @Inject
     lateinit var analytics: Analytics
-    private lateinit var model: CreateWalletViewModel
 
     companion object {
         val TAG = BootWalletFragment::class.java.simpleName
@@ -36,7 +34,7 @@ class BootWalletFragment : BaseFragment() {
         try {
             binding.model = (activity as BootWalletActivity).model
         } catch (e: Exception) {
-            Log.e(BootWalletFragment.TAG, "Invalid data cant start BootWalletErrorFragment")
+            Log.e(TAG, "Invalid data cant start BootWalletErrorFragment")
             activity?.finish()
         }
         return binding.root

@@ -1,5 +1,6 @@
 package org.kinecosystem.kinit.viewmodel.bootwallet
 
+import android.databinding.ObservableBoolean
 import android.view.View
 
 enum class BootAction {
@@ -9,6 +10,7 @@ enum class BootAction {
 
 interface BootWalletViewModel {
     var listener: BootWalletEventsListener?
+    var isError: ObservableBoolean
     var walletAction: BootAction
     fun onDestroy() {}
     fun bootWallet()

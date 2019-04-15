@@ -20,7 +20,6 @@ import org.kinecosystem.kinit.view.backup.BackupQuestionAnswerFragment
 import org.kinecosystem.kinit.view.backup.BackupSummaryFragment
 import org.kinecosystem.kinit.view.spend.EcoAppsInfoActivity
 import org.kinecosystem.kinit.view.bootWallet.BootWalletActivity
-import org.kinecosystem.kinit.view.bootWallet.BootWalletErrorFragment
 import org.kinecosystem.kinit.view.bootWallet.BootWalletFragment
 import org.kinecosystem.kinit.view.bootWallet.BootCompleteFragment
 import org.kinecosystem.kinit.view.customView.QuizAnswerView
@@ -93,7 +92,6 @@ interface CoreComponent {
     fun inject(quizAnswerView: QuizAnswerView)
     fun inject(bootCompleteFragment: BootCompleteFragment)
     fun inject(bootWalletFragment: BootWalletFragment)
-    fun inject(bootWalletErrorFragment: BootWalletErrorFragment)
     fun inject(createWalletViewModel: CreateWalletViewModel)
     fun inject(bootWalletActivity: BootWalletActivity)
     fun inject(backupModel: BackupModel)
