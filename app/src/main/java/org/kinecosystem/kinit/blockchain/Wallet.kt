@@ -307,6 +307,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 if (statusResponse?.status != "ok") {
                     errorMessage = "Response " + statusResponse?.status
                 }
+            } else {
+                errorMessage = "response: $response, isSuccessful: ${response?.isSuccessful}"
             }
         } catch (e: Exception) {
             Log.d(TAG, "Exception occurred while creating account ${e.message}")
