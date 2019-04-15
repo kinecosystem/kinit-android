@@ -7,13 +7,12 @@ import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.navigation.Navigator
 import org.kinecosystem.kinit.view.SingleFragmentActivity
 import org.kinecosystem.kinit.view.support.SupportActivity
+import org.kinecosystem.kinit.view.support.TICKET_CATEGORY
+import org.kinecosystem.kinit.view.support.TICKET_SUB_CATEGORY
 import org.kinecosystem.kinit.viewmodel.SupportViewModel
 import org.kinecosystem.kinit.viewmodel.bootwallet.*
 
 class BootWalletActivity : SingleFragmentActivity() , BootWalletEventsListener {
-
-
-
     companion object {
         private const val BOOT_ACTION = "BOOT_ACTION"
 
@@ -26,7 +25,6 @@ class BootWalletActivity : SingleFragmentActivity() , BootWalletEventsListener {
 
     lateinit var model: BootWalletViewModel
     private lateinit var currentFragment: Fragment
-    private val bootWalletErrorFragment: Fragment by lazy { BootWalletErrorFragment.newInstance() }
     private val bootWalletFragment: Fragment by lazy { BootWalletFragment.newInstance() }
 
     override fun beforeSuper() {
@@ -69,13 +67,6 @@ class BootWalletActivity : SingleFragmentActivity() , BootWalletEventsListener {
         model.onDestroy()
     }
 
-    override fun onWalletBootError() {
-        if (currentFragment != bootWalletErrorFragment) {
-            currentFragment = bootWalletErrorFragment
-            replaceFragment(bootWalletErrorFragment)
-        }
-    }
-
     override fun onWalletBooting() {
         if (currentFragment != bootWalletFragment) {
             currentFragment = bootWalletFragment
@@ -83,8 +74,11 @@ class BootWalletActivity : SingleFragmentActivity() , BootWalletEventsListener {
         }
     }
 
-    override fun contactSupport() {
-        val urlParams = mapOf("category" to "Other","subCategory" to "On-boarding error")
+    override fun contactSupport(action: BootAction) {
+        val urlParams = when (action){
+            BootAction.CREATE ->  mapOf(TICKET_CATEGORY to "Other",TICKET_SUB_CATEGORY to "On-boarding error")
+            BootAction.MIGRATE -> mapOf(TICKET_CATEGORY to "Other",TICKET_SUB_CATEGORY to "Other")
+        }
         val intent = SupportActivity.getIntent(this, SupportViewModel.Destination.CONTACT_US, urlParams)
         Navigator(this).navigateTo(intent)
     }
