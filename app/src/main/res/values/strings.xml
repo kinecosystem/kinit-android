@@ -69,8 +69,8 @@
     <string name="error_unable_to_create_wallet">We were unable to create a wallet for you</string>
     <string name="error_unable_to_migrate_wallet">We were unable to migrate a wallet for you</string>
 
-    <string name="error_unable_to_boot_wallet_title">Sorry, error occurred. </string>
-    <string name="error_booting_wallet_text">Sorry, error occurred.\n<u>Retry</u> or <u>contact support</u></string>
+    <string name="error_unable_to_boot_wallet_title">Sorry, an error occurred. </string>
+    <string name="error_booting_wallet_text">Sorry, an error occurred.\n<u>Retry</u> or <u>contact support</u></string>
     <string name="retry">Retry</string>
     <string name="contact_support">contact support</string>
     <string name="question_gray_text">Check all that apply</string>
