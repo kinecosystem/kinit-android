@@ -138,13 +138,13 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
                     override fun onResponse(call: Call<OnboardingApi.AccountAddressResponds>, response: Response<OnboardingApi.AccountAddressResponds>) {
                         if (response.isSuccessful) {
-                            if (response.body()?.userId.isNullOrEmpty()) {
+                            if (response.body()?.userId.isNullOrBlank()) {
                                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                             } else {
-                                userRepo.updateUserId(response.body()?.userId ?: "")
-                                categoriesService.retrieveCategories()
-                                taskService.retrieveAllTasks()
-                                callback?.onSuccess()
+                                response.body()?.userId?.let {
+                                    wallet.restoreWallet(it)
+                                    callback?.onSuccess()
+                                }
                             }
                         } else {
                             callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
