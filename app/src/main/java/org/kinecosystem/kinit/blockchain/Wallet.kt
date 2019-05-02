@@ -284,14 +284,15 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     }
 
     fun restoreWallet(userId: String) {
+        userRepo.isBackedup = true
+        activeWallet = true
         userRepo.updateUserId(userId)
         userRepo.userInfo.publicAddress = account.publicAddress!!
         analytics.setUserId(userRepo.userId())
-        initKinWallet()
+        analytics.logEvent(Events.Business.WalletRestored())
+        updateBalance()
         retrieveTransactions()
         retrieveCoupons()
-        userRepo.isBackedup = true
-        analytics.logEvent(Events.Business.WalletRestored())
     }
 
     private fun createAccountSync(): Boolean {
