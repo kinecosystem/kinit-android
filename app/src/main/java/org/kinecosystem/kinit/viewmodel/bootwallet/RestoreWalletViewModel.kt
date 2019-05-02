@@ -49,11 +49,9 @@ class RestoreWalletViewModel {
         passphrase = answers.joinToString(separator = "") { it.trim() }
         var restoredAccount = walletService.importBackedUpAccount(qrCode, passphrase)
         if (restoredAccount == null || restoredAccount.publicAddress == null) {
-            // this is the restoration point
             passphrase = answers.joinToString(separator = "")
             restoredAccount = walletService.importBackedUpAccount(qrCode, passphrase)
         }
-        // check if were *not* able to restore the account
         if (restoredAccount == null || restoredAccount.publicAddress == null) {
             answersSubmitted.set(false)
             listener?.onError(RestoreWalletActivityMessages.RESTORE_ERROR)

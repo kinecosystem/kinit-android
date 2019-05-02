@@ -275,7 +275,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     fun importBackedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
         return try {
+            kinClient.deleteAccount(0)
             kinClient.importAccount(exportedStr, passphrase)
+            account = kinClient.getAccount(kinClient.accountCount - 1)
+            return account
         } catch (cryptoException: CryptoException) {
             null
         } catch (createAccountException: CreateAccountException) {
@@ -290,7 +293,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         userRepo.userInfo.publicAddress = account.publicAddress!!
         analytics.setUserId(userRepo.userId())
         analytics.logEvent(Events.Business.WalletRestored())
-        updateBalance()
         retrieveTransactions()
         retrieveCoupons()
     }
