@@ -58,22 +58,26 @@ class RestoreWalletViewModel {
         } else {
             onboardingService.restoreAccount(restoredAccount.publicAddress.orEmpty(), object : OperationCompletionCallback {
                 override fun onSuccess() {
-                    walletService.migrateWallet(object: IMigrationManagerCallbacks {
-                        override fun onReady(kinClient: IKinClient?) {
-                            analytics.logEvent(Events.Business.MigrationSucceeded())
-                            listener?.onSuccess()
-                        }
+                    if (!walletService.kin3Ready.get()){
+                        walletService.migrateWallet(object: IMigrationManagerCallbacks {
+                            override fun onReady(kinClient: IKinClient?) {
+                                analytics.logEvent(Events.Business.MigrationSucceeded())
+                                listener?.onSuccess()
+                            }
 
-                        override fun onMigrationStart() {
-                            analytics.logEvent(Events.Business.MigrationStarted())
-                        }
+                            override fun onMigrationStart() {
+                                analytics.logEvent(Events.Business.MigrationStarted())
+                            }
 
-                        override fun onError(e: Exception?) {
-                            analytics.logEvent(Events.BILog.MigrationFailed(e?.message))
-                            listener?.onError(RestoreWalletActivityMessages.RESTORE_SERVER_ERROR)
-                            answersSubmitted.set(false)
-                        }
-                    })
+                            override fun onError(e: Exception?) {
+                                analytics.logEvent(Events.BILog.MigrationFailed(e?.message))
+                                listener?.onError(RestoreWalletActivityMessages.RESTORE_SERVER_ERROR)
+                                answersSubmitted.set(false)
+                            }
+                        })
+                    } else {
+                        listener?.onSuccess()
+                    }
                 }
 
                 override fun onError(errorCode: Int) {
