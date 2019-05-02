@@ -35,10 +35,11 @@
 
         <View
             android:id="@+id/retry"
-            android:layout_width="33dp"
+            android:layout_width="0dp"
             android:layout_height="44dp"
             android:onClick="@{model::onRetryClicked}"
             app:layout_constraintBottom_toBottomOf="@+id/bottom_text"
+            app:layout_constraintEnd_toStartOf="@+id/contact_support"
             app:layout_constraintStart_toStartOf="@+id/bottom_text"
             app:layout_constraintTop_toTopOf="@+id/bottom_text" />
 
@@ -51,23 +52,6 @@
             app:layout_constraintEnd_toEndOf="@+id/bottom_text"
             app:layout_constraintTop_toTopOf="@+id/bottom_text"
             app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:lineSpacingExtra="37sp"
-            android:padding="15sp"
-            android:text="@{ model.walletAction == bootAction.CREATE ? @string/creating_wallet : @string/migrating_wallet}"
-            android:textColor="#7884a5"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            tools:text="Updating your wallet"
-            app:layout_constraintEnd_toEndOf="@+id/creating_wallet_lottie"
-            app:layout_constraintStart_toStartOf="@+id/creating_wallet_lottie"
-            app:layout_constraintTop_toBottomOf="@+id/creating_wallet_lottie" />
 
         <TextView
             android:id="@+id/bottom_text"
@@ -85,6 +69,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/error_booting_wallet_text" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:lineSpacingExtra="37sp"
+            android:padding="15sp"
+            android:text="@{ model.walletAction == bootAction.CREATE ? @string/creating_wallet : @string/migrating_wallet}"
+            android:textColor="#7884a5"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            tools:text="Updating your wallet"
+            app:layout_constraintEnd_toEndOf="@+id/creating_wallet_lottie"
+            app:layout_constraintStart_toStartOf="@+id/creating_wallet_lottie"
+            app:layout_constraintTop_toBottomOf="@+id/creating_wallet_lottie" />
 
         <View
             android:id="@+id/line1"
