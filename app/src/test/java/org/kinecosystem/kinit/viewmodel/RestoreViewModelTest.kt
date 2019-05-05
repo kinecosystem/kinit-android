@@ -1,7 +1,9 @@
 package org.kinecosystem.kinit.viewmodel
 
+import android.databinding.ObservableBoolean
 import com.google.common.truth.Truth.assertThat
 import kin.sdk.KinAccount
+import kin.sdk.migration.common.interfaces.IMigrationManagerCallbacks
 import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -104,6 +106,13 @@ class RestoreViewModelTest {
 
         `when`(walletService.importBackedUpAccount(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(mockKinAccount)
         `when`(mockKinAccount.publicAddress).thenReturn("")
+        `when`(walletService.kin3Ready).thenReturn( ObservableBoolean(false))
+
+        doAnswer {invocation ->
+            val callback = invocation.getArgument<IMigrationManagerCallbacks>(0)
+            callback.onReady(null)
+        }.`when`(walletService).migrateWallet(any(IMigrationManagerCallbacks::class.java))
+
 
         doAnswer { invocation ->
             val callback = invocation.getArgument<OperationCompletionCallback>(1)

@@ -73,42 +73,40 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         Test
     }
 
-    private val type: Type = if (BuildConfig.DEBUG) Type.Test else Type.Main
     private val walletCache: DataStore
     private var kinClient: KinClient
     private var account: KinAccount
-    private var migrationManager : MigrationManager? = null
     private lateinit var paymentListener: ListenerRegistration
+    private val applicationContext = context.applicationContext
 
     val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
     val transactions: ObservableField<List<KinTransaction>> = ObservableField(ArrayList())
     val coupons: ObservableField<List<Coupon>> = ObservableField(ArrayList())
 
-    init {
-        val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
-        walletCache = dataStoreProvider.dataStore(walletCacheName)
-        val providerUrl = if (type == Type.Main) SDK_MAIN_NETWORK_URL else SDK_TEST_NETWORK_URL
-        val networkId = if (type == Type.Main) SDK_MAIN_NETWORK_ID else SDK_TEST_NETWORK_ID
-        val coreUrl = if (type == Type.Main) CORE_MAIN_NETWORK_URL else CORE_TEST_NETWORK_URL
-        val coreId = if (type == Type.Main) CORE_MAIN_NETWORK_ID else CORE_TEST_NETWORK_ID
-        val coreIssuer = if (type == Type.Main) CORE_ISSUER_MAIN else CORE_ISSUER_TEST
-        val migrationUrl = (if (type == Type.Main) MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL else MIGRATE_ACCOUNT_SERVICE_TEST_URL) + "user_id=${userRepo.userId()}&public_address="
-        val kinSdkVersion = object: IKinVersionProvider {
-            override fun getKinSdkVersion(): KinSdkVersion {
-                return KinSdkVersion.NEW_KIN_SDK
-            }
-        }
+    private val type: Type = if (BuildConfig.DEBUG) Type.Test else Type.Main
+    private val providerUrl = if (type == Type.Main) SDK_MAIN_NETWORK_URL else SDK_TEST_NETWORK_URL
+    private val networkId = if (type == Type.Main) SDK_MAIN_NETWORK_ID else SDK_TEST_NETWORK_ID
+    private val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
 
+    init {
+        walletCache = dataStoreProvider.dataStore(walletCacheName)
         kinClient = KinClient(context, Environment(providerUrl, networkId), KINIT_APP_ID)
         account = if (kinClient.hasAccount()) {
             kinClient.getAccount(kinClient.accountCount - 1)
         } else {
             kinClient.addAccount()
         }
-
         userRepo.userInfo.publicAddress = account.publicAddress!!
+    }
 
-        if (!isKin3) migrationManager = MigrationManager(context,KINIT_APP_ID, MigrationNetworkInfo(coreUrl, coreId, providerUrl, networkId,coreIssuer,migrationUrl), kinSdkVersion, MigrationManagerListener())
+    private fun getMigrationManager(): MigrationManager {
+        val coreUrl = if (type == Type.Main) CORE_MAIN_NETWORK_URL else CORE_TEST_NETWORK_URL
+        val coreId = if (type == Type.Main) CORE_MAIN_NETWORK_ID else CORE_TEST_NETWORK_ID
+        val coreIssuer = if (type == Type.Main) CORE_ISSUER_MAIN else CORE_ISSUER_TEST
+        val migrationUrl = (if (type == Type.Main) MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL else MIGRATE_ACCOUNT_SERVICE_TEST_URL) + "user_id=${userRepo.userId()}&public_address="
+        val kinSdkVersion = IKinVersionProvider { KinSdkVersion.NEW_KIN_SDK }
+
+        return MigrationManager(applicationContext,KINIT_APP_ID, MigrationNetworkInfo(coreUrl, coreId, providerUrl, networkId,coreIssuer,migrationUrl), kinSdkVersion, MigrationManagerListener())
     }
 
     private var isKin3: Boolean
@@ -277,7 +275,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     fun importBackedUpAccount(exportedStr: String, passphrase: String): KinAccount? {
         return try {
+            kinClient.deleteAccount(0)
             kinClient.importAccount(exportedStr, passphrase)
+            account = kinClient.getAccount(kinClient.accountCount - 1)
+            return account
         } catch (cryptoException: CryptoException) {
             null
         } catch (createAccountException: CreateAccountException) {
@@ -285,15 +286,15 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         }
     }
 
-    fun restoreWallet(backedUpKinAccount: KinAccount) {
-        account = backedUpKinAccount
+    fun restoreWallet(userId: String) {
+        userRepo.isBackedup = true
+        activeWallet = true
+        userRepo.updateUserId(userId)
         userRepo.userInfo.publicAddress = account.publicAddress!!
         analytics.setUserId(userRepo.userId())
-        initKinWallet()
+        analytics.logEvent(Events.Business.WalletRestored())
         retrieveTransactions()
         retrieveCoupons()
-        userRepo.isBackedup = true
-        analytics.logEvent(Events.Business.WalletRestored())
     }
 
     private fun createAccountSync(): Boolean {
@@ -448,27 +449,30 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     }
 
     fun migrateWallet(migrationManagerCallbacks: IMigrationManagerCallbacks? = null) {
-        migrationManager?.start(object : IMigrationManagerCallbacks {
-            override fun onReady(newKinClient: IKinClient) {
-                Log.d("WalletMigration", "migrateWallet onReady for account: ${userRepo.userId()} " +
-                        "with public address ${kinClient.getAccount(0)?.publicAddress}")
-                isKin3 = true
-                migrationManagerCallbacks?.onReady(newKinClient)
-            }
+        val manager = getMigrationManager()
+        if (!isKin3){
+            manager.start(object : IMigrationManagerCallbacks {
+                override fun onReady(newKinClient: IKinClient) {
+                    Log.d("WalletMigration", "migrateWallet onReady for account: ${userRepo.userId()} " +
+                            "with public address ${kinClient.getAccount(0)?.publicAddress}")
+                    isKin3 = true
+                    migrationManagerCallbacks?.onReady(null)
+                }
 
-            override fun onMigrationStart() {
-                Log.d("WalletMigration", "migrateWallet onMigrationStart for account: ${userRepo.userId()} " +
-                        "with public address ${kinClient.getAccount(0)?.publicAddress}")
-                migrationManagerCallbacks?.onMigrationStart()
-            }
+                override fun onMigrationStart() {
+                    Log.d("WalletMigration", "migrateWallet onMigrationStart for account: ${userRepo.userId()} " +
+                            "with public address ${kinClient.getAccount(0)?.publicAddress}")
+                    migrationManagerCallbacks?.onMigrationStart()
+                }
 
-            override fun onError(e: java.lang.Exception?) {
-                Log.d("WalletMigration", "migrateWallet onError for account: ${userRepo.userId()} " +
-                        "with public address ${kinClient.getAccount(0)?.publicAddress} with error: $e")
-                migrationManagerCallbacks?.onError(e)
-            }
-
-        })
+                override fun onError(e: java.lang.Exception?) {
+                    Log.d("WalletMigration", "migrateWallet onError for account: ${userRepo.userId()} " +
+                            "with public address ${kinClient.getAccount(0)?.publicAddress} with error: $e")
+                    migrationManagerCallbacks?.onError(e)
+                }
+            })
+        } else
+            migrationManagerCallbacks?.onReady(null)
     }
 
 }

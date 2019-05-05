@@ -3,6 +3,8 @@ package org.kinecosystem.kinit.server
 import android.content.Context
 import android.util.Log
 import com.google.firebase.iid.FirebaseInstanceId
+import kin.sdk.Balance
+import kin.utils.ResultCallback
 import org.kinecosystem.kinit.BuildConfig
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
@@ -17,6 +19,7 @@ import org.kinecosystem.kinit.util.GeneralUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 class OnboardingService(context: Context, private val appLaunchApi: OnboardingApi,
                         private val phoneAuthenticationApi: PhoneAuthenticationApi,
@@ -138,13 +141,20 @@ class OnboardingService(context: Context, private val appLaunchApi: OnboardingAp
 
                     override fun onResponse(call: Call<OnboardingApi.AccountAddressResponds>, response: Response<OnboardingApi.AccountAddressResponds>) {
                         if (response.isSuccessful) {
-                            if (response.body()?.userId.isNullOrEmpty()) {
+                            if (response.body()?.userId.isNullOrBlank()) {
                                 callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
                             } else {
-                                userRepo.updateUserId(response.body()?.userId ?: "")
-                                categoriesService.retrieveCategories()
-                                taskService.retrieveAllTasks()
-                                callback?.onSuccess()
+                                response.body()?.userId?.let {
+                                    wallet.restoreWallet(it)
+                                    wallet.updateBalance(object : ResultCallback<Balance>{
+                                        override fun onResult(result: Balance?) {
+                                            callback?.onSuccess()
+                                        }
+                                        override fun onError(e: Exception?) {
+                                            callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
+                                        }
+                                    })
+                                }
                             }
                         } else {
                             callback?.onError(ERROR_APP_SERVER_FAILED_RESPONSE)
