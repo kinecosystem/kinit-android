@@ -96,13 +96,7 @@
             android:name=".view.support.SupportActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.feedback.FeedbackActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".view.spend.EcoAppsInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.migrateWallet.MigrateWalletActivity"
             android:screenOrientation="portrait" />
 
         <activity android:name=".view.transfer.TransferActivity"
