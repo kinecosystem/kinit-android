@@ -92,7 +92,7 @@ dependencies {
     kapt "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     kapt 'com.android.databinding:compiler:3.0.1'
     implementation 'com.android.support:support-compat:27.1.1'
-    implementation "com.github.kinecosystem.move-kin-android:common:$moveKinVersion"
+    implementation "com.github.kinecosystem.move-kin-android:transfer:$moveKinVersion"
     implementation "com.github.kinecosystem:kin-sdk-android:$kinSdkVersion"
     implementation 'com.google.firebase:firebase-messaging:15.0.2'
     implementation 'com.airbnb.android:lottie:2.5.0'
@@ -102,7 +102,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-vector-drawable:27.1.1'
     implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
@@ -134,7 +134,7 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.15'
     kaptTest 'com.google.dagger:dagger-compiler:2.15'
     compile project(path: ':kinit-client-validation-android-module')
-    implementation 'com.github.kinecosystem:kin-migration-module-android:1.0.5'
+    implementation "com.github.kinecosystem:kin-migration-module-android:$migrationModuleVersion"
     api 'com.github.kinecosystem:kin-utils-android:1.1'
 }
 
