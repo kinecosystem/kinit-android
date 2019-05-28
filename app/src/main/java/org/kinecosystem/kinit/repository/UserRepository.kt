@@ -1,11 +1,9 @@
 package org.kinecosystem.kinit.repository
 
-import android.databinding.ObservableBoolean
 import android.util.Log
 import org.kinecosystem.kinit.model.user.UserInfo
 import org.kinecosystem.kinit.server.api.BackupApi
 import java.util.*
-import kotlin.collections.HashMap
 
 
 private const val USER_ID_KEY = "user_id"
@@ -119,8 +117,6 @@ class UserRepository(dataStoreProvider: DataStoreProvider) {
     var authToken: String
         set(token) = userCache.putString(AUTH_TOKEN, token)
         get() = userCache.getString(AUTH_TOKEN, "")
-
-
 
     var restoreHints: List<String>
         set(hints) {
