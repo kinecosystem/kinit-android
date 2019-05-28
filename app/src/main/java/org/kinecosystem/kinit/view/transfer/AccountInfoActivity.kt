@@ -14,7 +14,7 @@ class AccountInfoActivity : AccountInfoActivityBase() {
         viewModel = AccountInfoViewModel()
     }
 
-    override fun getAccountInfo(): String? {
+    override fun getData(): String? {
         return viewModel?.getPublicAddress()
     }
 
