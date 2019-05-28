@@ -29,6 +29,7 @@ import org.kinecosystem.kinit.view.earn.CategoryTaskActivity
 import org.kinecosystem.kinit.view.earn.QuestionnaireActivity
 import org.kinecosystem.kinit.view.earn.TaskErrorFragment
 import org.kinecosystem.kinit.view.earn.WebTaskTruexFragment
+import org.kinecosystem.kinit.view.onewallet.LinkAccountActivity
 import org.kinecosystem.kinit.view.support.SupportActivity
 import org.kinecosystem.kinit.view.phoneVerify.CodeVerificationFragment
 import org.kinecosystem.kinit.view.phoneVerify.PhoneSendFragment
@@ -127,4 +128,5 @@ interface CoreComponent {
     fun inject(transferActivityModel: TransferActivityModel)
     fun inject(accountInfoViewModel: AccountInfoViewModel)
     fun inject(migrationWalletActivity: MigrateWalletViewModel)
+    fun inject(linkAccountActivity: LinkAccountActivity)
 }

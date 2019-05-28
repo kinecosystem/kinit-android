@@ -45,6 +45,12 @@
             android:exported="true"/>
 
         <activity
+            android:name=".view.onewallet.LinkAccountActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:exported="true"/>
+
+        <activity
             android:name=".view.RegisterErrorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Questionnaire" />

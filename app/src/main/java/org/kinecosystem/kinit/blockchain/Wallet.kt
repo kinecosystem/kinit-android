@@ -106,7 +106,9 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         val migrationUrl = (if (type == Type.Main) MIGRATE_ACCOUNT_SERVICE_PRODUCTION_URL else MIGRATE_ACCOUNT_SERVICE_TEST_URL) + "user_id=${userRepo.userId()}&public_address="
         val kinSdkVersion = IKinVersionProvider { KinSdkVersion.NEW_KIN_SDK }
 
-        return MigrationManager(applicationContext,KINIT_APP_ID, MigrationNetworkInfo(coreUrl, coreId, providerUrl, networkId,coreIssuer,migrationUrl), kinSdkVersion, MigrationManagerListener())
+        return MigrationManager(applicationContext, KINIT_APP_ID,
+            MigrationNetworkInfo(coreUrl, coreId, providerUrl, networkId, coreIssuer, migrationUrl), kinSdkVersion,
+            MigrationManagerListener())
     }
 
     private var isKin3: Boolean
@@ -115,7 +117,6 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             kin3Ready.set(value)
         }
         get() = walletCache.getBoolean(IS_KIN3, false)
-
 
     private var activeWallet: Boolean
         set(value) {
@@ -473,6 +474,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             })
         } else
             migrationManagerCallbacks?.onReady(null)
+    }
+
+    fun getLinkingTransactionEnvelope(appPackageId: String, appAccountPublicAddress:String): String {
+        return account.getLinkAccountsTransactionEnvelopeFor(appPackageId,appAccountPublicAddress)
     }
 
 }

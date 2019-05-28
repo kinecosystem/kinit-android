@@ -2,9 +2,10 @@
 
 buildscript {
     ext.kotlin_version = '1.2.30'
-    ext.moveKinVersion = '1.0.3'
-    ext.kinSdkVersion = '1.0.4.1'
-    ext.migrationModuleVersion = '1.0.8'
+    // TODO change to released versions
+    ext.moveKinVersion = '8b4317e3037bd6bb4de108223a5381459f2b2c05'
+    ext.kinSdkVersion = 'bba9e1e74e1bcc4102ff3f6ce84f580e70d162e0'
+    ext.migrationModuleVersion = 'bf1e3ff7a282de6a3378bc28f0ffffe84b362ba6'
     repositories {
         mavenLocal()
         google()
