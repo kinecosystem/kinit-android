@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
+import kin.base.*
 import kin.sdk.*
 import kin.sdk.exception.AccountNotFoundException
 import kin.sdk.exception.CreateAccountException
@@ -38,14 +39,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.math.BigDecimal
 
-
 private const val CORE_TEST_NETWORK_URL = "https://horizon-playground.kininfrastructure.com/"
 private const val CORE_TEST_NETWORK_ID = "Kin Playground Network ; June 2018"
 private const val CORE_MAIN_NETWORK_URL = "https://horizon-ecosystem.kininfrastructure.com/"
 private const val CORE_MAIN_NETWORK_ID = "Public Global Kin Ecosystem Network ; June 2018"
 private const val CORE_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZVCX7XX5A5QXZIVK"
 private const val CORE_ISSUER_TEST = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
-private const val SDK_TEST_NETWORK_URL = "https://horizon-testnet.kininfrastructure.com/"
+private const val SDK_TEST_NETWORK_URL = "http://horizon-testnet-one-wallet.kininfrastructure.com/"
 private const val SDK_TEST_NETWORK_ID = "Kin Testnet ; December 2018"
 private const val SDK_MAIN_NETWORK_URL = "https://horizon.kinfederation.com/"
 private const val SDK_MAIN_NETWORK_ID = "Kin Mainnet ; December 2018"
@@ -61,12 +61,12 @@ private const val TAG = "Wallet"
 private const val KINIT_APP_ID = "kit"
 
 class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
-             val userRepo: UserRepository,
-             val categoriesRepository: CategoriesRepository,
-             val analytics: Analytics,
-             val onboardingApi: OnboardingApi,
-             val walletApi: WalletApi,
-             val scheduler: Scheduler) {
+    val userRepo: UserRepository,
+    val categoriesRepository: CategoriesRepository,
+    val analytics: Analytics,
+    val onboardingApi: OnboardingApi,
+    val walletApi: WalletApi,
+    val scheduler: Scheduler) {
 
     enum class Type {
         Main,
@@ -87,6 +87,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     private val providerUrl = if (type == Type.Main) SDK_MAIN_NETWORK_URL else SDK_TEST_NETWORK_URL
     private val networkId = if (type == Type.Main) SDK_MAIN_NETWORK_ID else SDK_TEST_NETWORK_ID
     private val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
+    val topupManager: TopupManager
 
     init {
         walletCache = dataStoreProvider.dataStore(walletCacheName)
@@ -97,6 +98,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             kinClient.addAccount()
         }
         userRepo.userInfo.publicAddress = account.publicAddress!!
+        topupManager = TopupManager(KINIT_APP_ID, account)
     }
 
     private fun getMigrationManager(): MigrationManager {
@@ -151,7 +153,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
                 override fun onError(exception: java.lang.Exception) {
                     Log.e(TAG, "no update balance")
                     analytics.logEvent(
-                            Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
+                        Events.BILog.BalanceUpdateFailed(exception.toString() + ":" + exception.message))
                     callback?.onError(exception)
                 }
             })
@@ -162,12 +164,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun retrieveTransactions(callback: OperationCompletionCallback? = null) {
         walletApi.getTransactions(userRepo.userId()).enqueue(object : Callback<WalletApi.TransactionsResponse> {
             override fun onResponse(call: Call<WalletApi.TransactionsResponse>?,
-                                    response: Response<WalletApi.TransactionsResponse>?) {
+                response: Response<WalletApi.TransactionsResponse>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d(TAG, "onResponse: ${response.body()}")
                     val transactionList = response.body()
                     if (transactionList?.txs != null && transactionList.txs.isNotEmpty() && transactionList.status.equals(
-                                    "ok")) {
+                        "ok")) {
                         injectTxsBalance(transactionList.txs)
                         transactions.set(transactionList.txs)
                     } else {
@@ -205,12 +207,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun retrieveCoupons(callback: OperationCompletionCallback? = null) {
         walletApi.getCoupons(userRepo.userId()).enqueue(object : Callback<WalletApi.CouponsResponse> {
             override fun onResponse(call: Call<WalletApi.CouponsResponse>?,
-                                    response: Response<WalletApi.CouponsResponse>?) {
+                response: Response<WalletApi.CouponsResponse>?) {
                 if (response != null && response.isSuccessful) {
                     Log.d(TAG, "onResponse: ${response.body()}")
                     val couponsList = response.body()
                     if (couponsList?.coupons != null && couponsList.coupons.isNotEmpty() && couponsList.status.equals(
-                                    "ok")) {
+                        "ok")) {
                         coupons.set(couponsList.coupons)
                     } else {
                         Log.d(TAG, "coupons list empty or null ")
@@ -250,10 +252,12 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun payForOrderSync(validationToken: String?, toAddress: String, amount: Int, orderId: String): TransactionId? {
         var transactionId: TransactionId? = null
         var paddr = account.publicAddress
-        var transaction = account.buildTransactionSync(toAddress, BigDecimal(amount), 0, orderId).whitelistableTransaction
-        val transactionInfo = WalletApi.TransactionInfo(orderId, paddr!!, toAddress, amount, transaction.transactionPayload, validationToken)
+        var transaction = account.buildTransactionSync(toAddress, BigDecimal(amount), 0,
+            orderId).whitelistableTransaction()
+        val transactionInfo = WalletApi.TransactionInfo(orderId, paddr!!, toAddress, amount,
+            transaction.transactionPayload, validationToken)
         var response = walletApi.addSignature(userRepo.userId(), transactionInfo).execute()
-        if (response.isSuccessful && response.body()!=null) {
+        if (response.isSuccessful && response.body() != null) {
             transactionId = account.sendWhitelistTransactionSync(response.body()?.signedTransaction)
         }
         return transactionId
@@ -302,7 +306,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         var errorMessage = ""
         try {
             val call = onboardingApi.createAccount(userRepo.userId(),
-                    OnboardingApi.AccountInfo(account.publicAddress!!))
+                OnboardingApi.AccountInfo(account.publicAddress!!))
             val response = call.execute()
             if (response != null && response.isSuccessful && response.body() != null) {
                 val statusResponse = response.body()
@@ -317,8 +321,8 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             errorMessage = "Exception $e with message: ${e.message}"
         }
         analytics.logEvent(
-                if (errorMessage.isEmpty()) Events.BILog.StellarAccountCreationSucceeded()
-                else Events.BILog.StellarAccountCreationFailed(""))
+            if (errorMessage.isEmpty()) Events.BILog.StellarAccountCreationSucceeded()
+            else Events.BILog.StellarAccountCreationFailed(""))
 
         return errorMessage.isEmpty()
     }
@@ -335,7 +339,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         } catch (e: Exception) {
             Log.d(TAG, "Exception occurred while activating account ${e.message}")
             analytics.logEvent(Events.BILog.StellarKinTrustlineSetupFailed(
-                    "Exception $e with message: ${e.message}"))
+                "Exception $e with message: ${e.message}"))
         }
         return false
     }
@@ -353,19 +357,19 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun logSpendTransactionCompleted(price: Int, txHash: String) {
         analytics.incrementUserProperty(Events.UserProperties.SPEND_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_SPENT,
-                price.toLong())
+            price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price,
-                txHash, TRANSACTION_TYPE_SPEND))
+            txHash, TRANSACTION_TYPE_SPEND))
     }
 
     fun logEarnTransactionCompleted(price: Int, txHash: String) {
         analytics.incrementUserProperty(Events.UserProperties.EARN_COUNT, 1)
         analytics.incrementUserProperty(Events.UserProperties.TOTAL_KIN_EARNED,
-                price.toLong())
+            price.toLong())
         analytics.incrementUserProperty(Events.UserProperties.TRANSACTION_COUNT, 1)
         analytics.logEvent(Events.Business.KINTransactionSucceeded(price,
-                txHash, TRANSACTION_TYPE_EARN))
+            txHash, TRANSACTION_TYPE_EARN))
     }
 
     fun listenToPayment(taskId: String, memo: String) {
@@ -439,10 +443,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     private fun isValid(transactionComplete: Push.TransactionCompleteMessage): Boolean {
         return transactionComplete.kin != null &&
-                transactionComplete.kin > 0 &&
-                transactionComplete.taskId != null &&
-                transactionComplete.userId != null &&
-                transactionComplete.userId == userRepo.userInfo.userId
+            transactionComplete.kin > 0 &&
+            transactionComplete.taskId != null &&
+            transactionComplete.userId != null &&
+            transactionComplete.userId == userRepo.userInfo.userId
     }
 
     private fun setTaskState(taskId: String, state: Int) {
@@ -451,24 +455,24 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
 
     fun migrateWallet(migrationManagerCallbacks: IMigrationManagerCallbacks? = null) {
         val manager = getMigrationManager()
-        if (!isKin3){
+        if (!isKin3) {
             manager.start(object : IMigrationManagerCallbacks {
                 override fun onReady(newKinClient: IKinClient) {
                     Log.d("WalletMigration", "migrateWallet onReady for account: ${userRepo.userId()} " +
-                            "with public address ${kinClient.getAccount(0)?.publicAddress}")
+                        "with public address ${kinClient.getAccount(0)?.publicAddress}")
                     isKin3 = true
                     migrationManagerCallbacks?.onReady(null)
                 }
 
                 override fun onMigrationStart() {
                     Log.d("WalletMigration", "migrateWallet onMigrationStart for account: ${userRepo.userId()} " +
-                            "with public address ${kinClient.getAccount(0)?.publicAddress}")
+                        "with public address ${kinClient.getAccount(0)?.publicAddress}")
                     migrationManagerCallbacks?.onMigrationStart()
                 }
 
                 override fun onError(e: java.lang.Exception?) {
                     Log.d("WalletMigration", "migrateWallet onError for account: ${userRepo.userId()} " +
-                            "with public address ${kinClient.getAccount(0)?.publicAddress} with error: $e")
+                        "with public address ${kinClient.getAccount(0)?.publicAddress} with error: $e")
                     migrationManagerCallbacks?.onError(e)
                 }
             })
@@ -476,8 +480,24 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             migrationManagerCallbacks?.onReady(null)
     }
 
-    fun getLinkingTransactionEnvelope(appPackageId: String, appAccountPublicAddress:String): String {
-        return account.getLinkAccountsTransactionEnvelopeFor(appPackageId,appAccountPublicAddress)
+    fun getLinkingTransactionEnvelope(kinSdkAppId: String, publicAddress: String): String? {
+
+        val kinitAccountKeyPair = KeyPair.fromAccountId(account.publicAddress)
+
+        val setOptionsOperation = SetOptionsOperation.Builder()
+            .setSigner(Signer.ed25519PublicKey(kinitAccountKeyPair), 1)
+            .setSourceAccount(KeyPair.fromAccountId(publicAddress))
+            .build()
+        val manageDataOperation = ManageDataOperation.Builder("__link_$publicAddress", kinSdkAppId.toByteArray())
+            .setSourceAccount(kinitAccountKeyPair)
+            .build()
+
+        val transaction = account.transactionBuilderSync.setFee(200)
+            .setMemo("link_$kinSdkAppId")
+            .addOperation(setOptionsOperation)
+            .addOperation(manageDataOperation)
+            .build()
+        return transaction.transactionEnvelope()
     }
 
 }
