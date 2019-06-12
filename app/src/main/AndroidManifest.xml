@@ -40,9 +40,9 @@
             android:theme="@style/Questionnaire" />
         <activity
             android:name=".view.transfer.AccountInfoActivity"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:exported="true"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".view.RegisterErrorActivity"
@@ -99,10 +99,14 @@
             android:name=".view.spend.EcoAppsInfoActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".view.transfer.TransferActivity"
-            android:screenOrientation="portrait"
+        <activity android:name=".kindiscover.AccountInfoActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".view.transfer.TransferActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
         <service android:name=".firebase.KinInstanceIdService">
             <intent-filter>
@@ -114,6 +118,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".kindiscover.SendKinService"
+            android:exported="false" />
 
 
     </application>
