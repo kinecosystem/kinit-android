@@ -29,27 +29,22 @@
             android:id="@+id/balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="sans-serif-medium"
             android:text="@{model.balance}"
             android:textColor="#ffffff"
             android:textSize="57sp"
             android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/balance_blue"
+            app:layout_constraintBottom_toTopOf="@+id/transferButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/ksign"
-            app:layout_constraintTop_toBottomOf="@+id/balance_blue"
-            app:layout_constraintVertical_bias="0.501"
+            app:layout_constraintTop_toBottomOf="@+id/balance_title"
             tools:text="250" />
 
         <TextView
             android:id="@+id/balance_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:letterSpacing="0.01"
@@ -61,13 +56,13 @@
             app:layout_constraintBottom_toTopOf="@+id/balance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/balance_blue"
             tools:text="Your Kin Balance" />
 
         <ImageView
             android:id="@+id/ksign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/balance"
             app:layout_constraintEnd_toStartOf="@+id/balance"
             app:layout_constraintHorizontal_bias="0.5"
@@ -75,8 +70,24 @@
             app:layout_constraintStart_toEndOf="@+id/balance_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/balance"
-            app:layout_constraintVertical_bias="0.456"
+            app:layout_constraintVertical_bias="0.5"
             app:srcCompat="@drawable/k_kin_white" />
+
+        <org.kinecosystem.appstransfer.view.customview.AppsTransferButton
+            android:id="@+id/transferButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/empty_rounded_blue"
+            android:text="@string/transfer_kin"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:textColor="@color/blue"
+            app:layout_constraintBottom_toTopOf="@+id/balance_nav_tabs"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balance"
+            />
 
         <View
             android:id="@+id/line_delim"
@@ -106,10 +117,10 @@
             app:layout_constraintBottom_toTopOf="@+id/shadow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tabTextAppearance="@style/CustomTextAppearanceTab"
             app:layout_constraintTop_toBottomOf="@+id/balance_blue"
             app:tabIndicatorColor="@color/tab_font_color_selected"
             app:tabSelectedTextColor="@color/fab_font_color"
+            app:tabTextAppearance="@style/CustomTextAppearanceTab"
             app:tabTextColor="@color/fab_font_color">
 
             <android.support.design.widget.TabItem
@@ -223,5 +234,7 @@
             </LinearLayout>
 
         </android.support.v4.view.ViewPager>
+
+
     </android.support.constraint.ConstraintLayout>
 </layout>

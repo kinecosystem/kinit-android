@@ -259,4 +259,5 @@
     <string name="kinecosystem_transfer_activity_title">Kin Ecosystem</string>
     <string name="kinecosystem_transfer_agree">I agree</string>
     <string name="kinecosystem_transfer_title">In order to send Kin, %1$s would like to receive your Kin account information (i.e. your public address) from Kinit.</string>
+    <string name="transfer_kin">Transfer Kin</string>
 </resources>
