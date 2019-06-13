@@ -4,7 +4,6 @@ import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
-import kin.base.*
 import kin.sdk.*
 import kin.sdk.exception.AccountNotFoundException
 import kin.sdk.exception.CreateAccountException
@@ -73,21 +72,21 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
         Test
     }
 
+    val oneWallet: OneWallet
+    val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
+    val transactions: ObservableField<List<KinTransaction>> = ObservableField(ArrayList())
+    val coupons: ObservableField<List<Coupon>> = ObservableField(ArrayList())
+
     private val walletCache: DataStore
     private var kinClient: KinClient
     private var account: KinAccount
     private lateinit var paymentListener: ListenerRegistration
     private val applicationContext = context.applicationContext
 
-    val onEarnTransactionCompleted: ObservableBoolean = ObservableBoolean(false)
-    val transactions: ObservableField<List<KinTransaction>> = ObservableField(ArrayList())
-    val coupons: ObservableField<List<Coupon>> = ObservableField(ArrayList())
-
     private val type: Type = if (BuildConfig.DEBUG) Type.Test else Type.Main
     private val providerUrl = if (type == Type.Main) SDK_MAIN_NETWORK_URL else SDK_TEST_NETWORK_URL
     private val networkId = if (type == Type.Main) SDK_MAIN_NETWORK_ID else SDK_TEST_NETWORK_ID
     private val walletCacheName = if (type == Type.Test) TEST_NET_WALLET_CACHE_NAME else MAIN_NET_WALLET_CACHE_NAME
-    val topupManager: TopupManager
 
     init {
         walletCache = dataStoreProvider.dataStore(walletCacheName)
@@ -98,7 +97,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             kinClient.addAccount()
         }
         userRepo.userInfo.publicAddress = account.publicAddress!!
-        topupManager = TopupManager(KINIT_APP_ID, account)
+        oneWallet = OneWallet(KINIT_APP_ID, account)
     }
 
     private fun getMigrationManager(): MigrationManager {
@@ -480,24 +479,5 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             migrationManagerCallbacks?.onReady(null)
     }
 
-    fun getLinkingTransactionEnvelope(kinSdkAppId: String, publicAddress: String): String? {
-
-        val kinitAccountKeyPair = KeyPair.fromAccountId(account.publicAddress)
-
-        val setOptionsOperation = SetOptionsOperation.Builder()
-            .setSigner(Signer.ed25519PublicKey(kinitAccountKeyPair), 1)
-            .setSourceAccount(KeyPair.fromAccountId(publicAddress))
-            .build()
-        val manageDataOperation = ManageDataOperation.Builder("__link_$publicAddress", kinSdkAppId.toByteArray())
-            .setSourceAccount(kinitAccountKeyPair)
-            .build()
-
-        val transaction = account.transactionBuilderSync.setFee(200)
-            .setMemo("link_$kinSdkAppId")
-            .addOperation(setOptionsOperation)
-            .addOperation(manageDataOperation)
-            .build()
-        return transaction.transactionEnvelope()
-    }
 
 }

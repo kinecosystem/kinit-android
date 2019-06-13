@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.TextView
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
-import org.kinecosystem.kinit.blockchain.TopupManager
 import org.kinecosystem.kinit.blockchain.Wallet
 import org.kinecosystem.transfer.receiver.view.AccountInfoActivityBase
 import javax.inject.Inject
@@ -34,7 +33,12 @@ class TopupAccountActivity : AccountInfoActivityBase() {
         val dstAppId = intent.extras.getString(EXTRA_APP_ID)
         val dstPublicAddress = intent.extras.getString(EXTRA_PUBLIC_ADDRESS)
         val amount = Integer.parseInt(intent.extras.getString(EXTRA_AMOUNT, "5"))
-        return wallet.topupManager.topup(amount, dstAppId, dstPublicAddress).toString()
+        return try {
+            wallet.oneWallet.sendTopupTo(dstAppId, dstPublicAddress, amount).toString()
+        } catch (e: Exception){
+            e.printStackTrace()
+            "Unable to topup account. Exception $e with message ${e.message}"
+        }
     }
 
     override fun updateSourceApp(sourceApp: String) {

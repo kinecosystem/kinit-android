@@ -25,7 +25,7 @@ class LinkAccountActivity : AccountInfoActivityBase() {
     override fun getData(): String? {
         val appId = intent.extras.getString(EXTRA_APP_ID)
         val publicAddress = intent.extras.getString(EXTRA_PUBLIC_ADDRESS)
-        return wallet.getLinkingTransactionEnvelope(appId, publicAddress)
+        return wallet.oneWallet.getLinkingTransactionEnvelopeFor(appId, publicAddress)
     }
 
     override fun updateSourceApp(sourceApp: String) {
