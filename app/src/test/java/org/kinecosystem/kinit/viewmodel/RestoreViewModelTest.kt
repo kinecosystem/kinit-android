@@ -1,7 +1,9 @@
 package org.kinecosystem.kinit.viewmodel
 
+import android.databinding.ObservableBoolean
 import com.google.common.truth.Truth.assertThat
-import kin.core.KinAccount
+import kin.sdk.KinAccount
+import kin.sdk.migration.common.interfaces.IMigrationManagerCallbacks
 import org.junit.Before
 import org.junit.Test
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -10,8 +12,8 @@ import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.ERROR_APP_SERVER_FAILED_RESPONSE
 import org.kinecosystem.kinit.server.OnboardingService
 import org.kinecosystem.kinit.server.OperationCompletionCallback
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletActivityMessages
-import org.kinecosystem.kinit.viewmodel.restore.RestoreWalletViewModel
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletActivityMessages
+import org.kinecosystem.kinit.viewmodel.bootwallet.RestoreWalletViewModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
@@ -104,6 +106,13 @@ class RestoreViewModelTest {
 
         `when`(walletService.importBackedUpAccount(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(mockKinAccount)
         `when`(mockKinAccount.publicAddress).thenReturn("")
+        `when`(walletService.kin3Ready).thenReturn( ObservableBoolean(false))
+
+        doAnswer {invocation ->
+            val callback = invocation.getArgument<IMigrationManagerCallbacks>(0)
+            callback.onReady(null)
+        }.`when`(walletService).migrateWallet(any(IMigrationManagerCallbacks::class.java))
+
 
         doAnswer { invocation ->
             val callback = invocation.getArgument<OperationCompletionCallback>(1)

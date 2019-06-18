@@ -62,7 +62,6 @@ interface OnboardingApi {
     @POST("/user/onboard")
     fun createAccount(@Header(USER_HEADER_KEY) userId: String, @Body accountInfo: AccountInfo): Call<StatusResponse>
 
-
     @POST("/user/auth/ack")
     fun authTokenAck(@Header(USER_HEADER_KEY) userId: String, @Body tokenInfo: TokenInfo): Call<StatusResponse>
 
@@ -76,5 +75,4 @@ interface OnboardingApi {
 
     data class AccountAddressResponds(@SerializedName("status") val status: String,
                                       @SerializedName("user_id") val userId: String)
-
 }

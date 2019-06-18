@@ -1,4 +1,4 @@
-package org.kinecosystem.kinit.viewmodel
+package org.kinecosystem.kinit.viewmodel.bootwallet
 
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
@@ -13,7 +13,7 @@ import org.kinecosystem.kinit.server.TaskService
 import org.kinecosystem.kinit.util.Scheduler
 import javax.inject.Inject
 
-class CreateWalletViewModel {
+class CreateWalletViewModel(override var listener: BootWalletEventsListener?) : BootWalletViewModel {
 
     @Inject
     lateinit var analytics: Analytics
@@ -28,18 +28,14 @@ class CreateWalletViewModel {
     @Inject
     lateinit var categoriesService: CategoriesService
 
-
-
     var callback: Observable.OnPropertyChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(p0: Observable?, p1: Int) {
             categoriesService.retrieveCategories()
             taskService.retrieveAllTasks()
-            listener?.onWalletCreated()
+            listener?.onWalletBooted()
         }
     }
     private var walletReady: ObservableBoolean
-    var listener: CreateWalletEventsListener? = null
-
     private companion object {
         const val WAIT_TIMEOUT: Long = 2000L
         const val CREATE_WALLET_TIMEOUT = 20000L
@@ -50,15 +46,16 @@ class CreateWalletViewModel {
         walletReady = networkServices.walletService.ready
     }
 
-    fun initWallet() {
+    override fun bootWallet() {
+        isError.set(false)
         networkServices.walletService.initKinWallet()
-        listener?.onWalletCreating()
+        listener?.onWalletBooting()
         scheduler.scheduleOnMain({
             checkReadyToMove()
         }, WAIT_TIMEOUT)
     }
 
-    fun onDestroy() {
+    override fun onDestroy() {
         walletReady.removeOnPropertyChangedCallback(callback)
     }
 
@@ -68,9 +65,9 @@ class CreateWalletViewModel {
                     if (walletReady.get()) {
                         categoriesService.retrieveCategories()
                         taskService.retrieveAllTasks()
-                        listener?.onWalletCreated()
+                        listener?.onWalletBooted()
                     } else {
-                        listener?.onCreateWalletError()
+                        isError.set(true)
                         onDestroy()
                     }
                 },
@@ -81,28 +78,29 @@ class CreateWalletViewModel {
         if (walletReady.get()) {
             categoriesService.retrieveCategories()
             taskService.retrieveAllTasks()
-            listener?.onWalletCreated()
+            listener?.onWalletBooted()
         } else {
             walletReady.addOnPropertyChangedCallback(callback)
             scheduleTimeout()
         }
     }
 
-    fun onRetryClicked(view: View?) {
+    override var walletAction = BootAction.CREATE
+    override var isError = ObservableBoolean(false)
+
+    override fun onRetryClicked(view: View?) {
         analytics.logEvent(Events.Analytics.ClickRetryButtonOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
-        initWallet()
-        checkReadyToMove()
+        bootWallet()
     }
 
-    fun onContactSupportClicked(view: View?) {
+    override fun onContactSupportClicked(view: View?) {
         analytics.logEvent(Events.Analytics.ClickContactLinkOnErrorPage(Analytics.VIEW_ERROR_TYPE_ONBOARDING))
-        listener?.contactSupport()
+        listener?.contactSupport(walletAction)
     }
 }
 
-interface CreateWalletEventsListener {
-    fun onWalletCreated()
-    fun onCreateWalletError()
-    fun onWalletCreating()
-    fun contactSupport()
+interface BootWalletEventsListener {
+    fun onWalletBooted()
+    fun onWalletBooting()
+    fun contactSupport(action: BootAction)
 }

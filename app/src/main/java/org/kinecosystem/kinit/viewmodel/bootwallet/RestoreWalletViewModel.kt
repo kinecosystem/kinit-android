@@ -1,6 +1,8 @@
-package org.kinecosystem.kinit.viewmodel.restore
+package org.kinecosystem.kinit.viewmodel.bootwallet
 
 import android.databinding.ObservableBoolean
+import kin.sdk.migration.common.interfaces.IKinClient
+import kin.sdk.migration.common.interfaces.IMigrationManagerCallbacks
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
@@ -9,6 +11,7 @@ import org.kinecosystem.kinit.repository.UserRepository
 import org.kinecosystem.kinit.server.OnboardingService
 import org.kinecosystem.kinit.server.OperationCompletionCallback
 import org.kinecosystem.kinit.server.api.BackupApi
+import java.lang.Exception
 import javax.inject.Inject
 
 class RestoreWalletViewModel {
@@ -55,8 +58,26 @@ class RestoreWalletViewModel {
         } else {
             onboardingService.restoreAccount(restoredAccount.publicAddress.orEmpty(), object : OperationCompletionCallback {
                 override fun onSuccess() {
-                    walletService.restoreWallet(restoredAccount)
-                    listener?.onSuccess()
+                    if (!walletService.kin3Ready.get()){
+                        walletService.migrateWallet(object: IMigrationManagerCallbacks {
+                            override fun onReady(kinClient: IKinClient?) {
+                                analytics.logEvent(Events.Business.MigrationSucceeded())
+                                listener?.onSuccess()
+                            }
+
+                            override fun onMigrationStart() {
+                                analytics.logEvent(Events.Business.MigrationStarted())
+                            }
+
+                            override fun onError(e: Exception?) {
+                                analytics.logEvent(Events.BILog.MigrationFailed(e?.message))
+                                listener?.onError(RestoreWalletActivityMessages.RESTORE_SERVER_ERROR)
+                                answersSubmitted.set(false)
+                            }
+                        })
+                    } else {
+                        listener?.onSuccess()
+                    }
                 }
 
                 override fun onError(errorCode: Int) {

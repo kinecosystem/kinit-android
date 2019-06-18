@@ -56,11 +56,14 @@ class SplashViewModel {
             userRepository.isFirstTimeUser = false
             Navigator.Destination.TUTORIAL
         } else if (!networkServices.walletService.ready.get()) {
-            if (!userRepository.restoreHints.isEmpty())
+            if (userRepository.restoreHints.isNotEmpty())
                 Navigator.Destination.WALLET_RESTORE
             else
                 Navigator.Destination.WALLET_CREATE
-        } else {
+        } else if (!networkServices.walletService.kin3Ready.get()){
+            Navigator.Destination.WALLET_MIGRATE
+        }
+        else {
             Navigator.Destination.MAIN_SCREEN
         }
     }

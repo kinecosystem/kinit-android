@@ -68,7 +68,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".view.createWallet.CreateWalletActivity"
+            android:name=".view.bootWallet.BootWalletActivity"
             android:screenOrientation="portrait" />
 
         <activity
@@ -94,9 +94,6 @@
 
         <activity
             android:name=".view.support.SupportActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.feedback.FeedbackActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.spend.EcoAppsInfoActivity"

@@ -146,10 +146,4 @@ public class PhoneVerifyActivity extends BaseActivity implements PhoneVerificati
                     .commit();
         }
     }
-
-    @NotNull
-    @Override
-    public ClientValidator getClientValidator() {
-        return new ClientValidator(this);
-    }
 }

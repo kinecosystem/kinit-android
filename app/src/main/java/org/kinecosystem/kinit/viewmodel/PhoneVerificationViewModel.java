@@ -76,8 +76,7 @@ public class PhoneVerificationViewModel {
         }
     };
 
-    public PhoneVerificationViewModel(Activity activity,
-        OperationCompletionCallback actions) {
+    public PhoneVerificationViewModel(Activity activity, OperationCompletionCallback actions) {
         KinitApplication.coreComponent.inject(this);
         this.activity = activity;
         auth = FirebaseAuth.getInstance();
@@ -117,6 +116,7 @@ public class PhoneVerificationViewModel {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        ClientValidator clientValidator = new ClientValidator(activity.getApplicationContext());
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity, task -> {
                 if (task.isSuccessful()) {
@@ -128,8 +128,7 @@ public class PhoneVerificationViewModel {
                                 @Override
                                 public void onResult(String result) {
                                     // use the nonce for validation and proceed with phone auth
-                                    ClientValidator validator = ((PhoneVerifyActivity) activity).getClientValidator();
-                                    validator.validateClient(result, clientValidationJws -> servicesProvider.getOnBoardingService()
+                                    clientValidator.validateClient(result, clientValidationJws -> servicesProvider.getOnBoardingService()
                                             .sendAuthentication(clientValidationJws, tokenRequest.getResult().getToken(),
                                                     verificationCallback));
                                 }

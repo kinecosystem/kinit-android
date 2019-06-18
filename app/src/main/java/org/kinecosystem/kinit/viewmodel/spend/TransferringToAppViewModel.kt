@@ -4,6 +4,8 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Handler
+import android.util.Log
+import org.kinecosystem.ClientValidator
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Analytics.FAILURE_TYPE_ERROR
@@ -18,10 +20,11 @@ import javax.inject.Inject
 
 const val TRANSFER_TIMEOUT: Long = 30000
 
-class TransferringToAppViewModel(val navigator: Navigator, val app: EcosystemApp, val amount: Int, var transferActions: TransferActions?) {
+class TransferringToAppViewModel(clientValidator: ClientValidator, val navigator: Navigator, val app: EcosystemApp,
+                                 val amount: Int, var transferActions: TransferActions?) {
 
     @Inject
-    lateinit var servicesProvider: NetworkServices
+    lateinit var networkServices: NetworkServices
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
@@ -40,8 +43,8 @@ class TransferringToAppViewModel(val navigator: Navigator, val app: EcosystemApp
     init {
         KinitApplication.coreComponent.inject(this)
         address = userRepository.getApplicationAddress(app.identifier)
-        balance = servicesProvider.walletService.balance
-        transfer()
+        balance = networkServices.walletService.balance
+        networkServices.clientValidationService.validateAndAct(clientValidator, ::transfer, ::handleTransferError)
         val handler = Handler()
         handler.postDelayed({
             if (!onTransactionComplete.get() && !onTransactionFailed) {
@@ -61,22 +64,29 @@ class TransferringToAppViewModel(val navigator: Navigator, val app: EcosystemApp
         transferActions?.onClose()
     }
 
-    fun transfer() {
+    fun transfer(validationToken: String?) {
         address?.let {
-            servicesProvider.offerService.app2appTransfer(it, app.sid, amount, object : OperationResultCallback<String> {
-                override fun onResult(result: String) {
-                    onTransactionComplete.set(true)
-                    transferActions?.onTransferComplete()
-                    analytics.logEvent(Events.Business.CrossAppKinSent(app.data.categoryTitle, app.identifier, app.name, amount))
-                }
+            networkServices.offerService.app2appTransfer(validationToken, it, app.sid, amount,
+                object : OperationResultCallback<String> {
+                    override fun onResult(result: String) {
+                        onTransactionComplete.set(true)
+                        transferActions?.onTransferComplete()
+                        analytics.logEvent(
+                            Events.Business.CrossAppKinSent(app.data.categoryTitle, app.identifier, app.name, amount))
+                    }
 
-                override fun onError(errorCode: Int) {
-                    onTransactionFailed = true
-                    transferActions?.onTransferFailed()
-                    analytics.logEvent(Events.Business.CrossAppKinFailure("Transfer error $errorCode", FAILURE_TYPE_ERROR))
-                }
-            })
+                    override fun onError(errorCode: Int) {
+                        handleTransferError(errorCode, "app2app transfer failed")
+                    }
+                })
         }
+    }
+
+    private fun handleTransferError(errorCode: Int, message:String) {
+        onTransactionFailed = true
+        transferActions?.onTransferFailed()
+        analytics.logEvent(Events.Business.CrossAppKinFailure(
+            "Transfer error $errorCode, $message", FAILURE_TYPE_ERROR))
     }
 
     fun onResume() {

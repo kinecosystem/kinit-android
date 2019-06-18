@@ -1,11 +1,11 @@
-package org.kinecosystem.kinit.view.createWallet
+package org.kinecosystem.kinit.view.bootWallet
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import kotlinx.android.synthetic.main.create_wallet_complete_fragment.*
+import kotlinx.android.synthetic.main.boot_wallet_complete_fragment.*
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.kinecosystem.kinit.KinitApplication
@@ -16,7 +16,7 @@ import org.kinecosystem.kinit.view.BaseFragment
 import org.kinecosystem.kinit.view.restore.RestoreWalletActions
 import javax.inject.Inject
 
-class OnboardingCompleteFragment : BaseFragment() {
+class BootCompleteFragment : BaseFragment() {
     @Inject
     lateinit var analytics: Analytics
     var listener: AfterAnimationListener? = null
@@ -26,11 +26,11 @@ class OnboardingCompleteFragment : BaseFragment() {
     }
 
     companion object {
-        val TAG = OnboardingCompleteFragment::class.java.simpleName
+        val TAG = BootCompleteFragment::class.java.simpleName
         const val ANIMATION_DURATION: Long = 5000
         @JvmStatic
-        fun newInstance(): OnboardingCompleteFragment {
-            return OnboardingCompleteFragment()
+        fun newInstance(): BootCompleteFragment {
+            return BootCompleteFragment()
         }
     }
 
@@ -41,7 +41,7 @@ class OnboardingCompleteFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.create_wallet_complete_fragment, container, false)
+        val view = inflater.inflate(R.layout.boot_wallet_complete_fragment, container, false)
         view.postDelayed({ listener?.onAnimationEnd() }, ANIMATION_DURATION)
         return view
     }

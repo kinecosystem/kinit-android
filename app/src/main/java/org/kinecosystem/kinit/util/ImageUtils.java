@@ -31,13 +31,13 @@ public class ImageUtils {
             }
         }
         String urlWithResolution = urlWithResolution(serverUrl, context);
-        Picasso.with(context).load(urlWithResolution).into(view);
+        Picasso.get().load(urlWithResolution).into(view);
     }
 
     public static void fetchImage(Context context, String url) {
         if (url != null && !url.isEmpty()) {
             String urlWithResolution = urlWithResolution(url, context);
-            Picasso.with(context).load(urlWithResolution).fetch();
+            Picasso.get().load(urlWithResolution).fetch();
         }
     }
 

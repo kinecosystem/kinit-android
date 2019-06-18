@@ -3,7 +3,7 @@ package org.kinecosystem.kinit.server
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import kin.core.exception.OperationFailedException
+import kin.sdk.exception.OperationFailedException
 import org.kinecosystem.kinit.analytics.Analytics
 import org.kinecosystem.kinit.analytics.Events
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -19,13 +19,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.SocketTimeoutException
+import java.util.*
 
 const val ERROR_TRANSACTION_FAILED = 100
 const val ERROR_REDEEM_COUPON_FAILED = 101
 const val ERROR_NO_GOOD_LEFT = 200
 private const val ERROR_UPDATE_TRANSACTION_TO_SERVER = 300
-private const val P2P_ORDER_ID = "1-kit-p2p"
-private const val P2P_TO_APP_ORDER_ID = "1-kit-to-app"
+private const val P2P_ORDER_ID_PREFIX = "p2p"
+private const val P2P_TO_APP_ORDER_ID_PREFIX = "to_app_"
+private const val ORDER_ID_LENGTH = 20
 
 class OfferService(context: Context, private val offersApi: OffersApi, val userRepo: UserRepository,
                    val repository: OffersRepository, val analytics: Analytics, val wallet: Wallet, val scheduler: Scheduler) {
@@ -93,7 +95,7 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                 val response: Response<OffersApi.BookOfferResponse>
                 try {
                     response = offersApi.bookOffer(userRepo.userId(),
-                            OffersApi.OfferInfo(offer.id!!, clientValidationJws)).execute()
+                            OffersApi.OfferInfo(offer.id!!)).execute()
                 } catch (e: SocketTimeoutException) {
                     callbackWithError(ERROR_NO_INTERNET)
                     return
@@ -117,11 +119,11 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
                 }
 
                 try {
-                    val transactionId = wallet.payForOrder(offer.address!!, offer.price!!,
+                    val transactionId = wallet.payForOrderSync(clientValidationJws, offer.address!!, offer.price!!,
                             bookOfferResponse?.orderId!!)
 
                     wallet.updateBalanceSync()
-                    wallet.logSpendTransactionCompleted(offer.price, transactionId.id())
+                    wallet.logSpendTransactionCompleted(offer.price, transactionId!!.id())
 
                     val response2 = offersApi.redeemOffer(userRepo.userId(),
                             OffersApi.PaymentReceipt(transactionId.id())).execute()
@@ -169,39 +171,42 @@ class OfferService(context: Context, private val offersApi: OffersApi, val userR
 
     }
 
-    fun p2pTransfer(toAddress: String, amount: Int, callback: OperationResultCallback<String>) {
-        transfer(toAddress, amount, callback, false)
+    fun p2pTransfer(validationToken: String?, toAddress: String, amount: Int, callback: OperationResultCallback<String>) {
+        transfer(validationToken, toAddress, amount, callback, false)
     }
 
-    fun app2appTransfer(toAddress: String, appSid: String, amount: Int, callback: OperationResultCallback<String>) {
-        transfer(toAddress, amount, callback, true, appSid)
+    fun app2appTransfer(validationToken: String?, toAddress: String, appSid: String, amount: Int, callback: OperationResultCallback<String>) {
+        transfer(validationToken, toAddress, amount, callback, true, appSid)
     }
 
-    private fun transfer(toAddress: String, amount: Int, callback: OperationResultCallback<String>, isApp2app: Boolean = false, appSid: String = "") {
+    private fun transfer(validationToken: String?, toAddress: String, amount: Int, callback: OperationResultCallback<String>, isApp2app: Boolean = false, appSid: String = "") {
         if (!GeneralUtils.isConnected(applicationContext)) {
             callback.onError(ERROR_NO_INTERNET)
         }
         scheduler.executeOnBackground(object : Runnable {
             override fun run() {
                 try {
-                    val type = if (isApp2app) P2P_TO_APP_ORDER_ID else P2P_ORDER_ID
-                    val transactionId = wallet.payForOrder(toAddress, amount, type)
+                    val prefix = if (isApp2app) P2P_TO_APP_ORDER_ID_PREFIX else P2P_ORDER_ID_PREFIX
+                    val orderId = (prefix + UUID.randomUUID().toString().replace("-","_")).take(ORDER_ID_LENGTH)
+
+                    val transactionId = wallet.payForOrderSync(validationToken, toAddress, amount, orderId)
                     wallet.updateBalanceSync()
-                    if (!transactionId.id().isEmpty()) {
-                        scheduler.post {
-                            callback.onResult(transactionId.id())
-                        }
-                        wallet.logP2pTransactionCompleted(amount, transactionId.id(), isApp2app)
-                        //update to the server the transactionId
-                        if (isApp2app) {
-                            offersApi.sendToAppTransactionInfo(userRepo.userId(),
-                                    OffersApi.AppsTransactionInfo(transactionId.id(), toAddress, amount, appSid)).execute()
-                        } else {
-                            offersApi.sendTransactionInfo(userRepo.userId(),
-                                    OffersApi.PeersTransactionInfo(transactionId.id(), toAddress, amount)).execute()
-                        }
-                        wallet.retrieveTransactions()
+
+                    val txId = transactionId!!.id()
+                    scheduler.post {
+                        callback.onResult(txId)
                     }
+                    wallet.logP2pTransactionCompleted(amount, txId, isApp2app)
+                    //update to the server the transactionId
+                    if (isApp2app) {
+                        offersApi.sendToAppTransactionInfo(userRepo.userId(),
+                                OffersApi.AppsTransactionInfo(txId, toAddress, amount, appSid)).execute()
+                    } else {
+                        offersApi.sendTransactionInfo(userRepo.userId(),
+                                OffersApi.PeersTransactionInfo(txId, toAddress, amount)).execute()
+                    }
+                    wallet.retrieveTransactions()
+
                 } catch (e: OperationFailedException) {
                     scheduler.post {
                         callbackWithError(ERROR_TRANSACTION_FAILED)

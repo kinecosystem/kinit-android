@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import org.kinecosystem.kinit.model.earn.Answer;
 import org.kinecosystem.kinit.server.api.EcoApplicationsApi;
 import org.kinecosystem.kinit.view.customView.AnswerSelectedOverView;
@@ -28,6 +30,16 @@ import java.util.List;
 
 
 public class BindingUtils {
+
+
+    @BindingAdapter("pause")
+    public static void pauseLottie(LottieAnimationView lottieAnimationView, Boolean pause) {
+        if (pause)
+            lottieAnimationView.pauseAnimation();
+        else
+            lottieAnimationView.playAnimation();
+    }
+
 
     @BindingAdapter("imageUrl")
     public static void loadImage(ImageView imageView, String url) {
