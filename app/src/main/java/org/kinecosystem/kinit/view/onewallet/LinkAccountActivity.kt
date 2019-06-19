@@ -2,6 +2,7 @@ package org.kinecosystem.kinit.view.onewallet
 
 import android.os.Bundle
 import android.widget.TextView
+import com.google.gson.Gson
 import org.kinecosystem.kinit.KinitApplication
 import org.kinecosystem.kinit.R
 import org.kinecosystem.kinit.blockchain.Wallet
@@ -25,7 +26,9 @@ class LinkAccountActivity : AccountInfoActivityBase() {
     override fun getData(): String? {
         val appId = intent.extras.getString(EXTRA_APP_ID)
         val publicAddress = intent.extras.getString(EXTRA_PUBLIC_ADDRESS)
-        return wallet.oneWallet.getLinkingTransactionEnvelopeFor(appId, publicAddress)
+        return wallet.oneWallet.getLinkingTransactionEnvelopeFor(appId, publicAddress)?.let { linkingResult ->
+            return Gson().toJson(linkingResult)
+        }
     }
 
     override fun updateSourceApp(sourceApp: String) {

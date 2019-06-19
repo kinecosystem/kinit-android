@@ -44,7 +44,7 @@ private const val CORE_MAIN_NETWORK_URL = "https://horizon-ecosystem.kininfrastr
 private const val CORE_MAIN_NETWORK_ID = "Public Global Kin Ecosystem Network ; June 2018"
 private const val CORE_ISSUER_MAIN = "GDF42M3IPERQCBLWFEZKQRK77JQ65SCKTU3CW36HZVCX7XX5A5QXZIVK"
 private const val CORE_ISSUER_TEST = "GBC3SG6NGTSZ2OMH3FFGB7UVRQWILW367U4GSOOF4TFSZONV42UJXUH7"
-private const val SDK_TEST_NETWORK_URL = "http://horizon-testnet-one-wallet.kininfrastructure.com/"
+private const val SDK_TEST_NETWORK_URL = "https://horizon-testnet.kininfrastructure.com/"
 private const val SDK_TEST_NETWORK_ID = "Kin Testnet ; December 2018"
 private const val SDK_MAIN_NETWORK_URL = "https://horizon.kinfederation.com/"
 private const val SDK_MAIN_NETWORK_ID = "Kin Mainnet ; December 2018"
@@ -97,7 +97,7 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
             kinClient.addAccount()
         }
         userRepo.userInfo.publicAddress = account.publicAddress!!
-        oneWallet = OneWallet(KINIT_APP_ID, account)
+        oneWallet = OneWallet(KINIT_APP_ID, account, scheduler)
     }
 
     private fun getMigrationManager(): MigrationManager {
@@ -251,10 +251,10 @@ class Wallet(context: Context, dataStoreProvider: DataStoreProvider,
     fun payForOrderSync(validationToken: String?, toAddress: String, amount: Int, orderId: String): TransactionId? {
         var transactionId: TransactionId? = null
         var paddr = account.publicAddress
-        var transaction = account.buildTransactionSync(toAddress, BigDecimal(amount), 0,
+        var transaction = account.buildPaymentTransactionSync(toAddress, BigDecimal(amount), 0,
             orderId).whitelistableTransaction()
         val transactionInfo = WalletApi.TransactionInfo(orderId, paddr!!, toAddress, amount,
-            transaction.transactionPayload, validationToken)
+            transaction.transactionPayload(), validationToken)
         var response = walletApi.addSignature(userRepo.userId(), transactionInfo).execute()
         if (response.isSuccessful && response.body() != null) {
             transactionId = account.sendWhitelistTransactionSync(response.body()?.signedTransaction)
