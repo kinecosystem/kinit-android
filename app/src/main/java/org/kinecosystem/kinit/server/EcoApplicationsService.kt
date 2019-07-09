@@ -1,6 +1,7 @@
 package org.kinecosystem.kinit.server
 
 import android.content.Context
+import org.kinecosystem.kinit.model.spend.isKinTransferSupported
 import org.kinecosystem.kinit.model.spend.preload
 import org.kinecosystem.kinit.repository.EcoApplicationsRepository
 import org.kinecosystem.kinit.repository.UserRepository
@@ -29,7 +30,17 @@ class EcoApplicationsService(context: Context, private val api: EcoApplicationsA
             override fun onResponse(call: Call<List<EcoApplicationsApi.AppsCategory>>, response: Response<List<EcoApplicationsApi.AppsCategory>>) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        repo.updateCategories(it)
+                        val sortedCategoriesByInstalled = ArrayList<EcoApplicationsApi.AppsCategory>()
+                        for (appCategory in it){
+                            val sortedCategory = EcoApplicationsApi.AppsCategory(appCategory.title, appCategory.id,
+                                appCategory.apps.sortedBy {
+                                    app ->
+                                    GeneralUtils.isAppInstalled(applicationContext,app.identifier) and app.isKinTransferSupported()
+                                }.reversed()
+                            )
+                            sortedCategoriesByInstalled.add(sortedCategory)
+                        }
+                        repo.updateCategories(sortedCategoriesByInstalled)
                         for (appCategory in it) {
                             for (app in appCategory.apps) {
                                 app.preload(applicationContext)
